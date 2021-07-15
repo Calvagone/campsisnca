@@ -1,0 +1,21 @@
+Package: campsisnca
+Type: Package
+Collate:
+    'metrics.R'
+Title: CAMPSIS NCA Package
+Version: 0.1.0
+Authors@R: c(
+  person("Nicolas", "Luyckx", role = c("aut", "cre"), email = "nicolas.luyckx@calvagone.com")
+  )
+Description: TODO.
+Depends: R (>= 4.0.0)
+Imports: assertthat, dplyr, plyr, purrr, tibble, tidyr
+License: file LICENSE
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+Suggests: devtools, knitr, pkgdown, rmarkdown, roxygen2, testthat
+RoxygenNote: 7.1.1
+VignetteBuilder: knitr
+URL: https://github.com/Calvagone/campsisnca
+BugReports: https://github.com/Calvagone/campsisnca/issues
