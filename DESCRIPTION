@@ -1,7 +1,8 @@
 Package: campsisnca
 Type: Package
 Collate:
-    'metrics.R'
+    'auc_trap_rule.R'
+    'nca_metrics.R'
 Title: CAMPSIS NCA Package
 Version: 0.1.0
 Authors@R: c(
@@ -9,12 +10,12 @@ Authors@R: c(
   )
 Description: TODO.
 Depends: R (>= 4.0.0)
-Imports: assertthat, dplyr, plyr, purrr, tibble, tidyr
+Imports: assertthat, dplyr, purrr, tibble, tidyr
 License: file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Suggests: devtools, knitr, pkgdown, rmarkdown, roxygen2, testthat
+Suggests: campsismod, campsis, devtools, knitr, pkgdown, ncappc, rmarkdown, roxygen2, testthat
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/Calvagone/campsisnca
