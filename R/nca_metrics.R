@@ -1,13 +1,24 @@
 
 #' 
+#' Standardise CAMPSIS dataframe for NCA analysis.
+#' Additional checks will also be performed.
+#' 
+#' @param x CAMPSIS dataframe
+#' @param variable dependent variable
+standardise <- function(x, variable) {
+  x <- x %>% dplyr::rename_at(variable, ~"dv_variable")
+  return(x)
+}
+
+#' 
 #' Compute AUC.
 #' 
 #' @param x CAMPSIS dataframe
 #' @param variable dependent variable
 #' @export
 auc <- function(x, variable, method=1) {
-  x <- x %>% dplyr::rename_at(variable, ~"variable")
-  x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(auc=trap(x=time, y=variable, method=method))
+  x <- x %>% standardise(variable)
+  x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(auc=trap(x=time, y=dv_variable, method=method))
   return(x)
 }
 
@@ -18,9 +29,9 @@ auc <- function(x, variable, method=1) {
 #' @param variable dependent variable
 #' @export
 cmax <- function(x, variable) {
-  x <- x %>% dplyr::rename_at(variable, ~"variable")
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(variable))
-  return(x %>% dplyr::transmute(id=id, cmax=variable))
+  x <- x %>% standardise(variable)
+  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable))
+  return(x %>% dplyr::transmute(id=id, cmax=dv_variable))
 }
 
 #' 
@@ -30,8 +41,8 @@ cmax <- function(x, variable) {
 #' @param variable dependent variable
 #' @export
 tmax <- function(x, variable) {
-  x <- x %>% dplyr::rename_at(variable, ~"variable")
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(variable))
+  x <- x %>% standardise(variable)
+  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable))
   return(x %>% dplyr::transmute(id=id, tmax=time))
 }
 
@@ -42,9 +53,10 @@ tmax <- function(x, variable) {
 #' @param variable dependent variable
 #' @export
 cmin <- function(x, variable, after) {
-  x <- x %>% dplyr::rename_at(variable, ~"variable") %>% dplyr::filter(time >= after)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(variable))
-  return(x %>% dplyr::transmute(id=id, cmin=variable))
+  x <- x %>% standardise(variable)
+  x <- x %>% dplyr::filter(time >= after)
+  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable))
+  return(x %>% dplyr::transmute(id=id, cmin=dv_variable))
 }
 
 #' 
@@ -54,8 +66,9 @@ cmin <- function(x, variable, after) {
 #' @param variable dependent variable
 #' @export
 tmin <- function(x, variable, after) {
-  x <- x %>% dplyr::rename_at(variable, ~"variable") %>% dplyr::filter(time >= after) 
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(variable))
+  x <- x %>% standardise(variable)
+  x <- x %>% dplyr::filter(time >= after) 
+  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable))
   return(x %>% dplyr::transmute(id=id, tmin=time))
 }
 
@@ -66,7 +79,7 @@ tmin <- function(x, variable, after) {
 #' @param variable dependent variable
 #' @export
 ctrough <- function(x, variable, t) {
-  x <- x %>% dplyr::rename_at(variable, ~"variable")
+  x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::filter(time==t)
-  return(x %>% dplyr::transmute(id=id, ctrough=variable))
+  return(x %>% dplyr::transmute(id=id, ctrough=dv_variable))
 }

@@ -4,10 +4,17 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 
-validateNCA <- function(nmDataset, metric) {
+validateNCA <- function(nmDataset, metric, method=1) {
+  if (method==1) {
+    method_ <- "linear"
+  } else if(method==2) {
+    method_ <- "linearup-logdown"
+  } else {
+    stop("Either 1 or 2")
+  }
   out <- ncappc::ncappc(
     obsFile=nmDataset,
-    method="linear",
+    method=method_,
     onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
     extrapolate=F,
     printOut=F,
