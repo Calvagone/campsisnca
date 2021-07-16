@@ -4,7 +4,7 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 
-validateNCA <- function(nmDataset, metric, method=1) {
+validateNCA <- function(nmDataset, metric, method=1, AUCTimeRange=NULL) {
   if (method==1) {
     method_ <- "linear"
   } else if(method==2) {
@@ -18,9 +18,11 @@ validateNCA <- function(nmDataset, metric, method=1) {
     onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
     extrapolate=F,
     printOut=F,
-    noPlot=T
+    noPlot=T,
+    AUCTimeRange=AUCTimeRange
   )
   retValue <- out$ncaOutput
+  #cat(paste0(colnames(retValue), collapse=","))
   retValue <- retValue %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID) %>% dplyr::select(ID, dplyr::all_of(metric))
   return(retValue %>% tibble::as_tibble())
 }

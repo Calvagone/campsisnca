@@ -2,17 +2,17 @@
 % Please edit documentation in R/nca_metrics.R
 \name{standardise}
 \alias{standardise}
-\title{Standardise CAMPSIS dataframe for NCA analysis.
+\title{Standardise CAMPSIS/NONMEM dataframe for NCA analysis.
 Additional checks will also be performed.}
 \usage{
 standardise(x, variable)
 }
 \arguments{
-\item{x}{CAMPSIS dataframe}
+\item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 }
 \description{
-Standardise CAMPSIS dataframe for NCA analysis.
+Standardise CAMPSIS/NONMEM dataframe for NCA analysis.
 Additional checks will also be performed.
 }

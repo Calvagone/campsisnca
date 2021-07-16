@@ -7,7 +7,7 @@
 auc(x, variable, method = 1)
 }
 \arguments{
-\item{x}{CAMPSIS dataframe}
+\item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 }

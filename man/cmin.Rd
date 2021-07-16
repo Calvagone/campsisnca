@@ -7,7 +7,7 @@
 cmin(x, variable, after)
 }
 \arguments{
-\item{x}{CAMPSIS dataframe}
+\item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 }
