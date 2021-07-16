@@ -9,7 +9,10 @@
 #' @return dataset subset
 #' @export
 timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE) {
-  time_var <- ifelse(isCAMPSIS(x), "time", "TIME")
+  campsis <- isCAMPSIS(x)
+  time_var <- ifelse(campsis, "time", "TIME")
+  checkNATimes(x, time_var=time_var) 
+  
   if (exclmin) {
     x <- x %>% dplyr::filter_at(.vars=time_var, .vars_predicate=~.x > min)
   } else {

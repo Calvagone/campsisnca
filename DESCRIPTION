@@ -1,6 +1,7 @@
 Package: campsisnca
 Type: Package
 Collate:
+    'consistency_checks.R'
     'filter_utilities.R'
     'auc_trap_rule.R'
     'nca_metrics.R'

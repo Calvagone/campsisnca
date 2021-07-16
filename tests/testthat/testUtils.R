@@ -4,7 +4,7 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 
-validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL) {
+validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
   if (method==1) {
     method_ <- "linear"
   } else if(method==2) {
@@ -19,7 +19,7 @@ validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTim
     doseTime=doseTime,
     Tau=Tau,
     onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
-    extrapolate=F,
+    extrapolate=extrapolate,
     printOut=F,
     noPlot=T
   )
@@ -39,6 +39,8 @@ validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTim
         return("cmin")
       } else if (.x == "Tmin") {
         return("tmin")
+      } else if (.x == "Cavg") {
+        return("cavg")
       } else {
         stop(paste0("Metric ", x, " not encoded"))
       }
