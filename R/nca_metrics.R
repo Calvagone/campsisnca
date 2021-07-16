@@ -61,9 +61,8 @@ tmax <- function(x, variable) {
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
 #' @export
-cmin <- function(x, variable, after) {
+cmin <- function(x, variable) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::filter(time >= after)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, cmin=dv_variable))
 }
@@ -74,9 +73,8 @@ cmin <- function(x, variable, after) {
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
 #' @export
-tmin <- function(x, variable, after) {
+tmin <- function(x, variable) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::filter(time >= after) 
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, tmin=time))
 }

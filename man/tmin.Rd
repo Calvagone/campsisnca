@@ -4,12 +4,14 @@
 \alias{tmin}
 \title{Compute tmin.}
 \usage{
-tmin(x, variable, after)
+tmin(x, variable)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{after}{delay, when do we start looking at concentrations}
 }
 \description{
 Compute tmin.

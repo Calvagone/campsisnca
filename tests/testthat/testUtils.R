@@ -4,7 +4,7 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 
-validateNCA <- function(nmDataset, metric, method=1, AUCTimeRange=NULL) {
+validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL) {
   if (method==1) {
     method_ <- "linear"
   } else if(method==2) {
@@ -15,15 +15,19 @@ validateNCA <- function(nmDataset, metric, method=1, AUCTimeRange=NULL) {
   out <- ncappc::ncappc(
     obsFile=nmDataset,
     method=method_,
+    doseType=doseType,
+    doseTime=doseTime,
+    Tau=Tau,
     onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
     extrapolate=F,
     printOut=F,
-    noPlot=T,
-    AUCTimeRange=AUCTimeRange
+    noPlot=T
   )
   retValue <- out$ncaOutput
-  #cat(paste0(colnames(retValue), collapse=","))
-  retValue <- retValue %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID) %>% dplyr::select(ID, dplyr::all_of(metric))
+  retValue <- retValue %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID)
+  if (!is.null(metric)) {
+    retValue <- retValue %>% dplyr::select(ID, dplyr::all_of(metric))
+  }
   return(retValue %>% tibble::as_tibble())
 }
 
@@ -53,18 +57,17 @@ dataset1 <- function() {
   # 20 subjects
   dataset <- Dataset(20)
   
-  # 4 infusions
-  dataset <- dataset %>% add(Infusion(0, 100, 1))
-  dataset <- dataset %>% add(Infusion(24, 100, 1))
-  dataset <- dataset %>% add(Infusion(48, 100, 1))
-  dataset <- dataset %>% add(Infusion(72, 100, 1))
-  
-  # Rich PK sampling on day 1 and day 4
+  # 2-weeks infusions
+  dataset <- dataset %>% add(Infusion(time=(0:13)*24, amount=100, compartment=1))
+
+  # Rich PK sampling on day 1 and day 7
   sampling <- c(0,1,2,3, 2,4,8,10,12,16,20,24)
-  dataset <- dataset %>% add(Observations(times=c(sampling, sampling + 72)))
+  dataset <- dataset %>% add(Observations(times=c(sampling, sampling + ((7-1)*24))))
   
   # Simulate with CAMPSIS
   results <- model %>% simulate(dataset, dest="mrgsolve", seed=fixedSeed())
+  
+  #spaghettiPlot(results, "CP")
   
   # Return both the CAMPSIS output and the NONMEM dataset
   return(list(campsis=results, nonmem=results %>% exportToNMDataset(dataset=dataset, model=model)))

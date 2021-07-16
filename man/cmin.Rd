@@ -4,7 +4,7 @@
 \alias{cmin}
 \title{Compute Cmin.}
 \usage{
-cmin(x, variable, after)
+cmin(x, variable)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}

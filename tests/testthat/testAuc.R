@@ -14,10 +14,10 @@ test_that("Dataset 1 - AUC0-24 at day 1 (method 1)", {
   expect_equal(auc1, auc2 %>% rename(id=ID, auc=AUClast), tolerance=1e-3)
 })
 
-test_that("Dataset 1 - AUC0-24 at day 4 (method 1)", {
+test_that("Dataset 1 - AUC0-24 at day 7 (method 1)", {
   ds <- dataset1()
-  auc1 <- auc(ds$campsis %>% timerange(72, 96), "Y")
-  auc2 <- validateNCA(ds$nonmem %>% timerange(72, 96), metric="AUClast")
+  auc1 <- auc(ds$campsis %>% timerange(144, 168), "Y")
+  auc2 <- validateNCA(ds$nonmem %>% timerange(144, 168), metric="AUClast")
   expect_equal(auc1, auc2 %>% rename(id=ID, auc=AUClast), tolerance=1e-3)
 })
 
@@ -28,9 +28,9 @@ test_that("Dataset 1 - AUC0-24 at day 1 (method 2)", {
   expect_equal(auc1, auc2 %>% rename(id=ID, auc=AUClast), tolerance=1e-3)
 })
 
-test_that("Dataset 1 - AUC0-24 at day 4 (method 2)", {
+test_that("Dataset 1 - AUC0-24 at day 7 (method 2)", {
   ds <- dataset1()
-  auc1 <- auc(ds$campsis %>% timerange(72, 96), "Y", method=2)
-  auc2 <- validateNCA(ds$nonmem %>% timerange(72, 96), metric="AUClast", method=2)
+  auc1 <- auc(ds$campsis %>% timerange(144, 168), "Y", method=2)
+  auc2 <- validateNCA(ds$nonmem %>% timerange(144, 168), metric="AUClast", method=2)
   expect_equal(auc1, auc2 %>% rename(id=ID, auc=AUClast), tolerance=1e-3)
 })
