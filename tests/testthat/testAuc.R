@@ -2,7 +2,7 @@
 library(testthat)
 library(dplyr)
 library(campsis)
-context("Test the AUC method")
+context("Test auc method")
 
 testFolder <<- ""
 source(paste0(testFolder, "testUtils.R"))

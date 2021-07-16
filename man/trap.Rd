@@ -6,7 +6,7 @@
  
 Calculate Area Under the Curve Using Trapezoids.}
 \usage{
-trap(x = NA, y = NA, method = 1)
+trap(x, y, method = 1)
 }
 \arguments{
 \item{x}{x variable, i.e. time}
