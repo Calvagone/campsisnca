@@ -10,8 +10,6 @@ tmin(x, variable)
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
-
-\item{after}{delay, when do we start looking at concentrations}
 }
 \description{
 Compute tmin.

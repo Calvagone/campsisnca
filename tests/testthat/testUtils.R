@@ -27,6 +27,22 @@ validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTim
   retValue <- retValue %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID)
   if (!is.null(metric)) {
     retValue <- retValue %>% dplyr::select(ID, dplyr::all_of(metric))
+    retValue <- retValue %>% rename(id=ID)
+    retValue <- retValue %>% rename_at(.vars=metric, .funs=function(.x) {
+      if (.x == "AUClast") {
+        return("auc")
+      } else if (.x == "Cmax") {
+        return("cmax")
+      } else if (.x == "Tmax") {
+        return("tmax")
+      } else if (.x == "Cmin") {
+        return("cmin")
+      } else if (.x == "Tmin") {
+        return("tmin")
+      } else {
+        stop(paste0("Metric ", x, " not encoded"))
+      }
+    })
   }
   return(retValue %>% tibble::as_tibble())
 }
