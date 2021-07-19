@@ -3,6 +3,7 @@ Type: Package
 Collate:
     'consistency_checks.R'
     'filter_utilities.R'
+    'theoretical_metrics.R'
     'auc_trap_rule.R'
     'nca_metrics.R'
 Title: CAMPSIS NCA Package
