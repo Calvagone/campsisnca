@@ -10,6 +10,8 @@ ctrough(x, variable, t)
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{t}{time value to read Ctrough}
 }
 \description{
 Compute Ctrough

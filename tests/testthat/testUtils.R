@@ -4,7 +4,7 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 
-validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
+convertMethod <- function(method) {
   if (method==1) {
     method_ <- "linear"
   } else if(method==2) {
@@ -12,24 +12,16 @@ validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTim
   } else {
     stop("Either 1 or 2")
   }
-  out <- ncappc::ncappc(
-    obsFile=nmDataset,
-    method=method_,
-    doseType=doseType,
-    doseTime=doseTime,
-    Tau=Tau,
-    onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
-    extrapolate=extrapolate,
-    printOut=F,
-    noPlot=T
-  )
-  retValue <- out$ncaOutput
-  retValue <- retValue %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID)
+  return(method_)
+}
+
+standardiseOutput <- function(ncaOutput, metric) {
+  ncaOutput <- ncaOutput %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID)
   if (!is.null(metric)) {
-    retValue <- retValue %>% dplyr::select(ID, dplyr::all_of(metric))
-    retValue <- retValue %>% rename(id=ID)
-    retValue <- retValue %>% rename_at(.vars=metric, .funs=function(.x) {
-      if (.x == "AUClast") {
+    ncaOutput <- ncaOutput %>% dplyr::select(ID, dplyr::all_of(metric))
+    ncaOutput <- ncaOutput %>% rename(id=ID)
+    ncaOutput <- ncaOutput %>% rename_at(.vars=metric, .funs=function(.x) {
+      if (startsWith(.x, "AUC")) {
         return("auc")
       } else if (.x == "Cmax") {
         return("cmax")
@@ -46,7 +38,33 @@ validateNCA <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTim
       }
     })
   }
-  return(retValue %>% tibble::as_tibble())
+  return(ncaOutput %>% tibble::as_tibble())
+}
+
+ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
+  out <- ncappc::ncappc(
+    obsFile=nmDataset,
+    method=convertMethod(method),
+    doseType=doseType,
+    doseTime=doseTime,
+    Tau=Tau,
+    onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
+    extrapolate=extrapolate,
+    printOut=F,
+    noPlot=T
+  )
+  return(standardiseOutput(out$ncaOutput, metric))
+}
+
+calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, AUCTimeRange=NULL) {
+  out <- CalvaNCA::CalvaNCA_plasma(
+    obsFile=nmDataset, 
+    method=convertMethod(method),
+    doseType=doseType,
+    doseTime=doseTime,
+    Tau=Tau,
+    AUCTimeRange=AUCTimeRange)
+  return(standardiseOutput(out$ncaOutput, metric))
 }
 
 fixedSeed <- function() {

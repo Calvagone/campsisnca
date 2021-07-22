@@ -10,6 +10,11 @@ auc(x, variable, method = 1)
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{method}{method:
+* 1: linear up - linear down
+* 2: linear up - logarithmic down
+* 3: linear before Tmax, logarithmic after Tmax}
 }
 \description{
 Compute AUC.

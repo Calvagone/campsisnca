@@ -18,7 +18,7 @@ License: file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Suggests: campsismod, campsis, devtools, knitr, pkgdown, ncappc, rmarkdown, roxygen2, testthat
+Suggests: CalvaNCA, campsismod, campsis, devtools, knitr, ggplot2, mrgsolve, pkgdown, ncappc, NonCompart, rmarkdown, roxygen2, testthat
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/Calvagone/campsisnca

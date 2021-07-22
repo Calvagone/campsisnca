@@ -7,6 +7,8 @@
 timerange(x, min = 0, max = Inf, exclmin = FALSE, exclmax = FALSE)
 }
 \arguments{
+\item{x}{CAMPSIS/NONMEM dataframe}
+
 \item{min}{min time}
 
 \item{max}{max time}

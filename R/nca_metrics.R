@@ -46,6 +46,10 @@ standardise <- function(x, variable) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
+#' @param method method:
+#' * 1: linear up - linear down
+#' * 2: linear up - logarithmic down
+#' * 3: linear before Tmax, logarithmic after Tmax
 #' @export
 auc <- function(x, variable, method=1) {
   x <- x %>% standardise(variable)
@@ -106,6 +110,7 @@ tmin <- function(x, variable) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
+#' @param t time value to read Ctrough
 #' @export
 ctrough <- function(x, variable, t) {
   x <- x %>% standardise(variable)

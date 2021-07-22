@@ -2,6 +2,7 @@
 #' 
 #' Filter CAMPSIS dataset based on min and max time.
 #' 
+#' @param x CAMPSIS/NONMEM dataframe
 #' @param min min time
 #' @param max max time
 #' @param exclmin exclude min time when filtering
