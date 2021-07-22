@@ -1,0 +1,9 @@
+- Use of S4 class for each metric
+
+- Object NCAMetrics (scenarios=c(day='Day 1', fasted='Fasted') )  to collect all metrics
+
+- Object NCAMetricsTable %>% add(ncaMetrics1, 2, etc...)
+
+- Function Export(pdf, html, etc)
+
+- Add metrics thalf, thalfeff, thalfz
