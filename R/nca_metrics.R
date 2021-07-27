@@ -50,8 +50,7 @@ standardise <- function(x, variable) {
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
-#' @export
-auc <- function(x, variable, method=1) {
+auc_delegate <- function(x, variable, method=1) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(auc=trap(x=time, y=dv_variable, method=method), .groups="drop")
   return(x)
@@ -62,8 +61,7 @@ auc <- function(x, variable, method=1) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @export
-cmax <- function(x, variable) {
+cmax_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, cmax=dv_variable))
@@ -74,8 +72,7 @@ cmax <- function(x, variable) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @export
-tmax <- function(x, variable) {
+tmax_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, tmax=time))
@@ -86,8 +83,7 @@ tmax <- function(x, variable) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @export
-cmin <- function(x, variable) {
+cmin_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, cmin=dv_variable))
@@ -98,8 +94,7 @@ cmin <- function(x, variable) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @export
-tmin <- function(x, variable) {
+tmin_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, tmin=time))
@@ -111,8 +106,7 @@ tmin <- function(x, variable) {
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
 #' @param t time value to read Ctrough
-#' @export
-ctrough <- function(x, variable, t) {
+ctrough_delegate <- function(x, variable, t) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::filter(time==t) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, ctrough=dv_variable))
@@ -123,8 +117,7 @@ ctrough <- function(x, variable, t) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @export
-cavg <- function(x, variable) {
+cavg_delegate <- function(x, variable) {
   auc <- auc(x=x, variable=variable)
   x <- x %>% standardise(variable)
   diff <- x %>% dplyr::group_by(id) %>% dplyr::summarise(diff_time=time[dplyr::n()]-time[1], .groups="drop")
