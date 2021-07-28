@@ -31,9 +31,10 @@ Ctrough <- function(x=NULL, variable=NULL, time) {
   return(new("ctrough_metric", x=x, variable=variable, time=time))
 }
 
-#' @rdname compute
-setMethod("compute", signature=c("ctrough_metric"), definition=function(object) {
-  return(ctrough_delegate(x=object@x, variable=object@variable, time=object@time))    
+#' @rdname calculate
+setMethod("calculate", signature=c("ctrough_metric"), definition=function(object, ...) {
+  object@individual <- ctrough_delegate(x=object@x, variable=object@variable, time=object@time)
+  return(object)    
 })
 
 #_______________________________________________________________________________
@@ -50,5 +51,5 @@ setMethod("compute", signature=c("ctrough_metric"), definition=function(object) 
 ctrough_delegate <- function(x, variable, t) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::filter(time==t) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, ctrough=dv_variable))
+  return(x %>% dplyr::transmute(id=id, value=dv_variable))
 }

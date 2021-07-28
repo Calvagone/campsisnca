@@ -29,9 +29,10 @@ Tmax <- function(x=NULL, variable=NULL) {
   return(new("tmax_metric", x=x, variable=variable))
 }
 
-#' @rdname compute
-setMethod("compute", signature=c("tmax_metric"), definition=function(object) {
-  return(tmax_delegate(x=object@x, variable=object@variable))    
+#' @rdname calculate
+setMethod("calculate", signature=c("tmax_metric"), definition=function(object, ...) {
+  object@individual <- tmax_delegate(x=object@x, variable=object@variable)
+  return(object)    
 })
 
 #_______________________________________________________________________________
@@ -46,5 +47,5 @@ setMethod("compute", signature=c("tmax_metric"), definition=function(object) {
 tmax_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, tmax=time))
+  return(x %>% dplyr::transmute(id=id, value=time))
 }

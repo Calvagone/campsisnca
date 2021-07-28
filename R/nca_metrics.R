@@ -86,10 +86,10 @@ validateMetric <- function(object) {
 setClass(
   "nca_metric",
   representation(
-    x = "data.frame",                  # default dataframe
-    variable = "character",            # default variable
-    individual_results = "data.frame", # individual results
-    summary_results = "data.frame"     # summary results
+    x = "data.frame",          # default dataframe
+    variable = "character",    # default variable
+    individual = "data.frame", # individual results
+    summary = "data.frame"     # summary results
   ),
   contains="pmx_element",
   validity=validateMetric
@@ -105,11 +105,11 @@ setClass(
 #' @param ... extra arguments
 #' @return updated object
 #' @export
-#' @rdname compute
-compute <- function(object, ...) {
+#' @rdname calculate
+calculate <- function(object, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("compute", function(object, ...) {
-  standardGeneric("compute")
+setGeneric("calculate", function(object, ...) {
+  standardGeneric("calculate")
 })

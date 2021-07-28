@@ -29,9 +29,10 @@ Cmin <- function(x=NULL, variable=NULL) {
   return(new("cmin_metric", x=x, variable=variable))
 }
 
-#' @rdname compute
-setMethod("compute", signature=c("cmin_metric"), definition=function(object) {
-  return(cmin_delegate(x=object@x, variable=object@variable))    
+#' @rdname calculate
+setMethod("calculate", signature=c("cmin_metric"), definition=function(object, ...) {
+  object@individual <- cmin_delegate(x=object@x, variable=object@variable)
+  return(object)    
 })
 
 #_______________________________________________________________________________
@@ -46,5 +47,5 @@ setMethod("compute", signature=c("cmin_metric"), definition=function(object) {
 cmin_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, cmin=dv_variable))
+  return(x %>% dplyr::transmute(id=id, value=dv_variable))
 }

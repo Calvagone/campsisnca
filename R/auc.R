@@ -35,9 +35,10 @@ Auc <- function(x=NULL, variable=NULL, method=1) {
   return(new("auc_metric", x=x, variable=variable, method=as.integer(method)))
 }
 
-#' @rdname compute
-setMethod("compute", signature=c("auc_metric"), definition=function(object) {
-  return(auc_delegate(x=object@x, variable=object@variable, method=object@method))    
+#' @rdname calculate
+setMethod("calculate", signature=c("auc_metric"), definition=function(object, ...) {
+  object@individual <- auc_delegate(x=object@x, variable=object@variable, method=object@method)
+  return(object)    
 })
 
 #_______________________________________________________________________________
@@ -55,6 +56,6 @@ setMethod("compute", signature=c("auc_metric"), definition=function(object) {
 #' * 3: linear before Tmax, logarithmic after Tmax
 auc_delegate <- function(x, variable, method=1) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(auc=trap(x=time, y=dv_variable, method=method), .groups="drop")
+  x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(value=trap(x=time, y=dv_variable, method=method), .groups="drop")
   return(x)
 }

@@ -20,28 +20,19 @@ standardiseOutput <- function(ncaOutput, metric) {
   if (!is.null(metric)) {
     ncaOutput <- ncaOutput %>% dplyr::select(ID, dplyr::all_of(metric))
     ncaOutput <- ncaOutput %>% rename(id=ID)
-    ncaOutput <- ncaOutput %>% rename_at(.vars=metric, .funs=function(.x) {
-      if (startsWith(.x, "AUC")) {
-        return("auc")
-      } else if (.x == "Cmax") {
-        return("cmax")
-      } else if (.x == "Tmax") {
-        return("tmax")
-      } else if (.x == "Cmin") {
-        return("cmin")
-      } else if (.x == "Tmin") {
-        return("tmin")
-      } else if (.x == "Cavg") {
-        return("cavg")
-      } else {
-        stop(paste0("Metric ", x, " not encoded"))
-      }
-    })
+    ncaOutput <- ncaOutput %>% rename_at(.vars=metric, .funs=~"value")
   }
   return(ncaOutput %>% tibble::as_tibble())
 }
 
+detachCampsisNCA <- function() {
+  if("campsisnca" %in% (.packages())){
+    detach("package:campsisnca", unload=TRUE) 
+  }
+}
+
 ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
+  detachCampsisNCA()
   out <- ncappc::ncappc(
     obsFile=nmDataset,
     method=convertMethod(method),
@@ -57,6 +48,7 @@ ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTi
 }
 
 calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, AUCTimeRange=NULL) {
+  detachCampsisNCA()
   out <- CalvaNCA::CalvaNCA_plasma(
     obsFile=nmDataset, 
     method=convertMethod(method),
@@ -87,6 +79,8 @@ exportToNMDataset <- function(results, dataset, model) {
 }
 
 dataset1 <- function() {
+  library(campsisnca)
+  
   model <- getNONMEMModelTemplate(3,4)
   model <- model %>% add(InfusionDuration(1, rhs="5"))
   

@@ -29,9 +29,10 @@ Cavg <- function(x=NULL, variable=NULL) {
   return(new("cavg_metric", x=x, variable=variable))
 }
 
-#' @rdname compute
-setMethod("compute", signature=c("cavg_metric"), definition=function(object) {
-  return(cavg_delegate(x=object@x, variable=object@variable))    
+#' @rdname calculate
+setMethod("calculate", signature=c("cavg_metric"), definition=function(object, ...) {
+  object@individual <- cavg_delegate(x=object@x, variable=object@variable)
+  return(object)    
 })
 
 #_______________________________________________________________________________
@@ -48,6 +49,6 @@ cavg_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
   diff <- x %>% dplyr::group_by(id) %>% dplyr::summarise(diff_time=time[dplyr::n()]-time[1], .groups="drop")
   auc <- auc %>% dplyr::left_join(diff, by="id")
-  cavg <- auc %>% dplyr::mutate(cavg=auc/diff_time) %>% dplyr::select(-auc, -diff_time) 
+  cavg <- auc %>% dplyr::mutate(value=auc/diff_time) %>% dplyr::select(-auc, -diff_time) 
   return(cavg)
 }
