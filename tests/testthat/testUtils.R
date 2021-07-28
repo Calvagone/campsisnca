@@ -25,6 +25,9 @@ standardiseOutput <- function(ncaOutput, metric) {
   return(ncaOutput %>% tibble::as_tibble())
 }
 
+# THis is needed because of Cavg, Cmin funtions etc
+# that make the ncappc package not to work properly
+# Test it with the global variable: Cavg=0
 detachCampsisNCA <- function() {
   if("campsisnca" %in% (.packages())){
     detach("package:campsisnca", unload=TRUE) 

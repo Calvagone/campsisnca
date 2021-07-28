@@ -4,14 +4,14 @@
 \alias{ctrough_delegate}
 \title{Compute Ctrough}
 \usage{
-ctrough_delegate(x, variable, t)
+ctrough_delegate(x, variable, time)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 
-\item{t}{time value to read Ctrough}
+\item{time}{time value to read Ctrough}
 }
 \description{
 Compute Ctrough

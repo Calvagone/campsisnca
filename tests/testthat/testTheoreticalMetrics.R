@@ -81,7 +81,7 @@ test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
   firstRow$K
   
   # Validation 1: OK
-  linearMod <- lm(log(CP) ~ time, data=results %>% timerange(min=15*24, max=16*24))
+  linearMod <- lm(log(CP) ~ time, data=results %>% campsisnca::timerange(min=15*24, max=16*24))
   linearMod$coefficients
   expect_equal(-linearMod$coefficients[["time"]], firstRow$K, tolerance=1e-3)
   

@@ -47,9 +47,9 @@ setMethod("calculate", signature=c("ctrough_metric"), definition=function(object
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @param t time value to read Ctrough
-ctrough_delegate <- function(x, variable, t) {
+#' @param time time value to read Ctrough
+ctrough_delegate <- function(x, variable, time) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::filter(time==t) %>% dplyr::ungroup()
+  x <- x %>% dplyr::group_by(id) %>% dplyr::filter_at(.vars="time", .vars_predicate=~.x==time) %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, value=dv_variable))
 }

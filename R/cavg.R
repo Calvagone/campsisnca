@@ -45,10 +45,10 @@ setMethod("calculate", signature=c("cavg_metric"), definition=function(object, .
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
 cavg_delegate <- function(x, variable) {
-  auc <- auc(x=x, variable=variable)
+  auc <- auc_delegate(x=x, variable=variable)
   x <- x %>% standardise(variable)
   diff <- x %>% dplyr::group_by(id) %>% dplyr::summarise(diff_time=time[dplyr::n()]-time[1], .groups="drop")
   auc <- auc %>% dplyr::left_join(diff, by="id")
-  cavg <- auc %>% dplyr::mutate(value=auc/diff_time) %>% dplyr::select(-auc, -diff_time) 
+  cavg <- auc %>% dplyr::mutate(value=value/diff_time) %>% dplyr::select(-diff_time) 
   return(cavg)
 }
