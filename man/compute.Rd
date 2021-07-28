@@ -2,9 +2,30 @@
 % Please edit documentation in R/nca_metrics_s4.R
 \name{compute}
 \alias{compute}
+\alias{compute,auc_metric-method}
+\alias{compute,cmax_metric-method}
+\alias{compute,tmax_metric-method}
+\alias{compute,cmin_metric-method}
+\alias{compute,tmin_metric-method}
+\alias{compute,ctrough_metric-method}
+\alias{compute,cavg_metric-method}
 \title{Compute.}
 \usage{
 compute(object, ...)
+
+\S4method{compute}{auc_metric}(object)
+
+\S4method{compute}{cmax_metric}(object)
+
+\S4method{compute}{tmax_metric}(object)
+
+\S4method{compute}{cmin_metric}(object)
+
+\S4method{compute}{tmin_metric}(object)
+
+\S4method{compute}{ctrough_metric}(object)
+
+\S4method{compute}{cavg_metric}(object)
 }
 \arguments{
 \item{object}{metric to be computed}

@@ -1,3 +1,33 @@
+#_______________________________________________________________________________
+#----                         common process                                ----
+#_______________________________________________________________________________
+
+processDataframe <- function(x) {
+  if (is.null(x)) {
+    return(data.frame())
+  } else {
+    assertthat::assert_that(is.data.frame(x), msg="x not a dataframe")
+    return(x)
+  }
+}
+
+processVariable <- function(variable) {
+  if (is.null(variable)) {
+    return(as.character(NA))
+  } else {
+    assertthat::assert_that(is.character(variable) && length(variable),
+                            msg="variable not a single character value")
+    return(variable)
+  }
+}
+
+#' Main metrics parameters.
+#' 
+#' @param x CAMPSIS/NONMEM dataframe
+#' @param variable dependent variable
+metricsParams <- function(x=NULL, variable=NULL) {
+  # Do nothing
+}
 
 #' 
 #' Standardise input dataframe to CAMPSIS dataframe.
@@ -41,87 +71,45 @@ standardise <- function(x, variable) {
   return(x)
 }
 
-#' 
-#' Compute AUC.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @param method method:
-#' * 1: linear up - linear down
-#' * 2: linear up - logarithmic down
-#' * 3: linear before Tmax, logarithmic after Tmax
-auc_delegate <- function(x, variable, method=1) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(auc=trap(x=time, y=dv_variable, method=method), .groups="drop")
-  return(x)
+#_______________________________________________________________________________
+#----                          nca_metric class                             ----
+#_______________________________________________________________________________
+
+validateMetric <- function(object) {
+  return(expectOne(object, "variable"))
 }
 
 #' 
-#' Compute Cmax.
+#' NCA metric class. See this class as an interface.
 #' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-cmax_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, cmax=dv_variable))
+#' @export
+setClass(
+  "nca_metric",
+  representation(
+    x = "data.frame",                  # default dataframe
+    variable = "character",            # default variable
+    individual_results = "data.frame", # individual results
+    summary_results = "data.frame"     # summary results
+  ),
+  contains="pmx_element",
+  validity=validateMetric
+)
+
+#_______________________________________________________________________________
+#----                              compute                                  ----
+#_______________________________________________________________________________
+
+#' Compute.
+#' 
+#' @param object metric to be computed
+#' @param ... extra arguments
+#' @return updated object
+#' @export
+#' @rdname compute
+compute <- function(object, ...) {
+  stop("No default function is provided")
 }
 
-#' 
-#' Compute tmax.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-tmax_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, tmax=time))
-}
-
-#' 
-#' Compute Cmin.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-cmin_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, cmin=dv_variable))
-}
-
-#' 
-#' Compute tmin.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-tmin_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, tmin=time))
-}
-
-#' 
-#' Compute Ctrough
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @param t time value to read Ctrough
-ctrough_delegate <- function(x, variable, t) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::filter(time==t) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, ctrough=dv_variable))
-}
-
-#' 
-#' Compute Cavg (C average).
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-cavg_delegate <- function(x, variable) {
-  auc <- auc(x=x, variable=variable)
-  x <- x %>% standardise(variable)
-  diff <- x %>% dplyr::group_by(id) %>% dplyr::summarise(diff_time=time[dplyr::n()]-time[1], .groups="drop")
-  auc <- auc %>% dplyr::left_join(diff, by="id")
-  cavg <- auc %>% dplyr::mutate(cavg=auc/diff_time) %>% dplyr::select(-auc, -diff_time) 
-  return(cavg)
-}
+setGeneric("compute", function(object, ...) {
+  standardGeneric("compute")
+})

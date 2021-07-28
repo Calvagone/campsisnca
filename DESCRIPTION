@@ -7,7 +7,14 @@ Collate:
     'theoretical_metrics.R'
     'auc_trap_rule.R'
     'nca_metrics.R'
-    'nca_metrics_s4.R'
+    'auc.R'
+    'cmax.R'
+    'tmax.R'
+    'cmin.R'
+    'tmin.R'
+    'ctrough.R'
+    'cavg.R'
+
 Title: CAMPSIS NCA Package
 Version: 0.1.0
 Authors@R: c(

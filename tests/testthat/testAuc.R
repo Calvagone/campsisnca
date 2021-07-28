@@ -4,12 +4,12 @@ library(dplyr)
 library(campsis)
 context("Test auc method")
 
-testFolder <<- ""
+testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Dataset 1 - AUC0-24 at day 1 (method 1)", {
   ds <- dataset1()
-  auc1 <- auc(ds$campsis %>% timerange(0, 24), "Y")
+  auc1 <- Auc(ds$campsis %>% timerange(0, 24), "Y")
   auc2 <- ncappcOutput(ds$nonmem %>% timerange(0, 24), metric="AUClast")
   auc3 <- calvaNCAOutput(ds$nonmem %>% timerange(0, 24), metric="AUClast")
   
