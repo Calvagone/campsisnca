@@ -3,6 +3,7 @@ Type: Package
 Collate:
     'check.R'
     'consistency_checks.R'
+    'generic.R'
     'filter_utilities.R'
     'theoretical_metrics.R'
     'nca_metrics.R'

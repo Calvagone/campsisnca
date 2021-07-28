@@ -86,8 +86,8 @@ validateMetric <- function(object) {
 setClass(
   "nca_metric",
   representation(
-    x = "data.frame",          # default dataframe
-    variable = "character",    # default variable
+    x = "data.frame",          # specific dataframe
+    variable = "character",    # specific variable
     individual = "data.frame", # individual results
     summary = "data.frame"     # summary results
   ),
@@ -96,20 +96,37 @@ setClass(
 )
 
 #_______________________________________________________________________________
-#----                              compute                                  ----
+#----                          nca_metrics class                            ----
 #_______________________________________________________________________________
 
-#' Compute.
-#' 
-#' @param object metric to be computed
-#' @param ... extra arguments
-#' @return updated object
-#' @export
-#' @rdname calculate
-calculate <- function(object, ...) {
-  stop("No default function is provided")
+validateNCAMetrics <- function(object) {
+  return(c(expectOne(object, "variable"), expectOneOrMore(object, "scenario")))
 }
 
-setGeneric("calculate", function(object, ...) {
-  standardGeneric("calculate")
-})
+#' 
+#' NCA metric class. See this class as an interface.
+#' 
+#' @export
+setClass(
+  "nca_metrics",
+  representation(
+    x = "data.frame",       # default dataframe
+    variable = "character", # default variable
+    scenario = "character"  # named character vector, e.g. c(day='Day 1', fasted='Fasted')
+  ),
+  contains="pmx_list",
+  prototype = prototype(type="nca_metric"),
+  validity=validateNCAMetrics
+)
+
+#' 
+#' NCA metrics
+#' 
+#' @inheritParams metricsParams
+#' @param time time value to read Ctrough
+#' @export
+NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
+  x = processDataframe(x)
+  variable = processVariable(variable)
+  return(new("nca_metrics", x=x, variable=variable, scenario=scenario))
+}

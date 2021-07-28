@@ -29,10 +29,22 @@ Tmax <- function(x=NULL, variable=NULL) {
   return(new("tmax_metric", x=x, variable=variable))
 }
 
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
 #' @rdname calculate
 setMethod("calculate", signature=c("tmax_metric"), definition=function(object, ...) {
   object@individual <- tmax_delegate(x=object@x, variable=object@variable)
   return(object)    
+})
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("tmax_metric"), definition = function(x) {
+  return("tmax")
 })
 
 #_______________________________________________________________________________

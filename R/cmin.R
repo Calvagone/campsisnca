@@ -29,10 +29,22 @@ Cmin <- function(x=NULL, variable=NULL) {
   return(new("cmin_metric", x=x, variable=variable))
 }
 
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
 #' @rdname calculate
 setMethod("calculate", signature=c("cmin_metric"), definition=function(object, ...) {
   object@individual <- cmin_delegate(x=object@x, variable=object@variable)
   return(object)    
+})
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("cmin_metric"), definition = function(x) {
+  return("cmin")
 })
 
 #_______________________________________________________________________________

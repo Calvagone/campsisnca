@@ -29,10 +29,22 @@ Tmin <- function(x=NULL, variable=NULL) {
   return(new("tmin_metric", x=x, variable=variable))
 }
 
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
 #' @rdname calculate
 setMethod("calculate", signature=c("tmin_metric"), definition=function(object, ...) {
   object@individual <- tmin_delegate(x=object@x, variable=object@variable)
   return(object)    
+})
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("tmin_metric"), definition = function(x) {
+  return("tmin")
 })
 
 #_______________________________________________________________________________

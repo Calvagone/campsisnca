@@ -31,10 +31,22 @@ Ctrough <- function(x=NULL, variable=NULL, time) {
   return(new("ctrough_metric", x=x, variable=variable, time=time))
 }
 
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
 #' @rdname calculate
 setMethod("calculate", signature=c("ctrough_metric"), definition=function(object, ...) {
   object@individual <- ctrough_delegate(x=object@x, variable=object@variable, time=object@time)
   return(object)    
+})
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("ctrough_metric"), definition = function(x) {
+  return("ctrough")
 })
 
 #_______________________________________________________________________________

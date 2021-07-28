@@ -35,10 +35,22 @@ Auc <- function(x=NULL, variable=NULL, method=1) {
   return(new("auc_metric", x=x, variable=variable, method=as.integer(method)))
 }
 
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
 #' @rdname calculate
 setMethod("calculate", signature=c("auc_metric"), definition=function(object, ...) {
   object@individual <- auc_delegate(x=object@x, variable=object@variable, method=object@method)
   return(object)    
+})
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("auc_metric"), definition = function(x) {
+  return("auc")
 })
 
 #_______________________________________________________________________________

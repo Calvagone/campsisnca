@@ -29,10 +29,22 @@ Cavg <- function(x=NULL, variable=NULL) {
   return(new("cavg_metric", x=x, variable=variable))
 }
 
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
 #' @rdname calculate
 setMethod("calculate", signature=c("cavg_metric"), definition=function(object, ...) {
   object@individual <- cavg_delegate(x=object@x, variable=object@variable)
   return(object)    
+})
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("cavg_metric"), definition = function(x) {
+  return("cavg")
 })
 
 #_______________________________________________________________________________
