@@ -1,9 +1,4 @@
 ---
-pagetitle: "CAMPSIS NCA"
-date: ""
-author: ""
-output: github_document
-always_allow_html: true
 knit: (knitr::knit)
 ---
 
