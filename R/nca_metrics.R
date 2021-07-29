@@ -95,6 +95,16 @@ setClass(
   validity=validateMetric
 )
 
+summariseIndividualData <- function(x, level) {
+  assertthat::assert_that(all(colnames(x)==c("id", "value")))
+  level.low <- (1 - level)/2
+  level.up <- 1 - level.low
+  x@summary <- x@individual %>% summarise(low=quantile(value, level.low),
+                                          med=median(value),
+                                          up=quantile(value, level.up))
+  return(x)
+}
+
 #_______________________________________________________________________________
 #----                          nca_metrics class                            ----
 #_______________________________________________________________________________
@@ -130,3 +140,23 @@ NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
   variable = processVariable(variable)
   return(new("nca_metrics", x=x, variable=variable, scenario=scenario))
 }
+
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_metrics"), definition=function(object, ...) {
+  object@list <- object@list %>% purrr::map(.f=function(.x) {
+    # Use default dataframe if specific dataframe is empty
+    if (nrow(.x@x) == 0) {
+      .x@x <- object@x
+    }
+    # Use default dependent variable if specific variable is empty
+    if (is.na(.x@variable)) {
+      .x@variable <- object@variable
+    }
+    return(.x %>% calculate(...))
+  })
+  return(object)    
+})

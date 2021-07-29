@@ -34,9 +34,9 @@ Tmax <- function(x=NULL, variable=NULL) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("tmax_metric"), definition=function(object, ...) {
+setMethod("calculate", signature=c("tmax_metric"), definition=function(object, level=0.9, ...) {
   object@individual <- tmax_delegate(x=object@x, variable=object@variable)
-  return(object)    
+  return(object %>% summariseIndividualData(level=level))    
 })
 
 #_______________________________________________________________________________

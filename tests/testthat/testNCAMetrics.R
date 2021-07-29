@@ -13,7 +13,7 @@ test_that("Dataset 1 - day 1 & day 7", {
   
   metrics <- NCAMetrics(x=ds$campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1"))
   metrics <- metrics %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
-  
-  
+  metrics <- metrics %>% calculate()
+    
 })
 
