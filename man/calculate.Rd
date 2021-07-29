@@ -34,7 +34,7 @@ calculate(object, level = 0.9, ...)
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
 
-\item{level}{prediction interval level, default is 0.9 (90% prediction interval)}
+\item{level}{prediction interval level, default is 0.9 (90\% prediction interval)}
 
 \item{...}{extra arguments}
 }

@@ -3,11 +3,15 @@ Type: Package
 Collate:
     'check.R'
     'consistency_checks.R'
+    'export_type.R'
     'generic.R'
+    'common_utilities.R'
     'filter_utilities.R'
     'theoretical_metrics.R'
+    'nca_metric.R'
     'nca_metrics.R'
     'nca_metrics_table.R'
+    'table_export.R'
     'auc_trap_rule.R'
     'auc.R'
     'cmax.R'
@@ -23,7 +27,7 @@ Authors@R: c(
   )
 Description: TODO.
 Depends: R (>= 4.0.0), campsismod
-Imports: assertthat, dplyr, purrr, tibble, tidyr
+Imports: assertthat, dplyr, kableExtra, purrr, tibble, tidyr
 License: file LICENSE
 Encoding: UTF-8
 Language: en-US

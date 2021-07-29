@@ -20,6 +20,8 @@ test_that("Dataset 1 - day 1 & day 7", {
   metrics_d7 <- metrics_d7 %>% calculate()
   
   table <- NCAMetricsTable()  
-  table <- table %>% add(metrics_d1, metrics_d7)
+  table <- table %>% add(c(metrics_d1, metrics_d7))
+  
+  df <- table %>% export(dest="dataframe")
 })
 

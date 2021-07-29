@@ -26,3 +26,22 @@ setClass(
 NCAMetricsTable <- function() {
   return(new("nca_metrics_table"))
 }
+
+#_______________________________________________________________________________
+#----                                export                                 ----
+#_______________________________________________________________________________
+
+setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
+  if (dest=="dataframe") {
+    return(object %>% export(new("dataframe_type")))
+  } else if (dest=="kable") {
+    return(object %>% export(new("kable_type")))
+  } else {
+    stop("Only dataframe and kable are supported for now")
+  }
+})
+
+setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, ...) {
+  return(object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest)))
+})
+
