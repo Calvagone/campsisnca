@@ -37,7 +37,7 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
     }
   }
   # Reorder
-  metrics_ <- metrics_[, order(match(preferredOrder, colnames(metrics_)))]
+  metrics_ <- metrics_[, order(match(colnames(metrics_), preferredOrder))]
   
   return(metrics_ %>% makeKable(vgroup=vgroup, vsubgroup=original_subgroup))
 }
