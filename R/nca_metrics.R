@@ -124,7 +124,7 @@ setClass(
     variable = "character", # default variable
     scenario = "character"  # named character vector, e.g. c(day='Day 1', fasted='Fasted')
   ),
-  contains="pmx_list",
+  contains=c("pmx_element", "pmx_list"), # PMX element in nca_metrics_table
   prototype = prototype(type="nca_metric"),
   validity=validateNCAMetrics
 )
@@ -140,6 +140,14 @@ NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
   variable = processVariable(variable)
   return(new("nca_metrics", x=x, variable=variable, scenario=scenario))
 }
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("nca_metrics"), definition = function(x) {
+  return(paste0("NCA metrics: ", paste0(x@scenario, collapse=" / ")))
+})
 
 #_______________________________________________________________________________
 #----                            calculate                                  ----

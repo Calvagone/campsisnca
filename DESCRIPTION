@@ -7,6 +7,7 @@ Collate:
     'filter_utilities.R'
     'theoretical_metrics.R'
     'nca_metrics.R'
+    'nca_metrics_table.R'
     'auc_trap_rule.R'
     'auc.R'
     'cmax.R'
