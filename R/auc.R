@@ -50,7 +50,7 @@ setMethod("calculate", signature=c("auc_metric"), definition=function(object, le
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("auc_metric"), definition = function(x) {
-  return("auc")
+  return("AUC")
 })
 
 #_______________________________________________________________________________

@@ -46,7 +46,7 @@ setMethod("calculate", signature=c("ctrough_metric"), definition=function(object
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("ctrough_metric"), definition = function(x) {
-  return("ctrough")
+  return("Ctrough")
 })
 
 #_______________________________________________________________________________

@@ -44,7 +44,7 @@ setMethod("calculate", signature=c("cmin_metric"), definition=function(object, l
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("cmin_metric"), definition = function(x) {
-  return("cmin")
+  return("Cmin")
 })
 
 #_______________________________________________________________________________

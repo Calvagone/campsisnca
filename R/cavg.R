@@ -44,7 +44,7 @@ setMethod("calculate", signature=c("cavg_metric"), definition=function(object, l
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("cavg_metric"), definition = function(x) {
-  return("cavg")
+  return("Cavg")
 })
 
 #_______________________________________________________________________________

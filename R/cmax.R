@@ -44,7 +44,7 @@ setMethod("calculate", signature=c("cmax_metric"), definition=function(object, l
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("cmax_metric"), definition = function(x) {
-  return("cmax")
+  return("Cmax")
 })
 
 #_______________________________________________________________________________

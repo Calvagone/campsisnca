@@ -62,13 +62,13 @@ calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", dose
   return(standardiseOutput(out$ncaOutput, metric))
 }
 
-exportToNMDataset <- function(results, dataset, model) {
+exportToNMDataset <- function(results, dataset, model, seed=seed) {
   # Retrieve ETA names from model
   etas <- (model@parameters %>% campsismod::select("omega"))@list %>% purrr::map_chr(~paste0("ETA_", .x@name))
   
   # Export CAMPSIS dataset to dataframe, remove all ETAS
   # Note: seed can be random as ETAS are removed
-  nmDataset <- dataset %>% export(dest="mrgsolve", model=model, seed=fixedSeed()) %>% dplyr::select(-all_of(etas), -ARM, -DOSENO)
+  nmDataset <- dataset %>% export(dest="mrgsolve", model=model, seed=seed) %>% dplyr::select(-all_of(etas), -ARM, -DOSENO)
   
   # Merge CAMPSIS results and dataset to have kind of full dataset (dosing info + observations)
   nmDataset <- nmDataset %>% dplyr::left_join(results %>% dplyr::transmute(ID=id, TIME=time, EVID=0, DV=Y))
@@ -99,5 +99,5 @@ dataset1 <- function(seed=1) {
   #spaghettiPlot(results, "CP")
   
   # Return both the CAMPSIS output and the NONMEM dataset
-  return(list(campsis=results, nonmem=results %>% exportToNMDataset(dataset=dataset, model=model)))
+  return(list(campsis=results, nonmem=results %>% exportToNMDataset(dataset=dataset, model=model, seed=seed)))
 }
