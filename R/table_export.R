@@ -46,12 +46,13 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
 #' @export
 #' 
 makeKable <- function(metrics_, vgroup=NULL, vsubgroup=NULL) {
+  escape <- TRUE
   if (is.null(vsubgroup)) {
     # Remove vertical group column header
     tmp <- metrics_ %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
     
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format="html", row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    retValue <- kableExtra::kbl(tmp, format="html", escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
     
   } else {
     group_info <- metrics_ %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
@@ -66,7 +67,7 @@ makeKable <- function(metrics_, vgroup=NULL, vsubgroup=NULL) {
     tmp <- tmp %>% dplyr::rename_at(.vars=vsubgroup, .funs=~" ")
     
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format="html", row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    retValue <- kableExtra::kbl(tmp, format="html", escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
     
     # Make groups
     for (rowIndex in seq_len(nrow(group_info))) {
