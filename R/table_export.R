@@ -5,8 +5,13 @@
 #' @param metrics dataframe, mandatory columns: metric & cell
 #' @param vgroup vertical group variable names
 #' @param vsubgroup vertical subgroup variable names
+#' @export
 #' 
 makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
+  original_subgroup = vsubgroup
+  if (is.null(vsubgroup)) {
+    vsubgroup = vgroup
+  }
   assertthat::assert_that(is.character(vgroup) && length(vgroup)==1,
                           msg=paste0("argument '", vgroup, "' must be a single character value"))
   assertthat::assert_that(is.character(vsubgroup) && length(vsubgroup)==1,
@@ -29,7 +34,7 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
     }
   }
   
-  return(metrics_ %>% makeKable(vgroup=vgroup, vsubgroup=vsubgroup))
+  return(metrics_ %>% makeKable(vgroup=vgroup, vsubgroup=original_subgroup))
 }
 
 #'
@@ -38,26 +43,36 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
 #' @param metrics dataframe, mandatory columns: metric & cell
 #' @param vgroup vertical group variable names
 #' @param vsubgroup vertical subgroup variable names
+#' @export
 #' 
 makeKable <- function(metrics_, vgroup=NULL, vsubgroup=NULL) {
-  group_info <- metrics_ %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
-    dplyr::group_by_at(vgroup) %>%
-    dplyr::summarise(MIN_INDEX=min(INDEX_COL), MAX_INDEX=max(INDEX_COL)) %>%
-    dplyr::arrange(MIN_INDEX)
-  
-  # Remove vertical group column as info is stored in group_info
-  tmp <- metrics_ %>% dplyr::select(-dplyr::all_of(c(vgroup)))
-  
-  # Remove vertical subgroup column header 
-  tmp <- tmp %>% dplyr::rename_at(.vars=vsubgroup, .funs=~" ")
-  
-  # Make kable
-  retValue <- kableExtra::kbl(tmp, format="html", row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
-  
-  # Make groups
-  for (rowIndex in seq_len(nrow(group_info))) {
-    row <- group_info[rowIndex, ]
-    retValue <- retValue %>% kableExtra::pack_rows(row %>% dplyr::pull(vgroup), row$MIN_INDEX, row$MAX_INDEX)
+  if (is.null(vsubgroup)) {
+    # Remove vertical group column header
+    tmp <- metrics_ %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
+    
+    # Make kable
+    retValue <- kableExtra::kbl(tmp, format="html", row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    
+  } else {
+    group_info <- metrics_ %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
+      dplyr::group_by_at(vgroup) %>%
+      dplyr::summarise(MIN_INDEX=min(INDEX_COL), MAX_INDEX=max(INDEX_COL)) %>%
+      dplyr::arrange(MIN_INDEX)
+    
+    # Remove vertical group column as info is stored in group_info
+    tmp <- metrics_ %>% dplyr::select(-dplyr::all_of(c(vgroup)))
+    
+    # Remove vertical subgroup column header
+    tmp <- tmp %>% dplyr::rename_at(.vars=vsubgroup, .funs=~" ")
+    
+    # Make kable
+    retValue <- kableExtra::kbl(tmp, format="html", row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    
+    # Make groups
+    for (rowIndex in seq_len(nrow(group_info))) {
+      row <- group_info[rowIndex, ]
+      retValue <- retValue %>% kableExtra::pack_rows(row %>% dplyr::pull(vgroup), row$MIN_INDEX, row$MAX_INDEX)
+    }
   }
   
   return(retValue)

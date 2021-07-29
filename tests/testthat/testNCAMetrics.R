@@ -23,5 +23,7 @@ test_that("Dataset 1 - day 1 & day 7", {
   table <- table %>% add(c(metrics_d1, metrics_d7))
   
   df <- table %>% export(dest="dataframe")
+  kable <- table %>% export(dest="kable", vgroup="day", vsubgroup=NULL)
+  kable
 })
 
