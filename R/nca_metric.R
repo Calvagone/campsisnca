@@ -26,9 +26,12 @@ summariseIndividualData <- function(x, level) {
   assertthat::assert_that(all(colnames(x)==c("id", "value")))
   level.low <- (1 - level)/2
   level.up <- 1 - level.low
-  x@summary <- x@individual %>% summarise(low=quantile(value, level.low),
-                                          med=median(value),
-                                          up=quantile(value, level.up))
+  x@summary <-
+    x@individual %>% dplyr::summarise(
+      low = quantile(value, level.low),
+      med = median(value),
+      up = quantile(value, level.up)
+    )
   return(x)
 }
 

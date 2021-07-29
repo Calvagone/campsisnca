@@ -3,6 +3,7 @@ pagetitle: "CAMPSIS NCA"
 date: ""
 author: ""
 output: github_document
+always_allow_html: true
 ---
 
 # campsisnca
@@ -16,3 +17,57 @@ devtools::install_github("Calvagone/campsisnca", ref="main", auth_token="AUTH_TO
 ```
 
 ## Some examples
+
+```{r, results='hide', echo=F, message=F, warning=F}
+library(campsis)
+ds <- Dataset(50)
+ds <- ds %>% add(Bolus(time=(0:6)*24, amount=1000))
+ds <- ds %>% add(Observations(times=seq(0, 7*24, by=1)))
+model <- model_library$advan4_trans4
+campsis <- model %>% simulate(dataset=ds, dest="RxODE", seed=1)
+```
+
+First import the `campsisnca` package:
+
+```{r, message=FALSE}
+library(campsisnca)
+```
+
+Assume some results were simulated with CAMPSIS (see `campsis` dataframe) :
+
+```{r, message=FALSE}
+campsis
+```
+
+Let's calculate PK metrics at Day 1 and Day 7 as follows:
+
+```{r, message=FALSE}
+# Day 1
+ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1"))
+ncaD1 <- ncaD1 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
+ncaD1 <- ncaD1 %>% calculate()
+
+# Day 7 
+ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168), variable="Y", scenario=c(day="Day 7"))
+ncaD7 <- ncaD7 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=168)))
+ncaD7 <- ncaD7 %>% calculate()
+```
+
+These 2 metrics may be imported into a metrics table object, as follows:
+
+```{r, message=FALSE}
+table <- NCAMetricsTable()  
+table <- table %>% add(c(ncaD1, ncaD7))
+```
+
+This table can be exported to a dataframe using the `export` function:
+
+```{r, message=FALSE}
+table %>% export(dest="dataframe")
+```
+
+Or to a HTML table using `kable`:
+
+```{r, message=FALSE}
+table %>% export(dest="kable")
+```

@@ -29,7 +29,7 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
   for (vgroupCat in vgroupCats) {
     row_ <- metrics %>% dplyr::filter_at(.vars=vgroup, .vars_predicate=~.x==vgroupCat)
     for (vsubgroupCat in vsubgroupCats) {
-      row <- row_ %>% filter_at(.vars=vsubgroup, .vars_predicate=~.x==vsubgroupCat)
+      row <- row_ %>% dplyr::filter_at(.vars=vsubgroup, .vars_predicate=~.x==vsubgroupCat)
       metrics_ <- dplyr::bind_rows(metrics_, tidyr::spread(data=row, key=metric, value=cell))
     }
   }
