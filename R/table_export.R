@@ -26,6 +26,9 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
   
   metrics_ <- NULL
   
+  # Remember order because spread does not preserve the initial order
+  preferredOrder <- c(vgroup, vsubgroup, metrics$metric) %>% unique()
+
   for (vgroupCat in vgroupCats) {
     row_ <- metrics %>% dplyr::filter_at(.vars=vgroup, .vars_predicate=~.x==vgroupCat)
     for (vsubgroupCat in vsubgroupCats) {
@@ -33,6 +36,8 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
       metrics_ <- dplyr::bind_rows(metrics_, tidyr::spread(data=row, key=metric, value=cell))
     }
   }
+  # Reorder
+  metrics_ <- metrics_[, order(match(preferredOrder, colnames(metrics_)))]
   
   return(metrics_ %>% makeKable(vgroup=vgroup, vsubgroup=original_subgroup))
 }

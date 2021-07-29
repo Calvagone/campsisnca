@@ -62,7 +62,7 @@ setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=f
 })
 
 statsToCell <- function(x) {
-  x <- x %>% dplyr::mutate(cell=paste0(med %>% roundCustom(), " &#91;", low %>% roundCustom(), "-", up %>% roundCustom(), "&#93;"))
+  x <- x %>% dplyr::mutate(cell=paste0(med %>% roundCustom(), " [", low %>% roundCustom(), "-", up %>% roundCustom(), "]"))
   x <- x %>% dplyr::select(-med, -low, -up)
   return(x)
 }

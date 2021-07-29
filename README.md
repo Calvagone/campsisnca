@@ -102,10 +102,10 @@ AUC
 Cmax
 </th>
 <th style="text-align:left;">
-Ctrough
+tmax
 </th>
 <th style="text-align:left;">
-tmax
+Ctrough
 </th>
 </tr>
 </thead>
@@ -121,10 +121,10 @@ Day 1
 10 [9-14]
 </td>
 <td style="text-align:left;">
-3 [1-4]
+3 [1-6]
 </td>
 <td style="text-align:left;">
-3 [1-6]
+3 [1-4]
 </td>
 </tr>
 <tr>
@@ -138,10 +138,10 @@ Day 7
 15 [11-19]
 </td>
 <td style="text-align:left;">
-4 [2-7]
+147 [145-150]
 </td>
 <td style="text-align:left;">
-147 [145-150]
+4 [2-7]
 </td>
 </tr>
 </tbody>
@@ -187,10 +187,10 @@ AUC
 Cmax
 </th>
 <th style="text-align:left;">
-Ctrough
+tmax
 </th>
 <th style="text-align:left;">
-tmax
+Ctrough
 </th>
 </tr>
 </thead>
@@ -211,10 +211,10 @@ BW range: 50-75
 11 [9-14]
 </td>
 <td style="text-align:left;">
-3 [2-4]
+4 [2-6]
 </td>
 <td style="text-align:left;">
-4 [2-6]
+3 [2-4]
 </td>
 </tr>
 <tr>
@@ -228,10 +228,10 @@ BW range: 75-100
 10 [8-13]
 </td>
 <td style="text-align:left;">
-2 [1-3]
+3 [1-5]
 </td>
 <td style="text-align:left;">
-3 [1-5]
+2 [1-3]
 </td>
 </tr>
 <tr grouplength="2">
@@ -250,10 +250,10 @@ BW range: 50-75
 17 [14-19]
 </td>
 <td style="text-align:left;">
-5 [3-7]
+147 [145-150]
 </td>
 <td style="text-align:left;">
-147 [145-150]
+5 [3-7]
 </td>
 </tr>
 <tr>
@@ -267,10 +267,10 @@ BW range: 75-100
 14 [11-17]
 </td>
 <td style="text-align:left;">
-3 [2-5]
+147 [145-149]
 </td>
 <td style="text-align:left;">
-147 [145-149]
+3 [2-5]
 </td>
 </tr>
 </tbody>
