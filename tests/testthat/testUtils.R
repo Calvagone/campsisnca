@@ -62,10 +62,6 @@ calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", dose
   return(standardiseOutput(out$ncaOutput, metric))
 }
 
-fixedSeed <- function() {
-  return(1)
-}
-
 exportToNMDataset <- function(results, dataset, model) {
   # Retrieve ETA names from model
   etas <- (model@parameters %>% campsismod::select("omega"))@list %>% purrr::map_chr(~paste0("ETA_", .x@name))
@@ -81,7 +77,7 @@ exportToNMDataset <- function(results, dataset, model) {
   return(nmDataset)
 }
 
-dataset1 <- function() {
+dataset1 <- function(seed=1) {
   library(campsisnca)
   
   model <- getNONMEMModelTemplate(3,4)
@@ -94,11 +90,11 @@ dataset1 <- function() {
   dataset <- dataset %>% add(Infusion(time=(0:13)*24, amount=100, compartment=1))
 
   # Rich PK sampling on day 1 and day 7
-  sampling <- c(0,1,2,3, 2,4,8,10,12,16,20,24)
+  sampling <- c(0,1,2,3,4,8,10,12,16,20,24)
   dataset <- dataset %>% add(Observations(times=c(sampling, sampling + ((7-1)*24))))
   
   # Simulate with CAMPSIS
-  results <- model %>% simulate(dataset, dest="mrgsolve", seed=fixedSeed())
+  results <- model %>% simulate(dataset, dest="mrgsolve", seed=seed)
   
   #spaghettiPlot(results, "CP")
   

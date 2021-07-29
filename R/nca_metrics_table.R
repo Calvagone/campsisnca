@@ -32,6 +32,9 @@ NCAMetricsTable <- function() {
 #_______________________________________________________________________________
 
 setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
+  if (object %>% length() == 0) {
+    stop("No metrics to export")
+  }
   if (dest=="dataframe") {
     return(object %>% export(new("dataframe_type"), ...))
   } else if (dest=="kable") {
@@ -45,8 +48,14 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   return(object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest)))
 })
 
-setMethod("export", signature=c("nca_metrics_table", "kable_type"),
-          definition=function(object, dest, vgroup, vsubgroup, ...) {
+setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=function(object, dest, ...) {
+  firstScenario <- object@list[[1]]@scenario
+  names <- names(firstScenario)
+  vgroup <- names[1]
+  vsubgroup <- NULL
+  if(names %>% length() > 1) {
+    vsubgroup <- names[2]
+  }
   metrics <- object %>% export(dest="dataframe")
   metrics <- metrics %>% statsToCell()
   return(metrics %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup))
