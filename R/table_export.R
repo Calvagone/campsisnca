@@ -46,7 +46,7 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
 #' @export
 #' 
 makeKable <- function(metrics_, vgroup=NULL, vsubgroup=NULL) {
-  escape <- TRUE
+  escape <- FALSE
   if (is.null(vsubgroup)) {
     # Remove vertical group column header
     tmp <- metrics_ %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
