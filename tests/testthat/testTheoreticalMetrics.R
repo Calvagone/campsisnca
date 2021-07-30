@@ -4,8 +4,19 @@ library(dplyr)
 library(campsis)
 context("Compute theoritical NCA metrics from PK parameters")
 
-testFolder <<- ""
+testFolder <<- "C:/prj/campsisnca/tests/testthat/"
 source(paste0(testFolder, "testUtils.R"))
+
+test_that("Check errors are well detected", {
+  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)
+  expect_error(metrics.2cpt(x), regexp="Missing columns in x: KA")
+  
+  x <- data.frame(id=1, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, KA=3.3)
+  expect_error(metrics.2cpt(x), regexp="x not recognised as CAMPSIS output nor NONMEM dataset")
+  
+  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)
+  expect_error(metrics.2cpt(x, map=c(KA="K", V4="TAU")), regexp="Unnecessary keys detected in map vector: V4")
+})
 
 test_that("Run from modelling", {
   x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, KA=3.3)
@@ -37,7 +48,7 @@ test_that("Run from modelling", {
   expect_equal(metrics$AUC_Z_1_pc, 71.29783, tolerance=tol)
   expect_equal(metrics$AUC_Z_pc, 28.70217, tolerance=tol)
   
-  expect_equal(metrics$THALF, 2.133194, tolerance=tol)
+  expect_equal(metrics$THALF_D, 2.133194, tolerance=tol)
   expect_equal(metrics$THALF_Z, 37.08738, tolerance=tol)
   expect_equal(metrics$THALF_EFF, 12.1658, tolerance=tol)
   
@@ -47,7 +58,7 @@ test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
   model <- getNONMEMModelTemplate(4,4)
   model <- model %>% campsismod::replace(Theta(name="Q", value=5))
   model <- model %>% campsismod::replace(Theta(name="V3", value=100))
-  halfLifeRequiredVars <- c("CL", "V2", "Q", "V3", "KA")
+  halfLifeRequiredVars <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
   
   dataset <- Dataset(1)
   dataset <- dataset %>% add(Bolus(time=(0:13)*24, amount=1000, compartment=1))

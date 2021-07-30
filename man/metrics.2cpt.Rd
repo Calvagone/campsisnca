@@ -4,33 +4,12 @@
 \alias{metrics.2cpt}
 \title{Theoretical metrics for 2-cpt model results.}
 \usage{
-metrics.2cpt(
-  x,
-  DOSE = NULL,
-  TAU = NULL,
-  CL = NULL,
-  V2 = NULL,
-  Q = NULL,
-  V3 = NULL,
-  KA = NULL
-)
+metrics.2cpt(x, map = character(0))
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
-\item{DOSE}{column name corresponding to DOSE in x, character value}
-
-\item{TAU}{column name corresponding to TAU in x, character value}
-
-\item{CL}{column name corresponding to CL in x, character value}
-
-\item{V2}{column name corresponding to V2 in x, character value}
-
-\item{Q}{column name corresponding to Q in x, character value}
-
-\item{V3}{column name corresponding to V3 in x, character value}
-
-\item{KA}{column name corresponding to KA in x, character value}
+\item{map}{character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA}
 }
 \value{
 theoretical metrics

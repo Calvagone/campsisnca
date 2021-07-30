@@ -20,6 +20,7 @@ Collate:
     'tmin.R'
     'ctrough.R'
     'cavg.R'
+    'thalf.R'
 Title: CAMPSIS NCA Package
 Version: 0.1.0
 Authors@R: c(

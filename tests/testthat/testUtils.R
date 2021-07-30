@@ -62,7 +62,7 @@ calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", dose
   return(standardiseOutput(out$ncaOutput, metric))
 }
 
-exportToNMDataset <- function(results, dataset, model, seed=seed) {
+exportToNMDataset <- function(results, dataset, model, seed=1) {
   # Retrieve ETA names from model
   etas <- (model@parameters %>% campsismod::select("omega"))@list %>% purrr::map_chr(~paste0("ETA_", .x@name))
   
