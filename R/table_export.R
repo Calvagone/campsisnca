@@ -8,7 +8,6 @@
 #' @export
 #' 
 makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
-  original_subgroup = vsubgroup
   if (is.null(vsubgroup)) {
     vsubgroup = vgroup
   }
@@ -24,7 +23,7 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
   vgroupCats <- metrics %>% dplyr::pull(vgroup) %>% unique()
   vsubgroupCats <- metrics %>% dplyr::pull(vsubgroup) %>% unique()
   
-  metrics_ <- NULL
+  retValue <- NULL
   
   # Remember order because spread does not preserve the initial order
   preferredOrder <- c(vgroup, vsubgroup, metrics$metric) %>% unique()
@@ -33,46 +32,46 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
     row_ <- metrics %>% dplyr::filter_at(.vars=vgroup, .vars_predicate=~.x==vgroupCat)
     for (vsubgroupCat in vsubgroupCats) {
       row <- row_ %>% dplyr::filter_at(.vars=vsubgroup, .vars_predicate=~.x==vsubgroupCat)
-      metrics_ <- dplyr::bind_rows(metrics_, tidyr::spread(data=row, key=metric, value=cell))
+      retValue <- dplyr::bind_rows(retValue, tidyr::spread(data=row, key=metric, value=cell))
     }
   }
   # Reorder
-  metrics_ <- metrics_[, order(match(colnames(metrics_), preferredOrder))]
-  
-  return(metrics_ %>% makeKable(vgroup=vgroup, vsubgroup=original_subgroup))
+  retValue <- retValue[, order(match(colnames(retValue), preferredOrder))]
+  return(retValue)
 }
 
 #'
 #' Make kable.
 #' 
-#' @param metrics_ dataframe, mandatory columns: metric & cell
+#' @param table dataframe, mandatory columns: metric & cell
 #' @param vgroup vertical group variable names
 #' @param vsubgroup vertical subgroup variable names
+#' @param format can be 'html' or "pdf'
 #' @export
 #' 
-makeKable <- function(metrics_, vgroup=NULL, vsubgroup=NULL) {
+makeKable <- function(table, vgroup=NULL, vsubgroup=NULL, format="html") {
   escape <- FALSE
   if (is.null(vsubgroup)) {
     # Remove vertical group column header
-    tmp <- metrics_ %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
+    tmp <- table %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
     
     # Make kable
     retValue <- kableExtra::kbl(tmp, format="html", escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
     
   } else {
-    group_info <- metrics_ %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
+    group_info <- table %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
       dplyr::group_by_at(vgroup) %>%
       dplyr::summarise(MIN_INDEX=min(INDEX_COL), MAX_INDEX=max(INDEX_COL)) %>%
       dplyr::arrange(MIN_INDEX)
     
     # Remove vertical group column as info is stored in group_info
-    tmp <- metrics_ %>% dplyr::select(-dplyr::all_of(c(vgroup)))
+    tmp <- table %>% dplyr::select(-dplyr::all_of(c(vgroup)))
     
     # Remove vertical subgroup column header
     tmp <- tmp %>% dplyr::rename_at(.vars=vsubgroup, .funs=~" ")
     
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format="html", escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
     
     # Make groups
     for (rowIndex in seq_len(nrow(group_info))) {

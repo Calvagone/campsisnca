@@ -4,14 +4,16 @@
 \alias{makeKable}
 \title{Make kable.}
 \usage{
-makeKable(metrics_, vgroup = NULL, vsubgroup = NULL)
+makeKable(table, vgroup = NULL, vsubgroup = NULL, format = "html")
 }
 \arguments{
-\item{metrics_}{dataframe, mandatory columns: metric & cell}
+\item{table}{dataframe, mandatory columns: metric & cell}
 
 \item{vgroup}{vertical group variable names}
 
 \item{vsubgroup}{vertical subgroup variable names}
+
+\item{format}{can be 'html' or "pdf'}
 }
 \description{
 Make kable.

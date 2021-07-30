@@ -49,6 +49,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
 })
 
 setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=function(object, dest, ...) {
+  format <- campsismod::processExtraArg(args=list(...), name="format", default="html")
+  
   firstScenario <- object@list[[1]]@scenario
   names <- names(firstScenario)
   vgroup <- names[1]
@@ -58,7 +60,9 @@ setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=f
   }
   metrics <- object %>% export(dest="dataframe")
   metrics <- metrics %>% statsToCell()
-  return(metrics %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup))
+  table <- metrics %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup)
+  kable <- table %>% makeKable(vgroup=vgroup, vsubgroup=vsubgroup, format=format)
+  return(kable)
 })
 
 statsToCell <- function(x) {
