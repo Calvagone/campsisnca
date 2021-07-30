@@ -275,3 +275,49 @@ BW range: 75-100
 </tr>
 </tbody>
 </table>
+
+### Example 3: Calculate 2-compartment half-life metrics
+
+``` r
+nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Half-lives"))
+nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
+nca <- nca %>% calculate()
+
+table <- NCAMetricsTable()  
+table <- table %>% add(nca)
+table %>% export(dest="kable")
+```
+
+<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+</th>
+<th style="text-align:left;">
+t1/2dist
+</th>
+<th style="text-align:left;">
+t1/2eff
+</th>
+<th style="text-align:left;">
+t1/2z
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;">
+Half-lives
+</td>
+<td style="text-align:left;">
+3 [2-3]
+</td>
+<td style="text-align:left;">
+13 [8-17]
+</td>
+<td style="text-align:left;">
+14 [10-19]
+</td>
+</tr>
+</tbody>
+</table>

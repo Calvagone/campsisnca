@@ -105,3 +105,15 @@ table <- NCAMetricsTable()
 table <- table %>% add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
 table %>% export(dest="kable")
 ```
+
+### Example 3: Calculate 2-compartment half-life metrics
+
+```{r, message=FALSE}
+nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Half-lives"))
+nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
+nca <- nca %>% calculate()
+
+table <- NCAMetricsTable()  
+table <- table %>% add(nca)
+table %>% export(dest="kable")
+```

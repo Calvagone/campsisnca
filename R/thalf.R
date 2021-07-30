@@ -83,7 +83,7 @@ Thalf.1cpt <- function(x=NULL, map=NULL) {
 Thalf.2cpt.dist <- function(x=NULL, map=NULL) {
   x = processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
-  return(new("thalf_metric", x=x, variable=NA, map=map, subtype="2cpt.dist"))
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype="2cpt.dist"))
 }
 
 #' 
@@ -92,10 +92,10 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL) {
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map) {
+Thalf.2cpt.z <- function(x=NULL, map=NULL) {
   x = processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
-  return(new("thalf_metric", x=x, variable=NA, map=map, subtype="2cpt.z"))
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype="2cpt.z"))
 }
 
 #' 
@@ -104,10 +104,10 @@ Thalf.2cpt.dist <- function(x=NULL, map) {
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map) {
+Thalf.2cpt.eff <- function(x=NULL, map=NULL) {
   x = processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
-  return(new("thalf_metric", x=x, variable=NA, map=map, subtype="2cpt.eff"))
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype="2cpt.eff"))
 }
 
 #_______________________________________________________________________________
@@ -117,12 +117,13 @@ Thalf.2cpt.dist <- function(x=NULL, map) {
 #' @rdname calculate
 setMethod("calculate", signature=c("thalf_metric", "numeric"), definition=function(object, level, ...) {
   subtype <- object@subtype
+
   if (subtype == "1cpt") {
     ind <- metrics.1cpt(object@x, map=object@map)
     ind <- ind %>% dplyr::transmute(id=id, value=THALF)
  
    } else if (subtype %>% startsWith("2cpt")) {
-    ind <- metrics.1cpt(object@x, map=object@map)
+    ind <- metrics.2cpt(object@x, map=object@map)
     
     if (subtype == "2cpt.dist") {
       ind <- ind %>% dplyr::transmute(id=id, value=THALF_D)
@@ -143,6 +144,7 @@ setMethod("calculate", signature=c("thalf_metric", "numeric"), definition=functi
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("thalf_metric"), definition = function(x) {
+  subtype <- x@subtype
   if (subtype == "1cpt") {
     return("t1/2")
   } else if (subtype == "2cpt.dist") {

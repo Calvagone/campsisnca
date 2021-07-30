@@ -19,6 +19,5 @@ setGeneric("calculate", function(object, level=NULL, ...) {
   if (is.null(level)) {
     level <- 0.9
   }
-  cat(class(object))
   standardGeneric("calculate")
 })
