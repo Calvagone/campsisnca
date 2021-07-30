@@ -56,7 +56,7 @@ makeKable <- function(table, vgroup=NULL, vsubgroup=NULL, format="html") {
     tmp <- table %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
     
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format="html", escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
     
   } else {
     group_info <- table %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
@@ -79,6 +79,5 @@ makeKable <- function(table, vgroup=NULL, vsubgroup=NULL, format="html") {
       retValue <- retValue %>% kableExtra::pack_rows(row %>% dplyr::pull(vgroup), row$MIN_INDEX, row$MAX_INDEX)
     }
   }
-  
   return(retValue)
 }
