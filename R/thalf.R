@@ -115,7 +115,7 @@ Thalf.2cpt.dist <- function(x=NULL, map) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("thalf_metric"), definition=function(object, level=0.9, ...) {
+setMethod("calculate", signature=c("thalf_metric", "numeric"), definition=function(object, level=0.9, ...) {
   subtype <- object@subtype
   if (subtype == "1cpt") {
     ind <- metrics.1cpt(object@x, map=object@map)

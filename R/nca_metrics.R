@@ -26,7 +26,8 @@ setClass(
 #' NCA metrics
 #' 
 #' @inheritParams metricsParams
-#' @param time time value to read Ctrough
+#' @param scenario character vector used to describe the current scenario.
+#' E.g. c(day="Day 1", condition="Fasted)
 #' @export
 NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
   x = processDataframe(x)
@@ -47,7 +48,7 @@ setMethod("getName", signature=c("nca_metrics"), definition = function(x) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metrics"), definition=function(object, ...) {
+setMethod("calculate", signature=c("nca_metrics", "numeric"), definition=function(object, level=0.9, ...) {
   object@list <- object@list %>% purrr::map(.f=function(.x) {
     # Use default dataframe if specific dataframe is empty
     if (nrow(.x@x) == 0) {
@@ -57,7 +58,7 @@ setMethod("calculate", signature=c("nca_metrics"), definition=function(object, .
     if (is.na(.x@variable)) {
       .x@variable <- object@variable
     }
-    return(.x %>% calculate(...))
+    return(.x %>% calculate(level=level, ...))
   })
   return(object)    
 })

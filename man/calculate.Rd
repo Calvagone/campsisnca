@@ -3,36 +3,36 @@
 %   R/tmax.R, R/cmin.R, R/tmin.R, R/ctrough.R, R/cavg.R, R/thalf.R
 \name{calculate}
 \alias{calculate}
-\alias{calculate,nca_metrics-method}
-\alias{calculate,auc_metric-method}
-\alias{calculate,cmax_metric-method}
-\alias{calculate,tmax_metric-method}
-\alias{calculate,cmin_metric-method}
-\alias{calculate,tmin_metric-method}
-\alias{calculate,ctrough_metric-method}
-\alias{calculate,cavg_metric-method}
-\alias{calculate,thalf_metric-method}
+\alias{calculate,nca_metrics,numeric-method}
+\alias{calculate,auc_metric,numeric-method}
+\alias{calculate,cmax_metric,numeric-method}
+\alias{calculate,tmax_metric,numeric-method}
+\alias{calculate,cmin_metric,numeric-method}
+\alias{calculate,tmin_metric,numeric-method}
+\alias{calculate,ctrough_metric,numeric-method}
+\alias{calculate,cavg_metric,numeric-method}
+\alias{calculate,thalf_metric,numeric-method}
 \title{Calculate.}
 \usage{
-calculate(object, level = 0.9, ...)
+calculate(object, level = NULL, ...)
 
-\S4method{calculate}{nca_metrics}(object, level = 0.9, ...)
+\S4method{calculate}{nca_metrics,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{auc_metric}(object, level = 0.9, ...)
+\S4method{calculate}{auc_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{cmax_metric}(object, level = 0.9, ...)
+\S4method{calculate}{cmax_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{tmax_metric}(object, level = 0.9, ...)
+\S4method{calculate}{tmax_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{cmin_metric}(object, level = 0.9, ...)
+\S4method{calculate}{cmin_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{tmin_metric}(object, level = 0.9, ...)
+\S4method{calculate}{tmin_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{ctrough_metric}(object, level = 0.9, ...)
+\S4method{calculate}{ctrough_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{cavg_metric}(object, level = 0.9, ...)
+\S4method{calculate}{cavg_metric,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{thalf_metric}(object, level = 0.9, ...)
+\S4method{calculate}{thalf_metric,numeric}(object, level = 0.9, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}

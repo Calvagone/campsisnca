@@ -36,7 +36,7 @@ Ctrough <- function(x=NULL, variable=NULL, time) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("ctrough_metric"), definition=function(object, level=0.9, ...) {
+setMethod("calculate", signature=c("ctrough_metric", "numeric"), definition=function(object, level=0.9, ...) {
   object@individual <- ctrough_delegate(x=object@x, variable=object@variable, time=object@time)
   return(object %>% summariseIndividualData(level=level))    
 })

@@ -14,7 +14,7 @@ renameOriginalColumn <- function(x, from, to) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, only one key is possible: K
-#' @param required required variables
+#' @param thalf.1cpt logical value
 #' @return theoretical metrics
 #' @importFrom dplyr all_of group_by select slice ungroup
 #' @importFrom purrr map2

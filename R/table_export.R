@@ -45,7 +45,7 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
 #'
 #' Make kable.
 #' 
-#' @param metrics dataframe, mandatory columns: metric & cell
+#' @param metrics_ dataframe, mandatory columns: metric & cell
 #' @param vgroup vertical group variable names
 #' @param vsubgroup vertical subgroup variable names
 #' @export

@@ -11,7 +11,8 @@ NCAMetrics(x = NULL, variable = NULL, scenario)
 
 \item{variable}{dependent variable}
 
-\item{time}{time value to read Ctrough}
+\item{scenario}{character vector used to describe the current scenario.
+E.g. c(day="Day 1", condition="Fasted)}
 }
 \description{
 NCA metrics

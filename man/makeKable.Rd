@@ -7,11 +7,11 @@
 makeKable(metrics_, vgroup = NULL, vsubgroup = NULL)
 }
 \arguments{
+\item{metrics_}{dataframe, mandatory columns: metric & cell}
+
 \item{vgroup}{vertical group variable names}
 
 \item{vsubgroup}{vertical subgroup variable names}
-
-\item{metrics}{dataframe, mandatory columns: metric & cell}
 }
 \description{
 Make kable.

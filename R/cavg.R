@@ -34,7 +34,7 @@ Cavg <- function(x=NULL, variable=NULL) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("cavg_metric"), definition=function(object, level=0.9, ...) {
+setMethod("calculate", signature=c("cavg_metric", "numeric"), definition=function(object, level=0.9, ...) {
   object@individual <- cavg_delegate(x=object@x, variable=object@variable)
   return(object %>% summariseIndividualData(level=level))    
 })

@@ -11,10 +11,13 @@
 #' @return updated object
 #' @export
 #' @rdname calculate
-calculate <- function(object, level=0.9, ...) {
+calculate <- function(object, level=NULL, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("calculate", function(object, level=0.9, ...) {
+setGeneric("calculate", function(object, level=NULL, ...) {
+  if (is.null(level)) {
+    level <- 0.9
+  }
   standardGeneric("calculate")
 })

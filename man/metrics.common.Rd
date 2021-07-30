@@ -11,7 +11,7 @@ metrics.common(x, map, thalf.1cpt)
 
 \item{map}{character vector used for column mapping, only one key is possible: K}
 
-\item{required}{required variables}
+\item{thalf.1cpt}{logical value}
 }
 \value{
 theoretical metrics
