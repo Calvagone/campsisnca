@@ -40,7 +40,7 @@ Auc <- function(x=NULL, variable=NULL, method=1) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("auc_metric", "numeric"), definition=function(object, level=0.9, ...) {
+setMethod("calculate", signature=c("auc_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- auc_delegate(x=object@x, variable=object@variable, method=object@method)
   return(object %>% summariseIndividualData(level=level))    
 })

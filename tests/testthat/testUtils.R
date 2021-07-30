@@ -77,9 +77,10 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
   return(nmDataset)
 }
 
-dataset1 <- function(seed=1) {
-  library(campsisnca)
-  
+dataset1 <- function(seed=1, reload=TRUE) {
+  if (reload) {
+    library(campsisnca)
+  }
   model <- getNONMEMModelTemplate(3,4)
   model <- model %>% add(InfusionDuration(1, rhs="5"))
   

@@ -34,7 +34,7 @@ Tmin <- function(x=NULL, variable=NULL) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("tmin_metric", "numeric"), definition=function(object, level=0.9, ...) {
+setMethod("calculate", signature=c("tmin_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- tmin_delegate(x=object@x, variable=object@variable)
   return(object %>% summariseIndividualData(level=level))    
 })

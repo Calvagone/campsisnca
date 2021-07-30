@@ -18,21 +18,21 @@ calculate(object, level = NULL, ...)
 
 \S4method{calculate}{nca_metrics,numeric}(object, level = 0.9, ...)
 
-\S4method{calculate}{auc_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{auc_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{cmax_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{cmax_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{tmax_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{tmax_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{cmin_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{cmin_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{tmin_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{tmin_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{ctrough_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{ctrough_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{cavg_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{cavg_metric,numeric}(object, level = NULL, ...)
 
-\S4method{calculate}{thalf_metric,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{thalf_metric,numeric}(object, level = NULL, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
