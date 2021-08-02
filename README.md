@@ -115,16 +115,16 @@ Ctrough
 Day 1
 </td>
 <td style="text-align:left;">
-132 \[99.1-165\]
+132 [99.1-165]
 </td>
 <td style="text-align:left;">
-10.4 \[8.54-14\]
+10.4 [8.54-14]
 </td>
 <td style="text-align:left;">
-3 \[1.45-5.55\]
+3 [1.45-5.55]
 </td>
 <td style="text-align:left;">
-2.6 \[1.34-3.91\]
+2.6 [1.34-3.91]
 </td>
 </tr>
 <tr>
@@ -132,16 +132,16 @@ Day 1
 Day 7
 </td>
 <td style="text-align:left;">
-184 \[125-263\]
+184 [125-263]
 </td>
 <td style="text-align:left;">
-14.9 \[11.3-18.7\]
+14.9 [11.3-18.7]
 </td>
 <td style="text-align:left;">
-147 \[145-150\]
+147 [145-150]
 </td>
 <td style="text-align:left;">
-4.09 \[1.57-6.69\]
+4.09 [1.57-6.69]
 </td>
 </tr>
 </tbody>
@@ -205,16 +205,16 @@ Ctrough
 BW range: 50-75
 </td>
 <td style="text-align:left;">
-144 \[119-169\]
+144 [119-169]
 </td>
 <td style="text-align:left;">
-11.1 \[9.25-14.3\]
+11.1 [9.25-14.3]
 </td>
 <td style="text-align:left;">
-3.5 \[2-5.95\]
+3.5 [2-5.95]
 </td>
 <td style="text-align:left;">
-3.05 \[2.14-4.28\]
+3.05 [2.14-4.28]
 </td>
 </tr>
 <tr>
@@ -222,16 +222,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:left;">
-126 \[97.1-146\]
+126 [97.1-146]
 </td>
 <td style="text-align:left;">
-10.2 \[8.09-13.3\]
+10.2 [8.09-13.3]
 </td>
 <td style="text-align:left;">
-3 \[1.35-5\]
+3 [1.35-5]
 </td>
 <td style="text-align:left;">
-2.4 \[1.26-3.47\]
+2.4 [1.26-3.47]
 </td>
 </tr>
 <tr grouplength="2">
@@ -244,16 +244,16 @@ BW range: 75-100
 BW range: 50-75
 </td>
 <td style="text-align:left;">
-210 \[161-274\]
+210 [161-274]
 </td>
 <td style="text-align:left;">
-16.5 \[13.8-18.8\]
+16.5 [13.8-18.8]
 </td>
 <td style="text-align:left;">
-147 \[145-150\]
+147 [145-150]
 </td>
 <td style="text-align:left;">
-4.92 \[2.86-7.02\]
+4.92 [2.86-7.02]
 </td>
 </tr>
 <tr>
@@ -261,16 +261,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:left;">
-170 \[120-214\]
+170 [120-214]
 </td>
 <td style="text-align:left;">
-13.6 \[11.2-17.2\]
+13.6 [11.2-17.2]
 </td>
 <td style="text-align:left;">
-147 \[145-149\]
+147 [145-149]
 </td>
 <td style="text-align:left;">
-3.26 \[1.53-5.16\]
+3.26 [1.53-5.16]
 </td>
 </tr>
 </tbody>
@@ -310,13 +310,13 @@ t1/2z
 Half-lives
 </td>
 <td style="text-align:left;">
-2.51 \[2.01-3.31\]
+2.51 [2.01-3.31]
 </td>
 <td style="text-align:left;">
-12.8 \[8.13-17\]
+12.8 [8.13-17]
 </td>
 <td style="text-align:left;">
-14 \[9.69-18.8\]
+14 [9.69-18.8]
 </td>
 </tr>
 </tbody>
