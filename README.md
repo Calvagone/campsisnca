@@ -115,16 +115,16 @@ Ctrough
 Day 1
 </td>
 <td style="text-align:left;">
-132 \[99-165\]
+132 \[99.1-165\]
 </td>
 <td style="text-align:left;">
-10 \[9-14\]
+10.4 \[8.54-14\]
 </td>
 <td style="text-align:left;">
-3 \[1-6\]
+3 \[1.45-5.55\]
 </td>
 <td style="text-align:left;">
-3 \[1-4\]
+2.6 \[1.34-3.91\]
 </td>
 </tr>
 <tr>
@@ -135,13 +135,13 @@ Day 7
 184 \[125-263\]
 </td>
 <td style="text-align:left;">
-15 \[11-19\]
+14.9 \[11.3-18.7\]
 </td>
 <td style="text-align:left;">
 147 \[145-150\]
 </td>
 <td style="text-align:left;">
-4 \[2-7\]
+4.09 \[1.57-6.69\]
 </td>
 </tr>
 </tbody>
@@ -208,13 +208,13 @@ BW range: 50-75
 144 \[119-169\]
 </td>
 <td style="text-align:left;">
-11 \[9-14\]
+11.1 \[9.25-14.3\]
 </td>
 <td style="text-align:left;">
-4 \[2-6\]
+3.5 \[2-5.95\]
 </td>
 <td style="text-align:left;">
-3 \[2-4\]
+3.05 \[2.14-4.28\]
 </td>
 </tr>
 <tr>
@@ -222,16 +222,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:left;">
-126 \[97-146\]
+126 \[97.1-146\]
 </td>
 <td style="text-align:left;">
-10 \[8-13\]
+10.2 \[8.09-13.3\]
 </td>
 <td style="text-align:left;">
-3 \[1-5\]
+3 \[1.35-5\]
 </td>
 <td style="text-align:left;">
-2 \[1-3\]
+2.4 \[1.26-3.47\]
 </td>
 </tr>
 <tr grouplength="2">
@@ -247,13 +247,13 @@ BW range: 50-75
 210 \[161-274\]
 </td>
 <td style="text-align:left;">
-17 \[14-19\]
+16.5 \[13.8-18.8\]
 </td>
 <td style="text-align:left;">
 147 \[145-150\]
 </td>
 <td style="text-align:left;">
-5 \[3-7\]
+4.92 \[2.86-7.02\]
 </td>
 </tr>
 <tr>
@@ -264,13 +264,13 @@ BW range: 75-100
 170 \[120-214\]
 </td>
 <td style="text-align:left;">
-14 \[11-17\]
+13.6 \[11.2-17.2\]
 </td>
 <td style="text-align:left;">
 147 \[145-149\]
 </td>
 <td style="text-align:left;">
-3 \[2-5\]
+3.26 \[1.53-5.16\]
 </td>
 </tr>
 </tbody>
@@ -310,13 +310,13 @@ t1/2z
 Half-lives
 </td>
 <td style="text-align:left;">
-3 \[2-3\]
+2.51 \[2.01-3.31\]
 </td>
 <td style="text-align:left;">
-13 \[8-17\]
+12.8 \[8.13-17\]
 </td>
 <td style="text-align:left;">
-14 \[10-19\]
+14 \[9.69-18.8\]
 </td>
 </tr>
 </tbody>

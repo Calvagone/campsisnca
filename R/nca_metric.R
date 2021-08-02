@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "rounding_function", "name")))
+  return(expectOneForAll(object, c("variable", "name")))
 }
 
 #' 
@@ -17,11 +17,9 @@ setClass(
     variable = "character",         # specific variable
     individual = "data.frame",      # individual results
     summary = "data.frame",         # summary results
-    rounding_function = "function", # specific rounding function
     name = "character"              # metric name (this name is exported)
   ),
   contains="pmx_element",
-  prototype=prototype(rounding_function=defaultRoundingFunction),
   validity=validateMetric
 )
 

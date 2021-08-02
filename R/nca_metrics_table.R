@@ -13,6 +13,7 @@ validateNCAMetricsTable <- function(object) {
 setClass(
   "nca_metrics_table",
   representation(
+    rounding = "function" # default rounding function
   ),
   contains="pmx_list",
   prototype = prototype(type="nca_metrics"),
@@ -22,9 +23,13 @@ setClass(
 #' 
 #' NCA metrics table.
 #' 
+#' @param rounding rounding function (default arguments should be: x (values),
+#'  metric (metric name), stat (low, med, up))
 #' @export
-NCAMetricsTable <- function() {
-  return(new("nca_metrics_table"))
+NCAMetricsTable <- function(rounding=NULL) {
+  rounding <- if (is.null(rounding)) defaultRounding else rounding
+  assertthat::assert_that(is.function(rounding), msg="rounding must be a rounding function")
+  return(new("nca_metrics_table", rounding=rounding))
 }
 
 #_______________________________________________________________________________
@@ -59,19 +64,24 @@ setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=f
     vsubgroup <- names[2]
   }
   metrics <- object %>% export(dest="dataframe")
-  metrics <- metrics %>% statsToCell()
+  metrics <- metrics %>% statsToCell(rounding=object@rounding)
   table <- metrics %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup)
   kable <- table %>% makeKable(vgroup=vgroup, vsubgroup=vsubgroup, format=format)
   return(kable)
 })
 
-statsToCell <- function(x) {
-  x <- x %>% dplyr::mutate(cell=paste0(med %>% roundCustom(), " [", low %>% roundCustom(), "-", up %>% roundCustom(), "]"))
+statsToCell <- function(x, rounding) {
+  x <-
+    x %>% dplyr::mutate(
+      cell=paste0(
+        med %>% rounding(metric=metric, stat="med"),
+        " [",
+        low %>% rounding(metric=metric, stat="low"),
+        "-",
+        up %>% rounding(metric=metric, stat="up"),
+        "]"
+      )
+    )
   x <- x %>% dplyr::select(-med, -low, -up)
   return(x)
 }
-
-roundCustom <- function(x) {
-  ifelse(x < 1, signif(x, digits=1), round(x))
-}
-

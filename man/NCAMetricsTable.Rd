@@ -4,7 +4,11 @@
 \alias{NCAMetricsTable}
 \title{NCA metrics table.}
 \usage{
-NCAMetricsTable()
+NCAMetricsTable(rounding = NULL)
+}
+\arguments{
+\item{rounding}{rounding function (default arguments should be: x (values),
+metric (metric name), stat (low, med, up))}
 }
 \description{
 NCA metrics table.
