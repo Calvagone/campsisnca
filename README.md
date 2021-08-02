@@ -54,8 +54,8 @@ ncaD1 <- ncaD1 %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h")
 ncaD1 <- ncaD1 %>% calculate()
 
 # Day 7 
-ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168), variable="Y", scenario=c(day="Day 7"))
-ncaD7 <- ncaD7 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=168)))
+ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7"))
+ncaD7 <- ncaD7 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD7 <- ncaD7 %>% calculate()
 ```
 
@@ -81,7 +81,7 @@ table %>% export(dest="dataframe")
     ## 4 Ctrough   1.34   2.60   3.91 Day 1
     ## 5 AUC     125.   184.   263.   Day 7
     ## 6 Cmax     11.3   14.9   18.7  Day 7
-    ## 7 tmax    145    147    150.   Day 7
+    ## 7 tmax      1      3      5.55 Day 7
     ## 8 Ctrough   1.57   4.09   6.69 Day 7
 
 Or to a HTML table using `kable`:
@@ -96,7 +96,7 @@ table %>% export(dest="kable")
 <th style="text-align:center;">
 </th>
 <th style="text-align:center;">
-AUC (ng/mL\*h)
+AUC (ng/mL*h)
 </th>
 <th style="text-align:center;">
 Cmax (ng/mL)
@@ -138,7 +138,7 @@ Day 7
 14.9 [11.3-18.7]
 </td>
 <td style="text-align:center;">
-147 [145-150]
+3 [1-5.55]
 </td>
 <td style="text-align:center;">
 4.09 [1.57-6.69]
@@ -158,16 +158,16 @@ ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", sce
 ncaD1_a <- ncaD1_a %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD1_a <- ncaD1_a %>% calculate()
 
-ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 50-75"))
-ncaD7_a <- ncaD7_a %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=168)))
+ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 50-75"))
+ncaD7_a <- ncaD7_a %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD7_a <- ncaD7_a %>% calculate()
 
 ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1", bw_range="BW range: 75-100"))
 ncaD1_b <- ncaD1_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD1_b <- ncaD1_b %>% calculate()
 
-ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 75-100"))
-ncaD7_b <- ncaD7_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=168)))
+ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 75-100"))
+ncaD7_b <- ncaD7_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD7_b <- ncaD7_b %>% calculate()
 
 table <- NCAMetricsTable()  
@@ -250,7 +250,7 @@ BW range: 50-75
 16.5 [13.8-18.8]
 </td>
 <td style="text-align:center;">
-147 [145-150]
+3 [1-5.95]
 </td>
 <td style="text-align:center;">
 4.92 [2.86-7.02]
@@ -267,7 +267,7 @@ BW range: 75-100
 13.6 [11.2-17.2]
 </td>
 <td style="text-align:center;">
-147 [145-149]
+3 [1.35-5]
 </td>
 <td style="text-align:center;">
 3.26 [1.53-5.16]

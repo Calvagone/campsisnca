@@ -1,7 +1,8 @@
 fixBrackets = function(file){
   x=readLines(file)
-  y=gsub("\\[", "[", x, fixed = TRUE)
-  y=gsub("\\]", "]", y, fixed = TRUE)
-  writeLines(y, file)
+  x=gsub("\\[", "[", x, fixed=TRUE)
+  x=gsub("\\]", "]", x, fixed=TRUE)
+  x=gsub("\\*", "*", x, fixed=TRUE)
+  writeLines(x, file)
 }
 fixBrackets("README.md")
