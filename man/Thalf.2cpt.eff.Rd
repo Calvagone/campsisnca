@@ -4,7 +4,7 @@
 \alias{Thalf.2cpt.eff}
 \title{Theoretical effective half life for a 2-compartment model.}
 \usage{
-Thalf.2cpt.eff(x = NULL, map = NULL, name = NULL)
+Thalf.2cpt.eff(x = NULL, map = NULL, name = NULL, unit = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -12,6 +12,8 @@ Thalf.2cpt.eff(x = NULL, map = NULL, name = NULL)
 \item{map}{character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA}
 
 \item{name}{custom metric name (will be exported into table headers)}
+
+\item{unit}{metric unit (will be exported into table headers if provided)}
 }
 \description{
 Theoretical effective half life for a 2-compartment model.

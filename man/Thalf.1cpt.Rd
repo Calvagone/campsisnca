@@ -4,7 +4,7 @@
 \alias{Thalf.1cpt}
 \title{Theoretical half life for a 1-compartment model.}
 \usage{
-Thalf.1cpt(x = NULL, map = NULL, name = NULL)
+Thalf.1cpt(x = NULL, map = NULL, name = NULL, unit = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -12,6 +12,8 @@ Thalf.1cpt(x = NULL, map = NULL, name = NULL)
 \item{map}{character vector used for column mapping, only one key is possible: K}
 
 \item{name}{custom metric name (will be exported into table headers)}
+
+\item{unit}{metric unit (will be exported into table headers if provided)}
 }
 \description{
 Theoretical half life for a 1-compartment model.

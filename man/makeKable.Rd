@@ -4,10 +4,12 @@
 \alias{makeKable}
 \title{Make kable.}
 \usage{
-makeKable(table, vgroup = NULL, vsubgroup = NULL, format = "html")
+makeKable(x, df, vgroup = NULL, vsubgroup = NULL, format = "html")
 }
 \arguments{
-\item{table}{dataframe, mandatory columns: metric & cell}
+\item{x}{table object}
+
+\item{df}{output of makeTable, dataframe}
 
 \item{vgroup}{vertical group variable names}
 

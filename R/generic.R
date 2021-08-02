@@ -21,3 +21,21 @@ setGeneric("calculate", function(object, level=NULL, ...) {
   }
   standardGeneric("calculate")
 })
+
+#_______________________________________________________________________________
+#----                              getUnit                                  ----
+#_______________________________________________________________________________
+
+#' Get the unit corresponding to the given metric.
+#' 
+#' @param object any object that contains units
+#' @param metric given metric name
+#' @export
+#' @rdname getUnit
+getUnit <- function(object, metric, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getUnit", function(object, metric, ...) {
+  standardGeneric("getUnit")
+})

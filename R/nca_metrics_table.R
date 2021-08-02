@@ -63,10 +63,10 @@ setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=f
   if(names %>% length() > 1) {
     vsubgroup <- names[2]
   }
-  metrics <- object %>% export(dest="dataframe")
-  metrics <- metrics %>% statsToCell(rounding=object@rounding)
-  table <- metrics %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup)
-  kable <- table %>% makeKable(vgroup=vgroup, vsubgroup=vsubgroup, format=format)
+  df <- object %>% export(dest="dataframe")
+  df <- df %>% statsToCell(rounding=object@rounding)
+  df <- df %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup)
+  kable <- makeKable(x=object, df=df, vgroup=vgroup, vsubgroup=vsubgroup, format=format)
   return(kable)
 })
 
@@ -85,3 +85,14 @@ statsToCell <- function(x, rounding) {
   x <- x %>% dplyr::select(-med, -low, -up)
   return(x)
 }
+
+#_______________________________________________________________________________
+#----                              getUnit                                  ----
+#_______________________________________________________________________________
+
+setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
+  if (object %>% length()==0) {
+    stop("No metrics in table at this stage")
+  }
+  return(object@list[[1]] %>% getUnit(metric=metric, ...))
+})

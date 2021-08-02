@@ -50,7 +50,7 @@ Let’s calculate PK metrics at Day 1 and Day 7 as follows:
 ``` r
 # Day 1
 ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1"))
-ncaD1 <- ncaD1 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
+ncaD1 <- ncaD1 %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(time=24, unit="ng/mL")))
 ncaD1 <- ncaD1 %>% calculate()
 
 # Day 7 
@@ -93,54 +93,54 @@ table %>% export(dest="kable")
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:left;">
+<th style="text-align:center;">
 </th>
-<th style="text-align:left;">
-AUC
+<th style="text-align:center;">
+AUC (ng/mL\*h)
 </th>
-<th style="text-align:left;">
-Cmax
+<th style="text-align:center;">
+Cmax (ng/mL)
 </th>
-<th style="text-align:left;">
-tmax
+<th style="text-align:center;">
+tmax (h)
 </th>
-<th style="text-align:left;">
-Ctrough
+<th style="text-align:center;">
+Ctrough (ng/mL)
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:center;">
 Day 1
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 132 [99.1-165]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 10.4 [8.54-14]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 3 [1.45-5.55]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 2.6 [1.34-3.91]
 </td>
 </tr>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:center;">
 Day 7
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 184 [125-263]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 14.9 [11.3-18.7]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 147 [145-150]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 4.09 [1.57-6.69]
 </td>
 </tr>
@@ -178,18 +178,18 @@ table %>% export(dest="kable")
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:left;">
+<th style="text-align:center;">
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 AUC
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 Cmax
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 tmax
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 Ctrough
 </th>
 </tr>
@@ -201,36 +201,36 @@ Ctrough
 </td>
 </tr>
 <tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<td style="text-align:center;padding-left: 2em;" indentlevel="1">
 BW range: 50-75
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 144 [119-169]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 11.1 [9.25-14.3]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 3.5 [2-5.95]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 3.05 [2.14-4.28]
 </td>
 </tr>
 <tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<td style="text-align:center;padding-left: 2em;" indentlevel="1">
 BW range: 75-100
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 126 [97.1-146]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 10.2 [8.09-13.3]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 3 [1.35-5]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 2.4 [1.26-3.47]
 </td>
 </tr>
@@ -240,36 +240,36 @@ BW range: 75-100
 </td>
 </tr>
 <tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<td style="text-align:center;padding-left: 2em;" indentlevel="1">
 BW range: 50-75
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 210 [161-274]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 16.5 [13.8-18.8]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 147 [145-150]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 4.92 [2.86-7.02]
 </td>
 </tr>
 <tr>
-<td style="text-align:left;padding-left: 2em;" indentlevel="1">
+<td style="text-align:center;padding-left: 2em;" indentlevel="1">
 BW range: 75-100
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 170 [120-214]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 13.6 [11.2-17.2]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 147 [145-149]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 3.26 [1.53-5.16]
 </td>
 </tr>
@@ -291,31 +291,31 @@ table %>% export(dest="kable")
 <table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
-<th style="text-align:left;">
+<th style="text-align:center;">
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 t1/2dist
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 t1/2eff
 </th>
-<th style="text-align:left;">
+<th style="text-align:center;">
 t1/2z
 </th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:left;">
+<td style="text-align:center;">
 Half-lives
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 2.51 [2.01-3.31]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 12.8 [8.13-17]
 </td>
-<td style="text-align:left;">
+<td style="text-align:center;">
 14 [9.69-18.8]
 </td>
 </tr>

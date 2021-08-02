@@ -43,35 +43,46 @@ makeTable <- function(metrics, vgroup=NULL, vsubgroup=NULL) {
 #'
 #' Make kable.
 #' 
-#' @param table dataframe, mandatory columns: metric & cell
+#' @param x table object
+#' @param df output of makeTable, dataframe
 #' @param vgroup vertical group variable names
 #' @param vsubgroup vertical subgroup variable names
 #' @param format can be 'html' or "pdf'
 #' @export
 #' 
-makeKable <- function(table, vgroup=NULL, vsubgroup=NULL, format="html") {
+makeKable <- function(x, df, vgroup=NULL, vsubgroup=NULL, format="html") {
   escape <- FALSE
+  
+  
   if (is.null(vsubgroup)) {
     # Remove vertical group column header
-    tmp <- table %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
+    tmp <- df %>% dplyr::rename_at(.vars=vgroup, .funs=~" ")
     
+    # Header and units processing
+    headers <- colnames(tmp)
+
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE, col.names=addUnits(x, headers), align="c") %>%
+      kableExtra::kable_paper("striped", full_width=F)
     
   } else {
-    group_info <- table %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
+    group_info <- df %>% dplyr::mutate(INDEX_COL=seq_len(dplyr::n())) %>%
       dplyr::group_by_at(vgroup) %>%
       dplyr::summarise(MIN_INDEX=min(INDEX_COL), MAX_INDEX=max(INDEX_COL)) %>%
       dplyr::arrange(MIN_INDEX)
     
     # Remove vertical group column as info is stored in group_info
-    tmp <- table %>% dplyr::select(-dplyr::all_of(c(vgroup)))
+    tmp <- df %>% dplyr::select(-dplyr::all_of(c(vgroup)))
     
     # Remove vertical subgroup column header
     tmp <- tmp %>% dplyr::rename_at(.vars=vsubgroup, .funs=~" ")
     
+    # Header and units processing
+    headers <- colnames(tmp)
+
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE) %>% kableExtra::kable_paper("striped", full_width=F)
+    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE, col.names=addUnits(x, headers), align="c") %>%
+      kableExtra::kable_paper("striped", full_width=F)
     
     # Make groups
     for (rowIndex in seq_len(nrow(group_info))) {
@@ -81,3 +92,10 @@ makeKable <- function(table, vgroup=NULL, vsubgroup=NULL, format="html") {
   }
   return(retValue)
 }
+
+addUnits <- function(x, headers) {
+  units <- headers %>% purrr::map_chr(.f=~ifelse(.x != " ", x %>% getUnit(metric=.x), as.character(NA)))
+  headers <- paste0(headers, ifelse(is.na(units), "", paste0(" (", units, ")")))
+  return(headers)
+}
+

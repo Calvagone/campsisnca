@@ -24,13 +24,13 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @param time time value to read Ctrough
-#' @param name custom metric name
 #' @export
-Ctrough <- function(x=NULL, variable=NULL, time, name=NULL) {
+Ctrough <- function(x=NULL, variable=NULL, time, name=NULL, unit=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Ctrough" else name
-  return(new("ctrough_metric", x=x, variable=variable, time=time, name=name))
+  unit <- processUnit(unit)
+  return(new("ctrough_metric", x=x, variable=variable, time=time, name=name, unit=unit))
 }
 
 #_______________________________________________________________________________

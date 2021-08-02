@@ -39,8 +39,21 @@ NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
 #----                             getName                                   ----
 #_______________________________________________________________________________
 
-setMethod("getName", signature=c("nca_metrics"), definition = function(x) {
+setMethod("getName", signature=c("nca_metrics"), definition=function(x) {
   return(paste0("NCA metrics: ", paste0(x@scenario, collapse=" / ")))
+})
+
+#_______________________________________________________________________________
+#----                              getUnit                                  ----
+#_______________________________________________________________________________
+
+setMethod("getUnit", signature=c("nca_metrics", "character"), definition=function(object, metric, ...) {
+  metrics <- object@list %>% purrr::keep(.p=~.x@name==metric)
+  if (metrics %>% length() == 0) {
+    stop(paste0("Metric ", metric, " not found"))
+  }
+  metric <- metrics[[1]]
+  return(metric@unit)
 })
 
 #_______________________________________________________________________________

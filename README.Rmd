@@ -50,7 +50,7 @@ Let's calculate PK metrics at Day 1 and Day 7 as follows:
 ```{r, message=FALSE}
 # Day 1
 ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1"))
-ncaD1 <- ncaD1 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
+ncaD1 <- ncaD1 %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(time=24, unit="ng/mL")))
 ncaD1 <- ncaD1 %>% calculate()
 
 # Day 7 
