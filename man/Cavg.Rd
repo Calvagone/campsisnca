@@ -4,12 +4,14 @@
 \alias{Cavg}
 \title{Cavg.}
 \usage{
-Cavg(x = NULL, variable = NULL)
+Cavg(x = NULL, variable = NULL, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{name}{custom metric name}
 }
 \description{
 Cavg.

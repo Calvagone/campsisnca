@@ -115,16 +115,16 @@ Ctrough
 Day 1
 </td>
 <td style="text-align:left;">
-132 [99-165]
+132 \[99-165\]
 </td>
 <td style="text-align:left;">
-10 [9-14]
+10 \[9-14\]
 </td>
 <td style="text-align:left;">
-3 [1-6]
+3 \[1-6\]
 </td>
 <td style="text-align:left;">
-3 [1-4]
+3 \[1-4\]
 </td>
 </tr>
 <tr>
@@ -132,16 +132,16 @@ Day 1
 Day 7
 </td>
 <td style="text-align:left;">
-184 [125-263]
+184 \[125-263\]
 </td>
 <td style="text-align:left;">
-15 [11-19]
+15 \[11-19\]
 </td>
 <td style="text-align:left;">
-147 [145-150]
+147 \[145-150\]
 </td>
 <td style="text-align:left;">
-4 [2-7]
+4 \[2-7\]
 </td>
 </tr>
 </tbody>
@@ -205,16 +205,16 @@ Ctrough
 BW range: 50-75
 </td>
 <td style="text-align:left;">
-144 [119-169]
+144 \[119-169\]
 </td>
 <td style="text-align:left;">
-11 [9-14]
+11 \[9-14\]
 </td>
 <td style="text-align:left;">
-4 [2-6]
+4 \[2-6\]
 </td>
 <td style="text-align:left;">
-3 [2-4]
+3 \[2-4\]
 </td>
 </tr>
 <tr>
@@ -222,16 +222,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:left;">
-126 [97-146]
+126 \[97-146\]
 </td>
 <td style="text-align:left;">
-10 [8-13]
+10 \[8-13\]
 </td>
 <td style="text-align:left;">
-3 [1-5]
+3 \[1-5\]
 </td>
 <td style="text-align:left;">
-2 [1-3]
+2 \[1-3\]
 </td>
 </tr>
 <tr grouplength="2">
@@ -244,16 +244,16 @@ BW range: 75-100
 BW range: 50-75
 </td>
 <td style="text-align:left;">
-210 [161-274]
+210 \[161-274\]
 </td>
 <td style="text-align:left;">
-17 [14-19]
+17 \[14-19\]
 </td>
 <td style="text-align:left;">
-147 [145-150]
+147 \[145-150\]
 </td>
 <td style="text-align:left;">
-5 [3-7]
+5 \[3-7\]
 </td>
 </tr>
 <tr>
@@ -261,16 +261,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:left;">
-170 [120-214]
+170 \[120-214\]
 </td>
 <td style="text-align:left;">
-14 [11-17]
+14 \[11-17\]
 </td>
 <td style="text-align:left;">
-147 [145-149]
+147 \[145-149\]
 </td>
 <td style="text-align:left;">
-3 [2-5]
+3 \[2-5\]
 </td>
 </tr>
 </tbody>
@@ -310,13 +310,13 @@ t1/2z
 Half-lives
 </td>
 <td style="text-align:left;">
-3 [2-3]
+3 \[2-3\]
 </td>
 <td style="text-align:left;">
-13 [8-17]
+13 \[8-17\]
 </td>
 <td style="text-align:left;">
-14 [10-19]
+14 \[10-19\]
 </td>
 </tr>
 </tbody>

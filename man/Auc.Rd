@@ -4,7 +4,7 @@
 \alias{Auc}
 \title{Auc.}
 \usage{
-Auc(x = NULL, variable = NULL, method = 1)
+Auc(x = NULL, variable = NULL, method = 1, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -15,6 +15,8 @@ Auc(x = NULL, variable = NULL, method = 1)
 * 1: linear up - linear down
 * 2: linear up - logarithmic down
 * 3: linear before Tmax, logarithmic after Tmax}
+
+\item{name}{custom metric name}
 }
 \description{
 Auc.

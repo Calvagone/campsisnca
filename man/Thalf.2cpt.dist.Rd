@@ -4,12 +4,14 @@
 \alias{Thalf.2cpt.dist}
 \title{Theoretical distribution half life for a 2-compartment model.}
 \usage{
-Thalf.2cpt.dist(x = NULL, map = NULL)
+Thalf.2cpt.dist(x = NULL, map = NULL, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{map}{character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA}
+
+\item{name}{custom metric name}
 }
 \description{
 Theoretical distribution half life for a 2-compartment model.

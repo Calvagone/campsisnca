@@ -4,12 +4,14 @@
 \alias{Tmin}
 \title{Tmin.}
 \usage{
-Tmin(x = NULL, variable = NULL)
+Tmin(x = NULL, variable = NULL, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{name}{custom metric name}
 }
 \description{
 Tmin.

@@ -22,11 +22,13 @@ setClass(
 #' Cmin.
 #' 
 #' @inheritParams metricsParams
+#' @param name custom metric name
 #' @export
-Cmin <- function(x=NULL, variable=NULL) {
+Cmin <- function(x=NULL, variable=NULL, name=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
-  return(new("cmin_metric", x=x, variable=variable))
+  name <- if (is.null(name)) "Cmin" else name
+  return(new("cmin_metric", x=x, variable=variable, name=name))
 }
 
 #_______________________________________________________________________________
@@ -37,14 +39,6 @@ Cmin <- function(x=NULL, variable=NULL) {
 setMethod("calculate", signature=c("cmin_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- cmin_delegate(x=object@x, variable=object@variable)
   return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
-#----                             getName                                   ----
-#_______________________________________________________________________________
-
-setMethod("getName", signature=c("cmin_metric"), definition = function(x) {
-  return("Cmin")
 })
 
 #_______________________________________________________________________________

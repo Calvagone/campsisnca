@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOne(object, "variable"))
+  return(expectOneForAll(object, c("variable", "rounding_function", "name")))
 }
 
 #' 
@@ -13,12 +13,15 @@ validateMetric <- function(object) {
 setClass(
   "nca_metric",
   representation(
-    x = "data.frame",          # specific dataframe
-    variable = "character",    # specific variable
-    individual = "data.frame", # individual results
-    summary = "data.frame"     # summary results
+    x = "data.frame",               # specific dataframe
+    variable = "character",         # specific variable
+    individual = "data.frame",      # individual results
+    summary = "data.frame",         # summary results
+    rounding_function = "function", # specific rounding function
+    name = "character"              # metric name (this name is exported)
   ),
   contains="pmx_element",
+  prototype=prototype(rounding_function=defaultRoundingFunction),
   validity=validateMetric
 )
 
@@ -34,6 +37,14 @@ summariseIndividualData <- function(x, level) {
     )
   return(x)
 }
+
+#_______________________________________________________________________________
+#----                             getName                                   ----
+#_______________________________________________________________________________
+
+setMethod("getName", signature=c("nca_metric"), definition = function(x) {
+  return(x@name)
+})
 
 #_______________________________________________________________________________
 #----                                export                                 ----

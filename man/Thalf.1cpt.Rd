@@ -4,7 +4,7 @@
 \alias{Thalf.1cpt}
 \title{Theoretical half life for a 1-compartment model.}
 \usage{
-Thalf.1cpt(x = NULL, map = NULL)
+Thalf.1cpt(x = NULL, map = NULL, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}

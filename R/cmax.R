@@ -22,11 +22,13 @@ setClass(
 #' Cmax.
 #' 
 #' @inheritParams metricsParams
+#' @param name custom metric name
 #' @export
-Cmax <- function(x=NULL, variable=NULL) {
+Cmax <- function(x=NULL, variable=NULL, name=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
-  return(new("cmax_metric", x=x, variable=variable))
+  name <- if (is.null(name)) "Cmax" else name
+  return(new("cmax_metric", x=x, variable=variable, name=name))
 }
 
 #_______________________________________________________________________________
@@ -37,14 +39,6 @@ Cmax <- function(x=NULL, variable=NULL) {
 setMethod("calculate", signature=c("cmax_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- cmax_delegate(x=object@x, variable=object@variable)
   return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
-#----                             getName                                   ----
-#_______________________________________________________________________________
-
-setMethod("getName", signature=c("cmax_metric"), definition = function(x) {
-  return("Cmax")
 })
 
 #_______________________________________________________________________________

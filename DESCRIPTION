@@ -6,6 +6,7 @@ Collate:
     'export_type.R'
     'generic.R'
     'common_utilities.R'
+    'rounding.R'
     'filter_utilities.R'
     'theoretical_metrics.R'
     'nca_metric.R'

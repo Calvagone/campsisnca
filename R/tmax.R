@@ -22,11 +22,13 @@ setClass(
 #' Tmax.
 #' 
 #' @inheritParams metricsParams
+#' @param name custom metric name
 #' @export
-Tmax <- function(x=NULL, variable=NULL) {
+Tmax <- function(x=NULL, variable=NULL, name=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
-  return(new("tmax_metric", x=x, variable=variable))
+  name <- if (is.null(name)) "tmax" else name
+  return(new("tmax_metric", x=x, variable=variable, name=name))
 }
 
 #_______________________________________________________________________________
@@ -37,14 +39,6 @@ Tmax <- function(x=NULL, variable=NULL) {
 setMethod("calculate", signature=c("tmax_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- tmax_delegate(x=object@x, variable=object@variable)
   return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
-#----                             getName                                   ----
-#_______________________________________________________________________________
-
-setMethod("getName", signature=c("tmax_metric"), definition = function(x) {
-  return("tmax")
 })
 
 #_______________________________________________________________________________

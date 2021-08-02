@@ -4,7 +4,7 @@
 \alias{Ctrough}
 \title{Ctrough.}
 \usage{
-Ctrough(x = NULL, variable = NULL, time)
+Ctrough(x = NULL, variable = NULL, time, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -12,6 +12,8 @@ Ctrough(x = NULL, variable = NULL, time)
 \item{variable}{dependent variable}
 
 \item{time}{time value to read Ctrough}
+
+\item{name}{custom metric name}
 }
 \description{
 Ctrough.

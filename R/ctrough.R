@@ -24,11 +24,13 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @param time time value to read Ctrough
+#' @param name custom metric name
 #' @export
-Ctrough <- function(x=NULL, variable=NULL, time) {
+Ctrough <- function(x=NULL, variable=NULL, time, name=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
-  return(new("ctrough_metric", x=x, variable=variable, time=time))
+  name <- if (is.null(name)) "Ctrough" else name
+  return(new("ctrough_metric", x=x, variable=variable, time=time, name=name))
 }
 
 #_______________________________________________________________________________
@@ -39,14 +41,6 @@ Ctrough <- function(x=NULL, variable=NULL, time) {
 setMethod("calculate", signature=c("ctrough_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- ctrough_delegate(x=object@x, variable=object@variable, time=object@time)
   return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
-#----                             getName                                   ----
-#_______________________________________________________________________________
-
-setMethod("getName", signature=c("ctrough_metric"), definition = function(x) {
-  return("Ctrough")
 })
 
 #_______________________________________________________________________________

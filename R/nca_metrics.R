@@ -13,9 +13,10 @@ validateNCAMetrics <- function(object) {
 setClass(
   "nca_metrics",
   representation(
-    x = "data.frame",       # default dataframe
-    variable = "character", # default variable
-    scenario = "character"  # named character vector, e.g. c(day='Day 1', fasted='Fasted')
+    x = "data.frame",              # default dataframe
+    variable = "character",        # default variable
+    scenario = "character",        # named character vector, e.g. c(day='Day 1', fasted='Fasted')
+    rounding_function = "function" # default rounding function
   ),
   contains=c("pmx_element", "pmx_list"), # PMX element in nca_metrics_table
   prototype = prototype(type="nca_metric"),

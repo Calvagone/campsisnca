@@ -9,6 +9,23 @@ validateThalfMetric <- function(object) {
   ))
 }
 
+#' 
+#' Get default name based on thalf subtype.
+#'
+#' @param subtype thalf subtype (2cpt.dist, 2cpt.z or 2cpt.eff)
+getDefaultTHalfName <- function(subtype) {
+  if (subtype == "1cpt") {
+    return("t1/2")
+  } else if (subtype == "2cpt.dist") {
+    return("t1/2dist")
+  } else if (subtype == "2cpt.z") {
+    return("t1/2z")
+  } else if (subtype == "2cpt.eff") {
+    return("t1/2eff")
+  } else {
+    stop(paste0("Unknown subtype ", subtype))
+  }
+}
 
 #' 
 #' Thalf metric class.
@@ -68,10 +85,12 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, only one key is possible: K
 #' @export
-Thalf.1cpt <- function(x=NULL, map=NULL) {
-  x = processDataframe(x)
+Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL) {
+  x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=TRUE)
-  return(new("thalf_metric", x=x, variable=NA, map=map, subtype="1cpt"))
+  subtype <- "1cpt"
+  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
+  return(new("thalf_metric", x=x, variable=NA, map=map, subtype=subtype, name=name))
 }
 
 #' 
@@ -79,11 +98,14 @@ Thalf.1cpt <- function(x=NULL, map=NULL) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
+#' @param name custom metric name
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map=NULL) {
-  x = processDataframe(x)
+Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL) {
+  x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
-  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype="2cpt.dist"))
+  subtype <- "2cpt.dist"
+  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name))
 }
 
 #' 
@@ -91,11 +113,14 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
+#' @param name custom metric name
 #' @export
-Thalf.2cpt.z <- function(x=NULL, map=NULL) {
-  x = processDataframe(x)
+Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL) {
+  x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
-  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype="2cpt.z"))
+  subtype <- "2cpt.z"
+  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name))
 }
 
 #' 
@@ -103,11 +128,14 @@ Thalf.2cpt.z <- function(x=NULL, map=NULL) {
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
+#' @param name custom metric name
 #' @export
-Thalf.2cpt.eff <- function(x=NULL, map=NULL) {
-  x = processDataframe(x)
+Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL) {
+  x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
-  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype="2cpt.eff"))
+  subtype <- "2cpt.eff"
+  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name))
 }
 
 #_______________________________________________________________________________
@@ -137,23 +165,4 @@ setMethod("calculate", signature=c("thalf_metric", "numeric"), definition=functi
   }
   object@individual <- ind
   return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
-#----                             getName                                   ----
-#_______________________________________________________________________________
-
-setMethod("getName", signature=c("thalf_metric"), definition = function(x) {
-  subtype <- x@subtype
-  if (subtype == "1cpt") {
-    return("t1/2")
-  } else if (subtype == "2cpt.dist") {
-    return("t1/2dist")
-  } else if (subtype == "2cpt.z") {
-    return("t1/2z")
-  } else if (subtype == "2cpt.eff") {
-    return("t1/2eff")
-  } else {
-    stop(paste0("Unknown subtype ", subtype))
-  }
 })

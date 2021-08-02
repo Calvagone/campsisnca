@@ -4,12 +4,14 @@
 \alias{Tmax}
 \title{Tmax.}
 \usage{
-Tmax(x = NULL, variable = NULL)
+Tmax(x = NULL, variable = NULL, name = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{name}{custom metric name}
 }
 \description{
 Tmax.

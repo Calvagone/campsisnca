@@ -22,11 +22,13 @@ setClass(
 #' Cavg.
 #' 
 #' @inheritParams metricsParams
+#' @param name custom metric name
 #' @export
-Cavg <- function(x=NULL, variable=NULL) {
+Cavg <- function(x=NULL, variable=NULL, name=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
-  return(new("cavg_metric", x=x, variable=variable))
+  name <- if (is.null(name)) "Cavg" else name
+  return(new("cavg_metric", x=x, variable=variable, name=name))
 }
 
 #_______________________________________________________________________________
@@ -37,14 +39,6 @@ Cavg <- function(x=NULL, variable=NULL) {
 setMethod("calculate", signature=c("cavg_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- cavg_delegate(x=object@x, variable=object@variable)
   return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
-#----                             getName                                   ----
-#_______________________________________________________________________________
-
-setMethod("getName", signature=c("cavg_metric"), definition = function(x) {
-  return("Cavg")
 })
 
 #_______________________________________________________________________________
