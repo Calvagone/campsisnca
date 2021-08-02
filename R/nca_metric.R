@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name")))
+  return(expectOneForAll(object, c("variable", "name", "unit")))
 }
 
 #' 
@@ -13,11 +13,12 @@ validateMetric <- function(object) {
 setClass(
   "nca_metric",
   representation(
-    x = "data.frame",               # specific dataframe
-    variable = "character",         # specific variable
-    individual = "data.frame",      # individual results
-    summary = "data.frame",         # summary results
-    name = "character"              # metric name (this name is exported)
+    x = "data.frame",             # specific dataframe
+    variable = "character",       # specific variable
+    individual = "data.frame",    # individual results
+    summary = "data.frame",       # summary results
+    name = "character",           # metric name (exported into header)
+    unit = "character"            # metric unit (exported into header)
   ),
   contains="pmx_element",
   validity=validateMetric

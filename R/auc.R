@@ -27,14 +27,14 @@ setClass(
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
-#' @param name custom metric name
 #' @export
-Auc <- function(x=NULL, variable=NULL, method=1, name=NULL) {
+Auc <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "AUC" else name
+  unit <- processUnit(unit)
   assertthat::assert_that(method %in% c(1,2,3), msg="method must be 1, 2 or 3")
-  return(new("auc_metric", x=x, variable=variable, method=as.integer(method), name=name))
+  return(new("auc_metric", x=x, variable=variable, method=as.integer(method), name=name, unit=unit))
 }
 
 #_______________________________________________________________________________

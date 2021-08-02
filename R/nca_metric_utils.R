@@ -18,11 +18,17 @@ processVariable <- function(variable) {
   }
 }
 
+processUnit <- function(unit) {
+  return(if(is.null(unit)) as.character(NA) else unit)
+}
+
 #' Main metrics parameters.
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-metricsParams <- function(x=NULL, variable=NULL) {
+#' @param name custom metric name (will be exported into table headers)
+#' @param unit metric unit (will be exported into table headers if provided)
+metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
   # Do nothing
 }
 

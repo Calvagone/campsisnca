@@ -7,11 +7,13 @@
 #' @param max max time
 #' @param exclmin exclude min time when filtering
 #' @param exclmax exclude max time when filtering
+#' @param rebase rebase first time to origin, logical value, FALSE by default
 #' @return dataset subset
 #' @export
-timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE) {
+timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE, rebase=FALSE) {
   campsis <- isCAMPSIS(x)
   time_var <- ifelse(campsis, "time", "TIME")
+  id_var <- ifelse(campsis, "id", "ID")
   checkNATimes(x, time_var=time_var) 
   
   if (exclmin) {
@@ -25,6 +27,9 @@ timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE) {
     } else {
       x <- x %>% dplyr::filter_at(.vars=time_var, .vars_predicate=~.x <= max)
     }
+  }
+  if (rebase) {
+    x <- x %>% dplyr::group_by_at(id_var) %>% dplyr::mutate_at(.vars=time_var, .funs=~.x-.x[1])
   }
   return(x)
 }

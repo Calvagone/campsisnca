@@ -10,6 +10,8 @@ Thalf.1cpt(x = NULL, map = NULL, name = NULL)
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{map}{character vector used for column mapping, only one key is possible: K}
+
+\item{name}{custom metric name (will be exported into table headers)}
 }
 \description{
 Theoretical half life for a 1-compartment model.

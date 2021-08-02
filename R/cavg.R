@@ -22,13 +22,13 @@ setClass(
 #' Cavg.
 #' 
 #' @inheritParams metricsParams
-#' @param name custom metric name
 #' @export
-Cavg <- function(x=NULL, variable=NULL, name=NULL) {
+Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Cavg" else name
-  return(new("cavg_metric", x=x, variable=variable, name=name))
+  unit <- processUnit(unit)
+  return(new("cavg_metric", x=x, variable=variable, name=name, unit=unit))
 }
 
 #_______________________________________________________________________________
