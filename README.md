@@ -66,7 +66,9 @@ table <- NCAMetricsTable(unitLineBreak=TRUE)
 table <- table %>% add(c(ncaD1, ncaD7))
 ```
 
-This table can be exported to a dataframe using the `export` function:
+This table can be exported:
+
+1.  To a dataframe using the `export` function:
 
 ``` r
 table %>% export(dest="dataframe")
@@ -84,10 +86,10 @@ table %>% export(dest="dataframe")
     ## 7 tmax      1      3      5.55 Day 7
     ## 8 Ctrough   1.57   4.09   6.69 Day 7
 
-Or to a HTML table using `kable`:
+2.  To a HTML table using `kable` and format argument `html`:
 
 ``` r
-table %>% export(dest="kable")
+table %>% export(dest="kable", format="html")
 ```
 
 <table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
@@ -147,6 +149,12 @@ Day 7
 </tbody>
 </table>
 
+3.  To a LaTeX table using `kable` and format argument `latex`:
+
+``` r
+table %>% export(dest="kable", format="latex")
+```
+
 ### Example 2: PK metrics at Day 1 and Day 7 for different body weight ranges
 
 ``` r
@@ -154,25 +162,29 @@ library(dplyr)
 campsis_bw_50_75 <- campsis %>% filter(BW > 50 & BW < 75)
 campsis_bw_75_100 <- campsis %>% filter(BW >= 75 & BW < 100)
 
-ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1", bw_range="BW range: 50-75"))
+scenarioD1_a <- c(day="Day 1", bw_range="BW range: 50-75")
+ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a)
 ncaD1_a <- ncaD1_a %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(time=24, unit="ng/mL")))
 ncaD1_a <- ncaD1_a %>% calculate()
 
-ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 50-75"))
+scenarioD7_a <- c(day="Day 7", bw_range="BW range: 50-75")
+ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a)
 ncaD7_a <- ncaD7_a %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD7_a <- ncaD7_a %>% calculate()
 
-ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1", bw_range="BW range: 75-100"))
+scenarioD1_b <- c(day="Day 1", bw_range="BW range: 75-100")
+ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b)
 ncaD1_b <- ncaD1_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD1_b <- ncaD1_b %>% calculate()
 
-ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 75-100"))
+scenarioD7_b <- c(day="Day 7", bw_range="BW range: 75-100")
+ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b)
 ncaD7_b <- ncaD7_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD7_b <- ncaD7_b %>% calculate()
 
 table <- NCAMetricsTable(unitLineBreak=TRUE)  
 table <- table %>% add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
-table %>% export(dest="kable")
+table %>% export(dest="kable", format="html")
 ```
 
 <table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
@@ -285,7 +297,7 @@ nca <- nca %>% calculate()
 
 table <- NCAMetricsTable()  
 table <- table %>% add(nca)
-table %>% export(dest="kable")
+table %>% export(dest="kable", format="html")
 ```
 
 <table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">

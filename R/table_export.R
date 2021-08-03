@@ -90,13 +90,18 @@ makeKable <- function(x, df, vgroup=NULL, vsubgroup=NULL, format="html") {
       retValue <- retValue %>% kableExtra::pack_rows(row %>% dplyr::pull(vgroup), row$MIN_INDEX, row$MAX_INDEX)
     }
   }
-  return(retValue %>% kableExtra::kable_styling(protect_latex=TRUE, latex_options="HOLD_position"))
+  return(retValue %>% kableExtra::kable_styling(latex_options="HOLD_position"))
 }
 
 addUnits <- function(x, headers, format) {
+  isHtml <- format=="html"
   units <- headers %>% purrr::map_chr(.f=~ifelse(.x != " ", x %>% getUnit(metric=.x), as.character(NA)))
-  separator <- ifelse(x@unit_linebreak, ifelse(format=="html", "<br>", "\n"), " ")
+  separator <- ifelse(x@unit_linebreak, ifelse(isHtml, "<br>", "\n"), " ")
   headers <- paste0(headers, ifelse(is.na(units), "", paste0(separator, "(", units, ")")))
+  if (!isHtml) {
+    headers <- kableExtra::linebreak(headers, align="c")
+    # See https://stackoverflow.com/questions/52944533/wrap-text-in-knitrkable-table-cell-using-n
+  }
   return(headers)
 }
 
