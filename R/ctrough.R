@@ -23,13 +23,14 @@ setClass(
 #' Ctrough.
 #' 
 #' @inheritParams metricsParams
-#' @param time time value to read Ctrough
+#' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
 #' @export
-Ctrough <- function(x=NULL, variable=NULL, time, name=NULL, unit=NULL) {
+Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Ctrough" else name
   unit <- processUnit(unit)
+  time <- if (is.null(time)) as.numeric(NA) else time
   return(new("ctrough_metric", x=x, variable=variable, time=time, name=name, unit=unit))
 }
 
@@ -47,15 +48,20 @@ setMethod("calculate", signature=c("ctrough_metric", "numeric"), definition=func
 #----                           implementation                              ----
 #_______________________________________________________________________________
 
-
 #' 
 #' Compute Ctrough
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
-#' @param time time value to read Ctrough
+#' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
 ctrough_delegate <- function(x, variable, time) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::filter_at(.vars="time", .vars_predicate=~.x==time) %>% dplyr::ungroup()
+  x <- x %>% dplyr::group_by(id)
+  if (is.na(time)) {
+    x <- x %>% dplyr::slice(dplyr::n())
+  } else {
+    x <- x %>% dplyr::filter_at(.vars="time", .vars_predicate=~.x==time)
+  }
+  x <- x %>% dplyr::ungroup()
   return(x %>% dplyr::transmute(id=id, value=dv_variable))
 }

@@ -4,14 +4,14 @@
 \alias{Ctrough}
 \title{Ctrough.}
 \usage{
-Ctrough(x = NULL, variable = NULL, time, name = NULL, unit = NULL)
+Ctrough(x = NULL, variable = NULL, time = NULL, name = NULL, unit = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 
-\item{time}{time value to read Ctrough}
+\item{time}{time value to read Ctrough. If not provided, last concentrations from x will be returned.}
 
 \item{name}{custom metric name (will be exported into table headers)}
 
