@@ -30,6 +30,7 @@ setGeneric("calculate", function(object, level=NULL, ...) {
 #' 
 #' @param object any object that contains units
 #' @param metric given metric name
+#' @param ... extra arguments, not used
 #' @export
 #' @rdname getUnit
 getUnit <- function(object, metric, ...) {

@@ -92,6 +92,7 @@ statsToCell <- function(x, rounding) {
 #----                              getUnit                                  ----
 #_______________________________________________________________________________
 
+#' @rdname getUnit
 setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
   if (object %>% length()==0) {
     stop("No metrics in table at this stage")
