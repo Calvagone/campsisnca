@@ -91,7 +91,7 @@ Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
   subtype <- "1cpt"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("thalf_metric", x=x, variable=NA, map=map, subtype=subtype, name=name, unit=unit))
+  return(new("thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
 }
 
 #' 
