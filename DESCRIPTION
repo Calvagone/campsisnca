@@ -34,7 +34,7 @@ License: file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Suggests: CalvaNCA, campsis, devtools, knitr, ggplot2, mrgsolve, pkgdown, ncappc, NonCompart, rmarkdown, roxygen2, testthat
+Suggests: CalvaNCA, campsis, devtools, knitr, ggplot2, mrgsolve, ncappc, NonCompart, pkgdown, rmarkdown, roxygen2, RxODE, testthat
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/Calvagone/campsisnca
