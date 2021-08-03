@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateNCAMetricsTable <- function(object) {
-  return(TRUE)
+  return(expectOneForAll(object, c("unit_linebreak")))
 }
 
 #' 
@@ -13,7 +13,8 @@ validateNCAMetricsTable <- function(object) {
 setClass(
   "nca_metrics_table",
   representation(
-    rounding = "function" # default rounding function
+    rounding = "function", # default rounding function
+    unit_linebreak = "logical"
   ),
   contains="pmx_list",
   prototype = prototype(type="nca_metrics"),
@@ -23,13 +24,14 @@ setClass(
 #' 
 #' NCA metrics table.
 #' 
-#' @param rounding rounding function (default arguments should be: x (values),
-#'  metric (metric name), stat (low, med, up))
+#' @param rounding rounding function (default arguments should be: x (values), 
+#' metric (metric name), stat (low, med, up))
+#' @param unitLineBreak line break between header and unit, logical value
 #' @export
-NCAMetricsTable <- function(rounding=NULL) {
+NCAMetricsTable <- function(rounding=NULL, unitLineBreak=FALSE) {
   rounding <- if (is.null(rounding)) defaultRounding else rounding
   assertthat::assert_that(is.function(rounding), msg="rounding must be a rounding function")
-  return(new("nca_metrics_table", rounding=rounding))
+  return(new("nca_metrics_table", rounding=rounding, unit_linebreak=unitLineBreak))
 }
 
 #_______________________________________________________________________________

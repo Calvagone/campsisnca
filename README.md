@@ -62,7 +62,7 @@ ncaD7 <- ncaD7 %>% calculate()
 These 2 metrics may be imported into a metrics table object, as follows:
 
 ``` r
-table <- NCAMetricsTable()  
+table <- NCAMetricsTable(unitLineBreak=TRUE)  
 table <- table %>% add(c(ncaD1, ncaD7))
 ```
 
@@ -90,22 +90,22 @@ Or to a HTML table using `kable`:
 table %>% export(dest="kable")
 ```
 
-<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">
 </th>
 <th style="text-align:center;">
-AUC (ng/mL*h)
+AUC<br>(ng/mL*h)
 </th>
 <th style="text-align:center;">
-Cmax (ng/mL)
+Cmax<br>(ng/mL)
 </th>
 <th style="text-align:center;">
-tmax (h)
+tmax<br>(h)
 </th>
 <th style="text-align:center;">
-Ctrough (ng/mL)
+Ctrough<br>(ng/mL)
 </th>
 </tr>
 </thead>
@@ -155,7 +155,7 @@ campsis_bw_50_75 <- campsis %>% filter(BW > 50 & BW < 75)
 campsis_bw_75_100 <- campsis %>% filter(BW >= 75 & BW < 100)
 
 ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1", bw_range="BW range: 50-75"))
-ncaD1_a <- ncaD1_a %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
+ncaD1_a <- ncaD1_a %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(time=24, unit="ng/mL")))
 ncaD1_a <- ncaD1_a %>% calculate()
 
 ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7", bw_range="BW range: 50-75"))
@@ -170,27 +170,27 @@ ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=TRUE), 
 ncaD7_b <- ncaD7_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough(time=24)))
 ncaD7_b <- ncaD7_b %>% calculate()
 
-table <- NCAMetricsTable()  
+table <- NCAMetricsTable(unitLineBreak=TRUE)  
 table <- table %>% add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
 table %>% export(dest="kable")
 ```
 
-<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">
 </th>
 <th style="text-align:center;">
-AUC
+AUC<br>(ng/mL*h)
 </th>
 <th style="text-align:center;">
-Cmax
+Cmax<br>(ng/mL)
 </th>
 <th style="text-align:center;">
-tmax
+tmax<br>(h)
 </th>
 <th style="text-align:center;">
-Ctrough
+Ctrough<br>(ng/mL)
 </th>
 </tr>
 </thead>
@@ -288,7 +288,7 @@ table <- table %>% add(nca)
 table %>% export(dest="kable")
 ```
 
-<table class=" lightable-paper lightable-striped" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto;">
+<table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
 <thead>
 <tr>
 <th style="text-align:center;">

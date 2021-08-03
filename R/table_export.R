@@ -62,7 +62,7 @@ makeKable <- function(x, df, vgroup=NULL, vsubgroup=NULL, format="html") {
     headers <- colnames(tmp)
 
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE, col.names=addUnits(x, headers), align="c") %>%
+    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE, col.names=addUnits(x, headers, format), align="c") %>%
       kableExtra::kable_paper("striped", full_width=F)
     
   } else {
@@ -81,7 +81,7 @@ makeKable <- function(x, df, vgroup=NULL, vsubgroup=NULL, format="html") {
     headers <- colnames(tmp)
 
     # Make kable
-    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE, col.names=addUnits(x, headers), align="c") %>%
+    retValue <- kableExtra::kbl(tmp, format=format, escape=escape, row.names=FALSE, col.names=addUnits(x, headers, format), align="c") %>%
       kableExtra::kable_paper("striped", full_width=F)
     
     # Make groups
@@ -90,12 +90,13 @@ makeKable <- function(x, df, vgroup=NULL, vsubgroup=NULL, format="html") {
       retValue <- retValue %>% kableExtra::pack_rows(row %>% dplyr::pull(vgroup), row$MIN_INDEX, row$MAX_INDEX)
     }
   }
-  return(retValue)
+  return(retValue %>% kableExtra::kable_styling(protect_latex=TRUE, latex_options="HOLD_position"))
 }
 
-addUnits <- function(x, headers) {
+addUnits <- function(x, headers, format) {
   units <- headers %>% purrr::map_chr(.f=~ifelse(.x != " ", x %>% getUnit(metric=.x), as.character(NA)))
-  headers <- paste0(headers, ifelse(is.na(units), "", paste0(" (", units, ")")))
+  separator <- ifelse(x@unit_linebreak, ifelse(format=="html", "<br>", "\n"), " ")
+  headers <- paste0(headers, ifelse(is.na(units), "", paste0(separator, "(", units, ")")))
   return(headers)
 }
 
