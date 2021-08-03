@@ -4,7 +4,7 @@ library(dplyr)
 library(campsis)
 context("Compute theoritical NCA metrics from PK parameters")
 
-testFolder <<- "C:/prj/campsisnca/tests/testthat/"
+testFolder <<- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Check errors are well detected", {
@@ -18,7 +18,7 @@ test_that("Check errors are well detected", {
   expect_error(metrics.2cpt(x, map=c(KA="K", V4="TAU")), regexp="Unnecessary keys detected in map vector: V4")
 })
 
-test_that("Run from modelling", {
+test_that("Run 017F Pop1", {
   x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, KA=3.3)
   metrics <- metrics.2cpt(x)
   
@@ -51,6 +51,42 @@ test_that("Run from modelling", {
   expect_equal(metrics$THALF_D, 2.133194, tolerance=tol)
   expect_equal(metrics$THALF_Z, 37.08738, tolerance=tol)
   expect_equal(metrics$THALF_EFF, 12.1658, tolerance=tol)
+  
+})
+
+test_that("Run 017F Pop2", {
+  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=209, Q=18, V3=650, KA=2.1)
+  metrics <- metrics.2cpt(x)
+  
+  tol <- 1e-6
+  
+  expect_equal(metrics$K20, 0.229665072, tolerance=tol)
+  expect_equal(metrics$K23, 0.086124402, tolerance=tol)
+  expect_equal(metrics$K32, 0.027692308, tolerance=tol)
+  
+  expect_equal(metrics$A, 1, tolerance=tol)
+  expect_equal(metrics$B, 0.343481781, tolerance=tol)
+  expect_equal(metrics$C, 0.006359956, tolerance=tol)
+  expect_equal(metrics$DETER, 0.092539911, tolerance=tol)
+  
+  expect_equal(metrics$ALPHA, 0.323842757, tolerance=tol)
+  expect_equal(metrics$BETA, 0.019639024, tolerance=tol)
+  
+  expect_equal(metrics$COEFF_A, 55.07309134, tolerance=tol)
+  expect_equal(metrics$COEFF_B, 1.278623681, tolerance=tol)
+  expect_equal(metrics$COEFF_C, -56.35171502, tolerance=tol)
+  
+  expect_equal(metrics$AUC, 208.3333, tolerance=tol)
+  expect_equal(metrics$AUC_Z_1, 170.061210797, tolerance=tol)
+  expect_equal(metrics$AUC_Z, 65.106272548, tolerance=tol)
+  expect_equal(metrics$AUC_KA, -26.834150012, tolerance=tol)
+  
+  expect_equal(metrics$AUC_Z_1_pc, 72.314934181, tolerance=tol)
+  expect_equal(metrics$AUC_Z_pc, 27.685065819, tolerance=tol)
+  
+  expect_equal(metrics$THALF_D, 2.14038192, tolerance=tol)
+  expect_equal(metrics$THALF_Z, 35.294379356, tolerance=tol)
+  expect_equal(metrics$THALF_EFF, 11.319087929, tolerance=tol)
   
 })
 
