@@ -149,17 +149,17 @@ setMethod("calculate", signature=c("thalf_metric", "numeric"), definition=functi
 
   if (subtype == "1cpt") {
     ind <- metrics.1cpt(object@x, map=object@map)
-    ind <- ind %>% dplyr::transmute(id=id, value=THALF)
+    ind <- ind %>% dplyr::transmute(id=ID, value=THALF)
  
    } else if (subtype %>% startsWith("2cpt")) {
     ind <- metrics.2cpt(object@x, map=object@map)
     
     if (subtype == "2cpt.dist") {
-      ind <- ind %>% dplyr::transmute(id=id, value=THALF_D)
+      ind <- ind %>% dplyr::transmute(id=ID, value=THALF_D)
     } else if (subtype == "2cpt.z") {
-      ind <- ind %>% dplyr::transmute(id=id, value=THALF_Z)
+      ind <- ind %>% dplyr::transmute(id=ID, value=THALF_Z)
     } else if (subtype == "2cpt.eff") {
-      ind <- ind %>% dplyr::transmute(id=id, value=THALF_EFF)
+      ind <- ind %>% dplyr::transmute(id=ID, value=THALF_EFF)
     }
   } else {
     stop(paste0("Unknown subtype ", subtype))

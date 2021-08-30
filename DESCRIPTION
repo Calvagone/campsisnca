@@ -23,7 +23,7 @@ Collate:
     'cavg.R'
     'thalf.R'
 Title: CAMPSIS NCA Package
-Version: 0.1.0
+Version: 0.2.0
 Authors@R: c(
   person("Nicolas", "Luyckx", role = c("aut", "cre"), email = "nicolas.luyckx@calvagone.com")
   )
@@ -34,7 +34,7 @@ License: file LICENSE
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-Suggests: CalvaNCA, campsis, devtools, knitr, ggplot2, mrgsolve, ncappc, NonCompart, pkgdown, rmarkdown, roxygen2, RxODE, testthat
+Suggests: CalvaNCA, campsis, devtools, knitr, ggplot2, mrgsolve, ncappc, pkgdown, rmarkdown, roxygen2, RxODE, testthat
 RoxygenNote: 7.1.1
 VignetteBuilder: knitr
 URL: https://github.com/Calvagone/campsisnca

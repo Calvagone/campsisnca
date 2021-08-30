@@ -11,6 +11,9 @@ cavg_delegate(x, variable)
 
 \item{variable}{dependent variable}
 }
+\value{
+individual Cavg
+}
 \description{
 Compute Cavg (C average).
 }

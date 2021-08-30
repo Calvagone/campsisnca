@@ -13,6 +13,9 @@ ctrough_delegate(x, variable, time)
 
 \item{time}{time value to read Ctrough. If not provided, last concentrations from x will be returned.}
 }
+\value{
+individual ctrough
+}
 \description{
 Compute Ctrough
 }

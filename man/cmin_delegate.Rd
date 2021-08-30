@@ -11,6 +11,9 @@ cmin_delegate(x, variable)
 
 \item{variable}{dependent variable}
 }
+\value{
+individual Cmin
+}
 \description{
 Compute Cmin.
 }

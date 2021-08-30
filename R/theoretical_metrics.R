@@ -18,9 +18,10 @@ renameOriginalColumn <- function(x, from, to) {
 #' @return theoretical metrics
 #' @importFrom dplyr all_of group_by select slice ungroup
 #' @importFrom purrr map2
+#' @importFrom campsis obsOnly
 #' @export
 metrics.common <- function(x, map, thalf.1cpt) {
-  x <- x %>% toCAMPSISDataframe()
+  x <- x %>% campsis::obsOnly()
   map <- checkMap(map, thalf.1cpt=thalf.1cpt)
   
   # Remap columns
@@ -35,10 +36,10 @@ metrics.common <- function(x, map, thalf.1cpt) {
                                                     paste0(required[!checkCols], collapse=", ")))
   
   # Get rid of useless columns
-  x <- x %>% dplyr::select(dplyr::all_of(c("id", "time", required)))
+  x <- x %>% dplyr::select(dplyr::all_of(c("ID", "TIME", required)))
   
   # Keep first row
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(1) %>% dplyr::ungroup()
+  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(1) %>% dplyr::ungroup()
   return(x)
 }
 

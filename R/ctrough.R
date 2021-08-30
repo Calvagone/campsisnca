@@ -54,14 +54,16 @@ setMethod("calculate", signature=c("ctrough_metric", "numeric"), definition=func
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
 #' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
+#' @return individual ctrough
+#' @importFrom dplyr group_by filter_at slice transmute ungroup
 ctrough_delegate <- function(x, variable, time) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id)
+  x <- x %>% dplyr::group_by(ID)
   if (is.na(time)) {
     x <- x %>% dplyr::slice(dplyr::n())
   } else {
-    x <- x %>% dplyr::filter_at(.vars="time", .vars_predicate=~.x==time)
+    x <- x %>% dplyr::filter_at(.vars="TIME", .vars_predicate=~.x==time)
   }
   x <- x %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, value=dv_variable))
+  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
 }

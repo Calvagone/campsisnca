@@ -71,7 +71,7 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
   nmDataset <- dataset %>% export(dest="mrgsolve", model=model, seed=seed) %>% dplyr::select(-all_of(etas), -ARM, -DOSENO)
   
   # Merge CAMPSIS results and dataset to have kind of full dataset (dosing info + observations)
-  nmDataset <- nmDataset %>% dplyr::left_join(results %>% dplyr::transmute(ID=id, TIME=time, EVID=0, DV=Y))
+  nmDataset <- nmDataset %>% dplyr::left_join(results %>% dplyr::transmute(ID=ID, TIME=TIME, EVID=0, DV=Y))
   
   # Restrict DV to 6 decimals
   return(nmDataset)
