@@ -60,8 +60,10 @@ setMethod("calculate", signature=c("auc_metric", "numeric"), definition=function
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
+#' @return individual AUC
+#' @importFrom dplyr group_by rename summarise
 auc_delegate <- function(x, variable, method=1) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::summarise(value=trap(x=time, y=dv_variable, method=method), .groups="drop")
-  return(x)
+  x <- x %>% dplyr::group_by(ID) %>% dplyr::summarise(value=trap(x=TIME, y=dv_variable, method=method), .groups="drop")
+  return(x %>% dplyr::rename(id=ID))
 }

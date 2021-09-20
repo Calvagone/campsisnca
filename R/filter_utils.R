@@ -11,9 +11,8 @@
 #' @return dataset subset
 #' @export
 timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE, rebase=FALSE) {
-  campsis <- isCAMPSIS(x)
-  time_var <- ifelse(campsis, "time", "TIME")
-  id_var <- ifelse(campsis, "id", "ID")
+  time_var <- "TIME"
+  id_var <- "ID"
   checkNATimes(x, time_var=time_var) 
   
   if (exclmin) {
@@ -32,23 +31,4 @@ timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE, rebase=FA
     x <- x %>% dplyr::group_by_at(id_var) %>% dplyr::mutate_at(.vars=time_var, .funs=~.x-.x[1])
   }
   return(x)
-}
-
-#' 
-#' Say if the given data frame is a CAMPSIS output or a NONMEM dataset .
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @return TRUE for CAMPSIS output, FALSE for NONMEM dataset, error otherwise
-isCAMPSIS <- function(x) {
-  assertthat::assert_that(is.data.frame(x), msg="x is not a data frame")
-  colnames <- colnames(x)
-  campsisColnames <- c("id", "time")
-  nonmemColnames <- c("ID", "TIME", "MDV")
-  if (all(campsisColnames %in% colnames)) {
-    return(TRUE)
-  } else if (all(nonmemColnames %in% colnames)) {
-    return(FALSE)
-  } else {
-    stop("x not recognised as CAMPSIS output nor NONMEM dataset")
-  }
 }

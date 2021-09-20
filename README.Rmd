@@ -25,7 +25,8 @@ ds <- ds %>% add(Bolus(time=(0:6)*24, amount=1000))
 ds <- ds %>% add(Observations(times=seq(0, 7*24, by=1)))
 ds <- ds %>% add(Covariate("BW", UniformDistribution(50,100)))
 model <- model_library$advan4_trans4
-model <- model %>% replaceEquation("CL", paste0(model %>% getEquation("CL"), "*pow(BW/70, 0.75)"))
+cl <- model %>% find(Equation("CL"))
+model <- model %>% replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
 campsis <- model %>% simulate(dataset=ds, dest="RxODE", seed=1, outvars="BW")
 
 

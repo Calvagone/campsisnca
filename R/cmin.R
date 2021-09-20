@@ -50,8 +50,10 @@ setMethod("calculate", signature=c("cmin_metric", "numeric"), definition=functio
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
+#' @return individual Cmin
+#' @importFrom dplyr group_by slice transmute ungroup
 cmin_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, value=dv_variable))
+  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
+  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
 }

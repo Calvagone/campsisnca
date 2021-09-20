@@ -16,6 +16,9 @@ auc_delegate(x, variable, method = 1)
 * 2: linear up - logarithmic down
 * 3: linear before Tmax, logarithmic after Tmax}
 }
+\value{
+individual AUC
+}
 \description{
 Compute AUC.
 }

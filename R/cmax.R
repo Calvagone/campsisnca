@@ -50,8 +50,10 @@ setMethod("calculate", signature=c("cmax_metric", "numeric"), definition=functio
 #' 
 #' @param x CAMPSIS/NONMEM dataframe
 #' @param variable dependent variable
+#' @return individual Cmax
+#' @importFrom dplyr group_by slice transmute ungroup
 cmax_delegate <- function(x, variable) {
   x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(id) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=id, value=dv_variable))
+  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
+  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
 }

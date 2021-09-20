@@ -8,18 +8,15 @@ testFolder <<- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Check errors are well detected", {
-  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)
+  x <- data.frame(ID=1, TIME=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)
   expect_error(metrics.2cpt(x), regexp="Missing columns in x: KA")
   
-  x <- data.frame(id=1, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, KA=3.3)
-  expect_error(metrics.2cpt(x), regexp="x not recognised as CAMPSIS output nor NONMEM dataset")
-  
-  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)
+  x <- data.frame(ID=1, TIME=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)
   expect_error(metrics.2cpt(x, map=c(KA="K", V4="TAU")), regexp="Unnecessary keys detected in map vector: V4")
 })
 
 test_that("Run 017F Pop1", {
-  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, KA=3.3)
+  x <- data.frame(ID=1, TIME=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, KA=3.3)
   metrics <- metrics.2cpt(x)
   
   tol <- 1e-6
@@ -55,7 +52,7 @@ test_that("Run 017F Pop1", {
 })
 
 test_that("Run 017F Pop2", {
-  x <- data.frame(id=1, time=0, TAU=12, DOSE=10000, CL=48, V2=209, Q=18, V3=650, KA=2.1)
+  x <- data.frame(ID=1, TIME=0, TAU=12, DOSE=10000, CL=48, V2=209, Q=18, V3=650, KA=2.1)
   metrics <- metrics.2cpt(x)
   
   tol <- 1e-6
@@ -128,9 +125,9 @@ test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
   firstRow$K
   
   # Validation 1: OK
-  linearMod <- lm(log(CP) ~ time, data=results %>% campsisnca::timerange(min=15*24, max=16*24))
+  linearMod <- lm(log(CP) ~ TIME, data=results %>% campsisnca::timerange(min=15*24, max=16*24))
   linearMod$coefficients
-  expect_equal(-linearMod$coefficients[["time"]], firstRow$K, tolerance=1e-3)
+  expect_equal(-linearMod$coefficients[["TIME"]], firstRow$K, tolerance=1e-3)
   
   # Validation 2: NOK
   nca <- ncappcOutput(exportToNMDataset(results, dataset, model), metric=NULL, doseType="ss", doseTime=24*14, Tau=24, extrapolate=TRUE)
@@ -141,6 +138,6 @@ test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
   expect_equal(calva_nca$Lambda_z, firstRow$K, tolerance=1e-3)
 
   # Validation 4: OK
-  metrics <- NonCompart::sNCA(x=results$time, y=results$CP, dose=1000, adm="Bolus")
-  expect_equal(metrics[["LAMZ"]], firstRow$K, tolerance=1e-3)
+  # metrics <- NonCompart::sNCA(x=results$TIME, y=results$CP, dose=1000, adm="Bolus")
+  # expect_equal(metrics[["LAMZ"]], firstRow$K, tolerance=1e-3)
 })

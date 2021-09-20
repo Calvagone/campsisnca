@@ -11,6 +11,9 @@ tmax_delegate(x, variable)
 
 \item{variable}{dependent variable}
 }
+\value{
+individual tmax
+}
 \description{
 Compute tmax.
 }
