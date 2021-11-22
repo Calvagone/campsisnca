@@ -16,13 +16,17 @@ test_that("Test half life parameters on 1-compartment model ", {
   results <- model %>% disable("IIV") %>% simulate(dataset, dest="mrgsolve", seed=1, outvars=c("CP", required))
   
   nca <- NCAMetrics(x=results %>% mutate(DOSE=amount, TAU=24), variable="CP", scenario=c(xx="Half-lives"))
-  nca <- nca %>% add(c(Thalf.1cpt()))
+  nca <- nca %>% add(c(Thalf.1cpt(), Thalf(x=results %>% timerange(50,150)))) 
   nca <- nca %>% campsisnca::calculate()
   
-  thalf <- nca@list[[1]]@individual$value
-  expect_equal(thalf, 10.6638, tolerance=1e-4)
+  thalf.z <- nca@list[[1]]@individual$value
+  expect_equal(thalf.z, 10.6638, tolerance=1e-4)
   
-  slopes <- data.frame(x=times, y=13*exp(-log(2)/thalf*times), type="z")
+  # Thalf computed based on data
+  thalf <- nca@list[[2]]@individual$value
+  expect_equal(thalf.z, thalf, tolerance=1e-3)
+  
+  slopes <- data.frame(x=times, y=13*exp(-log(2)/thalf.z*times), type="z")
   
   shadedPlot(results, "CP") +
     ggplot2::geom_line(mapping=ggplot2::aes(x=x, y=y, colour=type, group=type), data=slopes) +
@@ -45,7 +49,7 @@ test_that("Test half life parameters on 2-compartment model ", {
   results <- model %>% disable("IIV") %>% simulate(dataset, dest="mrgsolve", seed=1, outvars=c("CP", required))
   
   nca <- NCAMetrics(x=results %>% mutate(DOSE=amount, TAU=24), variable="CP", scenario=c(xx="Half-lives"))
-  nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
+  nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z(), Thalf(x=results %>% timerange(50,150))))
   nca <- nca %>% campsisnca::calculate()
   
   thalf.dist <- nca@list[[1]]@individual$value
@@ -56,6 +60,10 @@ test_that("Test half life parameters on 2-compartment model ", {
   
   thalf.z <- nca@list[[3]]@individual$value
   expect_equal(thalf.z, 34.33897, tolerance=1e-4)
+  
+  # Thalf computed based on data
+  thalf <- nca@list[[4]]@individual$value
+  expect_equal(thalf.z, thalf, tolerance=1e-2)
   
   slopes <- bind_rows(data.frame(x=times, y=20*exp(-log(2)/thalf.dist*times), type="dist"),
                      data.frame(x=times, y=4*exp(-log(2)/thalf.eff*times), type="eff"),
