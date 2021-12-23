@@ -29,20 +29,20 @@ dataframe) :
 campsis
 ```
 
-    ## # A tibble: 8,450 x 18
+    ## # A tibble: 5,000 x 18
     ##       ID  TIME   ARM    KA    CL    V2    V3     Q    S2     F    CP OBS_CP
     ##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
-    ##  1     1     0     0  1.07  5.81  72.5  21.3  3.62  72.5  0     0      0   
-    ##  2     1     1     0  1.07  5.81  72.5  21.3  3.62  72.5  8.40  8.40   9.30
-    ##  3     1     2     0  1.07  5.81  72.5  21.3  3.62  72.5 10.3  10.3    9.05
-    ##  4     1     3     0  1.07  5.81  72.5  21.3  3.62  72.5 10.2  10.2   10.6 
-    ##  5     1     4     0  1.07  5.81  72.5  21.3  3.62  72.5  9.48  9.48   9.78
-    ##  6     1     5     0  1.07  5.81  72.5  21.3  3.62  72.5  8.67  8.67   8.56
-    ##  7     1     6     0  1.07  5.81  72.5  21.3  3.62  72.5  7.91  7.91   8.58
-    ##  8     1     7     0  1.07  5.81  72.5  21.3  3.62  72.5  7.23  7.23   7.48
-    ##  9     1     8     0  1.07  5.81  72.5  21.3  3.62  72.5  6.64  6.64   5.92
-    ## 10     1     9     0  1.07  5.81  72.5  21.3  3.62  72.5  6.12  6.12   6.81
-    ## # ... with 8,440 more rows, and 6 more variables: Y <dbl>, A_DEPOT <dbl>,
+    ##  1     1     0     0 0.842  5.89  94.8  21.3  3.62  94.8  0     0      0   
+    ##  2     1     1     0 0.842  5.89  94.8  21.3  3.62  94.8  5.68  5.68   4.71
+    ##  3     1     2     0 0.842  5.89  94.8  21.3  3.62  94.8  7.62  7.62   7.86
+    ##  4     1     4     0 0.842  5.89  94.8  21.3  3.62  94.8  7.81  7.81   6.01
+    ##  5     1     6     0 0.842  5.89  94.8  21.3  3.62  94.8  6.93  6.93   6.40
+    ##  6     1     8     0 0.842  5.89  94.8  21.3  3.62  94.8  6.05  6.05   7.73
+    ##  7     1    12     0 0.842  5.89  94.8  21.3  3.62  94.8  4.72  4.72   4.63
+    ##  8     1    16     0 0.842  5.89  94.8  21.3  3.62  94.8  3.78  3.78   3.46
+    ##  9     1    24     0 0.842  5.89  94.8  21.3  3.62  94.8  2.52  2.52   2.17
+    ## 10     1    48     0 0.842  5.89  94.8  21.3  3.62  94.8  3.33  3.33   3.69
+    ## # ... with 4,990 more rows, and 6 more variables: Y <dbl>, A_DEPOT <dbl>,
     ## #   A_CENTRAL <dbl>, A_PERIPHERAL <dbl>, A_OUTPUT <dbl>, BW <dbl>
 
 Let’s calculate PK metrics at Day 1 and Day 7 as follows:
@@ -77,14 +77,14 @@ table %>% export(dest="dataframe")
     ## # A tibble: 8 x 5
     ##   metric     low    med     up day  
     ##   <chr>    <dbl>  <dbl>  <dbl> <chr>
-    ## 1 AUC      99.1  132.   165.   Day 1
-    ## 2 Cmax      8.54  10.4   14.0  Day 1
-    ## 3 tmax      1.45   3      5.55 Day 1
-    ## 4 Ctrough   1.34   2.60   3.91 Day 1
-    ## 5 AUC     125.   184.   263.   Day 7
-    ## 6 Cmax     11.3   14.9   18.7  Day 7
-    ## 7 tmax      1      3      5.55 Day 7
-    ## 8 Ctrough   1.57   4.09   6.69 Day 7
+    ## 1 AUC     104.   135.   172.   Day 1
+    ## 2 Cmax      7.46  10.3   14.4  Day 1
+    ## 3 tmax      1      2      6    Day 1
+    ## 4 Ctrough   1.60   2.85   4.59 Day 1
+    ## 5 AUC     133.   197.   292.   Day 7
+    ## 6 Cmax     10.9   14.9   20.0  Day 7
+    ## 7 tmax      1      2      6    Day 7
+    ## 8 Ctrough   1.95   4.04   8.53 Day 7
 
 2.  To a HTML table using `kable` and format argument `html`:
 
@@ -117,16 +117,16 @@ Ctrough<br>(ng/mL)
 Day 1
 </td>
 <td style="text-align:center;">
-132 [99.1-165]
+135 [104-172]
 </td>
 <td style="text-align:center;">
-10.4 [8.54-14]
+10.3 [7.46-14.4]
 </td>
 <td style="text-align:center;">
-3 [1.45-5.55]
+2 [1-6]
 </td>
 <td style="text-align:center;">
-2.6 [1.34-3.91]
+2.85 [1.6-4.59]
 </td>
 </tr>
 <tr>
@@ -134,16 +134,16 @@ Day 1
 Day 7
 </td>
 <td style="text-align:center;">
-184 [125-263]
+197 [133-292]
 </td>
 <td style="text-align:center;">
-14.9 [11.3-18.7]
+14.9 [10.9-20]
 </td>
 <td style="text-align:center;">
-3 [1-5.55]
+2 [1-6]
 </td>
 <td style="text-align:center;">
-4.09 [1.57-6.69]
+4.04 [1.95-8.53]
 </td>
 </tr>
 </tbody>
@@ -217,16 +217,16 @@ Ctrough<br>(ng/mL)
 BW range: 50-75
 </td>
 <td style="text-align:center;">
-144 [119-169]
+147 [124-174]
 </td>
 <td style="text-align:center;">
-11.1 [9.25-14.3]
+10.4 [8.08-14.7]
 </td>
 <td style="text-align:center;">
-3.5 [2-5.95]
+4 [1.1-6]
 </td>
 <td style="text-align:center;">
-3.05 [2.14-4.28]
+3.32 [2.21-4.96]
 </td>
 </tr>
 <tr>
@@ -234,16 +234,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:center;">
-126 [97.1-146]
+123 [98.7-154]
 </td>
 <td style="text-align:center;">
-10.2 [8.09-13.3]
+10.2 [7.12-13.3]
 </td>
 <td style="text-align:center;">
-3 [1.35-5]
+2 [1-4]
 </td>
 <td style="text-align:center;">
-2.4 [1.26-3.47]
+2.25 [1.3-3.89]
 </td>
 </tr>
 <tr grouplength="2">
@@ -256,16 +256,16 @@ BW range: 75-100
 BW range: 50-75
 </td>
 <td style="text-align:center;">
-210 [161-274]
+234 [166-304]
 </td>
 <td style="text-align:center;">
-16.5 [13.8-18.8]
+16.1 [12.1-21.1]
 </td>
 <td style="text-align:center;">
-3 [1-5.95]
+2 [1-6]
 </td>
 <td style="text-align:center;">
-4.92 [2.86-7.02]
+5.33 [2.74-9.3]
 </td>
 </tr>
 <tr>
@@ -273,16 +273,16 @@ BW range: 50-75
 BW range: 75-100
 </td>
 <td style="text-align:center;">
-170 [120-214]
+169 [125-235]
 </td>
 <td style="text-align:center;">
-13.6 [11.2-17.2]
+13.2 [10.2-19.4]
 </td>
 <td style="text-align:center;">
-3 [1.35-5]
+2 [1-6]
 </td>
 <td style="text-align:center;">
-3.26 [1.53-5.16]
+3.18 [1.8-5.44]
 </td>
 </tr>
 </tbody>
@@ -291,7 +291,7 @@ BW range: 75-100
 ### Example 3: Calculate 2-compartment half-life metrics
 
 ``` r
-nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Half-lives"))
+nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Theoritical half-lives"))
 nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
 nca <- nca %>% calculate()
 
@@ -319,16 +319,50 @@ t1/2z
 <tbody>
 <tr>
 <td style="text-align:center;">
-Half-lives
+Theoritical half-lives
 </td>
 <td style="text-align:center;">
-2.51 [2.01-3.31]
+2.57 [1.91-3.48]
 </td>
 <td style="text-align:center;">
-12.8 [8.13-17]
+13.4 [8.38-20.8]
 </td>
 <td style="text-align:center;">
-14 [9.69-18.8]
+14.6 [9.64-22.2]
+</td>
+</tr>
+</tbody>
+</table>
+
+### Example 4: Compute terminal half-live based on data
+
+``` r
+nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(xx="Half-live computed on data"))
+nca <- nca %>% add(c(Thalf(x=campsis %>% timerange(7*24, 10*24))))
+nca <- nca %>% calculate()
+
+table <- NCAMetricsTable()  
+table <- table %>% add(nca)
+table %>% export(dest="kable", format="html")
+```
+
+<table class=" lightable-paper lightable-striped table" style="font-family: &quot;Arial Narrow&quot;, arial, helvetica, sans-serif; width: auto !important; margin-left: auto; margin-right: auto; margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:center;">
+</th>
+<th style="text-align:center;">
+t1/2
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center;">
+Half-live computed on data
+</td>
+<td style="text-align:center;">
+14.7 [9.72-22.4]
 </td>
 </tr>
 </tbody>

@@ -20,16 +20,22 @@ devtools::install_github("Calvagone/campsisnca", ref="main", auth_token="AUTH_TO
 
 ```{r, results='hide', echo=F, message=F, warning=F}
 library(campsis)
-ds <- Dataset(50)
-ds <- ds %>% add(Bolus(time=(0:6)*24, amount=1000))
-ds <- ds %>% add(Observations(times=seq(0, 7*24, by=1)))
-ds <- ds %>% add(Covariate("BW", UniformDistribution(50,100)))
+rich_sampling <- c(0,1,2,4,6,8,12,16,24)
+day1 <- rich_sampling
+day2day6 <- c(2,3,4,5,6)*24
+day7 <- rich_sampling + 6*24
+day8day10 <- c(8,9,10)*24
+
+ds <- Dataset(200) %>%
+  add(Bolus(time=(0:6)*24, amount=1000)) %>%
+  add(Observations(times=c(day1, day2day6, day7, day8day10))) %>%
+  add(Covariate("BW", UniformDistribution(50,100)))
+
 model <- model_library$advan4_trans4
 cl <- model %>% find(Equation("CL"))
 model <- model %>% replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
+
 campsis <- model %>% simulate(dataset=ds, dest="RxODE", seed=1, outvars="BW")
-
-
 ```
 
 First import the `campsisnca` package:
@@ -122,8 +128,20 @@ table %>% export(dest="kable", format="html")
 ### Example 3: Calculate 2-compartment half-life metrics
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Half-lives"))
+nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Theoritical half-lives"))
 nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
+nca <- nca %>% calculate()
+
+table <- NCAMetricsTable()  
+table <- table %>% add(nca)
+table %>% export(dest="kable", format="html")
+```
+
+### Example 4: Compute terminal half-live based on data
+
+```{r, message=FALSE}
+nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(xx="Half-live computed on data"))
+nca <- nca %>% add(c(Thalf(x=campsis %>% timerange(7*24, 10*24))))
 nca <- nca %>% calculate()
 
 table <- NCAMetricsTable()  
