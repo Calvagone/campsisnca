@@ -23,7 +23,7 @@ Collate:
     'cavg.R'
     'thalf.R'
 Title: CAMPSIS NCA Package
-Version: 0.2.0
+Version: 0.2.1
 Authors@R: c(
   person("Nicolas", "Luyckx", role = c("aut", "cre"), email = "nicolas.luyckx@calvagone.com")
   )
