@@ -81,7 +81,7 @@ dataset1 <- function(seed=1, reload=TRUE) {
   if (reload) {
     library(campsisnca)
   }
-  model <- getNONMEMModelTemplate(3,4)
+  model <- model_library$advan3_trans4
   model <- model %>% add(InfusionDuration(1, rhs="5"))
   
   # 20 subjects

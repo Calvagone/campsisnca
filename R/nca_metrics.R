@@ -83,14 +83,14 @@ setMethod("calculate", signature=c("nca_metrics", "numeric"), definition=functio
 
 setMethod("export", signature=c("nca_metrics", "character"), definition=function(object, dest, ...) {
   if (dest=="dataframe") {
-    return(object %>% export(new("dataframe_type")))
+    return(object %>% export(new("dataframe_type"), ...))
   } else {
     stop("Only dataframe is supported for now")
   }
 })
 
-setMethod("export", signature=c("nca_metrics", "dataframe_type"), definition=function(object, dest, ...) {
-  retValue <- object@list %>% purrr::map_df(~.x %>% export(dest=dest))
+setMethod("export", signature=c("nca_metrics", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
+  retValue <- object@list %>% purrr::map_df(~.x %>% export(dest=dest, type=type, ...))
   names <- names(object@scenario)
   values <- as.character(object@scenario)
   for (name in names) {

@@ -43,16 +43,16 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
     stop("No metrics to export")
   }
   if (dest=="dataframe") {
-    return(object %>% export(new("dataframe_type"), ...))
+    return(object %>% export(dest=new("dataframe_type"), ...))
   } else if (dest=="kable") {
-    return(object %>% export(new("kable_type"), ...))
+    return(object %>% export(dest=new("kable_type"), ...))
   } else {
     stop("Only dataframe and kable are supported for now")
   }
 })
 
-setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, ...) {
-  return(object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest)))
+setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
+  return(object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...)))
 })
 
 setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=function(object, dest, ...) {
