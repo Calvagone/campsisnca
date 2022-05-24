@@ -93,6 +93,12 @@ table %>% export(dest="kable", format="html")
 table %>% export(dest="kable", format="latex")
 ```
 
+Please note the individual metrics can also be exported to  a dataframe using the `export` function as follows:
+
+```{r, message=FALSE}
+table %>% export(dest="dataframe", type="individual")
+```
+
 ### Example 2: PK metrics at Day 1 and Day 7 for different body weight ranges
 
 ```{r, message=FALSE}

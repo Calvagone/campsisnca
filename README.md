@@ -29,7 +29,7 @@ dataframe) :
 campsis
 ```
 
-    ## # A tibble: 5,000 x 18
+    ## # A tibble: 5,000 × 18
     ##       ID  TIME   ARM    KA    CL    V2    V3     Q    S2     F    CP OBS_CP
     ##    <int> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl> <dbl>  <dbl>
     ##  1     1     0     0 0.842  5.89  94.8  21.3  3.62  94.8  0     0      0   
@@ -42,7 +42,7 @@ campsis
     ##  8     1    16     0 0.842  5.89  94.8  21.3  3.62  94.8  3.78  3.78   3.46
     ##  9     1    24     0 0.842  5.89  94.8  21.3  3.62  94.8  2.52  2.52   2.17
     ## 10     1    48     0 0.842  5.89  94.8  21.3  3.62  94.8  3.33  3.33   3.69
-    ## # ... with 4,990 more rows, and 6 more variables: Y <dbl>, A_DEPOT <dbl>,
+    ## # … with 4,990 more rows, and 6 more variables: Y <dbl>, A_DEPOT <dbl>,
     ## #   A_CENTRAL <dbl>, A_PERIPHERAL <dbl>, A_OUTPUT <dbl>, BW <dbl>
 
 Let’s calculate PK metrics at Day 1 and Day 7 as follows:
@@ -74,7 +74,7 @@ This table can be exported:
 table %>% export(dest="dataframe")
 ```
 
-    ## # A tibble: 8 x 5
+    ## # A tibble: 8 × 5
     ##   metric     low    med     up day  
     ##   <chr>    <dbl>  <dbl>  <dbl> <chr>
     ## 1 AUC     104.   135.   172.   Day 1
@@ -154,6 +154,28 @@ Day 7
 ``` r
 table %>% export(dest="kable", format="latex")
 ```
+
+Please note the individual metrics can also be exported to a dataframe
+using the `export` function as follows:
+
+``` r
+table %>% export(dest="dataframe", type="individual")
+```
+
+    ## # A tibble: 1,600 × 4
+    ##    metric    id value day  
+    ##    <chr>  <int> <dbl> <chr>
+    ##  1 AUC        1 112.  Day 1
+    ##  2 AUC        2  82.1 Day 1
+    ##  3 AUC        3 131.  Day 1
+    ##  4 AUC        4 159.  Day 1
+    ##  5 AUC        5 163.  Day 1
+    ##  6 AUC        6 173.  Day 1
+    ##  7 AUC        7 162.  Day 1
+    ##  8 AUC        8 163.  Day 1
+    ##  9 AUC        9 104.  Day 1
+    ## 10 AUC       10 135.  Day 1
+    ## # … with 1,590 more rows
 
 ### Example 2: PK metrics at Day 1 and Day 7 for different body weight ranges
 

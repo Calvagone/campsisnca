@@ -51,15 +51,27 @@ setMethod("getName", signature=c("nca_metric"), definition = function(x) {
 
 setMethod("export", signature=c("nca_metric", "character"), definition=function(object, dest, ...) {
   if (dest=="dataframe") {
-    return(object %>% export(new("dataframe_type")))
+    return(object %>% export(dest=new("dataframe_type"), ...))
   } else {
     stop("Only dataframe is supported for now")
   }
 })
 
-setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, ...) {
-  if (nrow(object@summary) == 0) {
-    stop(paste0("Metric ", object %>% getName(), " has no summary"))
+setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
+  if (type == "summary") {
+    if (nrow(object@summary) == 0) {
+      stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
+    }
+    retValue <- dplyr::bind_cols(tibble::tibble(metric=object %>% getName(), object@summary))
+  
+  } else if (type == "individual") {
+    if (nrow(object@individual) == 0) {
+      stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
+    }
+    retValue <- dplyr::bind_cols(tibble::tibble(metric=object %>% getName(), object@individual))
+  
+  } else {
+    stop("Argument type can only be 'summary' or 'individual'")
   }
-  return(dplyr::bind_cols(tibble::tibble(metric=object %>% getName(), object@summary)))
+  return(retValue)
 })

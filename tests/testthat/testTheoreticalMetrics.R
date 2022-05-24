@@ -88,7 +88,7 @@ test_that("Run 017F Pop2", {
 })
 
 test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
-  model <- getNONMEMModelTemplate(4,4)
+  model <- model_library$advan4_trans4
   model <- model %>% campsismod::replace(Theta(name="Q", value=5))
   model <- model %>% campsismod::replace(Theta(name="V3", value=100))
   halfLifeRequiredVars <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
@@ -109,7 +109,7 @@ test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
 })
 
 test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
-  model <- getNONMEMModelTemplate(2,1)
+  model <- model_library$advan2_trans1
 
   dataset <- Dataset(1)
   dataset <- dataset %>% add(Bolus(time=(0:13)*24, amount=1000, compartment=1))
