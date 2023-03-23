@@ -1,5 +1,42 @@
-Package: campsisnca
 Type: Package
+Package: campsisnca
+Title: CAMPSIS NCA Package
+Version: 0.3.0
+Authors@R: 
+    person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
+Description: TODO.
+License: file LICENSE
+URL: https://github.com/Calvagone/campsisnca
+BugReports: https://github.com/Calvagone/campsisnca/issues
+Depends: 
+    campsismod (>= 1.0.0),
+    R (>= 4.0.0)
+Imports: 
+    assertthat,
+    campsis (>= 1.4.0),
+    dplyr,
+    kableExtra,
+    purrr,
+    tibble,
+    tidyr
+Suggests: 
+    CalvaNCA,
+    devtools,
+    ggplot2,
+    knitr,
+    mrgsolve,
+    ncappc,
+    pkgdown,
+    rmarkdown,
+    roxygen2,
+    RxODE,
+    testthat
+VignetteBuilder: 
+    knitr
+Encoding: UTF-8
+Language: en-US
+LazyData: true
+RoxygenNote: 7.1.2
 Collate:
     'check.R'
     'consistency_checks.R'
@@ -22,20 +59,3 @@ Collate:
     'ctrough.R'
     'cavg.R'
     'thalf.R'
-Title: CAMPSIS NCA Package
-Version: 0.2.2
-Authors@R: c(
-  person("Nicolas", "Luyckx", role = c("aut", "cre"), email = "nicolas.luyckx@calvagone.com")
-  )
-Description: TODO.
-Depends: R (>= 4.0.0), campsismod
-Imports: assertthat, campsis, dplyr, kableExtra, purrr, tibble, tidyr
-License: file LICENSE
-Encoding: UTF-8
-Language: en-US
-LazyData: true
-Suggests: CalvaNCA, devtools, knitr, ggplot2, mrgsolve, ncappc, pkgdown, rmarkdown, roxygen2, RxODE, testthat
-RoxygenNote: 7.1.2
-VignetteBuilder: knitr
-URL: https://github.com/Calvagone/campsisnca
-BugReports: https://github.com/Calvagone/campsisnca/issues
