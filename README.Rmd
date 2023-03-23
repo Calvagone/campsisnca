@@ -35,7 +35,7 @@ model <- model_library$advan4_trans4
 cl <- model %>% find(Equation("CL"))
 model <- model %>% replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
 
-campsis <- model %>% simulate(dataset=ds, dest="RxODE", seed=1, outvars="BW")
+campsis <- model %>% simulate(dataset=ds, dest="rxode2", seed=1, outvars="BW")
 ```
 
 First import the `campsisnca` package:

@@ -14,7 +14,7 @@ test_that("AUC infinite (single dose)", {
   dataset <- Dataset(1)
   dataset <- dataset %>% add(Bolus(time=0, amount=amount))
   dataset <- dataset %>% add(Observations(times=seq(0, wait_period, by=0.1)))
-  results <- model %>% simulate(dataset=dataset, dest="RxODE", seed=1, outvars=c("CP", required))
+  results <- model %>% simulate(dataset=dataset, dest="rxode2", seed=1, outvars=c("CP", required))
   spaghettiPlot(results, "CP")
   auc <- Auc(results, "CP", method=1) %>% campsisnca::calculate()
   auc@individual$value
