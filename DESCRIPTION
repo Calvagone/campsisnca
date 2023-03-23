@@ -4,7 +4,7 @@ Title: CAMPSIS NCA Package
 Version: 0.3.0
 Authors@R: 
     person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
-Description: TODO.
+Description: A useful package for executing non-compartmental analysis (NCA).
 License: file LICENSE
 URL: https://github.com/Calvagone/campsisnca
 BugReports: https://github.com/Calvagone/campsisnca/issues
