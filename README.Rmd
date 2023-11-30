@@ -31,7 +31,7 @@ ds <- Dataset(200) %>%
   add(Observations(times=c(day1, day2day6, day7, day8day10))) %>%
   add(Covariate("BW", UniformDistribution(50,100)))
 
-model <- model_library$advan4_trans4
+model <- model_suite$testing$nonmem$advan4_trans4
 cl <- model %>% find(Equation("CL"))
 model <- model %>% replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
 
@@ -56,21 +56,22 @@ Let's calculate PK metrics at Day 1 and Day 7 as follows:
 
 ```{r, message=FALSE}
 # Day 1
-ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1"))
-ncaD1 <- ncaD1 %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
-ncaD1 <- ncaD1 %>% calculate()
+ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+  add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
+  calculate()
 
 # Day 7 
-ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7"))
-ncaD7 <- ncaD7 %>% add(c(Auc(), Cmax(), Tmax(), Ctrough()))
-ncaD7 <- ncaD7 %>% calculate()
+ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+  add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+  calculate()
 ```
 
 These 2 metrics may be imported into a metrics table object, as follows:
 
 ```{r, message=FALSE}
 table <- NCAMetricsTable(unitLineBreak=TRUE)  
-table <- table %>% add(c(ncaD1, ncaD7))
+table <- table %>%
+  add(c(ncaD1, ncaD7))
 ```
 
 This table can be exported:
@@ -107,50 +108,50 @@ campsis_bw_50_75 <- campsis %>% filter(BW > 50 & BW < 75)
 campsis_bw_75_100 <- campsis %>% filter(BW >= 75 & BW < 100)
 
 scenarioD1_a <- c(day="Day 1", bw_range="BW range: 50-75")
-ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a)
-ncaD1_a <- ncaD1_a %>% add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
-ncaD1_a <- ncaD1_a %>% calculate()
+ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a) %>% 
+  add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
+  calculate()
 
 scenarioD7_a <- c(day="Day 7", bw_range="BW range: 50-75")
-ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a)
-ncaD7_a <- ncaD7_a %>% add(c(Auc(), Cmax(), Tmax(), Ctrough()))
-ncaD7_a <- ncaD7_a %>% calculate()
+ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a) %>%
+  add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+  calculate()
 
 scenarioD1_b <- c(day="Day 1", bw_range="BW range: 75-100")
-ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b)
-ncaD1_b <- ncaD1_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough()))
-ncaD1_b <- ncaD1_b %>% calculate()
+ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b) %>%
+  add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+  calculate()
 
 scenarioD7_b <- c(day="Day 7", bw_range="BW range: 75-100")
-ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b)
-ncaD7_b <- ncaD7_b %>% add(c(Auc(), Cmax(), Tmax(), Ctrough()))
-ncaD7_b <- ncaD7_b %>% calculate()
+ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b) %>%
+  add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+  calculate()
 
-table <- NCAMetricsTable(unitLineBreak=TRUE)  
-table <- table %>% add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
+table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
+  add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
 table %>% export(dest="kable", format="html")
 ```
 
 ### Example 3: Calculate 2-compartment half-life metrics
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Theoritical half-lives"))
-nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
-nca <- nca %>% calculate()
+nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Theoritical half-lives")) %>%
+  add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
+  calculate()
 
-table <- NCAMetricsTable()  
-table <- table %>% add(nca)
+table <- NCAMetricsTable() %>%
+  add(nca)
 table %>% export(dest="kable", format="html")
 ```
 
 ### Example 4: Compute terminal half-live based on data
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(xx="Half-live computed on data"))
-nca <- nca %>% add(c(Thalf(x=campsis %>% timerange(7*24, 10*24))))
-nca <- nca %>% calculate()
+nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(xx="Half-live computed on data")) %>%
+  add(c(Thalf(x=campsis %>% timerange(7*24, 10*24)))) %>%
+  calculate()
 
-table <- NCAMetricsTable()  
-table <- table %>% add(nca)
+table <- NCAMetricsTable() %>%
+  add(nca)
 table %>% export(dest="kable", format="html")
 ```
