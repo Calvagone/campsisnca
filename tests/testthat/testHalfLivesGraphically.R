@@ -5,7 +5,7 @@ context("Check computed half lives are OK when plotted on graph")
 
 test_that("Test half life parameters on 1-compartment model ", {
   amount <- 1000
-  model <- model_library$advan2_trans1
+  model <- model_suite$testing$nonmem$advan2_trans1
   required <- thalf.1cpt.required()[!(thalf.1cpt.required() %in% c("DOSE", "TAU"))]
   
   times <- seq(0,144,by=0.1)
@@ -36,7 +36,7 @@ test_that("Test half life parameters on 1-compartment model ", {
 
 test_that("Test half life parameters on 2-compartment model ", {
   amount <- 1000
-  model <- model_library$advan4_trans4
+  model <- model_suite$testing$nonmem$advan4_trans4
   model <- model %>% campsismod::replace(Theta(name="Q", value=5))
   model <- model %>% campsismod::replace(Theta(name="V3", value=100))
   required <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]

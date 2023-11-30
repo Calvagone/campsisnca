@@ -50,17 +50,17 @@ ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTi
   return(standardiseOutput(out$ncaOutput, metric))
 }
 
-calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, AUCTimeRange=NULL) {
-  detachCampsisNCA()
-  out <- CalvaNCA::CalvaNCA_plasma(
-    obsFile=nmDataset, 
-    method=convertMethod(method),
-    doseType=doseType,
-    doseTime=doseTime,
-    Tau=Tau,
-    AUCTimeRange=AUCTimeRange)
-  return(standardiseOutput(out$ncaOutput, metric))
-}
+# calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, AUCTimeRange=NULL) {
+#   detachCampsisNCA()
+#   out <- CalvaNCA::CalvaNCA_plasma(
+#     obsFile=nmDataset, 
+#     method=convertMethod(method),
+#     doseType=doseType,
+#     doseTime=doseTime,
+#     Tau=Tau,
+#     AUCTimeRange=AUCTimeRange)
+#   return(standardiseOutput(out$ncaOutput, metric))
+# }
 
 exportToNMDataset <- function(results, dataset, model, seed=1) {
   # Retrieve ETA names from model
@@ -81,7 +81,7 @@ dataset1 <- function(seed=1, reload=TRUE) {
   if (reload) {
     library(campsisnca)
   }
-  model <- model_library$advan3_trans4
+  model <- model_suite$testing$nonmem$advan3_trans4
   model <- model %>% add(InfusionDuration(1, rhs="5"))
   
   # 20 subjects

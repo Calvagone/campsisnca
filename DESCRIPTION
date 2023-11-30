@@ -20,7 +20,6 @@ Imports:
     tibble,
     tidyr
 Suggests: 
-    CalvaNCA,
     devtools,
     ggplot2,
     knitr,
