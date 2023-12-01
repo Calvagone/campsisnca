@@ -4,7 +4,7 @@ library(dplyr)
 library(campsis)
 context("Compute theoritical NCA metrics from PK parameters")
 
-testFolder <<- ""
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Check errors are well detected", {

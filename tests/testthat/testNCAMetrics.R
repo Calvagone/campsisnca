@@ -5,7 +5,7 @@ library(campsis)
 
 context("Test NCA metrics and NCA metrics table object")
 
-testFolder <<- "C:/prj/campsisnca/tests/testthat/"
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Dataset 1 - day 1 & day 7", {

@@ -5,7 +5,7 @@ library(campsis)
 
 context("Test Auc metric")
 
-testFolder <<- ""
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 
