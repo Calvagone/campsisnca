@@ -4,7 +4,7 @@ library(dplyr)
 library(campsis)
 context("Test cmax method")
 
-testFolder <<- ""
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Dataset 1 - Cmax at day 1", {

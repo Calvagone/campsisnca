@@ -7,7 +7,7 @@ context("Test Auc metric (extra tests)")
 test_that("AUC infinite (single dose)", {
   amount <- 1000
   wait_period <- 24*7*5 # 5 weeks
-  model <- model_library$advan4_trans4 %>% disable("IIV")
+  model <- model_suite$testing$nonmem$advan4_trans4 %>% disable("IIV")
   model <- model %>% campsismod::replace(Theta(name="Q", value=5))
   model <- model %>% campsismod::replace(Theta(name="V3", value=100))
   required <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]

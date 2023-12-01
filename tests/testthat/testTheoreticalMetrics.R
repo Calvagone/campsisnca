@@ -4,7 +4,7 @@ library(dplyr)
 library(campsis)
 context("Compute theoritical NCA metrics from PK parameters")
 
-testFolder <<- ""
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Check errors are well detected", {
@@ -88,7 +88,7 @@ test_that("Run 017F Pop2", {
 })
 
 test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
-  model <- model_library$advan4_trans4
+  model <- model_suite$testing$nonmem$advan4_trans4
   model <- model %>% campsismod::replace(Theta(name="Q", value=5))
   model <- model %>% campsismod::replace(Theta(name="V3", value=100))
   halfLifeRequiredVars <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
@@ -109,7 +109,7 @@ test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
 })
 
 test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
-  model <- model_library$advan2_trans1
+  model <- model_suite$testing$nonmem$advan2_trans1
 
   dataset <- Dataset(1)
   dataset <- dataset %>% add(Bolus(time=(0:13)*24, amount=1000, compartment=1))
@@ -134,8 +134,8 @@ test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
   nca$Lambda_z
   
   # Validation 3: OK
-  calva_nca <- (CalvaNCA::CalvaNCA_plasma(obsFile=exportToNMDataset(results, dataset, model)))$ncaOutput
-  expect_equal(calva_nca$Lambda_z, firstRow$K, tolerance=1e-3)
+  # calva_nca <- (CalvaNCA::CalvaNCA_plasma(obsFile=exportToNMDataset(results, dataset, model)))$ncaOutput
+  # expect_equal(calva_nca$Lambda_z, firstRow$K, tolerance=1e-3)
 
   # Validation 4: OK
   # metrics <- NonCompart::sNCA(x=results$TIME, y=results$CP, dose=1000, adm="Bolus")

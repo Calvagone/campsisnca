@@ -4,7 +4,7 @@ library(dplyr)
 library(campsis)
 context("Test cmax method")
 
-testFolder <<- ""
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 test_that("Times must be monotonically increasing", {
