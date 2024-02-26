@@ -22,6 +22,31 @@ setGeneric("calculate", function(object, level=NULL, ...) {
   standardGeneric("calculate")
 })
 
+
+#_______________________________________________________________________________
+#----                               core                                    ----
+#_______________________________________________________________________________
+
+#' Core function for the evaluation of NCA metrics.
+#' 
+#' @param object object (PK metric) that needs to be calculated
+#' @param time time vector, numeric
+#' @param value value vector, numeric
+#' @param ... extra arguments
+#' @return results vector, numeric
+#' @export
+#' @rdname core
+core <- function(object, time, value, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("core", function(object, time, value, ...) {
+  assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
+  assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
+  standardGeneric("core")
+})
+
+
 #_______________________________________________________________________________
 #----                              getUnit                                  ----
 #_______________________________________________________________________________

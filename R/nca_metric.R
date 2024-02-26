@@ -75,3 +75,25 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
   }
   return(retValue)
 })
+
+
+#' 
+#' Compute individual values.
+#' 
+#' @param metric NCA metric
+#' @return individual metrics
+#' @importFrom dplyr group_by slice transmute ungroup
+computeIndividualValues <- function(metric) {
+  x <- metric@x
+  variable <- metric@variable
+  x <- x %>% 
+    standardise(variable)
+  
+  retValue <- x %>%
+    dplyr::group_by(ID) %>%
+    dplyr::summarise(individual_value=metric %>% core(time=TIME, value=dv_variable)) %>%
+    dplyr::ungroup()
+  
+  return(retValue %>%
+           dplyr::transmute(id=ID, value=individual_value))
+}
