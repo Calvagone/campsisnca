@@ -32,16 +32,6 @@ Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
-#_______________________________________________________________________________
-
-#' @rdname calculate
-setMethod("calculate", signature=c("cmin_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- iValues(metric=object)
-  return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
 #----                            iValue                                     ----
 #_______________________________________________________________________________
 

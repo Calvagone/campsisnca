@@ -38,6 +38,16 @@ summariseIndividualData <- function(x, level) {
 }
 
 #_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
+  object@individual <- iValues(metric=object)
+  return(object %>% summariseIndividualData(level=level))    
+})
+
+#_______________________________________________________________________________
 #----                             getName                                   ----
 #_______________________________________________________________________________
 
