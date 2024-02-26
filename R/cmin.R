@@ -37,15 +37,15 @@ Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 
 #' @rdname calculate
 setMethod("calculate", signature=c("cmin_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- computeIndividualValues(metric=object)
+  object@individual <- iValues(metric=object)
   return(object %>% summariseIndividualData(level=level))    
 })
 
 #_______________________________________________________________________________
-#----                             core                                      ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname core
-setMethod("core", signature=c("cmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname iValue
+setMethod("iValue", signature=c("cmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(min(value))    
 })

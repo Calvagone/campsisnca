@@ -76,14 +76,13 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
   return(retValue)
 })
 
+#_______________________________________________________________________________
+#----                             iValues                                   ----
+#_______________________________________________________________________________
 
-#' 
-#' Compute individual values.
-#' 
-#' @param metric NCA metric
-#' @return individual metrics
-#' @importFrom dplyr group_by slice transmute ungroup
-computeIndividualValues <- function(metric) {
+#' @rdname iValues
+#' @importFrom dplyr group_by summarise transmute ungroup
+setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...) {
   x <- metric@x
   variable <- metric@variable
   x <- x %>% 
@@ -91,9 +90,10 @@ computeIndividualValues <- function(metric) {
   
   retValue <- x %>%
     dplyr::group_by(ID) %>%
-    dplyr::summarise(individual_value=metric %>% core(time=TIME, value=dv_variable)) %>%
+    dplyr::summarise(individual_value=metric %>% iValue(time=TIME, value=dv_variable)) %>%
     dplyr::ungroup()
   
   return(retValue %>%
-           dplyr::transmute(id=ID, value=individual_value))
-}
+           dplyr::transmute(id=ID, value=individual_value))  
+})
+

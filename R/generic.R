@@ -24,28 +24,46 @@ setGeneric("calculate", function(object, level=NULL, ...) {
 
 
 #_______________________________________________________________________________
-#----                               core                                    ----
+#----                              iValue                                   ----
 #_______________________________________________________________________________
 
-#' Core function for the evaluation of NCA metrics.
+#' Compute the individual value of an individual.
 #' 
-#' @param object object (PK metric) that needs to be calculated
+#' @param object PK metric
 #' @param time time vector, numeric
 #' @param value value vector, numeric
 #' @param ... extra arguments
-#' @return results vector, numeric
+#' @return individual value
 #' @export
-#' @rdname core
-core <- function(object, time, value, ...) {
+#' @rdname iValue
+iValue <- function(object, time, value, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("core", function(object, time, value, ...) {
+setGeneric("iValue", function(object, time, value, ...) {
   assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
   assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
-  standardGeneric("core")
+  standardGeneric("iValue")
 })
 
+#_______________________________________________________________________________
+#----                             iValues                                   ----
+#_______________________________________________________________________________
+
+#' Compute the individual values of a population.
+#' 
+#' @param object PK metric
+#' @param ... extra arguments
+#' @return individual values
+#' @export
+#' @rdname iValues
+iValues <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("iValues", function(object, ...) {
+  standardGeneric("iValues")
+})
 
 #_______________________________________________________________________________
 #----                              getUnit                                  ----
