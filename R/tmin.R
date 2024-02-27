@@ -32,16 +32,6 @@ Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
-#_______________________________________________________________________________
-
-#' @rdname calculate
-setMethod("calculate", signature=c("tmin_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- tmin_delegate(x=object@x, variable=object@variable)
-  return(object %>% summariseIndividualData(level=level))    
-})
-
-#_______________________________________________________________________________
 #----                             getName                                   ----
 #_______________________________________________________________________________
 
@@ -50,18 +40,10 @@ setMethod("getName", signature=c("tmin_metric"), definition = function(x) {
 })
 
 #_______________________________________________________________________________
-#----                           implementation                              ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' 
-#' Compute tmin.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @return individual tmin
-#' @importFrom dplyr group_by slice transmute ungroup
-tmin_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=ID, value=TIME))
-}
+#' @rdname iValue
+setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(time[which.min(value)])    
+})
