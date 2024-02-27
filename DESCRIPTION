@@ -59,3 +59,5 @@ Collate:
     'cavg.R'
     'thalf.R'
     'theoretical_thalf.R'
+    'custom_metric.R'
+    
