@@ -16,6 +16,7 @@ setClass(
     method = "integer"
   ),
   contains="nca_metric",
+  prototype=prototype(method=1L, extra_args="method"),
   validity=validateAUCMetric
 )
 
@@ -38,32 +39,10 @@ Auc <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL) {
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname calculate
-setMethod("calculate", signature=c("auc_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- auc_delegate(x=object@x, variable=object@variable, method=object@method)
-  return(object %>% summariseIndividualData(level=level))    
+#' @rdname iValue
+setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value, method) {
+  return(trap(x=time, y=value, method=method))    
 })
-
-#_______________________________________________________________________________
-#----                           implementation                              ----
-#_______________________________________________________________________________
-
-#' 
-#' Compute AUC.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @param method method:
-#' * 1: linear up - linear down
-#' * 2: linear up - logarithmic down
-#' * 3: linear before Tmax, logarithmic after Tmax
-#' @return individual AUC
-#' @importFrom dplyr group_by rename summarise
-auc_delegate <- function(x, variable, method=1) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(ID) %>% dplyr::summarise(value=trap(x=TIME, y=dv_variable, method=method), .groups="drop")
-  return(x %>% dplyr::rename(id=ID))
-}

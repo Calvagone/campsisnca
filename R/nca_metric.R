@@ -18,7 +18,8 @@ setClass(
     individual = "data.frame",    # individual results
     summary = "data.frame",       # summary results
     name = "character",           # metric name (exported into header)
-    unit = "character"            # metric unit (exported into header)
+    unit = "character",           # metric unit (exported into header)
+    extra_args = "character"      # extra arguments names to iValue
   ),
   contains="pmx_element",
   validity=validateMetric
@@ -98,9 +99,17 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...)
   x <- x %>% 
     standardise(variable)
   
+  args <- list()
+  args[["object"]] <- object
+  for (argName in object@extra_args) {
+    args[[argName]] <- slot(object, argName)
+  }
+  
   retValue <- x %>%
     dplyr::group_by(ID) %>%
-    dplyr::summarise(individual_value=object %>% iValue(time=TIME, value=dv_variable)) %>%
+    dplyr::summarise(individual_value=do.call("iValue", args %>%
+                                                append(list(time=.data$TIME)) %>%
+                                                append(list(value=.data$dv_variable)))) %>%
     dplyr::ungroup()
   
   return(retValue %>%
