@@ -58,3 +58,4 @@ Collate:
     'ctrough.R'
     'cavg.R'
     'thalf.R'
+    'theoretical_thalf.R'
