@@ -43,7 +43,7 @@ summariseIndividualData <- function(x, level) {
 
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- iValues(metric=object)
+  object@individual <- iValues(object=object)
   return(object %>% summariseIndividualData(level=level))    
 })
 
@@ -93,14 +93,14 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 #' @rdname iValues
 #' @importFrom dplyr group_by summarise transmute ungroup
 setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...) {
-  x <- metric@x
-  variable <- metric@variable
+  x <- object@x
+  variable <- object@variable
   x <- x %>% 
     standardise(variable)
   
   retValue <- x %>%
     dplyr::group_by(ID) %>%
-    dplyr::summarise(individual_value=metric %>% iValue(time=TIME, value=dv_variable)) %>%
+    dplyr::summarise(individual_value=object %>% iValue(time=TIME, value=dv_variable)) %>%
     dplyr::ungroup()
   
   return(retValue %>%
