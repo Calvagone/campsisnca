@@ -16,7 +16,7 @@ setClass(
     trough_time = "numeric"
   ),
   contains="nca_metric",
-  prototype=prototype(trough_time=as.numeric(NA), extra_args="trough_time"),
+  prototype=prototype(trough_time=as.numeric(NA)),
   validity=validateCtroughMetric
 )
 

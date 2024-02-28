@@ -7,7 +7,7 @@
 CustomMetric(
   x = NULL,
   variable = NULL,
-  fun = function(time, value) {
+  fun = function(data) {
      0
  },
   name = NULL,
@@ -19,7 +19,7 @@ CustomMetric(
 
 \item{variable}{dependent variable}
 
-\item{fun}{any custom function with exactly 2 arguments: time and value}
+\item{fun}{any custom function with exactly 1 argument: data}
 
 \item{name}{custom metric name (will be exported into table headers)}
 

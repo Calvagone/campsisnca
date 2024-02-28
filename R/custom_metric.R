@@ -16,7 +16,7 @@ setClass(
     custom_function = "function"
   ),
   contains="nca_metric",
-  prototype=prototype(extra_args="custom_function"),
+  prototype=prototype(ivalue_tibble=TRUE),
   validity=validateCustomMetric
 )
 
@@ -24,9 +24,9 @@ setClass(
 #' Custom metric.
 #' 
 #' @inheritParams metricsParams
-#' @param fun any custom function with exactly 2 arguments: time and value
+#' @param fun any custom function with exactly 1 argument: data
 #' @export
-CustomMetric <- function(x=NULL, variable=NULL, fun=function(time, value){0}, name=NULL, unit=NULL) {
+CustomMetric <- function(x=NULL, variable=NULL, fun=function(data){0}, name=NULL, unit=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Custom" else name
@@ -35,10 +35,10 @@ CustomMetric <- function(x=NULL, variable=NULL, fun=function(time, value){0}, na
 }
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            iValueTbl                                  ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  return(object@custom_function(time=time, value=value))    
+#' @rdname iValueTbl
+setMethod("iValueTbl", signature=c("custom_metric", "tbl_df"), definition=function(object, data) {
+  return(object@custom_function(data=data))    
 })

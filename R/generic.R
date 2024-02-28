@@ -47,6 +47,26 @@ setGeneric("iValue", function(object, time, value, ...) {
 })
 
 #_______________________________________________________________________________
+#----                            iValueTbl                                  ----
+#_______________________________________________________________________________
+
+#' Compute the individual value of an individual.
+#' 
+#' @param object PK metric
+#' @param data individual data, tibble
+#' @param ... extra arguments
+#' @return individual value
+#' @export
+#' @rdname iValueTbl
+iValueTbl <- function(object, data, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("iValueTbl", function(object, data, ...) {
+  standardGeneric("iValueTbl")
+})
+
+#_______________________________________________________________________________
 #----                             iValues                                   ----
 #_______________________________________________________________________________
 

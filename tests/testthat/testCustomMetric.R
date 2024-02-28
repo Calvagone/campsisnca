@@ -14,7 +14,9 @@ test_that("Dataset 1 - Cmax at day 1 via custom metric", {
   nonmem <- ds$nonmem %>% timerange(0, 24)
   
   cmax1a <- Cmax(campsis, "Y") %>% campsisnca::calculate()
-  cmax1b <- CustomMetric(campsis, "Y", fun=function(time, value) {max(value)}) %>% campsisnca::calculate()
+  cmax1b <- CustomMetric(campsis, "Y", fun=function(data) {
+    max(data$Y)
+    }) %>% campsisnca::calculate()
   
   cmax2 <- ncappcOutput(nonmem, metric="Cmax")
   

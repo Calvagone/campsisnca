@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name", "unit")))
+  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble")))
 }
 
 #' 
@@ -19,9 +19,10 @@ setClass(
     summary = "data.frame",       # summary results
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
-    extra_args = "character"      # extra arguments names to iValue
+    ivalue_tibble = "logical"     # TRUE, iValue called, FALSE iValueTbl called
   ),
   contains="pmx_element",
+  prototype=prototype(ivalue_tibble=FALSE),
   validity=validateMetric
 )
 
@@ -93,18 +94,31 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 
 #' @rdname iValues
 #' @importFrom dplyr group_by summarise transmute ungroup
+#' @importFrom tibble tibble
 setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...) {
   x <- object@x
   variable <- object@variable
   x <- x %>% 
     standardise(variable)
 
-  retValue <- x %>%
-    dplyr::group_by(ID) %>%
-    dplyr::summarise(individual_value=object %>% iValue(time=.data$TIME, value=.data$dv_variable)) %>%
-    dplyr::ungroup()
-  
-  return(retValue %>%
-           dplyr::transmute(id=ID, value=individual_value))  
+  if (object@ivalue_tibble) {
+    # Use group_split and map_df, this way data is a real tibble
+    # Otherwise using group_by, .data is a pronoun
+    retValue <- x %>%
+      dplyr::group_split(ID) %>%
+      purrr::map_df(.f=function(data) {
+        id <- unique(data$ID)
+        ivalue <- object %>% iValueTbl(data=data)
+        return(tibble::tibble(id=id, value=ivalue))
+      })
+  } else {
+    retValue <- x %>%
+      dplyr::group_by(ID) %>%
+      dplyr::summarise(ivalue=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
+      dplyr::ungroup() %>%
+      dplyr::transmute(id=ID, value=ivalue)
+  }
+
+  return(retValue)  
 })
 

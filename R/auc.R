@@ -16,7 +16,7 @@ setClass(
     method = "integer"
   ),
   contains="nca_metric",
-  prototype=prototype(method=1L, extra_args="method"),
+  prototype=prototype(method=1L),
   validity=validateAUCMetric
 )
 

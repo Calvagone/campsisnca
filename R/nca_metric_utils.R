@@ -46,8 +46,7 @@ standardise <- function(x, variable) {
   assertthat::assert_that(is.character(variable) && length(variable)==1, msg="variable must be a single character value")
   assertthat::assert_that(is.data.frame(x), msg="x is not a data frame")
   assertthat::assert_that(variable %in% colnames(x), msg=paste0("Variable '", variable, "' not found in data frame"))
-  x <- x %>% dplyr::rename_at(variable, ~"dv_variable")
-  
+
   # Use only observations
   x <- x %>% campsis::obsOnly()
   
@@ -55,7 +54,7 @@ standardise <- function(x, variable) {
   checkNATimes(x, time_var="TIME") 
   
   # Check no observation is NA
-  checkNAObservations(x, variable="dv_variable")
+  checkNAObservations(x, variable=variable)
   
   # Check time is monotonically increasing
   checkTimesAreIncreasing(x)
