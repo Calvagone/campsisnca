@@ -32,31 +32,13 @@ Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname calculate
-setMethod("calculate", signature=c("cavg_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- cavg_delegate(x=object@x, variable=object@variable)
-  return(object %>% summariseIndividualData(level=level))    
+#' @rdname iValue
+setMethod("iValue", signature=c("cavg_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  start <- time[1]
+  end <- time[length(time)]
+  auc <- trap(x=time, y=value, method=1L)
+  return(auc/(end - start))    
 })
-
-#_______________________________________________________________________________
-#----                           implementation                              ----
-#_______________________________________________________________________________
-
-#' 
-#' Compute Cavg (C average).
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @return individual Cavg
-#' @importFrom dplyr group_by left_join mutate n select
-cavg_delegate <- function(x, variable) {
-  auc <- auc_delegate(x=x, variable=variable)
-  x <- x %>% standardise(variable)
-  diff <- x %>% dplyr::group_by(ID) %>% dplyr::summarise(diff_time=TIME[dplyr::n()]-TIME[1], .groups="drop") %>% dplyr::rename(id=ID)
-  auc <- auc %>% dplyr::left_join(diff, by="id")
-  cavg <- auc %>% dplyr::mutate(value=value/diff_time) %>% dplyr::select(-diff_time) 
-  return(cavg)
-}

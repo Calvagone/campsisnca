@@ -32,28 +32,10 @@ Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname calculate
-setMethod("calculate", signature=c("cmin_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- cmin_delegate(x=object@x, variable=object@variable)
-  return(object %>% summariseIndividualData(level=level))    
+#' @rdname iValue
+setMethod("iValue", signature=c("cmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(min(value))    
 })
-
-#_______________________________________________________________________________
-#----                           implementation                              ----
-#_______________________________________________________________________________
-
-#' 
-#' Compute Cmin.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @return individual Cmin
-#' @importFrom dplyr group_by slice transmute ungroup
-cmin_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
-}

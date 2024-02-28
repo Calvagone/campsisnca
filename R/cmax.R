@@ -32,28 +32,10 @@ Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname calculate
-setMethod("calculate", signature=c("cmax_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- cmax_delegate(x=object@x, variable=object@variable)
-  return(object %>% summariseIndividualData(level=level))    
+#' @rdname iValue
+setMethod("iValue", signature=c("cmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(max(value))    
 })
-
-#_______________________________________________________________________________
-#----                           implementation                              ----
-#_______________________________________________________________________________
-
-#' 
-#' Compute Cmax.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @return individual Cmax
-#' @importFrom dplyr group_by slice transmute ungroup
-cmax_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
-}

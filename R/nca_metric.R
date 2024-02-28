@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name", "unit")))
+  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble")))
 }
 
 #' 
@@ -18,9 +18,11 @@ setClass(
     individual = "data.frame",    # individual results
     summary = "data.frame",       # summary results
     name = "character",           # metric name (exported into header)
-    unit = "character"            # metric unit (exported into header)
+    unit = "character",           # metric unit (exported into header)
+    ivalue_tibble = "logical"     # TRUE, iValue called, FALSE iValueTbl called
   ),
   contains="pmx_element",
+  prototype=prototype(ivalue_tibble=FALSE),
   validity=validateMetric
 )
 
@@ -36,6 +38,16 @@ summariseIndividualData <- function(x, level) {
     )
   return(x)
 }
+
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
+  object@individual <- iValues(object=object)
+  return(object %>% summariseIndividualData(level=level))    
+})
 
 #_______________________________________________________________________________
 #----                             getName                                   ----
@@ -75,3 +87,39 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
   }
   return(retValue)
 })
+
+#_______________________________________________________________________________
+#----                             iValues                                   ----
+#_______________________________________________________________________________
+
+#' @rdname iValues
+#' @importFrom dplyr group_by summarise transmute ungroup
+#' @importFrom tibble tibble
+#' @importFrom purrr map_df
+setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...) {
+  x <- object@x
+  variable <- object@variable
+  x <- x %>% 
+    standardise(variable)
+
+  if (object@ivalue_tibble) {
+    # Use group_split and map_df, this way data is a real tibble
+    # Otherwise using group_by, .data is a pronoun
+    retValue <- x %>%
+      dplyr::group_split(ID) %>%
+      purrr::map_df(.f=function(data) {
+        id <- unique(data$ID)
+        ivalue <- object %>% iValueTbl(data=data)
+        return(tibble::tibble(id=id, value=ivalue))
+      })
+  } else {
+    retValue <- x %>%
+      dplyr::group_by(ID) %>%
+      dplyr::summarise(ivalue=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
+      dplyr::ungroup() %>%
+      dplyr::transmute(id=ID, value=ivalue)
+  }
+
+  return(retValue)  
+})
+
