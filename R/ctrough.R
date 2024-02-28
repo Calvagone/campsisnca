@@ -40,8 +40,8 @@ Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL) {
 #_______________________________________________________________________________
 
 #' @rdname iValue
-#' @param trough_time trough sample time, numeric value
-setMethod("iValue", signature=c("ctrough_metric", "numeric", "numeric"), definition=function(object, time, value, trough_time) {
+setMethod("iValue", signature=c("ctrough_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  trough_time <- object@trough_time
   if (is.na(trough_time)) {
     return(value[length(value)])
   } else {

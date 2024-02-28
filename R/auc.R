@@ -43,10 +43,6 @@ Auc <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL) {
 #_______________________________________________________________________________
 
 #' @rdname iValue
-#' @param method method:
-#' * 1: linear up - linear down
-#' * 2: linear up - logarithmic down
-#' * 3: linear before Tmax, logarithmic after Tmax
-setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value, method) {
-  return(trap(x=time, y=value, method=method))    
+setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(trap(x=time, y=value, method=object@method))    
 })

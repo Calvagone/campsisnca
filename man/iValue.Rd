@@ -16,7 +16,7 @@
 \usage{
 iValue(object, time, value, ...)
 
-\S4method{iValue}{auc_metric,numeric,numeric}(object, time, value, method)
+\S4method{iValue}{auc_metric,numeric,numeric}(object, time, value)
 
 \S4method{iValue}{cmax_metric,numeric,numeric}(object, time, value)
 
@@ -26,13 +26,13 @@ iValue(object, time, value, ...)
 
 \S4method{iValue}{tmin_metric,numeric,numeric}(object, time, value)
 
-\S4method{iValue}{ctrough_metric,numeric,numeric}(object, time, value, trough_time)
+\S4method{iValue}{ctrough_metric,numeric,numeric}(object, time, value)
 
 \S4method{iValue}{cavg_metric,numeric,numeric}(object, time, value)
 
 \S4method{iValue}{thalf_metric,numeric,numeric}(object, time, value)
 
-\S4method{iValue}{custom_metric,numeric,numeric}(object, time, value, custom_function)
+\S4method{iValue}{custom_metric,numeric,numeric}(object, time, value)
 }
 \arguments{
 \item{object}{PK metric}
@@ -42,15 +42,6 @@ iValue(object, time, value, ...)
 \item{value}{value vector, numeric}
 
 \item{...}{extra arguments}
-
-\item{method}{method:
-* 1: linear up - linear down
-* 2: linear up - logarithmic down
-* 3: linear before Tmax, logarithmic after Tmax}
-
-\item{trough_time}{trough sample time, numeric value}
-
-\item{custom_function}{any R function with exactly 2 arguments: time and value}
 }
 \value{
 individual value

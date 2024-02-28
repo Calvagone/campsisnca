@@ -98,18 +98,10 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...)
   variable <- object@variable
   x <- x %>% 
     standardise(variable)
-  
-  args <- list()
-  args[["object"]] <- object
-  for (argName in object@extra_args) {
-    args[[argName]] <- slot(object, argName)
-  }
-  
+
   retValue <- x %>%
     dplyr::group_by(ID) %>%
-    dplyr::summarise(individual_value=do.call("iValue", args %>%
-                                                append(list(time=.data$TIME)) %>%
-                                                append(list(value=.data$dv_variable)))) %>%
+    dplyr::summarise(individual_value=object %>% iValue(time=.data$TIME, value=.data$dv_variable)) %>%
     dplyr::ungroup()
   
   return(retValue %>%

@@ -39,7 +39,6 @@ CustomMetric <- function(x=NULL, variable=NULL, fun=function(time, value){0}, na
 #_______________________________________________________________________________
 
 #' @rdname iValue
-#' @param custom_function any R function with exactly 2 arguments: time and value
-setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definition=function(object, time, value, custom_function) {
-  return(custom_function(time=time, value=value))    
+setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(object@custom_function(time=time, value=value))    
 })
