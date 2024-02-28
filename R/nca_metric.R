@@ -95,6 +95,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 #' @rdname iValues
 #' @importFrom dplyr group_by summarise transmute ungroup
 #' @importFrom tibble tibble
+#' @importFrom purrr map_df
 setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...) {
   x <- object@x
   variable <- object@variable
