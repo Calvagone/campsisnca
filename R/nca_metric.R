@@ -72,13 +72,13 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     if (nrow(object@summary) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
-    retValue <- dplyr::bind_cols(tibble::tibble(metric=object %>% getName(), object@summary))
+    retValue <- tibble::tibble(metric=object %>% getName(), object@summary)
   
   } else if (type == "individual") {
     if (nrow(object@individual) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
-    retValue <- dplyr::bind_cols(tibble::tibble(metric=object %>% getName(), object@individual))
+    retValue <- tibble::tibble(metric=object %>% getName(), object@individual)
   
   } else {
     stop("Argument type can only be 'summary' or 'individual'")
