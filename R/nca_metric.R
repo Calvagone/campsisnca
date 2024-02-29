@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble")))
+  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble", "stat_display")))
 }
 
 #' 
@@ -19,10 +19,12 @@ setClass(
     summary = "data.frame",       # summary results
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
-    ivalue_tibble = "logical"     # TRUE, iValue called, FALSE iValueTbl called
+    ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
+    stat_display = "character",   # statistics display (see package gtsummary)
+    categorical = "logical"       # FALSE (default): continuous data, TRUE: categorical data
   ),
   contains="pmx_element",
-  prototype=prototype(ivalue_tibble=FALSE),
+  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE),
   validity=validateMetric
 )
 
@@ -37,6 +39,14 @@ summariseIndividualData <- function(x, level) {
       up = quantile(value, level.up)
     )
   return(x)
+}
+
+getStatDisplayDefault <- function(categorical=FALSE) {
+  if (categorical) {
+    return("{n} / {N} ({p}%)")
+  } else {
+    return("{median} [{p5}-{p95}]")
+  }
 }
 
 #_______________________________________________________________________________

@@ -24,12 +24,13 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x <- processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "t1/2" else name
   unit <- processUnit(unit)
-  return(new("thalf_metric", x=x, variable=variable, name=name, unit=unit))
+  return(new("thalf_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display))
 }
 
 #_______________________________________________________________________________

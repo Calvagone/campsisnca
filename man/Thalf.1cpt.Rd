@@ -4,7 +4,13 @@
 \alias{Thalf.1cpt}
 \title{Theoretical half life for a 1-compartment model.}
 \usage{
-Thalf.1cpt(x = NULL, map = NULL, name = NULL, unit = NULL)
+Thalf.1cpt(
+  x = NULL,
+  map = NULL,
+  name = NULL,
+  unit = NULL,
+  stat_display = getStatDisplayDefault()
+)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -14,6 +20,8 @@ Thalf.1cpt(x = NULL, map = NULL, name = NULL, unit = NULL)
 \item{name}{custom metric name (will be exported into table headers)}
 
 \item{unit}{metric unit (will be exported into table headers if provided)}
+
+\item{stat_display}{statistics display (see package gtsummary)}
 }
 \description{
 Theoretical half life for a 1-compartment model.

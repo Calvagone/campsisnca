@@ -4,7 +4,13 @@
 \alias{metricsParams}
 \title{Main metrics parameters.}
 \usage{
-metricsParams(x = NULL, variable = NULL, name = NULL, unit = NULL)
+metricsParams(
+  x = NULL,
+  variable = NULL,
+  name = NULL,
+  unit = NULL,
+  stat_display = NULL
+)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -14,6 +20,8 @@ metricsParams(x = NULL, variable = NULL, name = NULL, unit = NULL)
 \item{name}{custom metric name (will be exported into table headers)}
 
 \item{unit}{metric unit (will be exported into table headers if provided)}
+
+\item{stat_display}{statistics display (see package gtsummary)}
 }
 \description{
 Main metrics parameters.

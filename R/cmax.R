@@ -23,12 +23,13 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Cmax" else name
   unit <- processUnit(unit)
-  return(new("cmax_metric", x=x, variable=variable, name=name, unit=unit))
+  return(new("cmax_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display))
 }
 
 #_______________________________________________________________________________

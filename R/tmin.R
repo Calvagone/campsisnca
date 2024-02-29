@@ -23,12 +23,13 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "tmin" else name
   unit <- processUnit(unit)
-  return(new("tmin_metric", x=x, variable=variable, name=name, unit=unit))
+  return(new("tmin_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display))
 }
 
 #_______________________________________________________________________________

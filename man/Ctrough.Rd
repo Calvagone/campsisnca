@@ -4,7 +4,14 @@
 \alias{Ctrough}
 \title{Ctrough.}
 \usage{
-Ctrough(x = NULL, variable = NULL, time = NULL, name = NULL, unit = NULL)
+Ctrough(
+  x = NULL,
+  variable = NULL,
+  time = NULL,
+  name = NULL,
+  unit = NULL,
+  stat_display = getStatDisplayDefault()
+)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -16,6 +23,8 @@ Ctrough(x = NULL, variable = NULL, time = NULL, name = NULL, unit = NULL)
 \item{name}{custom metric name (will be exported into table headers)}
 
 \item{unit}{metric unit (will be exported into table headers if provided)}
+
+\item{stat_display}{statistics display (see package gtsummary)}
 }
 \description{
 Ctrough.

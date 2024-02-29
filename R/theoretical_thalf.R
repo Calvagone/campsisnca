@@ -85,13 +85,14 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, only one key is possible: K
 #' @export
-Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=TRUE)
   subtype <- "1cpt"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display))
 }
 
 #' 
@@ -100,13 +101,14 @@ Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
   subtype <- "2cpt.dist"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display))
 }
 
 #' 
@@ -115,13 +117,14 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
   subtype <- "2cpt.z"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display))
 }
 
 #' 
@@ -130,13 +133,14 @@ Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
   subtype <- "2cpt.eff"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display))
 }
 
 #_______________________________________________________________________________

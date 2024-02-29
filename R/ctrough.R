@@ -26,13 +26,14 @@ setClass(
 #' @inheritParams metricsParams
 #' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
 #' @export
-Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL) {
+Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Ctrough" else name
   unit <- processUnit(unit)
   time <- if (is.null(time)) as.numeric(NA) else time
-  return(new("ctrough_metric", x=x, variable=variable, trough_time=time, name=name, unit=unit))
+  return(new("ctrough_metric", x=x, variable=variable, trough_time=time, name=name,
+             unit=unit, stat_display=stat_display))
 }
 
 #_______________________________________________________________________________

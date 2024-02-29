@@ -4,7 +4,14 @@
 \alias{Auc}
 \title{Auc.}
 \usage{
-Auc(x = NULL, variable = NULL, method = 1, name = NULL, unit = NULL)
+Auc(
+  x = NULL,
+  variable = NULL,
+  method = 1,
+  name = NULL,
+  unit = NULL,
+  stat_display = getStatDisplayDefault()
+)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -19,6 +26,8 @@ Auc(x = NULL, variable = NULL, method = 1, name = NULL, unit = NULL)
 \item{name}{custom metric name (will be exported into table headers)}
 
 \item{unit}{metric unit (will be exported into table headers if provided)}
+
+\item{stat_display}{statistics display (see package gtsummary)}
 }
 \description{
 Auc.
