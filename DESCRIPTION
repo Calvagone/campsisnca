@@ -15,8 +15,10 @@ Imports:
     assertthat,
     campsis (>= 1.4.0),
     dplyr,
+    gtsummary,
     kableExtra,
     purrr,
+    stringr,
     tibble,
     tidyr
 Suggests: 
@@ -42,6 +44,7 @@ Collate:
     'export_type.R'
     'generic.R'
     'nca_metric_utils.R'
+    'gtsummary_utils.R'
     'rounding.R'
     'filter_utils.R'
     'theoretical_metrics.R'

@@ -28,19 +28,6 @@ setClass(
   validity=validateMetric
 )
 
-summariseIndividualData <- function(x, level) {
-  assertthat::assert_that(all(colnames(x)==c("id", "value")))
-  level.low <- (1 - level)/2
-  level.up <- 1 - level.low
-  x@summary <-
-    x@individual %>% dplyr::summarise(
-      low = quantile(value, level.low),
-      med = median(value),
-      up = quantile(value, level.up)
-    )
-  return(x)
-}
-
 getStatDisplayDefault <- function(categorical=FALSE) {
   if (categorical) {
     return("{n} / {N} ({p}%)")
@@ -56,7 +43,8 @@ getStatDisplayDefault <- function(categorical=FALSE) {
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- iValues(object=object)
-  return(object %>% summariseIndividualData(level=level))    
+  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display)
+  return(object)    
 })
 
 #_______________________________________________________________________________
@@ -133,3 +121,16 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...)
   return(retValue)  
 })
 
+#_______________________________________________________________________________
+#----                         statDisplayString                             ----
+#_______________________________________________________________________________
+
+#' @rdname statDisplayString
+setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
+  if (nrow(object@summary) > 0) {
+    attr <- attributes(object@summary)
+    return(attr$comment)
+  } else {
+    stop("Summary does not exist yet and must be calculated first")
+  }
+})

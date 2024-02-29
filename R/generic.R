@@ -103,3 +103,22 @@ getUnit <- function(object, metric, ...) {
 setGeneric("getUnit", function(object, metric, ...) {
   standardGeneric("getUnit")
 })
+
+#_______________________________________________________________________________
+#----                         statDisplayString                             ----
+#_______________________________________________________________________________
+
+#' Return the evaluated statistics display string.
+#' 
+#' @param object PK metric
+#' @param ... extra arguments
+#' @return a string, e.g. 100 [45-143]
+#' @export
+#' @rdname statDisplayString
+statDisplayString <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("statDisplayString", function(object, ...) {
+  standardGeneric("statDisplayString")
+})
