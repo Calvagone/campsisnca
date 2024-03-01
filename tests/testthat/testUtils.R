@@ -2,7 +2,9 @@
 # setwd("C:/prj/campsisnca/")
 # roxygen2::roxygenise()
 # setwd("C:/prj/campsisnca/tests/")
-# testFolder <- "C:/prj/campsisnca/tests/testthat/"
+
+overwriteNonRegressionFiles <- FALSE
+testFolder <- ""
 
 convertMethod <- function(method) {
   if (method==1) {
@@ -75,6 +77,28 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
   
   # Restrict DV to 6 decimals
   return(nmDataset)
+}
+
+#' Test there is no regression in the simulated output.
+#' 
+#' @param results newly generated results
+#' @param output variables to compare
+#' @param filename reference file
+#' @param times filter reference results on specific times, NULL by default
+#' @importFrom tibble as_tibble
+outputRegressionTest <- function(data, output, filename) {
+  results1 <- data %>%
+    dplyr::select(dplyr::all_of(output)) %>%
+    dplyr::mutate_if(is.numeric, round, digits=2)
+  
+  file <- paste0(testFolder, "non_regression/", paste0(filename, ".csv"))
+  
+  if (overwriteNonRegressionFiles) {
+    write.table(results1, file=file, sep=",", row.names=FALSE)
+  }
+  
+  results2 <- read.csv(file=file) %>% tibble::as_tibble()
+  expect_equal(results1, results2)
 }
 
 dataset1 <- function(seed=1, reload=TRUE) {
