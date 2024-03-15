@@ -2,9 +2,10 @@
 # setwd("C:/prj/campsisnca/")
 # roxygen2::roxygenise()
 # setwd("C:/prj/campsisnca/tests/")
+# testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 overwriteNonRegressionFiles <- FALSE
-testFolder <- ""
+testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 convertMethod <- function(method) {
   if (method==1) {

@@ -67,6 +67,7 @@ setMethod("export", signature=c("nca_metric", "character"), definition=function(
   }
 })
 
+#' @importFrom tibble tibble
 setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   if (type == "summary") {
     if (nrow(object@summary) == 0) {
@@ -74,14 +75,14 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     }
     retValue <- tibble::tibble(metric=object %>% getName(), object@summary)
   
-  } else if (type == "individual") {
+  } else if (type == "individual" || type == "individual_wide") {
     if (nrow(object@individual) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
     retValue <- tibble::tibble(metric=object %>% getName(), object@individual)
-  
+
   } else {
-    stop("Argument type can only be 'summary' or 'individual'")
+    stop("Argument type can only be 'summary', 'individual' or 'individual_wide'.")
   }
   return(retValue)
 })

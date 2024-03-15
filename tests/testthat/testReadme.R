@@ -3,9 +3,11 @@ library(testthat)
 library(campsisnca)
 library(campsis)
 library(dplyr)
+library(gtsummary)
+
 context("Test all functionalities presented in the README")
 
-testFolder <- ""
+testFolder <- "C:/prj/campsisnca/tests/testthat/"
 source(paste0(testFolder, "testUtils.R"))
 
 generateData <- function() {
@@ -56,4 +58,10 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   
   outputRegressionTest(data=summary, output=c("metric", "stat", "value", "day"), filename="example1_summary")
   outputRegressionTest(data=individual, output=c("metric", "id", "value", "day"), filename="example1_individual")
+
+  gttable <- table %>% export(dest=new("gtsummary_type"))
+  
+
+
 })
+

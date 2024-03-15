@@ -44,49 +44,68 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
   }
   if (dest=="dataframe") {
     return(object %>% export(dest=new("dataframe_type"), ...))
-  } else if (dest=="kable") {
-    return(object %>% export(dest=new("kable_type"), ...))
+  } else if (dest=="gtsummary") {
+    return(object %>% export(dest=new("gtsummary_type"), ...))
   } else {
-    stop("Only dataframe and kable are supported for now")
+    stop("Only dataframe and gtsummary are supported for now")
   }
 })
 
+#' @importFrom purrr map_df
+#' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
-  return(object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...)))
-})
-
-setMethod("export", signature=c("nca_metrics_table", "kable_type"), definition=function(object, dest, ...) {
-  format <- campsismod::processExtraArg(args=list(...), name="format", default="html")
   
-  firstScenario <- object@list[[1]]@scenario
-  names <- names(firstScenario)
-  vgroup <- names[1]
-  vsubgroup <- NULL
-  if(names %>% length() > 1) {
-    vsubgroup <- names[2]
+  retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
+  
+  # Apply transformation is wide format is requested
+  if (type == "individual_wide") {
+    retValue <- retValue %>%
+      tidyr::pivot_wider(names_from=metric, values_from=value) %>%
+      dplyr::select(-id) # Automatically remove id column (since 1 row per individual in wide format)
   }
-  df <- object %>% export(dest="dataframe")
-  df <- df %>% statsToCell(rounding=object@rounding)
-  df <- df %>% makeTable(vgroup=vgroup, vsubgroup=vsubgroup)
-  kable <- makeKable(x=object, df=df, vgroup=vgroup, vsubgroup=vsubgroup, format=format)
-  return(kable)
+  
+  return(retValue)
 })
 
-statsToCell <- function(x, rounding) {
-  x <-
-    x %>% dplyr::mutate(
-      cell=paste0(
-        med %>% rounding(metric=metric, stat="med"),
-        " [",
-        low %>% rounding(metric=metric, stat="low"),
-        "-",
-        up %>% rounding(metric=metric, stat="up"),
-        "]"
-      )
-    )
-  x <- x %>% dplyr::select(-med, -low, -up)
-  return(x)
-}
+setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, ...) {
+  code <- object %>% generateTableCode()
+  table <- object # Table variable needs to be there!
+  retValue <- tryCatch(
+    expr=eval(expr=parse(text=code)),
+    error=function(cond) {
+      return(sprintf("Failed to create gtsummary table: %s", cond$message))
+    })
+  return(retValue)
+})
+
+#_______________________________________________________________________________
+#----                       generateTableCode                               ----
+#_______________________________________________________________________________
+
+#' @rdname generateTableCode
+setMethod("generateTableCode", signature=c("nca_metrics_table"), definition=function(object, ...) {
+  
+  allScenarios <- object@list %>% purrr::map_df(~tibble::enframe(.x@scenario))
+  stratificationLevels <- unique(allScenarios$name)
+  
+  init <- "individual <- table %>% campsismod::export(dest=\"dataframe\", type=\"individual_wide\")"
+  stats <- getStatisticsCode(object)
+  
+  if (nrow(allScenarios)==1) {
+    code <- getTableSummaryCode("gttable <- individual", by="NULL", stats=stats)
+  } else {
+    if (length(stratificationLevels)==1) {
+      code <- getTableSummaryCode("gttable <- individual", by=stratificationLevels, stats=stats)
+    
+    } else if (length(stratificationLevels)==2) {
+      
+    } else {
+      stop("Too many stratification levels")
+    }
+  }
+  return(paste0(c(init, code, "gttable"), collapse="\n"))
+})
+
 
 #_______________________________________________________________________________
 #----                              getUnit                                  ----

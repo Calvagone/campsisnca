@@ -86,6 +86,24 @@ setGeneric("iValues", function(object, ...) {
 })
 
 #_______________________________________________________________________________
+#----                       generateTableCode                               ----
+#_______________________________________________________________________________
+
+#' Generate table code.
+#' 
+#' @param object table object
+#' @param ... extra arguments
+#' @export
+#' @rdname generateTableCode
+generateTableCode <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("generateTableCode", function(object, ...) {
+  standardGeneric("generateTableCode")
+})
+
+#_______________________________________________________________________________
 #----                              getUnit                                  ----
 #_______________________________________________________________________________
 

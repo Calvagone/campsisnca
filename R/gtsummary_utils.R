@@ -76,3 +76,40 @@ computeTableSummary <- function(idata, stat_display) {
   
   return(summary)
 }
+
+#' 
+#' Get table summary code.
+#' 
+#' @param data data frame code
+#' @param by variable
+#' @param stats stats to compute
+#' @return data frame
+getTableSummaryCode <- function(data, by, stats) {
+  retValue <- sprintf(
+"%s %%>%% tbl_summary(
+    by=%s,
+    statistic=list(
+      %s
+    ),
+    type=list(
+      all_continuous() ~ \"continuous\",
+      all_categorical() ~ \"continuous\"
+    )
+  )
+", data, by, stats)
+  return(retValue)
+}
+
+#' 
+#' Get statistics code for gtsummary.
+#' 
+#' @param table NCA table
+#' @return code
+getStatisticsCode <- function(table) {
+  # Always look at first NCA metrics only
+  metrics <- table@list[[1]]
+  
+  retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", .x %>% getName(), .x@stat_display))
+  
+  return(paste0(retValue, collapse=",\n"))
+}
