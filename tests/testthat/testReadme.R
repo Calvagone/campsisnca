@@ -65,3 +65,32 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
 
 })
 
+test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (example 2) can be reproduced", {
+  
+  campsis_bw_50_75 <- campsis %>% filter(BW > 50 & BW < 75)
+  campsis_bw_75_100 <- campsis %>% filter(BW >= 75 & BW < 100)
+  
+  scenarioD1_a <- c(day="Day 1", bw_range="BW range: 50-75")
+  ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a) %>% 
+    add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
+    calculate()
+  
+  scenarioD7_a <- c(day="Day 7", bw_range="BW range: 50-75")
+  ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a) %>%
+    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    calculate()
+  
+  scenarioD1_b <- c(day="Day 1", bw_range="BW range: 75-100")
+  ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b) %>%
+    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    calculate()
+  
+  scenarioD7_b <- c(day="Day 7", bw_range="BW range: 75-100")
+  ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b) %>%
+    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    calculate()
+  
+  table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
+    add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
+
+})
