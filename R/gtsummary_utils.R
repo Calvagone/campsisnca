@@ -86,7 +86,8 @@ computeTableSummary <- function(idata, stat_display) {
 #' @return data frame
 getTableSummaryCode <- function(data, by, stats) {
   retValue <- sprintf(
-"%s %%>%% tbl_summary(
+"%s %%>%% 
+  tbl_summary(
     by=%s,
     statistic=list(
       %s
@@ -95,7 +96,8 @@ getTableSummaryCode <- function(data, by, stats) {
       all_continuous() ~ \"continuous\",
       all_categorical() ~ \"continuous\"
     )
-  )
+  ) %%>%%
+  modify_header(label=\"**Metric**\")
 ", data, by, stats)
   return(retValue)
 }

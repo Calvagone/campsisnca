@@ -60,7 +60,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   outputRegressionTest(data=individual, output=c("metric", "id", "value", "day"), filename="example1_individual")
 
   gttable <- table %>% export(dest=new("gtsummary_type"))
-  
+  gtTableRegressionTest(gttable, "readme_example1")
 
 
 })

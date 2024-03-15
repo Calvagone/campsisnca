@@ -102,6 +102,14 @@ outputRegressionTest <- function(data, output, filename) {
   expect_equal(results1, results2)
 }
 
+gtTableRegressionTest <- function(gttable, filename) {
+  
+  file <- paste0(testFolder, "non_regression/", paste0(filename, ".html"))
+  
+  gttable %>% gtsummary::as_gt() |> 
+    gt::gtsave(filename=file)
+}
+
 dataset1 <- function(seed=1, reload=TRUE) {
   if (reload) {
     library(campsisnca)
