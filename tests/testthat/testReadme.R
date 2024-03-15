@@ -92,5 +92,18 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   
   table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
     add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
+  
+  summary <- table %>%
+    export(dest="dataframe") %>%
+    mutate(value=as.numeric(value)) # Remove names on values
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual") %>%
+    filter(id %in% c(1,2,3)) # Keep first 3
+  
+  outputRegressionTest(data=summary, output=c("metric", "stat", "value", "day", "bw_range"), filename="example2_summary")
+  outputRegressionTest(data=individual, output=c("metric", "id", "value", "day", "bw_range"), filename="example2_individual")
 
+  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gtTableRegressionTest(gttable, "readme_example2")
 })

@@ -92,12 +92,13 @@ setMethod("generateTableCode", signature=c("nca_metrics_table"), definition=func
   stats <- getStatisticsCode(object)
   
   if (nrow(allScenarios)==1) {
-    code <- getTableSummaryCode("gttable <- individual", by="NULL", stats=stats)
+    code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats)
   } else {
     if (length(stratificationLevels)==1) {
-      code <- getTableSummaryCode("gttable <- individual", by=stratificationLevels, stats=stats)
+      code <- getTableSummaryCode(var="gttable", data="individual", by=stratificationLevels, stats=stats)
     
     } else if (length(stratificationLevels)==2) {
+      code <- getTableSummaryCode(var="gttable", data="individual", by=stratificationLevels, stats=stats)
       
     } else {
       stop("Too many stratification levels")

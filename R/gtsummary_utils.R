@@ -84,21 +84,42 @@ computeTableSummary <- function(idata, stat_display) {
 #' @param by variable
 #' @param stats stats to compute
 #' @return data frame
-getTableSummaryCode <- function(data, by, stats) {
+getTableSummaryCode <- function(variable, data, by, stats) {
+  if (length(by) %in% c(0,1)) {
   retValue <- sprintf(
-"%s %%>%% 
-  tbl_summary(
-    by=%s,
-    statistic=list(
-      %s
-    ),
-    type=list(
-      all_continuous() ~ \"continuous\",
-      all_categorical() ~ \"continuous\"
-    )
-  ) %%>%%
-  modify_header(label=\"**Metric**\")
-", data, by, stats)
+"%s <- %s  %%>%% 
+tbl_summary(
+  by=%s,
+  statistic=list(
+    %s
+  ),
+  type=list(
+    all_continuous() ~ \"continuous\",
+    all_categorical() ~ \"continuous\"
+  )
+) %%>%%
+modify_header(label=\"**Metric**\")
+", variable, data, by, stats)
+  
+  } else if (length(by)==2) {
+    retValue <- sprintf(
+"%s <- tbl_strata(data=%s,
+strata=%s,
+~.x %%>%% tbl_summary(
+  by=%s,
+  statistic=list(
+    %s
+  ),
+  type=list(
+    all_continuous() ~ \"continuous\",
+    all_categorical() ~ \"continuous\"
+  )
+),
+.combine_with=\"tbl_stack\") %%>%%
+modify_header(label=\"**Metric**\")
+", variable, data, by[1], by[2], stats)    
+
+}
   return(retValue)
 }
 
