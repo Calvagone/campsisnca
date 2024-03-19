@@ -7,7 +7,7 @@ library(gtsummary)
 
 context("Test all functionalities presented in the README")
 
-testFolder <- "C:/prj/campsisnca/tests/testthat/"
+testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
 
 generateData <- function() {
@@ -56,8 +56,8 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
     export(dest="dataframe", type="individual") %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, output=c("metric", "stat", "value", "day"), filename="example1_summary")
-  outputRegressionTest(data=individual, output=c("metric", "id", "value", "day"), filename="example1_individual")
+  outputRegressionTest(data=summary, filename="example1_summary")
+  outputRegressionTest(data=individual, filename="example1_individual")
 
   gttable <- table %>% export(dest=new("gtsummary_type"))
   gtTableRegressionTest(gttable, "readme_example1")
@@ -101,8 +101,8 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
     export(dest="dataframe", type="individual") %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, output=c("metric", "stat", "value", "day", "bw_range"), filename="example2_summary")
-  outputRegressionTest(data=individual, output=c("metric", "id", "value", "day", "bw_range"), filename="example2_individual")
+  outputRegressionTest(data=summary, filename="example2_summary")
+  outputRegressionTest(data=individual, filename="example2_individual")
 
   gttable <- table %>% export(dest=new("gtsummary_type"))
   gtTableRegressionTest(gttable, "readme_example2")
@@ -125,9 +125,33 @@ test_that("Calculate 2-compartment half-life metrics (example 3) can be reproduc
     export(dest="dataframe", type="individual") %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, output=c("metric", "stat", "value"), filename="example3_summary")
-  outputRegressionTest(data=individual, output=c("metric", "id", "value"), filename="example3_individual")
+  outputRegressionTest(data=summary, filename="example3_summary")
+  outputRegressionTest(data=individual, filename="example3_individual")
   
   gttable <- table %>% export(dest=new("gtsummary_type"))
   gtTableRegressionTest(gttable, "readme_example3")
+})
+
+test_that("Compute terminal half-live based on data (example 4) can be reproduced", {
+  
+  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+    add(c(Thalf(x=campsis %>% timerange(7*24, 10*24)))) %>%
+    calculate()
+  
+  table <- NCAMetricsTable() %>%
+    add(nca)
+  
+  summary <- table %>%
+    export(dest="dataframe") %>%
+    mutate(value=as.numeric(value)) # Remove names on values
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual") %>%
+    filter(id %in% c(1,2,3)) # Keep first 3
+  
+  outputRegressionTest(data=summary, filename="example4_summary")
+  outputRegressionTest(data=individual, filename="example4_individual")
+  
+  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gtTableRegressionTest(gttable, "readme_example4")
 })

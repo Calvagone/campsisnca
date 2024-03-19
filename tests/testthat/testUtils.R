@@ -4,8 +4,8 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
-overwriteNonRegressionFiles <- TRUE
-testFolder <- "C:/prj/campsisnca/tests/testthat/"
+overwriteNonRegressionFiles <- FALSE
+testFolder <- ""
 
 convertMethod <- function(method) {
   if (method==1) {
@@ -82,12 +82,16 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
 
 #' Test there is no regression in the simulated output.
 #' 
-#' @param results newly generated results
-#' @param output variables to compare
+#' @param data newly generated data
+#' @param output variables to compare, if NULL, all column names are compared
 #' @param filename reference file
 #' @param times filter reference results on specific times, NULL by default
 #' @importFrom tibble as_tibble
-outputRegressionTest <- function(data, output, filename) {
+outputRegressionTest <- function(data, output=NULL, filename) {
+  if (is.null(output)) {
+    output <- colnames(data)
+  }
+  
   results1 <- data %>%
     dplyr::select(dplyr::all_of(output)) %>%
     dplyr::mutate_if(is.numeric, round, digits=2)

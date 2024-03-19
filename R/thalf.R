@@ -27,7 +27,7 @@ setClass(
 Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault()) {
   x <- processDataframe(x)
   variable = processVariable(variable)
-  name <- if (is.null(name)) "t1/2" else name
+  name <- if (is.null(name)) "thalf" else name
   unit <- processUnit(unit)
   return(new("thalf_metric", x=x, variable=variable, name=name, unit=unit,
              stat_display=stat_display))
