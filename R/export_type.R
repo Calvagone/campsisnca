@@ -21,3 +21,13 @@ setClass(
   ),
   contains="export_type" 
 )
+
+#' Gt export type class.
+#' 
+#' @export
+setClass(
+  "gt_type",
+  representation(
+  ),
+  contains="export_type" 
+)

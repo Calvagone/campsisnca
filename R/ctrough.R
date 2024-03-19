@@ -55,3 +55,12 @@ setMethod("iValue", signature=c("ctrough_metric", "numeric", "numeric"), definit
   }
 })
 
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("ctrough_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "trough"))
+})
+

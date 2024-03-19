@@ -43,3 +43,13 @@ setMethod("iValue", signature=c("thalf_metric", "numeric", "numeric"), definitio
   k <- -linearMod$coefficients[["time"]]
   return(log(2)/k)    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("thalf_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "half", "\U00BD"))
+})
+

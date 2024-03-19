@@ -40,3 +40,13 @@ Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
 setMethod("iValue", signature=c("cmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(min(value))    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("cmin_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "min"))
+})
+

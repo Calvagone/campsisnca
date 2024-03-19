@@ -46,6 +46,8 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
     return(object %>% export(dest=new("dataframe_type"), ...))
   } else if (dest=="gtsummary") {
     return(object %>% export(dest=new("gtsummary_type"), ...))
+  } else if (dest=="gt") {
+    return(object %>% export(dest=new("gt_type"), ...))
   } else {
     stop("Only dataframe and gtsummary are supported for now")
   }
@@ -71,8 +73,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, ...) {
-  code <- object %>% generateTableCode()
+setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, subscripts=FALSE, ...) {
+  code <- object %>% generateTableCode(subscripts=subscripts)
   table <- object # Table variable needs to be there!
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
@@ -80,6 +82,26 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definiti
       return(sprintf("Failed to create gtsummary table: %s", cond$message))
     })
   return(retValue)
+})
+
+setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=function(object, dest, subscripts=FALSE, ...) {
+  gtsummaryTable <- object %>%
+    export(dest=new("gtsummary_type"), subscripts=subscripts, ...)
+  
+  gtTable <- gtsummaryTable %>%
+    gtsummary::as_gt()
+  
+  if (subscripts) {
+    gtTable <- gtTable  %>%
+      gt::text_transform(
+        locations=gt::cells_body(),
+        fn=function(x) {
+          return(stringr::str_replace_all(string=x, pattern="(_\\{)([a-zA-Z0-9\U00BD ,]+)(\\})", replacement="<sub>\\2</sub>"))
+        }
+      )
+  }
+
+  return(gtTable)
 })
 
 #_______________________________________________________________________________

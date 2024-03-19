@@ -40,3 +40,12 @@ Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
 setMethod("iValue", signature=c("cmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(max(value))    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "max"))
+})

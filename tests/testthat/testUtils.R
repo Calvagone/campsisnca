@@ -110,7 +110,7 @@ gtTableRegressionTest <- function(gttable, filename) {
   
   file <- paste0(testFolder, "non_regression/", paste0(filename, ".html"))
   
-  gttable %>% gtsummary::as_gt() |> 
+  gttable %>%
     gt::gtsave(filename=file)
 }
 

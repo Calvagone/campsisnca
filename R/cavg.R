@@ -43,3 +43,13 @@ setMethod("iValue", signature=c("cavg_metric", "numeric", "numeric"), definition
   auc <- trap(x=time, y=value, method=1L)
   return(auc/(end - start))    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("cavg_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "avg"))
+})
+

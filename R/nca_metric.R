@@ -48,6 +48,25 @@ setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function
 })
 
 #_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @importFrom stringr str_replace_all
+subscriptOccurrence <- function(x, occurrence, replacement=NULL) {
+  if (is.null(replacement)) {
+     replacement <- sprintf("_{%s}", occurrence)
+  } else {
+    replacement <- sprintf("_{%s}", replacement)
+  }
+  return(stringr::str_replace_all(string=x, pattern=occurrence, replacement=replacement))
+}
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
+  return(x %>% getName())
+})
+
+#_______________________________________________________________________________
 #----                             getName                                   ----
 #_______________________________________________________________________________
 

@@ -173,3 +173,25 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), defin
   object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display)
   return(object)
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("theoretical_thalf_metric"), definition = function(x) {
+  name <- x %>% getName()
+  subtype <- x@subtype
+  if (subtype == "1cpt") {
+    retValue <- subscriptOccurrence(name, "half\\.z", "\U00BD,z")
+  } else if (subtype == "2cpt.dist") {
+    retValue <- subscriptOccurrence(name, "half\\.dist", "\U00BD,dist")
+  } else if (subtype == "2cpt.z") {
+    retValue <- subscriptOccurrence(name, "half\\.z", "\U00BD,z")
+  } else if (subtype == "2cpt.eff") {
+    retValue <- subscriptOccurrence(name, "half\\.eff", "\U00BD,eff")
+  } else {
+    retValue <- name
+  }
+  return(retValue)
+})

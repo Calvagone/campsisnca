@@ -108,6 +108,24 @@ setGeneric("generateTableCode", function(object, subscripts=NULL, ...) {
 })
 
 #_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' Get the name of the metric in LaTeX notation (with subscript coded with an underscore and brackets).
+#' 
+#' @param x metric
+#' @param ... extra arguments, not used
+#' @export
+#' @rdname getLaTeXName
+getLaTeXName <- function(x, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getLaTeXName", function(x, ...) {
+  standardGeneric("getLaTeXName")
+})
+
+#_______________________________________________________________________________
 #----                           getScenarios                                ----
 #_______________________________________________________________________________
 

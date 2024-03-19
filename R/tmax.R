@@ -40,3 +40,13 @@ Tmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
 setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(time[which.max(value)])    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("tmax_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "max"))
+})
+

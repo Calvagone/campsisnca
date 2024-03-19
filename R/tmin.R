@@ -48,3 +48,12 @@ setMethod("getName", signature=c("tmin_metric"), definition = function(x) {
 setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(time[which.min(value)])    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("tmin_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "min"))
+})

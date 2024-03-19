@@ -91,10 +91,10 @@ table %>% export(dest="dataframe")
     ## 10 Ctrough median   2.88 Day 1
     ## # ℹ 14 more rows
 
-2.  To a HTML table using `gtsummary`:
+2.  To a HTML table using `gt`:
 
 ``` r
-table %>% export(dest="gtsummary")
+table %>% export(dest="gt", subscripts=TRUE)
 ```
 
 <div id="dgabwknrsa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -495,16 +495,16 @@ table %>% export(dest="gtsummary")
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">AUC</td>
+    <tr><td headers="label" class="gt_row gt_left">AUC (ng/mL*h)</td>
 <td headers="stat_1" class="gt_row gt_center">134 [102-168]</td>
 <td headers="stat_2" class="gt_row gt_center">197 [131-297]</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">Cmax</td>
+    <tr><td headers="label" class="gt_row gt_left">C<sub>max</sub> (ng/mL)</td>
 <td headers="stat_1" class="gt_row gt_center">10.1 [7.4-13.4]</td>
 <td headers="stat_2" class="gt_row gt_center">14.7 [10.9-19.2]</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">tmax</td>
+    <tr><td headers="label" class="gt_row gt_left">t<sub>max</sub> (h)</td>
 <td headers="stat_1" class="gt_row gt_center">4.00 [1.00-6.00]</td>
 <td headers="stat_2" class="gt_row gt_center">2.00 [1.00-6.00]</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">Ctrough</td>
+    <tr><td headers="label" class="gt_row gt_left">C<sub>trough</sub> (ng/mL)</td>
 <td headers="stat_1" class="gt_row gt_center">2.88 [1.42-4.49]</td>
 <td headers="stat_2" class="gt_row gt_center">4.11 [1.90-8.59]</td></tr>
   </tbody>
@@ -567,7 +567,7 @@ ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), var
 
 table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
   add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
-table %>% export(dest="gtsummary")
+table %>% export(dest="gt", subscripts=TRUE)
 ```
 
 <div id="lywxfzgsjf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -971,31 +971,31 @@ table %>% export(dest="gtsummary")
     <tr class="gt_group_heading_row">
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Day 1">Day 1</th>
     </tr>
-    <tr class="gt_row_group_first"><td headers="Day 1  label" class="gt_row gt_left">AUC</td>
+    <tr class="gt_row_group_first"><td headers="Day 1  label" class="gt_row gt_left">AUC (ng/mL*h)</td>
 <td headers="Day 1  stat_1" class="gt_row gt_center">147 [122-172]</td>
 <td headers="Day 1  stat_2" class="gt_row gt_center">123 [99-151]</td></tr>
-    <tr><td headers="Day 1  label" class="gt_row gt_left">Cmax</td>
+    <tr><td headers="Day 1  label" class="gt_row gt_left">C<sub>max</sub> (ng/mL)</td>
 <td headers="Day 1  stat_1" class="gt_row gt_center">10.35 [7.77-12.76]</td>
 <td headers="Day 1  stat_2" class="gt_row gt_center">10.08 [7.09-13.50]</td></tr>
-    <tr><td headers="Day 1  label" class="gt_row gt_left">tmax</td>
+    <tr><td headers="Day 1  label" class="gt_row gt_left">t<sub>max</sub> (h)</td>
 <td headers="Day 1  stat_1" class="gt_row gt_center">4.00 [2.00-6.00]</td>
 <td headers="Day 1  stat_2" class="gt_row gt_center">2.00 [1.00-6.00]</td></tr>
-    <tr><td headers="Day 1  label" class="gt_row gt_left">Ctrough</td>
+    <tr><td headers="Day 1  label" class="gt_row gt_left">C<sub>trough</sub> (ng/mL)</td>
 <td headers="Day 1  stat_1" class="gt_row gt_center">3.46 [1.94-4.82]</td>
 <td headers="Day 1  stat_2" class="gt_row gt_center">2.39 [1.24-3.68]</td></tr>
     <tr class="gt_group_heading_row">
       <th colspan="3" class="gt_group_heading" scope="colgroup" id="Day 7">Day 7</th>
     </tr>
-    <tr class="gt_row_group_first"><td headers="Day 7  label" class="gt_row gt_left">AUC</td>
+    <tr class="gt_row_group_first"><td headers="Day 7  label" class="gt_row gt_left">AUC (ng/mL*h)</td>
 <td headers="Day 7  stat_1" class="gt_row gt_center">227 [167-311]</td>
 <td headers="Day 7  stat_2" class="gt_row gt_center">169 [124-231]</td></tr>
-    <tr><td headers="Day 7  label" class="gt_row gt_left">Cmax</td>
+    <tr><td headers="Day 7  label" class="gt_row gt_left">C<sub>max</sub> (ng/mL)</td>
 <td headers="Day 7  stat_1" class="gt_row gt_center">16.45 [12.89-19.81]</td>
 <td headers="Day 7  stat_2" class="gt_row gt_center">13.05 [10.51-17.49]</td></tr>
-    <tr><td headers="Day 7  label" class="gt_row gt_left">tmax</td>
+    <tr><td headers="Day 7  label" class="gt_row gt_left">t<sub>max</sub> (h)</td>
 <td headers="Day 7  stat_1" class="gt_row gt_center">2.00 [1.00-6.00]</td>
 <td headers="Day 7  stat_2" class="gt_row gt_center">2.00 [1.00-6.00]</td></tr>
-    <tr><td headers="Day 7  label" class="gt_row gt_left">Ctrough</td>
+    <tr><td headers="Day 7  label" class="gt_row gt_left">C<sub>trough</sub> (ng/mL)</td>
 <td headers="Day 7  stat_1" class="gt_row gt_center">5.50 [2.72-9.28]</td>
 <td headers="Day 7  stat_2" class="gt_row gt_center">3.13 [1.51-6.19]</td></tr>
   </tbody>
@@ -1016,7 +1016,7 @@ nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
 
 table <- NCAMetricsTable() %>%
   add(nca)
-table %>% export(dest="gtsummary")
+table %>% export(dest="gt", subscripts=TRUE)
 ```
 
 <div id="fqigwsvrzp" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1416,11 +1416,11 @@ table %>% export(dest="gtsummary")
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">thalf.dist</td>
+    <tr><td headers="label" class="gt_row gt_left">t<sub>½,dist</sub></td>
 <td headers="stat_0" class="gt_row gt_center">2.57 [1.91-3.48]</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">thalf.eff</td>
+    <tr><td headers="label" class="gt_row gt_left">t<sub>½,eff</sub></td>
 <td headers="stat_0" class="gt_row gt_center">13.4 [8.4-20.8]</td></tr>
-    <tr><td headers="label" class="gt_row gt_left">thalf.z</td>
+    <tr><td headers="label" class="gt_row gt_left">t<sub>½,z</sub></td>
 <td headers="stat_0" class="gt_row gt_center">14.6 [9.6-22.2]</td></tr>
   </tbody>
   &#10;  <tfoot class="gt_footnotes">
@@ -1440,7 +1440,7 @@ nca <- NCAMetrics(x=campsis, variable="Y") %>%
 
 table <- NCAMetricsTable() %>%
   add(nca)
-table %>% export(dest="gtsummary")
+table %>% export(dest="gt", subscripts=TRUE)
 ```
 
 <div id="pulgxuvhas" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -1840,7 +1840,7 @@ table %>% export(dest="gtsummary")
     </tr>
   </thead>
   <tbody class="gt_table_body">
-    <tr><td headers="label" class="gt_row gt_left">thalf</td>
+    <tr><td headers="label" class="gt_row gt_left">t<sub>½</sub></td>
 <td headers="stat_0" class="gt_row gt_center">14.7 [9.8-23.4]</td></tr>
   </tbody>
   &#10;  <tfoot class="gt_footnotes">

@@ -156,10 +156,15 @@ getLabelsCode <- function(table, subscripts) {
   
   retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
     unit <- x@unit
-    if (is.na(unit)) {
-      retValue <- sprintf("%s ~ \"%s\"", x %>% getName(), x %>% getName())
+    if (subscripts) {
+      resultingName <-  x %>% getLaTeXName()
     } else {
-      retValue <- sprintf("%s ~ \"%s (%s)\"", x %>% getName(), x %>% getName(), unit)
+      resultingName <-  x %>% getName()
+    }
+    if (is.na(unit)) {
+      retValue <- sprintf("%s ~ \"%s\"", x %>% getName(), resultingName)
+    } else {
+      retValue <- sprintf("%s ~ \"%s (%s)\"", x %>% getName(), resultingName, unit)
     }
   })
 

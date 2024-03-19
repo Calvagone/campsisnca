@@ -4,6 +4,7 @@ library(campsisnca)
 library(campsis)
 library(dplyr)
 library(gtsummary)
+library(gt)
 
 context("Test all functionalities presented in the README")
 
@@ -58,10 +59,8 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   outputRegressionTest(data=summary, filename="example1_summary")
   outputRegressionTest(data=individual, filename="example1_individual")
 
-  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example1")
-
-
 })
 
 test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (example 2) can be reproduced", {
@@ -102,7 +101,7 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   outputRegressionTest(data=summary, filename="example2_summary")
   outputRegressionTest(data=individual, filename="example2_individual")
 
-  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example2")
 })
 
@@ -125,7 +124,7 @@ test_that("Calculate 2-compartment half-life metrics (example 3) can be reproduc
   outputRegressionTest(data=summary, filename="example3_summary")
   outputRegressionTest(data=individual, filename="example3_individual")
   
-  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example3")
 })
 
@@ -148,6 +147,6 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
   outputRegressionTest(data=summary, filename="example4_summary")
   outputRegressionTest(data=individual, filename="example4_individual")
   
-  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example4")
 })
