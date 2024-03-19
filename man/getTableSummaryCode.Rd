@@ -4,7 +4,7 @@
 \alias{getTableSummaryCode}
 \title{Get table summary code.}
 \usage{
-getTableSummaryCode(variable, data, by, stats)
+getTableSummaryCode(variable, data, by, stats, labels)
 }
 \arguments{
 \item{data}{data frame code}
@@ -12,6 +12,8 @@ getTableSummaryCode(variable, data, by, stats)
 \item{by}{variable}
 
 \item{stats}{stats to compute}
+
+\item{labels}{the labels to display}
 }
 \value{
 data frame

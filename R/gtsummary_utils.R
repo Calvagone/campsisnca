@@ -83,8 +83,9 @@ computeTableSummary <- function(idata, stat_display) {
 #' @param data data frame code
 #' @param by variable
 #' @param stats stats to compute
+#' @param labels the labels to display
 #' @return data frame
-getTableSummaryCode <- function(variable, data, by, stats) {
+getTableSummaryCode <- function(variable, data, by, stats, labels) {
   if (length(by) %in% c(0,1)) {
   retValue <- sprintf(
 "%s <- %s  %%>%% 
@@ -96,10 +97,13 @@ tbl_summary(
   type=list(
     all_continuous() ~ \"continuous\",
     all_categorical() ~ \"continuous\"
+  ),
+  label=list(
+    %s
   )
 ) %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by, stats)
+", variable, data, by, stats, labels)
   
   } else if (length(by)==2) {
     retValue <- sprintf(
@@ -113,11 +117,14 @@ strata=%s,
   type=list(
     all_continuous() ~ \"continuous\",
     all_categorical() ~ \"continuous\"
+  ),
+  label=list(
+    %s
   )
 ),
 .combine_with=\"tbl_stack\") %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by[1], by[2], stats)    
+", variable, data, by[1], by[2], stats, labels)    
 
 }
   return(retValue)
@@ -129,10 +136,32 @@ modify_header(label=\"**Metric**\")
 #' @param table NCA table
 #' @return code
 getStatisticsCode <- function(table) {
-  # Always look at first NCA metrics only
+  # Always look at first NCA metric only
   metrics <- table@list[[1]]
   
   retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", .x %>% getName(), .x@stat_display))
   
+  return(paste0(retValue, collapse=",\n"))
+}
+
+#' 
+#' Get labels code for gtsummary.
+#' 
+#' @param table NCA table
+#' @param subscripts use subscripts, logical value
+#' @return code
+getLabelsCode <- function(table, subscripts) {
+  # Always look at first NCA metric only
+  metrics <- table@list[[1]]
+  
+  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+    unit <- x@unit
+    if (is.na(unit)) {
+      retValue <- sprintf("%s ~ \"%s\"", x %>% getName(), x %>% getName())
+    } else {
+      retValue <- sprintf("%s ~ \"%s (%s)\"", x %>% getName(), x %>% getName(), unit)
+    }
+  })
+
   return(paste0(retValue, collapse=",\n"))
 }

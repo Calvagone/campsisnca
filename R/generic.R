@@ -92,14 +92,18 @@ setGeneric("iValues", function(object, ...) {
 #' Generate table code.
 #' 
 #' @param object table object
+#' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
 #' @param ... extra arguments
 #' @export
 #' @rdname generateTableCode
-generateTableCode <- function(object, ...) {
+generateTableCode <- function(object, subscripts, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generateTableCode", function(object, ...) {
+setGeneric("generateTableCode", function(object, subscripts=NULL, ...) {
+  if (is.null(subscripts)) {
+    subscripts <- FALSE
+  }
   standardGeneric("generateTableCode")
 })
 

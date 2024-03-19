@@ -87,22 +87,23 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definiti
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table"), definition=function(object, ...) {
+setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"), definition=function(object, subscripts, ...) {
   
   scenarios <- object %>% getScenarios()
   stratVariables <- unique(scenarios$name)
   
   init <- "individual <- table %>% campsismod::export(dest=\"dataframe\", type=\"individual_wide\")"
   stats <- getStatisticsCode(object)
+  labels <- getLabelsCode(object, subscripts=subscripts)
   
   if (length(stratVariables)==0) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats)
+    code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats, labels=labels)
     
   } else if (length(stratVariables)==1) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats)
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, labels=labels)
     
   } else if (length(stratVariables)==2) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats)
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, labels=labels)
     
   } else {
     stop("Too many stratification variables")

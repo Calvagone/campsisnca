@@ -2,15 +2,17 @@
 % Please edit documentation in R/generic.R, R/nca_metrics_table.R
 \name{generateTableCode}
 \alias{generateTableCode}
-\alias{generateTableCode,nca_metrics_table-method}
+\alias{generateTableCode,nca_metrics_table,logical-method}
 \title{Generate table code.}
 \usage{
-generateTableCode(object, ...)
+generateTableCode(object, subscripts = NULL, ...)
 
-\S4method{generateTableCode}{nca_metrics_table}(object, ...)
+\S4method{generateTableCode}{nca_metrics_table,logical}(object, subscripts = NULL, ...)
 }
 \arguments{
 \item{object}{table object}
+
+\item{subscripts}{use LaTeX subcripts/superscripts notation when writing labels}
 
 \item{...}{extra arguments}
 }
