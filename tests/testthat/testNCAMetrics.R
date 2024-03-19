@@ -2,6 +2,8 @@
 library(testthat)
 library(dplyr)
 library(campsis)
+library(gt)
+library(gtsummary)
 
 context("Test NCA metrics and NCA metrics table object")
 
@@ -30,8 +32,8 @@ test_that("Dataset 1 - day 1 & day 7", {
   df <- table %>% export(dest="dataframe")
   
   # Export to HTML table
-  kable <- table %>% export(dest="kable")
-  kable
+  gtTable <- table %>% export(dest="gt")
+  gtTable
 })
 
 test_that("Dataset 1 - day 1 & day 7 - seed 1 & seed 2", {
@@ -57,8 +59,11 @@ test_that("Dataset 1 - day 1 & day 7 - seed 1 & seed 2", {
   table <- NCAMetricsTable()  
   table <- table %>% add(c(nca_d1_seed1, nca_d7_seed1, nca_d1_seed2, nca_d7_seed2))
   
+  # Export to dataframe
   df <- table %>% export(dest="dataframe")
-  kable <- table %>% export(dest="kable")
-  kable
+  
+  # Export to HTML table
+  gtTable <- table %>% export(dest="gt")
+  gtTable
 })
 

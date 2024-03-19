@@ -70,7 +70,7 @@ ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y"
 These 2 metrics may be imported into a metrics table object, as follows:
 
 ```{r, message=FALSE}
-table <- NCAMetricsTable(unitLineBreak=TRUE)  
+table <- NCAMetricsTable()  
 table <- table %>%
   add(c(ncaD1, ncaD7))
 ```
@@ -122,7 +122,7 @@ ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), var
   add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
   calculate()
 
-table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
+table <- NCAMetricsTable() %>%
   add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
 table %>% export(dest="gt", subscripts=TRUE)
 ```

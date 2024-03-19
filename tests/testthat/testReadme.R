@@ -24,8 +24,8 @@ generateData <- function() {
     add(Covariate("BW", UniformDistribution(50,100)))
   
   model <- model_suite$testing$nonmem$advan4_trans4
-  cl <- model %>% find(Equation("CL"))
-  model <- model %>% replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
+  cl <- model %>% campsismod::find(Equation("CL"))
+  model <- model %>% campsismod::replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
   
   campsis <- model %>% simulate(dataset=ds, dest="rxode2", seed=1, outvars="BW")
   return(campsis)
@@ -38,14 +38,14 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   # Day 1
   ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
     add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-    calculate()
+    campsisnca::calculate()
   
   # Day 7 
   ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
     add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
-    calculate()
+    campsisnca::calculate()
   
-  table <- NCAMetricsTable(unitLineBreak=TRUE)  
+  table <- NCAMetricsTable()  
   table <- table %>%
     add(c(ncaD1, ncaD7))
   
@@ -71,24 +71,24 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   scenarioD1_a <- c(day="Day 1", bw_range="BW range: 50-75")
   ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a) %>% 
     add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-    calculate()
+    campsisnca::calculate()
   
   scenarioD7_a <- c(day="Day 7", bw_range="BW range: 50-75")
   ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a) %>%
     add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
-    calculate()
+    campsisnca::calculate()
   
   scenarioD1_b <- c(day="Day 1", bw_range="BW range: 75-100")
   ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b) %>%
     add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
-    calculate()
+    campsisnca::calculate()
   
   scenarioD7_b <- c(day="Day 7", bw_range="BW range: 75-100")
   ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b) %>%
     add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
-    calculate()
+    campsisnca::calculate()
   
-  table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
+  table <- NCAMetricsTable() %>%
     add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
   
   summary <- table %>%
@@ -105,11 +105,11 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   gtTableRegressionTest(gttable, "readme_example2")
 })
 
-test_that("Calculate 2-compartment half-life metrics (example 3) can be reproduced", {
+test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can be reproduced", {
   
   nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
     add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
-    calculate()
+    campsisnca::calculate()
   
   table <- NCAMetricsTable() %>%
     add(nca)
@@ -132,7 +132,7 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
   
   nca <- NCAMetrics(x=campsis, variable="Y") %>%
     add(c(Thalf(x=campsis %>% timerange(7*24, 10*24)))) %>%
-    calculate()
+    campsisnca::calculate()
   
   table <- NCAMetricsTable() %>%
     add(nca)
