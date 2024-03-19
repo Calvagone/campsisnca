@@ -15,13 +15,13 @@ validateTheoreticalThalfMetric <- function(object) {
 #' @param subtype thalf subtype (2cpt.dist, 2cpt.z or 2cpt.eff)
 getDefaultTHalfName <- function(subtype) {
   if (subtype == "1cpt") {
-    return("t1/2z")
+    return("thalf.z")
   } else if (subtype == "2cpt.dist") {
-    return("t1/2dist")
+    return("thalf.dist")
   } else if (subtype == "2cpt.z") {
-    return("t1/2z")
+    return("thalf.z")
   } else if (subtype == "2cpt.eff") {
-    return("t1/2eff")
+    return("thalf.eff")
   } else {
     stop(paste0("Unknown subtype ", subtype))
   }
@@ -170,5 +170,6 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), defin
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  return(object %>% summariseIndividualData(level=level))
+  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display)
+  return(object)
 })

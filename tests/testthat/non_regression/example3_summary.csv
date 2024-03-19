@@ -1,0 +1,10 @@
+"metric","stat","value"
+"thalf.dist","median",2.57
+"thalf.dist","p5",1.91
+"thalf.dist","p95",3.48
+"thalf.eff","median",13.43
+"thalf.eff","p5",8.38
+"thalf.eff","p95",20.84
+"thalf.z","median",14.57
+"thalf.z","p5",9.64
+"thalf.z","p95",22.23

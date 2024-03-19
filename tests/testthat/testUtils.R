@@ -4,7 +4,7 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
-overwriteNonRegressionFiles <- FALSE
+overwriteNonRegressionFiles <- TRUE
 testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 convertMethod <- function(method) {

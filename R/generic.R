@@ -104,6 +104,25 @@ setGeneric("generateTableCode", function(object, ...) {
 })
 
 #_______________________________________________________________________________
+#----                           getScenarios                                ----
+#_______________________________________________________________________________
+
+#' Get all scenarios that were added to the table object.
+#' 
+#' @param object table object
+#' @param ... extra arguments
+#' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
+#' @export
+#' @rdname generateTableCode
+getScenarios <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getScenarios", function(object, ...) {
+  standardGeneric("getScenarios")
+})
+
+#_______________________________________________________________________________
 #----                              getUnit                                  ----
 #_______________________________________________________________________________
 

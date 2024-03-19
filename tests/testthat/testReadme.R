@@ -107,3 +107,27 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   gttable <- table %>% export(dest=new("gtsummary_type"))
   gtTableRegressionTest(gttable, "readme_example2")
 })
+
+test_that("Calculate 2-compartment half-life metrics (example 3) can be reproduced", {
+  
+  nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
+    add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
+    calculate()
+  
+  table <- NCAMetricsTable() %>%
+    add(nca)
+
+  summary <- table %>%
+    export(dest="dataframe") %>%
+    mutate(value=as.numeric(value)) # Remove names on values
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual") %>%
+    filter(id %in% c(1,2,3)) # Keep first 3
+  
+  outputRegressionTest(data=summary, output=c("metric", "stat", "value"), filename="example3_summary")
+  outputRegressionTest(data=individual, output=c("metric", "id", "value"), filename="example3_individual")
+  
+  gttable <- table %>% export(dest=new("gtsummary_type"))
+  gtTableRegressionTest(gttable, "readme_example3")
+})

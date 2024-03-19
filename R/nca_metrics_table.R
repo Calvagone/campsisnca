@@ -85,28 +85,37 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definiti
 #' @rdname generateTableCode
 setMethod("generateTableCode", signature=c("nca_metrics_table"), definition=function(object, ...) {
   
-  allScenarios <- object@list %>% purrr::map_df(~tibble::enframe(.x@scenario))
-  stratificationLevels <- unique(allScenarios$name)
+  scenarios <- object %>% getScenarios()
+  stratVariables <- unique(scenarios$name)
   
   init <- "individual <- table %>% campsismod::export(dest=\"dataframe\", type=\"individual_wide\")"
   stats <- getStatisticsCode(object)
   
-  if (nrow(allScenarios)==1) {
+  if (length(stratVariables)==0) {
     code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats)
-  } else {
-    if (length(stratificationLevels)==1) {
-      code <- getTableSummaryCode(var="gttable", data="individual", by=stratificationLevels, stats=stats)
     
-    } else if (length(stratificationLevels)==2) {
-      code <- getTableSummaryCode(var="gttable", data="individual", by=stratificationLevels, stats=stats)
-      
-    } else {
-      stop("Too many stratification levels")
-    }
+  } else if (length(stratVariables)==1) {
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats)
+    
+  } else if (length(stratVariables)==2) {
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats)
+    
+  } else {
+    stop("Too many stratification variables")
   }
+
   return(paste0(c(init, code, "gttable"), collapse="\n"))
 })
 
+#_______________________________________________________________________________
+#----                           getScenarios                                ----
+#_______________________________________________________________________________
+
+#' @rdname getScenarios
+setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(object, ...) {
+  retValue <- object@list %>% purrr::map_df(~tibble::enframe(.x@scenario))
+  return(retValue)
+})
 
 #_______________________________________________________________________________
 #----                              getUnit                                  ----
