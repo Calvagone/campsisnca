@@ -49,8 +49,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
     add(c(ncaD1, ncaD7))
   
   summary <- table %>%
-    export(dest="dataframe") %>%
-    mutate(value=as.numeric(value)) # Remove names on values
+    export(dest="dataframe")
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
@@ -94,8 +93,7 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
     add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
   
   summary <- table %>%
-    export(dest="dataframe") %>%
-    mutate(value=as.numeric(value)) # Remove names on values
+    export(dest="dataframe")
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
@@ -118,8 +116,7 @@ test_that("Calculate 2-compartment half-life metrics (example 3) can be reproduc
     add(nca)
 
   summary <- table %>%
-    export(dest="dataframe") %>%
-    mutate(value=as.numeric(value)) # Remove names on values
+    export(dest="dataframe")
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
@@ -142,8 +139,7 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
     add(nca)
   
   summary <- table %>%
-    export(dest="dataframe") %>%
-    mutate(value=as.numeric(value)) # Remove names on values
+    export(dest="dataframe")
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%

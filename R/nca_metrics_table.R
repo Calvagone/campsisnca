@@ -57,6 +57,10 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   
   retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
   
+  # Remove names on values
+  retValue <- retValue %>%
+    mutate(value=as.numeric(value))
+  
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
     retValue <- retValue %>%

@@ -113,7 +113,7 @@ setGeneric("generateTableCode", function(object, ...) {
 #' @param ... extra arguments
 #' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
 #' @export
-#' @rdname generateTableCode
+#' @rdname getScenarios
 getScenarios <- function(object, ...) {
   stop("No default function is provided")
 }
