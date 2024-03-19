@@ -43,6 +43,7 @@ First import the `campsisnca` and `gtsummary` packages as follows:
 ```{r, message=FALSE}
 library(campsisnca)
 library(gtsummary)
+library(gt)
 ```
 
 ### Example 1: PK metrics at Day 1 and Day 7
@@ -86,7 +87,7 @@ table %>% export(dest="dataframe")
 2. To a HTML table using `gt`:
 
 ```{r, message=FALSE}
-table %>% export(dest="gt", subscripts=TRUE)
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
 Please note the individual metrics can also be exported to  a dataframe using the `export` function as follows:
@@ -124,7 +125,7 @@ ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), var
 
 table <- NCAMetricsTable() %>%
   add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
-table %>% export(dest="gt", subscripts=TRUE)
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
 ### Example 3: Calculate 2-compartment half-life metrics
@@ -136,7 +137,7 @@ nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
 
 table <- NCAMetricsTable() %>%
   add(nca)
-table %>% export(dest="gt", subscripts=TRUE)
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
 ### Example 4: Compute terminal half-live based on data
@@ -148,5 +149,5 @@ nca <- NCAMetrics(x=campsis, variable="Y") %>%
 
 table <- NCAMetricsTable() %>%
   add(nca)
-table %>% export(dest="gt", subscripts=TRUE)
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
