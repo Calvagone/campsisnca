@@ -96,7 +96,7 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=func
       gt::text_transform(
         locations=gt::cells_body(),
         fn=function(x) {
-          return(stringr::str_replace_all(string=x, pattern="(_\\{)([a-zA-Z0-9\U00BD ,]+)(\\})", replacement="<sub>\\2</sub>"))
+          return(stringr::str_replace_all(string=x, pattern="(_\\{)([^\\}]+)(\\})", replacement="<sub>\\2</sub>"))
         }
       )
   }
