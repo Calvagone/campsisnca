@@ -91,7 +91,7 @@ Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getS
   subtype <- "1cpt"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
              subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
@@ -108,7 +108,7 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display
   subtype <- "2cpt.dist"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
              subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
@@ -125,7 +125,7 @@ Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=ge
   subtype <- "2cpt.z"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
              subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
@@ -142,7 +142,7 @@ Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=
   subtype <- "2cpt.eff"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
              subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }

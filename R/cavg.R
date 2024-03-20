@@ -28,7 +28,7 @@ Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
   variable = processVariable(variable)
   name <- if (is.null(name)) "Cavg" else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("cavg_metric", x=x, variable=variable, name=name, unit=unit,
              stat_display=stat_display, digits=digits))
 }

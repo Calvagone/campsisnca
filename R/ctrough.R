@@ -31,7 +31,7 @@ Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat
   variable = processVariable(variable)
   name <- if (is.null(name)) "Ctrough" else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   time <- if (is.null(time)) as.numeric(NA) else time
   return(new("ctrough_metric", x=x, variable=variable, trough_time=time, name=name,
              unit=unit, stat_display=stat_display, digits=digits))

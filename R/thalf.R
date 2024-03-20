@@ -29,7 +29,7 @@ Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getS
   variable = processVariable(variable)
   name <- if (is.null(name)) "thalf" else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("thalf_metric", x=x, variable=variable, name=name, unit=unit,
              stat_display=stat_display, digits=digits))
 }

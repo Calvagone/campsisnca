@@ -17,7 +17,7 @@ deparse1Line <- function(x) {
 #' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these)
 #' @return a character vector, which will be pasted and given to gtsummary
 #' 
-deparseRoundingItems <- function(digits) {
+deparseDigits <- function(digits) {
   if (is.null(digits)) {
     return(character(0))
   }

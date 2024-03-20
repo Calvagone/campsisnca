@@ -32,7 +32,7 @@ CustomMetric <- function(x=NULL, variable=NULL, fun=function(data){0}, name=NULL
   variable = processVariable(variable)
   name <- if (is.null(name)) "Custom" else name
   unit <- processUnit(unit)
-  digits <- deparseRoundingItems(digits)
+  digits <- deparseDigits(digits)
   return(new("custom_metric", x=x, variable=variable, name=name, unit=unit, custom_function=fun,
              categorical=categorical, stat_display=stat_display, digits=digits))
 }
