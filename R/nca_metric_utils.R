@@ -28,8 +28,10 @@ processUnit <- function(unit) {
 #' @param variable dependent variable
 #' @param name custom metric name (will be exported into table headers)
 #' @param unit metric unit (will be exported into table headers if provided)
+#' @param categorical categorical endpoint, logical
 #' @param stat_display statistics display (see package gtsummary)
-metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL) {
+#' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README
+metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   # Do nothing
 }
 

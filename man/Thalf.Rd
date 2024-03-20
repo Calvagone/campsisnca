@@ -10,7 +10,8 @@ Thalf(
   variable = NULL,
   name = NULL,
   unit = NULL,
-  stat_display = getStatDisplayDefault()
+  stat_display = getStatDisplayDefault(),
+  digits = NULL
 )
 }
 \arguments{
@@ -23,6 +24,8 @@ Thalf(
 \item{unit}{metric unit (will be exported into table headers if provided)}
 
 \item{stat_display}{statistics display (see package gtsummary)}
+
+\item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
 \description{
 Terminal half life computed by making a linear regression in the log domain 

@@ -21,7 +21,8 @@ setClass(
     unit = "character",           # metric unit (exported into header)
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
     stat_display = "character",   # statistics display (see package gtsummary)
-    categorical = "logical"       # FALSE (default): continuous data, TRUE: categorical data
+    categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
+    digits = "character"          # rounding digits definitions for gtsummary 
   ),
   contains="pmx_element",
   prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE),

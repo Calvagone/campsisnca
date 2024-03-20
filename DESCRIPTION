@@ -15,6 +15,7 @@ Imports:
     assertthat,
     campsis (>= 1.4.0),
     dplyr,
+    gt,
     gtsummary,
     kableExtra,
     purrr,
@@ -46,6 +47,7 @@ Collate:
     'nca_metric_utils.R'
     'gtsummary_utils.R'
     'filter_utils.R'
+    'rounding_utils.R'
     'theoretical_metrics.R'
     'nca_metric.R'
     'nca_metrics.R'

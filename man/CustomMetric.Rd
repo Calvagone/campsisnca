@@ -13,7 +13,8 @@ CustomMetric(
   name = NULL,
   unit = NULL,
   categorical = FALSE,
-  stat_display = getStatDisplayDefault(categorical)
+  stat_display = getStatDisplayDefault(categorical),
+  digits = NULL
 )
 }
 \arguments{
@@ -27,7 +28,11 @@ CustomMetric(
 
 \item{unit}{metric unit (will be exported into table headers if provided)}
 
+\item{categorical}{categorical endpoint, logical}
+
 \item{stat_display}{statistics display (see package gtsummary)}
+
+\item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
 \description{
 Custom metric.

@@ -2,6 +2,7 @@
 #' 
 #' Extract values from within braces.
 #' 
+#' @param x input string
 #' @return a character vector
 #' @importFrom stringr str_extract_all
 #' @export
@@ -80,6 +81,7 @@ computeTableSummary <- function(idata, stat_display) {
 #' 
 #' Get table summary code.
 #' 
+#' @param variable assigned variable name
 #' @param data data frame code
 #' @param by variable
 #' @param stats stats to compute

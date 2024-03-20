@@ -7,6 +7,8 @@
 getTableSummaryCode(variable, data, by, stats, labels)
 }
 \arguments{
+\item{variable}{assigned variable name}
+
 \item{data}{data frame code}
 
 \item{by}{variable}

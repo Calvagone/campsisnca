@@ -6,6 +6,9 @@
 \usage{
 extractBraceValues(x)
 }
+\arguments{
+\item{x}{input string}
+}
 \value{
 a character vector
 }
