@@ -76,7 +76,23 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=func
   gtsummaryTable <- object %>%
     export(dest=new("gtsummary_type"), subscripts=subscripts, ...)
   
-  gtTable <- gtsummaryTable %>%
+  gtTable <- gtTable %>%
+    toGt(subscripts=subscripts)
+
+  return(gtTable)
+})
+
+#' 
+#' Gtsummary to Gt.
+#' 
+#' @param x gtsummary table
+#' @param subscripts use subscripts
+#' @importFrom gtsummary as_gt
+#' @importFrom gt cells_body text_transform
+#' @importFrom stringr str_replace_all
+#' @export
+toGt <- function(x, subscripts=FALSE) {
+  gtTable <- x %>%
     gtsummary::as_gt()
   
   if (subscripts) {
@@ -88,9 +104,8 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=func
         }
       )
   }
-
   return(gtTable)
-})
+}
 
 #_______________________________________________________________________________
 #----                       generateTableCode                               ----
