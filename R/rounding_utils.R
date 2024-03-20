@@ -16,28 +16,33 @@ deparse1Line <- function(x) {
 #' 
 #' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these)
 #' @return a character vector, which will be pasted and given to gtsummary
+#' @importFrom purrr map_chr
 #' 
 deparseDigits <- function(digits) {
   if (is.null(digits)) {
     return(character(0))
   }
-  retValue <- NULL
-  for (item in digits) {
-    if (rlang::is_function(item)) {
-      retValue <- retValue %>%
-        append(deparse1Line(item))
-      
-    } else if (rlang::is_lambda(item)) {
-      retValue <- retValue %>%
-        append(paste0("rlang::as_function(", deparse1Line(item), ")"))
-      
-    } else if (is.numeric(item)) {
-      retValue <- retValue %>%
-        append(as.character(item))
-      
-    } else {
-      stop("Digit element must be a function, a purrr-style lambda function or simply an integer")
-    }
+  if (is.numeric(digits) || is.list(digits)) {
+    retValue <- digits %>% purrr::map_chr(~deparseDigit(.x))
+  } else {
+    retValue <- deparseDigit(digits)
+  }
+  return(retValue)
+}
+
+#' @importFrom rlang is_function is_lambda
+deparseDigit <- function(digit) {
+  if (rlang::is_function(digit)) {
+    retValue <- deparse1Line(digit)
+    
+  } else if (rlang::is_formula(digit)) {
+    retValue <- paste0("rlang::as_function(", deparse1Line(digit), ")")
+    
+  } else if (is.numeric(digit)) {
+    retValue <- as.character(digit)
+    
+  } else {
+    stop("Digit element must be a function, a purrr-style lambda function or simply an integer")
   }
   return(retValue)
 }

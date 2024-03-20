@@ -105,15 +105,16 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"), defi
   init <- "individual <- table %>% campsismod::export(dest=\"dataframe\", type=\"individual_wide\")"
   stats <- getStatisticsCode(object)
   labels <- getLabelsCode(object, subscripts=subscripts)
+  digits <- getDigitsCode(object)
   
   if (length(stratVariables)==0) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats, labels=labels)
+    code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats, labels=labels, digits=digits)
     
   } else if (length(stratVariables)==1) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, labels=labels)
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, labels=labels, digits=digits)
     
   } else if (length(stratVariables)==2) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, labels=labels)
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, labels=labels, digits=digits)
     
   } else {
     stop("Too many stratification variables")

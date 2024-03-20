@@ -150,3 +150,29 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example4")
 })
+
+test_that("Round your PK metrics (example 5)", {
+  
+  # Day 1
+  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+    add(Auc(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
+    add(Auc(digits=c(1,2,2), name="AUC2")) %>% # Respectively 1/2/2 digit(s) after decimal for med, p5 and p95
+    add(Auc(digits=~signif(.x, 2), name="AUC3")) %>% # 2 significant digits only
+    add(Auc(digits=list(~plyr::round_any(.x, 5), ~round(.x, 1) , ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
+    campsisnca::calculate()
+  
+  # Day 7 
+  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+    add(Auc(name="AUC1")) %>%
+    add(Auc(name="AUC2")) %>%
+    add(Auc(name="AUC3")) %>%
+    add(Auc(name="AUC4")) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()  
+  table <- table %>%
+    add(c(ncaD1, ncaD7))
+
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTableRegressionTest(gttable, "readme_example5")
+})

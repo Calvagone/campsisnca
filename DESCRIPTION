@@ -19,6 +19,7 @@ Imports:
     gtsummary,
     kableExtra,
     purrr,
+    rlang,
     stringr,
     tibble,
     tidyr

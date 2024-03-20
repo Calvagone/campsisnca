@@ -4,7 +4,7 @@
 \alias{getTableSummaryCode}
 \title{Get table summary code.}
 \usage{
-getTableSummaryCode(variable, data, by, stats, labels)
+getTableSummaryCode(variable, data, by, stats, labels, digits)
 }
 \arguments{
 \item{variable}{assigned variable name}
@@ -16,6 +16,8 @@ getTableSummaryCode(variable, data, by, stats, labels)
 \item{stats}{stats to compute}
 
 \item{labels}{the labels to display}
+
+\item{digits}{the digits to be used for rounding}
 }
 \value{
 data frame

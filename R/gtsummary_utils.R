@@ -86,8 +86,9 @@ computeTableSummary <- function(idata, stat_display) {
 #' @param by variable
 #' @param stats stats to compute
 #' @param labels the labels to display
+#' @param digits the digits to be used for rounding
 #' @return data frame
-getTableSummaryCode <- function(variable, data, by, stats, labels) {
+getTableSummaryCode <- function(variable, data, by, stats, labels, digits) {
   if (length(by) %in% c(0,1)) {
   retValue <- sprintf(
 "%s <- %s  %%>%% 
@@ -102,10 +103,13 @@ tbl_summary(
   ),
   label=list(
     %s
+  ),
+  digits=list(
+    %s
   )
 ) %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by, stats, labels)
+", variable, data, by, stats, labels, digits)
   
   } else if (length(by)==2) {
     retValue <- sprintf(
@@ -122,11 +126,14 @@ strata=%s,
   ),
   label=list(
     %s
+  ),
+  digits=list(
+    %s
   )
 ),
 .combine_with=\"tbl_stack\") %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by[1], by[2], stats, labels)    
+", variable, data, by[1], by[2], stats, labels, digits)    
 
 }
   return(retValue)
@@ -164,11 +171,36 @@ getLabelsCode <- function(table, subscripts) {
       resultingName <-  x %>% getName()
     }
     if (is.na(unit)) {
-      retValue <- sprintf("%s ~ \"%s\"", x %>% getName(), resultingName)
+      label <- sprintf("%s ~ \"%s\"", x %>% getName(), resultingName)
     } else {
-      retValue <- sprintf("%s ~ \"%s (%s)\"", x %>% getName(), resultingName, unit)
+      label <- sprintf("%s ~ \"%s (%s)\"", x %>% getName(), resultingName, unit)
     }
+    return(label)
   })
 
+  return(paste0(retValue, collapse=",\n"))
+}
+
+#' 
+#' Get digits code for gtsummary.
+#' 
+#' @param table NCA table
+#' @return code
+getDigitsCode <- function(table) {
+  # Always look at first NCA metric only
+  metrics <- table@list[[1]]
+  
+  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+    digits <- x@digits
+    if (length(digits) > 0) {
+      digit <- sprintf("%s ~ list(%s)", x %>% getName(), paste0(digits, collapse=","))
+    } else {
+      digit <- ""
+    }
+    return(digit)
+  })
+  
+  retValue <- retValue[retValue!=""]
+  
   return(paste0(retValue, collapse=",\n"))
 }
