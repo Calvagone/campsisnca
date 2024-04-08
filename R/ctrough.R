@@ -26,13 +26,15 @@ setClass(
 #' @inheritParams metricsParams
 #' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
 #' @export
-Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL) {
+Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Ctrough" else name
   unit <- processUnit(unit)
+  digits <- deparseDigits(digits)
   time <- if (is.null(time)) as.numeric(NA) else time
-  return(new("ctrough_metric", x=x, variable=variable, trough_time=time, name=name, unit=unit))
+  return(new("ctrough_metric", x=x, variable=variable, trough_time=time, name=name,
+             unit=unit, stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________
@@ -52,5 +54,14 @@ setMethod("iValue", signature=c("ctrough_metric", "numeric", "numeric"), definit
       return(value[index[1]])
     }
   }
+})
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("ctrough_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "trough"))
 })
 

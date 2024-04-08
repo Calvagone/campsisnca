@@ -12,11 +12,21 @@ setClass(
   contains="export_type" 
 )
 
-#' Kable export type class.
+#' Gt summary export type class.
 #' 
 #' @export
 setClass(
-  "kable_type",
+  "gtsummary_type",
+  representation(
+  ),
+  contains="export_type" 
+)
+
+#' Gt export type class.
+#' 
+#' @export
+setClass(
+  "gt_type",
   representation(
   ),
   contains="export_type" 

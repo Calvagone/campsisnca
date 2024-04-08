@@ -4,7 +4,7 @@
 \alias{NCAMetrics}
 \title{NCA metrics}
 \usage{
-NCAMetrics(x = NULL, variable = NULL, scenario)
+NCAMetrics(x = NULL, variable = NULL, scenario = NULL)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}

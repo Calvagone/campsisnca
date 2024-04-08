@@ -24,12 +24,14 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x <- processDataframe(x)
   variable = processVariable(variable)
-  name <- if (is.null(name)) "t1/2" else name
+  name <- if (is.null(name)) "thalf" else name
   unit <- processUnit(unit)
-  return(new("thalf_metric", x=x, variable=variable, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("thalf_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________
@@ -42,3 +44,13 @@ setMethod("iValue", signature=c("thalf_metric", "numeric", "numeric"), definitio
   k <- -linearMod$coefficients[["time"]]
   return(log(2)/k)    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("thalf_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "half", "\U00BD"))
+})
+

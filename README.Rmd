@@ -1,5 +1,5 @@
 ---
-pagetitle: "CAMPSIS NCA"
+pagetitle: "Campsis NCA"
 date: ""
 author: ""
 output: github_document
@@ -10,10 +10,10 @@ always_allow_html: true
 Analyse your simulation output using non-compartmental analysis.
 
 ## Installation
-Install the latest stable release with the authentication token you have received:
+Install the latest stable release as follows:
   
 ```{r, eval=FALSE}
-devtools::install_github("Calvagone/campsisnca", ref="main", auth_token="AUTH_TOKEN", force=TRUE)
+devtools::install_github("Calvagone/campsisnca")
 ```
 
 ## Basic use
@@ -38,15 +38,17 @@ model <- model %>% replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
 campsis <- model %>% simulate(dataset=ds, dest="rxode2", seed=1, outvars="BW")
 ```
 
-First import the `campsisnca` package:
+First import the `campsisnca` and `gtsummary` packages as follows:
 
 ```{r, message=FALSE}
 library(campsisnca)
+library(gtsummary)
+library(gt)
 ```
 
 ### Example 1: PK metrics at Day 1 and Day 7
 
-Assume some results were simulated with CAMPSIS (see `campsis` dataframe) :
+Assume some results were simulated with Campsis (see `campsis` dataframe) :
 
 ```{r, message=FALSE}
 campsis
@@ -69,7 +71,7 @@ ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y"
 These 2 metrics may be imported into a metrics table object, as follows:
 
 ```{r, message=FALSE}
-table <- NCAMetricsTable(unitLineBreak=TRUE)  
+table <- NCAMetricsTable()  
 table <- table %>%
   add(c(ncaD1, ncaD7))
 ```
@@ -82,16 +84,10 @@ This table can be exported:
 table %>% export(dest="dataframe")
 ```
 
-2. To a HTML table using `kable` and format argument `html`:
+2. To a HTML table using `gt`:
 
 ```{r, message=FALSE}
-table %>% export(dest="kable", format="html")
-```
-
-3. To a LaTeX table using `kable` and format argument `latex`:
-
-```{r, eval=FALSE, message=FALSE}
-table %>% export(dest="kable", format="latex")
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
 Please note the individual metrics can also be exported to  a dataframe using the `export` function as follows:
@@ -127,31 +123,59 @@ ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), var
   add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
   calculate()
 
-table <- NCAMetricsTable(unitLineBreak=TRUE) %>%
+table <- NCAMetricsTable() %>%
   add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
-table %>% export(dest="kable", format="html")
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
 ### Example 3: Calculate 2-compartment half-life metrics
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y", scenario=c(xx="Theoritical half-lives")) %>%
+nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
   add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
   calculate()
 
 table <- NCAMetricsTable() %>%
   add(nca)
-table %>% export(dest="kable", format="html")
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
 ### Example 4: Compute terminal half-live based on data
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(xx="Half-live computed on data")) %>%
+nca <- NCAMetrics(x=campsis, variable="Y") %>%
   add(c(Thalf(x=campsis %>% timerange(7*24, 10*24)))) %>%
   calculate()
 
 table <- NCAMetricsTable() %>%
   add(nca)
-table %>% export(dest="kable", format="html")
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+```
+
+### Example 5: Round your PK metrics
+
+```{r, message=FALSE}
+# Day 1
+ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+  add(Auc(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
+  add(Auc(digits=c(1,2,2), name="AUC2")) %>%             # Respectively 1/2/2 digit(s) after comma for med, p5 and p95
+  add(Auc(digits=~signif(.x, 2), name="AUC3")) %>%       # 2 significant digits only
+  add(Auc(digits=list(~plyr::round_any(.x, 5),
+                      ~round(.x, 1) ,
+                      ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
+  campsisnca::calculate()
+
+# Day 7 
+ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+  add(Auc(name="AUC1")) %>%
+  add(Auc(name="AUC2")) %>%
+  add(Auc(name="AUC3")) %>%
+  add(Auc(name="AUC4")) %>%
+  campsisnca::calculate()
+
+table <- NCAMetricsTable()  
+table <- table %>%
+  add(c(ncaD1, ncaD7))
+  
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```

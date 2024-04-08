@@ -15,13 +15,13 @@ validateTheoreticalThalfMetric <- function(object) {
 #' @param subtype thalf subtype (2cpt.dist, 2cpt.z or 2cpt.eff)
 getDefaultTHalfName <- function(subtype) {
   if (subtype == "1cpt") {
-    return("t1/2z")
+    return("thalf.z")
   } else if (subtype == "2cpt.dist") {
-    return("t1/2dist")
+    return("thalf.dist")
   } else if (subtype == "2cpt.z") {
-    return("t1/2z")
+    return("thalf.z")
   } else if (subtype == "2cpt.eff") {
-    return("t1/2eff")
+    return("thalf.eff")
   } else {
     stop(paste0("Unknown subtype ", subtype))
   }
@@ -85,13 +85,15 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, only one key is possible: K
 #' @export
-Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=TRUE)
   subtype <- "1cpt"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
 
 #' 
@@ -100,13 +102,15 @@ Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
   subtype <- "2cpt.dist"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
 
 #' 
@@ -115,13 +119,15 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
   subtype <- "2cpt.z"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
 
 #' 
@@ -130,13 +136,15 @@ Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL) {
+Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x <- processDataframe(x)
   map <- checkMap(map, thalf.1cpt=FALSE)
   subtype <- "2cpt.eff"
   name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
   unit <- processUnit(unit)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map, subtype=subtype, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
+             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________
@@ -166,5 +174,28 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), defin
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  return(object %>% summariseIndividualData(level=level))
+  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display)
+  return(object)
+})
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("theoretical_thalf_metric"), definition = function(x) {
+  name <- x %>% getName()
+  subtype <- x@subtype
+  if (subtype == "1cpt") {
+    retValue <- subscriptOccurrence(name, "half\\.z", "\U00BD,z")
+  } else if (subtype == "2cpt.dist") {
+    retValue <- subscriptOccurrence(name, "half\\.dist", "\U00BD,dist")
+  } else if (subtype == "2cpt.z") {
+    retValue <- subscriptOccurrence(name, "half\\.z", "\U00BD,z")
+  } else if (subtype == "2cpt.eff") {
+    retValue <- subscriptOccurrence(name, "half\\.eff", "\U00BD,eff")
+  } else {
+    retValue <- name
+  }
+  return(retValue)
 })

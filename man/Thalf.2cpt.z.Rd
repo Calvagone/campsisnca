@@ -4,7 +4,14 @@
 \alias{Thalf.2cpt.z}
 \title{Theoretical elimination half life for a 2-compartment model.}
 \usage{
-Thalf.2cpt.z(x = NULL, map = NULL, name = NULL, unit = NULL)
+Thalf.2cpt.z(
+  x = NULL,
+  map = NULL,
+  name = NULL,
+  unit = NULL,
+  stat_display = getStatDisplayDefault(),
+  digits = NULL
+)
 }
 \arguments{
 \item{x}{CAMPSIS/NONMEM dataframe}
@@ -14,6 +21,10 @@ Thalf.2cpt.z(x = NULL, map = NULL, name = NULL, unit = NULL)
 \item{name}{custom metric name (will be exported into table headers)}
 
 \item{unit}{metric unit (will be exported into table headers if provided)}
+
+\item{stat_display}{statistics display (see package gtsummary)}
+
+\item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
 \description{
 Theoretical elimination half life for a 2-compartment model.

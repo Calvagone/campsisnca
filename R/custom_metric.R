@@ -26,12 +26,15 @@ setClass(
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 1 argument: data
 #' @export
-CustomMetric <- function(x=NULL, variable=NULL, fun=function(data){0}, name=NULL, unit=NULL) {
+CustomMetric <- function(x=NULL, variable=NULL, fun=function(data){0}, name=NULL, unit=NULL,
+                         categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Custom" else name
   unit <- processUnit(unit)
-  return(new("custom_metric", x=x, variable=variable, name=name, unit=unit, custom_function=fun))
+  digits <- deparseDigits(digits)
+  return(new("custom_metric", x=x, variable=variable, name=name, unit=unit, custom_function=fun,
+             categorical=categorical, stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________

@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateNCAMetrics <- function(object) {
-  return(c(expectOne(object, "variable"), expectOneOrMore(object, "scenario")))
+  return(c(expectOne(object, "variable")))
 }
 
 #' 
@@ -29,9 +29,12 @@ setClass(
 #' @param scenario character vector used to describe the current scenario.
 #' E.g. c(day="Day 1", condition="Fasted)
 #' @export
-NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
+NCAMetrics <- function(x=NULL, variable=NULL, scenario=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
+  if (is.null(scenario)) {
+    scenario <- character()
+  }
   return(new("nca_metrics", x=x, variable=variable, scenario=scenario))
 }
 

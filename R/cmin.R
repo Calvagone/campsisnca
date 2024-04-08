@@ -23,12 +23,14 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Cmin" else name
   unit <- processUnit(unit)
-  return(new("cmin_metric", x=x, variable=variable, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("cmin_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________
@@ -39,3 +41,13 @@ Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
 setMethod("iValue", signature=c("cmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(min(value))    
 })
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("cmin_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "min"))
+})
+

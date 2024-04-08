@@ -86,6 +86,65 @@ setGeneric("iValues", function(object, ...) {
 })
 
 #_______________________________________________________________________________
+#----                       generateTableCode                               ----
+#_______________________________________________________________________________
+
+#' Generate table code.
+#' 
+#' @param object table object
+#' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
+#' @param ... extra arguments
+#' @export
+#' @rdname generateTableCode
+generateTableCode <- function(object, subscripts, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("generateTableCode", function(object, subscripts=NULL, ...) {
+  if (is.null(subscripts)) {
+    subscripts <- FALSE
+  }
+  standardGeneric("generateTableCode")
+})
+
+#_______________________________________________________________________________
+#----                           getLaTeXName                                ----
+#_______________________________________________________________________________
+
+#' Get the name of the metric in LaTeX notation (with subscript coded with an underscore and brackets).
+#' 
+#' @param x metric
+#' @param ... extra arguments, not used
+#' @export
+#' @rdname getLaTeXName
+getLaTeXName <- function(x, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getLaTeXName", function(x, ...) {
+  standardGeneric("getLaTeXName")
+})
+
+#_______________________________________________________________________________
+#----                           getScenarios                                ----
+#_______________________________________________________________________________
+
+#' Get all scenarios that were added to the table object.
+#' 
+#' @param object table object
+#' @param ... extra arguments
+#' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
+#' @export
+#' @rdname getScenarios
+getScenarios <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getScenarios", function(object, ...) {
+  standardGeneric("getScenarios")
+})
+
+#_______________________________________________________________________________
 #----                              getUnit                                  ----
 #_______________________________________________________________________________
 
@@ -102,4 +161,23 @@ getUnit <- function(object, metric, ...) {
 
 setGeneric("getUnit", function(object, metric, ...) {
   standardGeneric("getUnit")
+})
+
+#_______________________________________________________________________________
+#----                         statDisplayString                             ----
+#_______________________________________________________________________________
+
+#' Return the evaluated statistics display string.
+#' 
+#' @param object PK metric
+#' @param ... extra arguments
+#' @return a string, e.g. 100 [45-143]
+#' @export
+#' @rdname statDisplayString
+statDisplayString <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("statDisplayString", function(object, ...) {
+  standardGeneric("statDisplayString")
 })
