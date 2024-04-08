@@ -76,7 +76,7 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=func
   gtsummaryTable <- object %>%
     export(dest=new("gtsummary_type"), subscripts=subscripts, ...)
   
-  gtTable <- gtTable %>%
+  gtTable <- gtsummaryTable %>%
     toGt(subscripts=subscripts)
 
   return(gtTable)

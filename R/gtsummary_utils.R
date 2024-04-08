@@ -148,7 +148,7 @@ getStatisticsCode <- function(table) {
   # Always look at first NCA metric only
   metrics <- table@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", .x %>% getName(), .x@stat_display))
+  retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
   
   return(paste0(retValue, collapse=",\n"))
 }
@@ -171,9 +171,9 @@ getLabelsCode <- function(table, subscripts) {
       resultingName <-  x %>% getName()
     }
     if (is.na(unit)) {
-      label <- sprintf("%s ~ \"%s\"", x %>% getName(), resultingName)
+      label <- sprintf("%s ~ \"%s\"", addBackticks(x %>% getName()), resultingName)
     } else {
-      label <- sprintf("%s ~ \"%s (%s)\"", x %>% getName(), resultingName, unit)
+      label <- sprintf("%s ~ \"%s (%s)\"", addBackticks(x %>% getName()), resultingName, unit)
     }
     return(label)
   })
@@ -193,7 +193,7 @@ getDigitsCode <- function(table) {
   retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
     digits <- x@digits
     if (length(digits) > 0) {
-      digit <- sprintf("%s ~ list(%s)", x %>% getName(), paste0(digits, collapse=","))
+      digit <- sprintf("%s ~ list(%s)", addBackticks(x %>% getName()), paste0(digits, collapse=","))
     } else {
       digit <- ""
     }
@@ -204,3 +204,16 @@ getDigitsCode <- function(table) {
   
   return(paste0(retValue, collapse=",\n"))
 }
+
+addBackticks <- function(x, only_when_necessary=TRUE) {
+  assertthat::assert_that(length(x)==1, msg="x should be a single string")
+  
+  if (x == make.names(x) && !only_when_necessary) {
+    return(x)
+  } else {
+    # Then x considered non-standard column name
+    # Backticks are added automatically
+    return(paste0("`", x, "`")) 
+  }
+}
+

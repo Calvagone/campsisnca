@@ -176,3 +176,21 @@ test_that("Round your PK metrics (example 5)", {
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example5")
 })
+
+test_that("Column names can be non-standard", {
+
+  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+    add(c(Auc(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
+    campsisnca::calculate()
+
+  table <- NCAMetricsTable()
+  table <- table %>%
+    add(nca)
+  
+  summary <- table %>%
+    export(dest="dataframe")
+
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTableRegressionTest(gttable, "non_standard_column_name")
+  
+})
