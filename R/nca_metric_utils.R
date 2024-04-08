@@ -31,7 +31,7 @@ processUnit <- function(unit) {
 #' @param categorical categorical endpoint, logical
 #' @param stat_display statistics display (see package gtsummary)
 #' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README
-metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, categorical=NULL, stat_display=NULL, digits=NULL) {
   # Do nothing
 }
 

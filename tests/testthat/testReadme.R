@@ -158,7 +158,7 @@ test_that("Round your PK metrics (example 5)", {
     add(Auc(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
     add(Auc(digits=c(1,2,2), name="AUC2")) %>% # Respectively 1/2/2 digit(s) after decimal for med, p5 and p95
     add(Auc(digits=~signif(.x, 2), name="AUC3")) %>% # 2 significant digits only
-    add(Auc(digits=list(~plyr::round_any(.x, 5), ~round(.x, 1) , ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
+    add(Auc(digits=list(~round(.x/5)*5, ~round(.x, 1) , ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
     campsisnca::calculate()
   
   # Day 7 
