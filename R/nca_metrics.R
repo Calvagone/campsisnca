@@ -101,3 +101,23 @@ setMethod("export", signature=c("nca_metrics", "dataframe_type"), definition=fun
   }
   return(retValue)
 })
+
+#_______________________________________________________________________________
+#----                       reduceTo2Dimensions                             ----
+#_______________________________________________________________________________
+
+#' @rdname reduceTo2Dimensions
+setMethod("reduceTo2Dimensions", signature=c("nca_metrics"), definition=function(object, ...) {
+  scenario <- object@scenario
+  size <- length(scenario)
+  if (size > 2) {
+    names <- names(scenario)
+    values <- as.character(scenario)
+    hNames <- names[1:(size-1)]
+    hValues <- values[1:(size-1)]
+    hVec <- paste0(hValues, collapse=" / ")
+    names(hVec) <- paste0(hNames, collapse="_") # Variables concatenated with _
+    object@scenario <- c(hVec, scenario[size])
+  }
+  return(object)
+})

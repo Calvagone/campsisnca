@@ -7,6 +7,26 @@
 overwriteNonRegressionFiles <- FALSE
 testFolder <- ""
 
+generateData1 <- function() {
+  rich_sampling <- c(0,1,2,4,6,8,12,16,24)
+  day1 <- rich_sampling
+  day2day6 <- c(2,3,4,5,6)*24
+  day7 <- rich_sampling + 6*24
+  day8day10 <- c(8,9,10)*24
+  
+  ds <- Dataset(200) %>%
+    add(Bolus(time=(0:6)*24, amount=1000)) %>%
+    add(Observations(times=c(day1, day2day6, day7, day8day10))) %>%
+    add(Covariate("BW", UniformDistribution(50,100)))
+  
+  model <- model_suite$testing$nonmem$advan4_trans4
+  cl <- model %>% campsismod::find(Equation("CL"))
+  model <- model %>% campsismod::replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
+  
+  campsis <- model %>% simulate(dataset=ds, dest="rxode2", seed=1, outvars="BW")
+  return(campsis)
+}
+
 convertMethod <- function(method) {
   if (method==1) {
     method_ <- "linear"

@@ -93,16 +93,20 @@ setGeneric("iValues", function(object, ...) {
 #' 
 #' @param object table object
 #' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
+#' @param max_2dim if TRUE, table will be reduced to 2 dimensions
 #' @param ... extra arguments
 #' @export
 #' @rdname generateTableCode
-generateTableCode <- function(object, subscripts, ...) {
+generateTableCode <- function(object, subscripts, max_2dim, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generateTableCode", function(object, subscripts=NULL, ...) {
+setGeneric("generateTableCode", function(object, subscripts=NULL, max_2dim=NULL, ...) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
+  }
+  if (is.null(max_2dim)) {
+    max_2dim <- FALSE
   }
   standardGeneric("generateTableCode")
 })
@@ -180,4 +184,23 @@ statDisplayString <- function(object, ...) {
 
 setGeneric("statDisplayString", function(object, ...) {
   standardGeneric("statDisplayString")
+})
+
+#_______________________________________________________________________________
+#----                       reduceTo2Dimensions                             ----
+#_______________________________________________________________________________
+
+#' Reduce table to 2 dimensions.
+#' 
+#' @param object generic object
+#' @param ... extra arguments
+#' @return same object/table with max 2 dimensions (useful before export)
+#' @export
+#' @rdname reduceTo2Dimensions
+reduceTo2Dimensions <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("reduceTo2Dimensions", function(object, ...) {
+  standardGeneric("reduceTo2Dimensions")
 })

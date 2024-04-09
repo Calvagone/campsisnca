@@ -112,12 +112,16 @@ toGt <- function(x, subscripts=FALSE) {
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"), definition=function(object, subscripts, ...) {
+setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, max_2dim, ...) {
   
   scenarios <- object %>% getScenarios()
   stratVariables <- unique(scenarios$name)
+  if (max_2dim) {
+    init <- "individual <- table %>% reduceTo2Dimensions() %>% export(dest=\"dataframe\", type=\"individual_wide\")"
+  } else {
+    init <- "individual <- table %>% export(dest=\"dataframe\", type=\"individual_wide\")"
+  }
   
-  init <- "individual <- table %>% campsismod::export(dest=\"dataframe\", type=\"individual_wide\")"
   stats <- getStatisticsCode(object)
   labels <- getLabelsCode(object, subscripts=subscripts)
   digits <- getDigitsCode(object)
@@ -158,4 +162,16 @@ setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=f
     stop("No metrics in table at this stage")
   }
   return(object@list[[1]] %>% getUnit(metric=metric, ...))
+})
+
+#_______________________________________________________________________________
+#----                       reduceTo2Dimensions                             ----
+#_______________________________________________________________________________
+
+#' @rdname reduceTo2Dimensions
+setMethod("reduceTo2Dimensions", signature=c("nca_metrics_table"), definition=function(object, ...) {
+  object@list <- object@list %>%
+    purrr::map(~reduceTo2Dimensions(.x, ...))
+  
+  return(object)
 })
