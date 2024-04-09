@@ -4,7 +4,7 @@
 \alias{getVariableTypeCode}
 \title{Get the variable type code for gtsummary.}
 \usage{
-getVariableTypeCode(table, subscripts)
+getVariableTypeCode(table)
 }
 \arguments{
 \item{table}{NCA table}

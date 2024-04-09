@@ -159,7 +159,7 @@ getStatisticsCode <- function(table) {
 #' 
 #' @param table NCA table
 #' @return code
-getVariableTypeCode <- function(table, subscripts) {
+getVariableTypeCode <- function(table) {
   # Always look at first NCA metric only
   metrics <- table@list[[1]]
   
@@ -229,15 +229,7 @@ getDigitsCode <- function(table) {
   return(paste0(retValue, collapse=",\n    "))
 }
 
-addBackticks <- function(x, only_when_necessary=TRUE) {
-  assertthat::assert_that(length(x)==1, msg="x should be a single string")
-  
-  if (x == make.names(x) && !only_when_necessary) {
-    return(x)
-  } else {
-    # Then x considered non-standard column name
-    # Backticks are added automatically
-    return(paste0("`", x, "`")) 
-  }
+addBackticks <- function(x) {
+  return(paste0("`", x, "`")) 
 }
 

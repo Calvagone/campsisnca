@@ -169,7 +169,7 @@ test_that("Export custom metrics (example 6)", {
   
   # Day 7 
   ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(Auc(), Cmax(), Tmax(), custom1, custom2)) %>%
+    add(c(Cmax(), Tmax(), custom1, custom2)) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
