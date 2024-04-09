@@ -114,13 +114,15 @@ toGt <- function(x, subscripts=FALSE) {
 #' @rdname generateTableCode
 setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, max_2dim, ...) {
   
-  scenarios <- object %>% getScenarios()
-  stratVariables <- unique(scenarios$name)
   if (max_2dim) {
     init <- "individual <- table %>% reduceTo2Dimensions() %>% export(dest=\"dataframe\", type=\"individual_wide\")"
+    object <- object %>% reduceTo2Dimensions()
   } else {
     init <- "individual <- table %>% export(dest=\"dataframe\", type=\"individual_wide\")"
   }
+  
+  scenarios <- object %>% getScenarios()
+  stratVariables <- unique(scenarios$name)
   
   stats <- getStatisticsCode(object)
   labels <- getLabelsCode(object, subscripts=subscripts)

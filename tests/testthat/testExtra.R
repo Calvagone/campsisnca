@@ -39,11 +39,11 @@ test_that("Table can be reduced to 2 dimensions on demand", {
   table <- table %>%
     add(nca)
   
-  table <- table %>% reduceTo2Dimensions()
+  table <- table %>% campsisnca::reduceTo2Dimensions()
   
   scenario <- table@list[[1]]@scenario
   expect_equal(scenario, c(a_b="1 / 1", c="1"))
-  
+
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "reduction_to_2dim")
 })
