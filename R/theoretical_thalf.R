@@ -174,7 +174,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), defin
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display)
+  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display, categorical=FALSE)
   return(object)
 })
 

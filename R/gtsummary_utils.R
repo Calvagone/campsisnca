@@ -53,10 +53,12 @@ extractTableInfo <- function(tbl) {
 #' 
 #' @param idata individual values for a given metric
 #' @param stat_display statistics display for gtsummary
+#' @param categorical logical value
 #' @return data frame
 #' @importFrom gtsummary tbl_summary
 #' @importFrom dplyr select
-computeTableSummary <- function(idata, stat_display) {
+computeTableSummary <- function(idata, stat_display, categorical) {
+  type <- ifelse(categorical, "categorical", "continuous")
   gtTable <- idata %>%
     dplyr::select(-id) %>%
     gtsummary::tbl_summary(
@@ -65,7 +67,7 @@ computeTableSummary <- function(idata, stat_display) {
         value ~ stat_display
       ),
       type = list(
-        value ~ "continuous"
+        value ~ type
       )
     )
 

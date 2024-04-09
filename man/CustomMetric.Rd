@@ -7,9 +7,7 @@
 CustomMetric(
   x = NULL,
   variable = NULL,
-  fun = function(data) {
-     0
- },
+  fun,
   name = NULL,
   unit = NULL,
   categorical = FALSE,

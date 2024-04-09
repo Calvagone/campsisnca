@@ -44,7 +44,7 @@ getStatDisplayDefault <- function(categorical=FALSE) {
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- iValues(object=object)
-  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display)
+  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display, categorical=object@categorical)
   return(object)    
 })
 
@@ -125,6 +125,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...)
     # Use group_split and map_df, this way data is a real tibble
     # Otherwise using group_by, .data is a pronoun
     retValue <- x %>%
+      dplyr::ungroup() %>%
       dplyr::group_split(ID) %>%
       purrr::map_df(.f=function(data) {
         id <- unique(data$ID)
