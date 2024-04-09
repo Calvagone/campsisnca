@@ -47,25 +47,3 @@ test_that("Table can be reduced to 2 dimensions on demand", {
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "reduction_to_2dim")
 })
-
-test_that("Custom metrics can be exported to table properly", {
-  
-  custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x$TIME, .x$Y), name="Cmax custom", unit="ng/mL")
-  custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x$TIME, .x$Y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
-  
-  # Day 1
-  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"), custom1, custom2)) %>%
-    campsisnca::calculate()
-  
-  # Day 7 
-  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(Auc(), Cmax(), Tmax(), Ctrough(), custom1, custom2)) %>%
-    campsisnca::calculate()
-  
-  table <- NCAMetricsTable()  
-  table <- table %>%
-    add(c(ncaD1, ncaD7))
-  
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
-})

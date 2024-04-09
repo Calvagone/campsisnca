@@ -4,7 +4,7 @@
 \alias{getTableSummaryCode}
 \title{Get table summary code.}
 \usage{
-getTableSummaryCode(variable, data, by, stats, labels, digits)
+getTableSummaryCode(variable, data, by, stats, type, labels, digits)
 }
 \arguments{
 \item{variable}{assigned variable name}
@@ -14,6 +14,8 @@ getTableSummaryCode(variable, data, by, stats, labels, digits)
 \item{by}{variable}
 
 \item{stats}{stats to compute}
+
+\item{type}{type of the variables}
 
 \item{labels}{the labels to display}
 

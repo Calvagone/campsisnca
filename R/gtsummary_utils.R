@@ -87,10 +87,11 @@ computeTableSummary <- function(idata, stat_display, categorical) {
 #' @param data data frame code
 #' @param by variable
 #' @param stats stats to compute
+#' @param type type of the variables
 #' @param labels the labels to display
 #' @param digits the digits to be used for rounding
 #' @return data frame
-getTableSummaryCode <- function(variable, data, by, stats, labels, digits) {
+getTableSummaryCode <- function(variable, data, by, stats, type, labels, digits) {
   if (length(by) %in% c(0,1)) {
   retValue <- sprintf(
 "%s <- %s  %%>%% 
@@ -100,8 +101,7 @@ tbl_summary(
     %s
   ),
   type=list(
-    all_continuous() ~ \"continuous\",
-    all_categorical() ~ \"continuous\"
+    %s
   ),
   label=list(
     %s
@@ -111,7 +111,7 @@ tbl_summary(
   )
 ) %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by, stats, labels, digits)
+", variable, data, by, stats, type, labels, digits)
   
   } else if (length(by)==2) {
     retValue <- sprintf(
@@ -123,8 +123,7 @@ strata=%s,
     %s
   ),
   type=list(
-    all_continuous() ~ \"continuous\",
-    all_categorical() ~ \"continuous\"
+    %s
   ),
   label=list(
     %s
@@ -135,7 +134,7 @@ strata=%s,
 ),
 .combine_with=\"tbl_stack\") %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by[1], by[2], stats, labels, digits)    
+", variable, data, by[1], by[2], stats, type, labels, digits)    
 
 }
   return(retValue)
@@ -152,7 +151,30 @@ getStatisticsCode <- function(table) {
   
   retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
   
-  return(paste0(retValue, collapse=",\n"))
+  return(paste0(retValue, collapse=",\n    "))
+}
+
+#' 
+#' Get the variable type code for gtsummary.
+#' 
+#' @param table NCA table
+#' @return code
+getVariableTypeCode <- function(table, subscripts) {
+  # Always look at first NCA metric only
+  metrics <- table@list[[1]]
+  
+  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+    categorical <- x@categorical
+    if (categorical) {
+      typeStr <-  "categorical"
+    } else {
+      typeStr <-  "continuous"
+    }
+    type <- sprintf("%s ~ \"%s\"", addBackticks(x %>% getName()), typeStr)
+    return(type)
+  })
+  
+  return(paste0(retValue, collapse=",\n    "))
 }
 
 #' 
@@ -180,7 +202,7 @@ getLabelsCode <- function(table, subscripts) {
     return(label)
   })
 
-  return(paste0(retValue, collapse=",\n"))
+  return(paste0(retValue, collapse=",\n    "))
 }
 
 #' 
@@ -204,7 +226,7 @@ getDigitsCode <- function(table) {
   
   retValue <- retValue[retValue!=""]
   
-  return(paste0(retValue, collapse=",\n"))
+  return(paste0(retValue, collapse=",\n    "))
 }
 
 addBackticks <- function(x, only_when_necessary=TRUE) {

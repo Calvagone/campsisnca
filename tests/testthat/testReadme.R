@@ -156,3 +156,37 @@ test_that("Round your PK metrics (example 5)", {
   gtTableRegressionTest(gttable, "readme_example5")
 })
 
+
+test_that("Export custom metrics (example 6)", {
+  
+  custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x$TIME, .x$Y), name="Cmax custom", unit="ng/mL")
+  custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x$TIME, .x$Y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
+  
+  # Day 1
+  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+    add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2)) %>%
+    campsisnca::calculate()
+  
+  # Day 7 
+  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+    add(c(Auc(), Cmax(), Tmax(), custom1, custom2)) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()  
+  table <- table %>%
+    add(c(ncaD1, ncaD7))
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual") %>%
+    filter(id %in% c(1,2,3)) # Keep first 3
+  
+  outputRegressionTest(data=summary, filename="example6_summary")
+  outputRegressionTest(data=individual, filename="example6_individual")
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTableRegressionTest(gttable, "readme_example6")
+})
+
