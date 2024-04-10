@@ -47,3 +47,13 @@ test_that("Table can be reduced to 2 dimensions on demand", {
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "reduction_to_2dim")
 })
+
+test_that("Method statDisplayString on categorical data should work", {
+  
+  custom <- CustomMetric(x=campsis %>% timerange(0,24), variable="Y",
+                         fun=~(Cmax() %>% iValue(.x, .y)) > 12.5,
+                         name="Cmax > 12", unit="%", categorical=TRUE)
+
+  custom <- custom %>% campsisnca::calculate()
+  expect_equal(custom %>% statDisplayString(), "FALSE: 181 / 200 (91%) | TRUE: 19 / 200 (9.5%)")
+})
