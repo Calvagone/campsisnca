@@ -158,7 +158,7 @@ setMethod("statDisplayString", signature=c("nca_metric"), definition=function(ob
       categories <- unique(object@individual$value)
       if (length(comment)==length(categories)) {
         order <- order(categories)
-        retValue <- paste0(paste0(categories[order], ": ", comment[order]), collapse=" | ")
+        retValue <- paste0(paste0(categories[order], ": ", comment[order]), collapse=", ")
       } else {
         retValue <- "Can't derive stat display"
       }

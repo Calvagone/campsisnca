@@ -55,5 +55,5 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
 
   custom <- custom %>% campsisnca::calculate()
-  expect_equal(custom %>% statDisplayString(), "FALSE: 181 / 200 (91%) | TRUE: 19 / 200 (9.5%)")
+  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 181 / 200 (91%), TRUE: 19 / 200 (9.5%)")
 })
