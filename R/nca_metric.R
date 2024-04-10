@@ -14,7 +14,7 @@ setClass(
   "nca_metric",
   representation(
     x = "data.frame",             # specific dataframe
-    variable = "character",       # specific variable
+    variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
     individual = "data.frame",    # individual results
     summary = "data.frame",       # summary results
     name = "character",           # metric name (exported into header)

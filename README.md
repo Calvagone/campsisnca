@@ -363,10 +363,10 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 
 ``` r
 # Compute Cmax yourself using campsisnca
-custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x$TIME, .x$Y), name="Cmax custom", unit="ng/mL")
+custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="Cmax custom", unit="ng/mL")
 
 # Check if Cmax if higher than 12 ng/mL
-custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x$TIME, .x$Y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
+custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
 
 # Day 1
 ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%

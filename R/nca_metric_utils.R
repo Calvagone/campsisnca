@@ -48,7 +48,9 @@ metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, categoric
 standardise <- function(x, variable) {
   assertthat::assert_that(is.character(variable) && length(variable)==1, msg="variable must be a single character value")
   assertthat::assert_that(is.data.frame(x), msg="x is not a data frame")
-  assertthat::assert_that(variable %in% colnames(x), msg=paste0("Variable '", variable, "' not found in data frame"))
+  if (!is.na(variable)) {
+    assertthat::assert_that(variable %in% colnames(x), msg=paste0("Variable '", variable, "' not found in data frame"))
+  }
 
   # Use only observations
   x <- x %>% campsis::obsOnly()

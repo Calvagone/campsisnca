@@ -5,8 +5,11 @@ checkNATimes <- function(x, time_var="TIME") {
 }
 
 checkNAObservations <- function(x, variable) {
-  naObs <- x %>% dplyr::filter_at(.vars=variable, .vars_predicate=~is.na(.x))
-  assertthat::assert_that(nrow(naObs)==0, msg=paste0("Observations at times '", paste0(unique(naObs$TIME), collapse=",") , "' are NA"))
+  # Only make sense if variable is provided, i.e. not NA (like with the CustomMetricTbl)
+  if (!is.na(variable)) {
+    naObs <- x %>% dplyr::filter_at(.vars=variable, .vars_predicate=~is.na(.x))
+    assertthat::assert_that(nrow(naObs)==0, msg=paste0("Observations at times '", paste0(unique(naObs$TIME), collapse=",") , "' are NA"))
+  }
 }
 
 checkTimesAreIncreasing <- function(x) {
