@@ -44,7 +44,7 @@ getStatDisplayDefault <- function(categorical=FALSE) {
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
   object@individual <- iValues(object=object)
-  object@summary <- computeTableSummary(idata=object@individual, stat_display=object@stat_display, categorical=object@categorical)
+  object@summary <- computeTableSummary(object=object)
   return(object)    
 })
 

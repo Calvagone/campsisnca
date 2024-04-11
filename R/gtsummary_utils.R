@@ -51,26 +51,31 @@ extractTableInfo <- function(tbl) {
 #' 
 #' Compute table summary.
 #' 
-#' @param idata individual values for a given metric
-#' @param stat_display statistics display for gtsummary
-#' @param categorical logical value
+#' @param object NCA metric
 #' @return data frame
-#' @importFrom gtsummary tbl_summary
 #' @importFrom dplyr select
-computeTableSummary <- function(idata, stat_display, categorical) {
-  type <- ifelse(categorical, "categorical", "continuous")
-  gtTable <- idata %>%
-    dplyr::select(-id) %>%
-    gtsummary::tbl_summary(
-      by = NULL,
-      statistic = list(
-        value ~ stat_display
-      ),
-      type = list(
-        value ~ type
-      )
-    )
+computeTableSummary <- function(object) {
+  # Mock a table object with the given metric
+  object@name <- "value"
+  table <- NCAMetricsTable() %>%
+    add(NCAMetrics() %>% add(object))
+  
+  # Re-use 'standard' table generation code
+  stats <- getStatisticsCode(table)
+  type <- getVariableTypeCode(table)
+  labels <- getLabelsCode(table, subscripts=TRUE)
+  digits <- getDigitsCode(table)
 
+  individual <- object@individual %>%
+	  dplyr::select(-id)
+  code <- getTableSummaryCode(var="gtTable", data="individual", by="NULL", stats=stats, type=type, labels=labels, digits=digits)
+  gtTable <- tryCatch(
+    expr=eval(expr=parse(text=code)),
+    error=function(cond) {
+      return(sprintf("Failed to create gtsummary table: %s", cond$message))
+    })
+  
+  # Extract main info (-> stat_display)
   summary <- extractTableInfo(gtTable) %>%
     dplyr::select(-variable)
   
@@ -90,6 +95,7 @@ computeTableSummary <- function(idata, stat_display, categorical) {
 #' @param type type of the variables
 #' @param labels the labels to display
 #' @param digits the digits to be used for rounding
+#' @importFrom gtsummary tbl_summary modify_header
 #' @return data frame
 getTableSummaryCode <- function(variable, data, by, stats, type, labels, digits) {
   if (length(by) %in% c(0,1)) {

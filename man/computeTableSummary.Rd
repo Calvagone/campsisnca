@@ -4,14 +4,10 @@
 \alias{computeTableSummary}
 \title{Compute table summary.}
 \usage{
-computeTableSummary(idata, stat_display, categorical)
+computeTableSummary(object)
 }
 \arguments{
-\item{idata}{individual values for a given metric}
-
-\item{stat_display}{statistics display for gtsummary}
-
-\item{categorical}{logical value}
+\item{object}{NCA metric}
 }
 \value{
 data frame
