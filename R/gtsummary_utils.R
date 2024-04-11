@@ -241,9 +241,9 @@ addBackticks <- function(x) {
 
 factorUsingNaturalOrder <- function(by) {
   if (length(by)==1 && by != "NULL") {
-    return(sprintf("%%>%% mutate(%s=factor(%s, levels=unique(%s)))", by, by, by))
+    return(sprintf(" %%>%% mutate(%s=factor(%s, levels=unique(%s)))", by, by, by))
   } else if (length(by)==2) {
-    return(sprintf("%%>%% mutate(%s=factor(%s, levels=unique(%s)), %s=factor(%s, levels=unique(%s)))", by[1], by[1], by[1], by[2], by[2], by[2]))
+    return(sprintf(" %%>%% mutate(%s=factor(%s, levels=unique(%s)), %s=factor(%s, levels=unique(%s)))", by[1], by[1], by[1], by[2], by[2], by[2]))
   }
   return("")
 }
