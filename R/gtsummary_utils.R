@@ -100,7 +100,7 @@ computeTableSummary <- function(object) {
 getTableSummaryCode <- function(variable, data, by, stats, type, labels, digits) {
   if (length(by) %in% c(0,1)) {
   retValue <- sprintf(
-"%s <- %s  %%>%% 
+"%s <- %s%s  %%>%%
 tbl_summary(
   by=%s,
   statistic=list(
@@ -117,11 +117,11 @@ tbl_summary(
   )
 ) %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by, stats, type, labels, digits)
+", variable, data, factorUsingNaturalOrder(by), by, stats, type, labels, digits)
   
   } else if (length(by)==2) {
     retValue <- sprintf(
-"%s <- tbl_strata(data=%s,
+"%s <- tbl_strata(data=%s%s,
 strata=%s,
 ~.x %%>%% tbl_summary(
   by=%s,
@@ -140,7 +140,7 @@ strata=%s,
 ),
 .combine_with=\"tbl_stack\") %%>%%
 modify_header(label=\"**Metric**\")
-", variable, data, by[1], by[2], stats, type, labels, digits)    
+", variable, data, factorUsingNaturalOrder(by), by[1], by[2], stats, type, labels, digits)    
 
 }
   return(retValue)
@@ -237,5 +237,14 @@ getDigitsCode <- function(table) {
 
 addBackticks <- function(x) {
   return(paste0("`", x, "`")) 
+}
+
+factorUsingNaturalOrder <- function(by) {
+  if (length(by)==1 && by != "NULL") {
+    return(sprintf("%%>%% mutate(%s=factor(%s, levels=unique(%s)))", by, by, by))
+  } else if (length(by)==2) {
+    return(sprintf("%%>%% mutate(%s=factor(%s, levels=unique(%s)), %s=factor(%s, levels=unique(%s)))", by[1], by[1], by[1], by[2], by[2], by[2]))
+  }
+  return("")
 }
 
