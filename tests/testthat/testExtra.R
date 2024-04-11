@@ -50,12 +50,21 @@ test_that("Table can be reduced to 2 dimensions on demand", {
 
 test_that("Method statDisplayString on categorical data should work", {
   
-  custom <- CustomMetric(x=campsis %>% timerange(0,24), variable="Y",
+  custom1a <- CustomMetric(x=campsis %>% timerange(0,24), variable="Y",
                          fun=~(Cmax() %>% iValue(.x, .y)) > 12.5,
                          name="Cmax > 12", unit="%", categorical=TRUE)
 
-  custom <- custom %>% campsisnca::calculate()
-  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 181 / 200 (91%), TRUE: 19 / 200 (9.5%)")
+  custom1a <- custom1a %>% campsisnca::calculate()
+  expect_equal(custom1a %>% campsisnca::statDisplayString(), "FALSE: 181 / 200 (91%), TRUE: 19 / 200 (9.5%)")
+  
+  # Vice-versa
+  custom1b <- CustomMetric(x=campsis %>% timerange(0,24), variable="Y",
+                         fun=~(Cmax() %>% iValue(.x, .y)) <= 12.5,
+                         name="Cmax > 12", unit="%", categorical=TRUE)
+  
+  custom1b <- custom1b %>% campsisnca::calculate()
+  expect_equal(custom1b %>% campsisnca::statDisplayString(), "FALSE: 19 / 200 (9.5%), TRUE: 181 / 200 (91%)")
+  
 })
 
 test_that("Method statDisplayString works as expected when digits is provided", {
