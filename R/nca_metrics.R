@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateNCAMetrics <- function(object) {
-  return(c(expectOne(object, "variable"), expectOneOrMore(object, "scenario")))
+  return(c(expectOne(object, "variable")))
 }
 
 #' 
@@ -29,9 +29,12 @@ setClass(
 #' @param scenario character vector used to describe the current scenario.
 #' E.g. c(day="Day 1", condition="Fasted)
 #' @export
-NCAMetrics <- function(x=NULL, variable=NULL, scenario) {
+NCAMetrics <- function(x=NULL, variable=NULL, scenario=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
+  if (is.null(scenario)) {
+    scenario <- character()
+  }
   return(new("nca_metrics", x=x, variable=variable, scenario=scenario))
 }
 
@@ -97,4 +100,24 @@ setMethod("export", signature=c("nca_metrics", "dataframe_type"), definition=fun
     retValue <- retValue %>% dplyr::mutate(!!name := values[[which(name==names)]])
   }
   return(retValue)
+})
+
+#_______________________________________________________________________________
+#----                       reduceTo2Dimensions                             ----
+#_______________________________________________________________________________
+
+#' @rdname reduceTo2Dimensions
+setMethod("reduceTo2Dimensions", signature=c("nca_metrics"), definition=function(object, ...) {
+  scenario <- object@scenario
+  size <- length(scenario)
+  if (size > 2) {
+    names <- names(scenario)
+    values <- as.character(scenario)
+    hNames <- names[1:(size-1)]
+    hValues <- values[1:(size-1)]
+    hVec <- paste0(hValues, collapse=" / ")
+    names(hVec) <- paste0(hNames, collapse="_") # Variables concatenated with _
+    object@scenario <- c(hVec, scenario[size])
+  }
+  return(object)
 })

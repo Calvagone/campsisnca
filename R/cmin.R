@@ -23,37 +23,31 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Cmin" else name
   unit <- processUnit(unit)
-  return(new("cmin_metric", x=x, variable=variable, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("cmin_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname calculate
-setMethod("calculate", signature=c("cmin_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- cmin_delegate(x=object@x, variable=object@variable)
-  return(object %>% summariseIndividualData(level=level))    
+#' @rdname iValue
+setMethod("iValue", signature=c("cmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(min(value))    
 })
 
 #_______________________________________________________________________________
-#----                           implementation                              ----
+#----                           getLaTeXName                                ----
 #_______________________________________________________________________________
 
-#' 
-#' Compute Cmin.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @return individual Cmin
-#' @importFrom dplyr group_by slice transmute ungroup
-cmin_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.min(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
-}
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("cmin_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "min"))
+})
+

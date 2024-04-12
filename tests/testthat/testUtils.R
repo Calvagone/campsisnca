@@ -4,6 +4,29 @@
 # setwd("C:/prj/campsisnca/tests/")
 # testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
+overwriteNonRegressionFiles <- FALSE
+testFolder <- ""
+
+generateData1 <- function() {
+  rich_sampling <- c(0,1,2,4,6,8,12,16,24)
+  day1 <- rich_sampling
+  day2day6 <- c(2,3,4,5,6)*24
+  day7 <- rich_sampling + 6*24
+  day8day10 <- c(8,9,10)*24
+  
+  ds <- Dataset(200) %>%
+    add(Bolus(time=(0:6)*24, amount=1000)) %>%
+    add(Observations(times=c(day1, day2day6, day7, day8day10))) %>%
+    add(Covariate("BW", UniformDistribution(50,100)))
+  
+  model <- model_suite$testing$nonmem$advan4_trans4
+  cl <- model %>% campsismod::find(Equation("CL"))
+  model <- model %>% campsismod::replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
+  
+  campsis <- model %>% simulate(dataset=ds, dest="rxode2", seed=1, outvars="BW")
+  return(campsis)
+}
+
 convertMethod <- function(method) {
   if (method==1) {
     method_ <- "linear"
@@ -75,6 +98,40 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
   
   # Restrict DV to 6 decimals
   return(nmDataset)
+}
+
+#' Test there is no regression in the simulated output.
+#' 
+#' @param data newly generated data
+#' @param output variables to compare, if NULL, all column names are compared
+#' @param filename reference file
+#' @param times filter reference results on specific times, NULL by default
+#' @importFrom tibble as_tibble
+outputRegressionTest <- function(data, output=NULL, filename) {
+  if (is.null(output)) {
+    output <- colnames(data)
+  }
+  
+  results1 <- data %>%
+    dplyr::select(dplyr::all_of(output)) %>%
+    dplyr::mutate_if(is.numeric, round, digits=2)
+  
+  file <- paste0(testFolder, "non_regression/", paste0(filename, ".csv"))
+  
+  if (overwriteNonRegressionFiles) {
+    write.table(results1, file=file, sep=",", row.names=FALSE)
+  }
+  
+  results2 <- read.csv(file=file) %>% tibble::as_tibble()
+  expect_equal(results1, results2)
+}
+
+gtTableRegressionTest <- function(gttable, filename) {
+  
+  file <- paste0(testFolder, "non_regression/", paste0(filename, ".html"))
+  
+  gttable %>%
+    gt::gtsave(filename=file)
 }
 
 dataset1 <- function(seed=1, reload=TRUE) {

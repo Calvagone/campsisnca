@@ -1,10 +1,10 @@
 Type: Package
 Package: campsisnca
-Title: CAMPSIS NCA Package
-Version: 0.4.0
+Title: Campsis NCA Package
+Version: 1.0.0
 Authors@R: 
     person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
-Description: A useful package for executing non-compartmental analysis (NCA).
+Description: A useful package for executing non-compartmental analysis on simulated data (NCA).
 License: GPL (>= 3)
 URL: https://github.com/Calvagone/campsisnca
 BugReports: https://github.com/Calvagone/campsisnca/issues
@@ -15,8 +15,12 @@ Imports:
     assertthat,
     campsis (>= 1.4.0),
     dplyr,
+    gt,
+    gtsummary,
     kableExtra,
     purrr,
+    rlang,
+    stringr,
     tibble,
     tidyr
 Suggests: 
@@ -42,13 +46,13 @@ Collate:
     'export_type.R'
     'generic.R'
     'nca_metric_utils.R'
-    'rounding.R'
+    'gtsummary_utils.R'
     'filter_utils.R'
+    'rounding_utils.R'
     'theoretical_metrics.R'
     'nca_metric.R'
     'nca_metrics.R'
     'nca_metrics_table.R'
-    'table_export.R'
     'auc_trap_rule.R'
     'auc.R'
     'cmax.R'
@@ -58,3 +62,6 @@ Collate:
     'ctrough.R'
     'cavg.R'
     'thalf.R'
+    'theoretical_thalf.R'
+    'custom_metric.R'
+    

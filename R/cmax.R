@@ -23,37 +23,30 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL) {
+Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   x = processDataframe(x)
   variable = processVariable(variable)
   name <- if (is.null(name)) "Cmax" else name
   unit <- processUnit(unit)
-  return(new("cmax_metric", x=x, variable=variable, name=name, unit=unit))
+  digits <- deparseDigits(digits)
+  return(new("cmax_metric", x=x, variable=variable, name=name, unit=unit,
+             stat_display=stat_display, digits=digits))
 }
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
+#----                            iValue                                     ----
 #_______________________________________________________________________________
 
-#' @rdname calculate
-setMethod("calculate", signature=c("cmax_metric", "numeric"), definition=function(object, level, ...) {
-  object@individual <- cmax_delegate(x=object@x, variable=object@variable)
-  return(object %>% summariseIndividualData(level=level))    
+#' @rdname iValue
+setMethod("iValue", signature=c("cmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  return(max(value))    
 })
 
 #_______________________________________________________________________________
-#----                           implementation                              ----
+#----                           getLaTeXName                                ----
 #_______________________________________________________________________________
 
-#' 
-#' Compute Cmax.
-#' 
-#' @param x CAMPSIS/NONMEM dataframe
-#' @param variable dependent variable
-#' @return individual Cmax
-#' @importFrom dplyr group_by slice transmute ungroup
-cmax_delegate <- function(x, variable) {
-  x <- x %>% standardise(variable)
-  x <- x %>% dplyr::group_by(ID) %>% dplyr::slice(which.max(dv_variable)) %>% dplyr::ungroup()
-  return(x %>% dplyr::transmute(id=ID, value=dv_variable))
-}
+#' @rdname getLaTeXName
+setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
+  return(subscriptOccurrence(x %>% getName(), "max"))
+})
