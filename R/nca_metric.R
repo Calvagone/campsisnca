@@ -37,6 +37,16 @@ getStatDisplayDefault <- function(categorical=FALSE) {
   }
 }
 
+ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric_name, def_name) {
+  x <- processDataframe(x)
+  variable <- processVariable(variable)
+  name <- if (is.null(name)) def_name else name
+  unit <- processUnit(unit)
+  digits <- deparseDigits(digits)
+  metric <- new(metric_name, x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
+  return(metric)
+}
+
 #_______________________________________________________________________________
 #----                            calculate                                  ----
 #_______________________________________________________________________________

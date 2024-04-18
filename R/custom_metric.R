@@ -43,7 +43,7 @@ CustomMetric <- function(x=NULL, variable=NULL, fun, name=NULL, unit=NULL,
 #' @export
 CustomMetricTbl <- function(x=NULL, fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
-  x = processDataframe(x)
+  x <- processDataframe(x)
   name <- if (is.null(name)) "Custom" else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)

@@ -27,14 +27,11 @@ setClass(
 #' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
 #' @export
 Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x = processDataframe(x)
-  variable = processVariable(variable)
-  name <- if (is.null(name)) "Ctrough" else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="ctrough_metric", def_name="Ctrough")
   time <- if (is.null(time)) as.numeric(NA) else time
-  return(new("ctrough_metric", x=x, variable=variable, trough_time=time, name=name,
-             unit=unit, stat_display=stat_display, digits=digits))
+  metric@trough_time <- time
+  return(metric)
 }
 
 #_______________________________________________________________________________
