@@ -2,7 +2,7 @@
 library(testthat)
 library(dplyr)
 library(campsis)
-context("Test cmax method")
+context("Test custom metric")
 
 source(paste0("", "testUtils.R"))
 

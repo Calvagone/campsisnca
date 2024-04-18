@@ -2,7 +2,7 @@
 library(testthat)
 library(dplyr)
 library(campsis)
-context("Test cmax method")
+context("Test Cmax method")
 
 testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))

@@ -2,7 +2,7 @@
 library(testthat)
 library(dplyr)
 library(campsis)
-context("Test cmin method")
+context("Test Cmin method")
 
 testFolder <- ""
 source(paste0(testFolder, "testUtils.R"))
