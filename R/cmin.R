@@ -24,13 +24,22 @@ setClass(
 #' @inheritParams metricsParams
 #' @export
 Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x = processDataframe(x)
-  variable = processVariable(variable)
-  name <- if (is.null(name)) "Cmin" else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("cmin_metric", x=x, variable=variable, name=name, unit=unit,
-             stat_display=stat_display, digits=digits))
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="cmin_metric", def_name="Cmin")
+  metric@concentration <- TRUE
+  return(metric)
+}
+
+#' 
+#' Min.
+#' 
+#' @inheritParams metricsParams
+#' @export
+Min <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="cmin_metric", def_name="Min")
+  metric@concentration <- FALSE
+  return(metric)
 }
 
 #_______________________________________________________________________________

@@ -22,10 +22,11 @@ setClass(
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
     stat_display = "character",   # statistics display (see package gtsummary)
     categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
-    digits = "character"          # rounding digits definitions for gtsummary 
+    digits = "character",         # rounding digits definitions for gtsummary
+    concentration = "logical"     # concentration-related metric, NA by default
   ),
   contains="pmx_element",
-  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE),
+  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE, concentration=as.logical(NA)),
   validity=validateMetric
 )
 

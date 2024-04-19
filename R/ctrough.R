@@ -29,8 +29,34 @@ setClass(
 Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="ctrough_metric", def_name="Ctrough")
-  time <- if (is.null(time)) as.numeric(NA) else time
-  metric@trough_time <- time
+  metric@trough_time <- ifelse(is.null(time), as.numeric(NA), time)
+  metric@concentration <- TRUE
+  return(metric)
+}
+
+#' 
+#' Clast.
+#' 
+#' @inheritParams metricsParams
+#' @export
+Clast <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="ctrough_metric", def_name="Clast")
+  metric@trough_time <- as.numeric(NA)
+  metric@concentration <- TRUE
+  return(metric)
+}
+
+#' 
+#' Last value.
+#' 
+#' @inheritParams metricsParams
+#' @export
+Last <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="ctrough_metric", def_name="Last")
+  metric@trough_time <- as.numeric(NA)
+  metric@concentration <- FALSE
   return(metric)
 }
 
