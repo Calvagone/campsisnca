@@ -189,14 +189,18 @@ custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="Cmax custom", unit
 # Check if Cmax if higher than 12 ng/mL
 custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
 
+# Shortcut notation is also accepted
+custom3 <- CustomMetric(fun=~Cmax > 13, name="Cmax > 13", unit="%", categorical=TRUE)
+
+
 # Day 1
 ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-  add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2)) %>%
+  add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2, custom3)) %>%
   campsisnca::calculate()
 
 # Day 7 
 ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-  add(c(Cmax(), Tmax(), custom1, custom2)) %>%
+  add(c(Cmax(), Tmax(), custom1, custom2, custom3)) %>%
   campsisnca::calculate()
 
 table <- NCAMetricsTable()  

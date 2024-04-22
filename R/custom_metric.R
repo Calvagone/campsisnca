@@ -32,6 +32,11 @@ CustomMetric <- function(x=NULL, variable=NULL, fun, name=NULL, unit=NULL,
                             categorical=categorical, stat_display=stat_display, digits=digits)
   metric@variable <- processVariable(variable)
   metric@ivalue_tibble <- FALSE
+  
+  # Auto-replace known NCA metrics
+  metric <- metric %>%
+    replaceAll(pattern=NCAMetrics(), replacement="auto")
+  
   return(metric)
 }
 
@@ -86,3 +91,49 @@ deparseCustomFun <- function(fun) {
   }
   return(retValue)
 }
+
+#_______________________________________________________________________________
+#----                             replaceAll                                ----
+#_______________________________________________________________________________
+
+setMethod("replaceAll", signature=c("custom_metric", "character", "character"), definition=function(object, pattern, replacement, ...) {
+  object@custom_function <- gsub(paste0("([^a-zA-Z0-9_]|^)(", pattern, ")([^a-zA-Z0-9_\\(]|$)"), replacement=paste0("\\1", replacement, "\\3"), x=object@custom_function)
+  return(object)
+})
+
+setMethod("replaceAll", signature=c("custom_metric", "nca_metrics", "character"), definition=function(object, pattern, replacement, ...) {
+  replacement <- "auto"
+  object <- object %>%
+    replaceAll(pattern=Auc(), replacement=replacement, fun_name="Auc") %>%
+    replaceAll(pattern=CAt(), replacement=replacement, fun_name="CAt") %>%
+    replaceAll(pattern=Clast(), replacement=replacement, fun_name="Clast") %>%
+    replaceAll(pattern=Ctrough(), replacement=replacement, fun_name="Ctrough") %>%
+    replaceAll(pattern=ValueAt(), replacement=replacement, fun_name="ValueAt") %>%
+    replaceAll(pattern=Last(), replacement=replacement, fun_name="Last") %>%
+    replaceAll(pattern=Cavg(), replacement=replacement, fun_name="Cavg") %>%
+    replaceAll(pattern=Avg(), replacement=replacement, fun_name="Avg") %>%
+    replaceAll(pattern=Cmax(), replacement=replacement, fun_name="Cmax") %>%
+    replaceAll(pattern=Max(), replacement=replacement, fun_name="Max") %>%
+    replaceAll(pattern=Cmin(), replacement=replacement, fun_name="Cmin") %>%
+    replaceAll(pattern=Min(), replacement=replacement, fun_name="Min") %>%
+    replaceAll(pattern=Thalf(), replacement=replacement, fun_name="Thalf") %>%
+    replaceAll(pattern=Tmax(), replacement=replacement, fun_name="Tmax") %>%
+    replaceAll(pattern=Tmin(), replacement=replacement, fun_name="Tmin")
+  return(object)
+})
+
+setMethod("replaceAll", signature=c("custom_metric", "nca_metric", "character"), definition=function(object, pattern, replacement, fun_name=NULL, ...) {
+  # Replace all only available for non-tibble custom function
+  # In custom function tibble, variable of interest is unknown...
+  if (object@ivalue_tibble) {
+    return(object)
+  }
+  if (is.null(fun_name)) {
+    name <- pattern %>% getName()
+  } else {
+    name <- fun_name
+  }
+  object <- object %>%
+    replaceAll(pattern=name, replacement=sprintf("iValue(%s(),.x,.y)", name))
+  return(object)
+})
