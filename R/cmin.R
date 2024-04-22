@@ -23,7 +23,7 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="cmin_metric", def_name="Cmin")
   metric@concentration <- TRUE
@@ -35,7 +35,7 @@ Cmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
 #' 
 #' @inheritParams metricsParams
 #' @export
-Min <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Min <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="cmin_metric", def_name="Min")
   metric@concentration <- FALSE

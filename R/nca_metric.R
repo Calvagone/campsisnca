@@ -44,6 +44,9 @@ ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric
   name <- if (is.null(name)) def_name else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)
+  if (is.null(stat_display)) {
+    stat_display <- getStatDisplayDefault(categorical=FALSE) # Continuous by default
+  }
   metric <- new(metric_name, x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
   return(metric)
 }

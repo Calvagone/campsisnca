@@ -29,7 +29,7 @@ setClass(
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
 #' @export
-Auc <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Auc <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="auc_metric", def_name="AUC")
   assertthat::assert_that(method %in% c(1,2,3), msg="method must be 1, 2 or 3")

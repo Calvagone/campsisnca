@@ -23,7 +23,7 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="cavg_metric", def_name="Cavg")
   metric@concentration <- TRUE
@@ -35,7 +35,7 @@ Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
 #' 
 #' @inheritParams metricsParams
 #' @export
-Avg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Avg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="cavg_metric", def_name="Avg")
   metric@concentration <- FALSE

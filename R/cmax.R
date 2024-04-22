@@ -23,7 +23,7 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="cmax_metric", def_name="Cmax")
   metric@concentration <- TRUE
@@ -35,7 +35,7 @@ Cmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getSt
 #' 
 #' @inheritParams metricsParams
 #' @export
-Max <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Max <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="cmax_metric", def_name="Max")
   metric@concentration <- FALSE

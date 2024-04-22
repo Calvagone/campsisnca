@@ -26,7 +26,7 @@ setClass(
 #' @inheritParams metricsParams
 #' @param time time value to read Ctrough. If not provided, last concentrations from x will be returned.
 #' @export
-Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="ctrough_metric", def_name="Ctrough")
   metric@trough_time <- ifelse(is.null(time), as.numeric(NA), time)
@@ -39,7 +39,7 @@ Ctrough <- function(x=NULL, variable=NULL, time=NULL, name=NULL, unit=NULL, stat
 #' 
 #' @inheritParams metricsParams
 #' @export
-Clast <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Clast <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="ctrough_metric", def_name="Clast")
   metric@trough_time <- as.numeric(NA)
@@ -52,7 +52,7 @@ Clast <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getS
 #' 
 #' @inheritParams metricsParams
 #' @export
-Last <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
+Last <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="ctrough_metric", def_name="Last")
   metric@trough_time <- as.numeric(NA)

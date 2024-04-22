@@ -16,7 +16,7 @@ CustomMetric(
 )
 }
 \arguments{
-\item{x}{CAMPSIS/NONMEM dataframe}
+\item{x}{Campsis/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 
@@ -28,7 +28,7 @@ CustomMetric(
 
 \item{categorical}{categorical endpoint, logical}
 
-\item{stat_display}{statistics display (see package gtsummary)}
+\item{stat_display}{statistics display, default is '\{median\} [\{p5\}-\{p95\}]' for continuous data or '{n} / {N} ({p}\%)' for categorical data}
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
