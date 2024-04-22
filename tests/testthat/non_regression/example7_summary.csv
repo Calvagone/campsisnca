@@ -1,0 +1,5 @@
+"metric","stat","value"
+"AUC","geomean",904.49
+"AUC","geocv",35.32
+"Cavg","geomean",3.77
+"Cavg","geocv",35.32

@@ -30,3 +30,11 @@ cv <- function(x) {
 se <- function(x) {
   return(sd(x)/sqrt(length(x)))
 }
+
+adaptFootnote <- function(x) {
+  x <- x %>% replaceAll(pattern=VariablePattern("geomean"), replacement="Geometric Mean")
+  x <- x %>% replaceAll(pattern=VariablePattern("geocv"), replacement="Geometric CV")
+  x <- x %>% replaceAll(pattern=VariablePattern("cv"), replacement="Coefficient of Variation")
+  x <- x %>% replaceAll(pattern=VariablePattern("se"), replacement="Standard Error")
+  return(x)
+}

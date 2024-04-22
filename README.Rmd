@@ -71,8 +71,7 @@ ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y"
 These 2 metrics may be imported into a metrics table object, as follows:
 
 ```{r, message=FALSE}
-table <- NCAMetricsTable()  
-table <- table %>%
+table <- NCAMetricsTable() %>%
   add(c(ncaD1, ncaD7))
 ```
 
@@ -173,8 +172,7 @@ ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y"
   add(Auc(name="AUC4")) %>%
   campsisnca::calculate()
 
-table <- NCAMetricsTable()  
-table <- table %>%
+table <- NCAMetricsTable() %>%
   add(c(ncaD1, ncaD7))
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
@@ -203,9 +201,21 @@ ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y"
   add(c(Cmax(), Tmax(), custom1, custom2, custom3)) %>%
   campsisnca::calculate()
 
-table <- NCAMetricsTable()  
-table <- table %>%
+table <- NCAMetricsTable() %>%
   add(c(ncaD1, ncaD7))
+  
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+```
+
+### Example 7: Geometric mean / Geometric CV
+
+```{r, message=FALSE}
+nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  add(c(Auc(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
+  calculate()
+
+table <- NCAMetricsTable() %>%
+  add(nca)
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```

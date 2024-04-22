@@ -190,3 +190,25 @@ test_that("Export custom metrics (example 6)", {
   gtTableRegressionTest(gttable, "readme_example6")
 })
 
+test_that("Geometric Mean / Geometric CV (example 7)", {
+  
+  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+    add(c(Auc(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable() %>%
+    add(nca)
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual") %>%
+    filter(id %in% c(1,2,3)) # Keep first 3
+  
+  outputRegressionTest(data=summary, filename="example7_summary")
+  outputRegressionTest(data=individual, filename="example7_individual")
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTableRegressionTest(gttable, "readme_example7")
+})
