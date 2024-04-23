@@ -34,7 +34,7 @@ getStatDisplayDefault <- function(categorical=FALSE) {
   if (categorical) {
     return("{n} / {N} ({p}%)")
   } else {
-    return("{median} [{p5}-{p95}]")
+    return("{median} ({p5}–{p95})")
   }
 }
 
