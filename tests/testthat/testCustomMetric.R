@@ -21,6 +21,17 @@ test_that("Auto-replace of known NCA metrics works as expected", {
   custom3 <- custom3 %>%
     replaceAll(pattern=NCAMetrics(), replacement="auto")
   expect_equal(custom3@custom_function, "rlang::as_function(~max(.x$Y))") # I.e. no change
+  
+  custom4 <- CustomMetric(fun=~AUC > 100, name="AUC > 100", categorical=TRUE)
+  custom4 <- custom4 %>%
+    replaceAll(pattern=NCAMetrics(), replacement="auto")
+  expect_equal(custom4@custom_function, "rlang::as_function(~iValue(AUC(),.x,.y) > 100)")
+  
+  # Auc will be soon deprecated
+  custom5 <- CustomMetric(fun=~Auc > 100, name="AUC > 100", categorical=TRUE)
+  custom5 <- custom5 %>%
+    replaceAll(pattern=NCAMetrics(), replacement="auto")
+  expect_equal(custom5@custom_function, "rlang::as_function(~iValue(Auc(),.x,.y) > 100)")
 })
 
 

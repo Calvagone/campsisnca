@@ -105,6 +105,7 @@ setMethod("replaceAll", signature=c("custom_metric", "nca_metrics", "character")
   replacement <- "auto"
   object <- object %>%
     replaceAll(pattern=Auc(), replacement=replacement, fun_name="Auc") %>%
+    replaceAll(pattern=AUC(), replacement=replacement, fun_name="AUC") %>%
     replaceAll(pattern=CAt(), replacement=replacement, fun_name="CAt") %>%
     replaceAll(pattern=Clast(), replacement=replacement, fun_name="Clast") %>%
     replaceAll(pattern=Ctrough(), replacement=replacement, fun_name="Ctrough") %>%
