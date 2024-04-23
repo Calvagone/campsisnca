@@ -110,8 +110,9 @@ setMethod("iValue", signature=c("cat_metric", "numeric", "numeric"), definition=
 #' @rdname getLaTeXName
 setMethod("getLaTeXName", signature=c("cat_metric"), definition = function(x) {
   concentration <- x@concentration
+  retValue <- x %>% getName()
   if (concentration) {
-    retValue <- subscriptOccurrence(x %>% getName(), "trough")
+    retValue <- subscriptOccurrence(retValue, "trough")
     retValue <- subscriptOccurrence(retValue, "last")
   }
   return(retValue)
