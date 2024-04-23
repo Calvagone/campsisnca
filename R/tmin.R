@@ -23,14 +23,10 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x = processDataframe(x)
-  variable = processVariable(variable)
-  name <- if (is.null(name)) "tmin" else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("tmin_metric", x=x, variable=variable, name=name, unit=unit,
-             stat_display=stat_display, digits=digits))
+Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="tmin_metric", def_name="tmin")
+  return(metric)
 }
 
 #_______________________________________________________________________________

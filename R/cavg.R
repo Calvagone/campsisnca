@@ -23,14 +23,23 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x = processDataframe(x)
-  variable = processVariable(variable)
-  name <- if (is.null(name)) "Cavg" else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("cavg_metric", x=x, variable=variable, name=name, unit=unit,
-             stat_display=stat_display, digits=digits))
+Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="cavg_metric", def_name="Cavg")
+  metric@concentration <- TRUE
+  return(metric)
+}
+
+#' 
+#' Avg.
+#' 
+#' @inheritParams metricsParams
+#' @export
+Avg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="cavg_metric", def_name="Avg")
+  metric@concentration <- FALSE
+  return(metric)
 }
 
 #_______________________________________________________________________________

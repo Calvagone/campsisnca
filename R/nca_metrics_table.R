@@ -92,6 +92,14 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=func
 #' @importFrom stringr str_replace_all
 #' @export
 toGt <- function(x, subscripts=FALSE) {
+  
+  # Adapt footnote (conversion of custom statistics)
+  footnote <- x$table_styling$footnote
+  if (is(footnote, "tbl_df")) {
+    x$table_styling$footnote$footnote <- adaptFootnote(footnote$footnote)
+  }
+  
+  # Convert to GT table
   gtTable <- x %>%
     gtsummary::as_gt()
   

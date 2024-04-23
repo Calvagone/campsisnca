@@ -1,7 +1,7 @@
 Type: Package
 Package: campsisnca
 Title: Campsis NCA Package
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
 Description: A useful package for executing non-compartmental analysis on simulated data (NCA).
@@ -43,6 +43,7 @@ RoxygenNote: 7.2.3
 Collate:
     'check.R'
     'consistency_checks.R'
+    'stat_formula.R'
     'export_type.R'
     'generic.R'
     'nca_metric_utils.R'
@@ -59,7 +60,7 @@ Collate:
     'tmax.R'
     'cmin.R'
     'tmin.R'
-    'ctrough.R'
+    'cat.R'
     'cavg.R'
     'thalf.R'
     'theoretical_thalf.R'

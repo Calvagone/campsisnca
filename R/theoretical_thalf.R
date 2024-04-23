@@ -38,6 +38,7 @@ setClass(
     subtype = "character"
   ),
   contains="nca_metric",
+  prototype=prototype(subtype=as.character(NA)),
   validity=validateTheoreticalThalfMetric
 )
 
@@ -85,15 +86,14 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, only one key is possible: K
 #' @export
-Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x <- processDataframe(x)
-  map <- checkMap(map, thalf.1cpt=TRUE)
+Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "1cpt"
-  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
-             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
+  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  map <- checkMap(map, thalf.1cpt=TRUE)
+  metric@map <- map
+  metric@subtype <- subtype
+  return(metric)
 }
 
 #' 
@@ -102,15 +102,14 @@ Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getS
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x <- processDataframe(x)
-  map <- checkMap(map, thalf.1cpt=FALSE)
+Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.dist"
-  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
-             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
+  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  map <- checkMap(map, thalf.1cpt=FALSE)
+  metric@map <- map
+  metric@subtype <- subtype
+  return(metric)
 }
 
 #' 
@@ -119,15 +118,14 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x <- processDataframe(x)
-  map <- checkMap(map, thalf.1cpt=FALSE)
+Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.z"
-  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
-             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
+  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  map <- checkMap(map, thalf.1cpt=FALSE)
+  metric@map <- map
+  metric@subtype <- subtype
+  return(metric)
 }
 
 #' 
@@ -136,15 +134,14 @@ Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=ge
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=getStatDisplayDefault(), digits=NULL) {
-  x <- processDataframe(x)
-  map <- checkMap(map, thalf.1cpt=FALSE)
+Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.eff"
-  name <- if (is.null(name)) getDefaultTHalfName(subtype) else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
-  return(new("theoretical_thalf_metric", x=x, variable=as.character(NA), map=map,
-             subtype=subtype, name=name, unit=unit, stat_display=stat_display, digits=digits))
+  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  map <- checkMap(map, thalf.1cpt=FALSE)
+  metric@map <- map
+  metric@subtype <- subtype
+  return(metric)
 }
 
 #_______________________________________________________________________________

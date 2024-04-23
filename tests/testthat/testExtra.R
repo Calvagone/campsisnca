@@ -14,7 +14,7 @@ campsis <- generateData1()
 test_that("Column names can be non-standard", {
   
   nca <- NCAMetrics(x=campsis, variable="Y") %>%
-    add(c(Auc(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
+    add(c(AUC(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()
@@ -32,7 +32,7 @@ test_that("Column names can be non-standard", {
 test_that("Table can be reduced to 2 dimensions on demand", {
   
   nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(a="1", b="1", c="1")) %>%
-    add(Auc()) %>%
+    add(AUC()) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
@@ -71,14 +71,14 @@ test_that("Method statDisplayString works as expected when digits is provided", 
   
   cmax1 <- Cmax(x=campsis %>% timerange(0,24), variable="Y")
   cmax1 <- cmax1 %>% campsisnca::calculate()
-  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.13 [7.37-13.38]")
+  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.13 (7.37–13.38)")
   
   cmax2 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_sigfig(.x))
   cmax2 <- cmax2 %>% campsisnca::calculate()
-  expect_equal(cmax2 %>% campsisnca::statDisplayString(), "10 [7.4-13]")
+  expect_equal(cmax2 %>% campsisnca::statDisplayString(), "10 (7.4–13)")
   
   cmax3 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_number(.x))
   cmax3 <- cmax3 %>% campsisnca::calculate()
-  expect_equal(cmax3 %>% campsisnca::statDisplayString(), "10 [7-13]")
+  expect_equal(cmax3 %>% campsisnca::statDisplayString(), "10 (7–13)")
   
 })

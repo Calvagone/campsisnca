@@ -22,10 +22,11 @@ setClass(
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
     stat_display = "character",   # statistics display (see package gtsummary)
     categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
-    digits = "character"          # rounding digits definitions for gtsummary 
+    digits = "character",         # rounding digits definitions for gtsummary
+    concentration = "logical"     # concentration-related metric, NA by default
   ),
   contains="pmx_element",
-  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE),
+  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE, concentration=as.logical(NA)),
   validity=validateMetric
 )
 
@@ -33,8 +34,21 @@ getStatDisplayDefault <- function(categorical=FALSE) {
   if (categorical) {
     return("{n} / {N} ({p}%)")
   } else {
-    return("{median} [{p5}-{p95}]")
+    return("{median} ({p5}\U2013{p95})") # En dash
   }
+}
+
+ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric_name, def_name) {
+  x <- processDataframe(x)
+  variable <- processVariable(variable)
+  name <- if (is.null(name)) def_name else name
+  unit <- processUnit(unit)
+  digits <- deparseDigits(digits)
+  if (is.null(stat_display)) {
+    stat_display <- getStatDisplayDefault(categorical=FALSE) # Continuous by default
+  }
+  metric <- new(metric_name, x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
+  return(metric)
 }
 
 #_______________________________________________________________________________

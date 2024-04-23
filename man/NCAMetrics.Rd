@@ -7,7 +7,7 @@
 NCAMetrics(x = NULL, variable = NULL, scenario = NULL)
 }
 \arguments{
-\item{x}{CAMPSIS/NONMEM dataframe}
+\item{x}{Campsis/NONMEM dataframe}
 
 \item{variable}{dependent variable}
 
