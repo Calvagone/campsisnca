@@ -16,12 +16,12 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   
   # Day 1
   ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
+    add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
     campsisnca::calculate()
   
   # Day 7 
   ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
@@ -49,22 +49,22 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   
   scenarioD1_a <- c(day="Day 1", bw_range="BW range: 50-75")
   ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a) %>% 
-    add(c(Auc(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
+    add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
     campsisnca::calculate()
   
   scenarioD7_a <- c(day="Day 7", bw_range="BW range: 50-75")
   ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a) %>%
-    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
     campsisnca::calculate()
   
   scenarioD1_b <- c(day="Day 1", bw_range="BW range: 75-100")
   ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b) %>%
-    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
     campsisnca::calculate()
   
   scenarioD7_b <- c(day="Day 7", bw_range="BW range: 75-100")
   ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b) %>%
-    add(c(Auc(), Cmax(), Tmax(), Ctrough())) %>%
+    add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable() %>%
@@ -134,18 +134,18 @@ test_that("Round your PK metrics (example 5)", {
   
   # Day 1
   ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(Auc(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
-    add(Auc(digits=c(1,2,2), name="AUC2")) %>% # Respectively 1/2/2 digit(s) after decimal for med, p5 and p95
-    add(Auc(digits=~signif(.x, 2), name="AUC3")) %>% # 2 significant digits only
-    add(Auc(digits=list(~round(.x/5)*5, ~round(.x, 1) , ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
+    add(AUC(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
+    add(AUC(digits=c(1,2,2), name="AUC2")) %>% # Respectively 1/2/2 digit(s) after decimal for med, p5 and p95
+    add(AUC(digits=~signif(.x, 2), name="AUC3")) %>% # 2 significant digits only
+    add(AUC(digits=list(~round(.x/5)*5, ~round(.x, 1) , ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
     campsisnca::calculate()
   
   # Day 7 
   ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(Auc(name="AUC1")) %>%
-    add(Auc(name="AUC2")) %>%
-    add(Auc(name="AUC3")) %>%
-    add(Auc(name="AUC4")) %>%
+    add(AUC(name="AUC1")) %>%
+    add(AUC(name="AUC2")) %>%
+    add(AUC(name="AUC3")) %>%
+    add(AUC(name="AUC4")) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
@@ -193,7 +193,7 @@ test_that("Export custom metrics (example 6)", {
 test_that("Geometric Mean / Geometric CV (example 7)", {
   
   nca <- NCAMetrics(x=campsis, variable="Y") %>%
-    add(c(Auc(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
+    add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable() %>%

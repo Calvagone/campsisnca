@@ -14,7 +14,7 @@ campsis <- generateData1()
 test_that("Column names can be non-standard", {
   
   nca <- NCAMetrics(x=campsis, variable="Y") %>%
-    add(c(Auc(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
+    add(c(AUC(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()
@@ -32,7 +32,7 @@ test_that("Column names can be non-standard", {
 test_that("Table can be reduced to 2 dimensions on demand", {
   
   nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(a="1", b="1", c="1")) %>%
-    add(Auc()) %>%
+    add(AUC()) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
