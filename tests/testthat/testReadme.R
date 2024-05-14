@@ -188,6 +188,9 @@ test_that("Export custom metrics (example 6)", {
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example6")
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE)
+  gtTableRegressionTest(gttable, "readme_example6_all_levels")
 })
 
 test_that("Geometric Mean / Geometric CV (example 7)", {

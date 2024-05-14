@@ -7,7 +7,7 @@
 \usage{
 generateTableCode(object, subscripts = NULL, max_2dim = NULL, ...)
 
-\S4method{generateTableCode}{nca_metrics_table,logical,logical}(object, subscripts = NULL, max_2dim = NULL, ...)
+\S4method{generateTableCode}{nca_metrics_table,logical,logical}(object, subscripts, all_dichotomous_levels, max_2dim, ...)
 }
 \arguments{
 \item{object}{table object}

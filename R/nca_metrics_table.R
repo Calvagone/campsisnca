@@ -61,8 +61,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, subscripts=FALSE, ...) {
-  code <- object %>% generateTableCode(subscripts=subscripts)
+setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, subscripts=FALSE, all_dichotomous_levels=FALSE, ...) {
+  code <- object %>% generateTableCode(subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels)
   table <- object # Table variable needs to be there!
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
@@ -72,9 +72,9 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definiti
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=function(object, dest, subscripts=FALSE, ...) {
+setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=function(object, dest, subscripts=FALSE, all_dichotomous_levels=FALSE, ...) {
   gtsummaryTable <- object %>%
-    export(dest=new("gtsummary_type"), subscripts=subscripts, ...)
+    export(dest=new("gtsummary_type"), subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, ...)
   
   gtTable <- gtsummaryTable %>%
     toGt(subscripts=subscripts)
@@ -120,7 +120,7 @@ toGt <- function(x, subscripts=FALSE) {
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, max_2dim, ...) {
+setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, all_dichotomous_levels, max_2dim, ...) {
   
   if (max_2dim) {
     init <- "individual <- table %>% reduceTo2Dimensions() %>% export(dest=\"dataframe\", type=\"individual_wide\")"
@@ -133,7 +133,7 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   stratVariables <- unique(scenarios$name)
   
   stats <- getStatisticsCode(object)
-  type <- getVariableTypeCode(object)
+  type <- getVariableTypeCode(object, all_dichotomous_levels=all_dichotomous_levels)
   labels <- getLabelsCode(object, subscripts=subscripts)
   digits <- getDigitsCode(object)
   

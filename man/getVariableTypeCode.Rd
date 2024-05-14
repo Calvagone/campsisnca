@@ -4,10 +4,12 @@
 \alias{getVariableTypeCode}
 \title{Get the variable type code for gtsummary.}
 \usage{
-getVariableTypeCode(table)
+getVariableTypeCode(table, all_dichotomous_levels)
 }
 \arguments{
 \item{table}{NCA table}
+
+\item{all_dichotomous_levels}{show all dichotomous levels (0 and 1) when data is dichotomous}
 }
 \value{
 code

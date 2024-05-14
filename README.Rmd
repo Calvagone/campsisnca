@@ -203,8 +203,11 @@ ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y"
 
 table <- NCAMetricsTable() %>%
   add(c(ncaD1, ncaD7))
-  
+
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+
+# Alternatively, all dichotomous levels can be shown as well:
+table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE) %>% as_raw_html()
 ```
 
 ### Example 7: Geometric mean / Geometric CV
