@@ -254,3 +254,13 @@ factorUsingNaturalOrder <- function(by) {
   return("")
 }
 
+addPipeLayer <- function(x, layer) {
+  assertthat::assert_that(x %>% length() != 0, msg="x cannot be length 0")
+  x[x %>% length()] <- paste0(x[x %>% length()], " %>%")
+  return(x %>% append(paste0(getDefaultIndent(), layer)))
+}
+
+getDefaultIndent <- function() {
+  return("\t")
+}
+

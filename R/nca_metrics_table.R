@@ -54,8 +54,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
     retValue <- retValue %>%
-      tidyr::pivot_wider(names_from=metric, values_from=value) %>%
-      dplyr::select(-id) # Automatically remove id column (since 1 row per individual in wide format)
+      tidyr::pivot_wider(names_from=metric, values_from=value)
   }
   
   return(retValue)
@@ -122,12 +121,15 @@ toGt <- function(x, subscripts=FALSE) {
 #' @rdname generateTableCode
 setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, all_dichotomous_levels, max_2dim, ...) {
   
+  init <- "individual <- table"
   if (max_2dim) {
-    init <- "individual <- table %>% reduceTo2Dimensions() %>% export(dest=\"dataframe\", type=\"individual_wide\")"
+    init <- init %>%
+      addPipeLayer("reduceTo2Dimensions()")
     object <- object %>% reduceTo2Dimensions()
-  } else {
-    init <- "individual <- table %>% export(dest=\"dataframe\", type=\"individual_wide\")"
   }
+  init <- init %>%
+    addPipeLayer("export(dest=\"dataframe\", type=\"individual_wide\")") %>%
+    addPipeLayer("dplyr::select(-id)")
   
   scenarios <- object %>% getScenarios()
   stratVariables <- unique(scenarios$name)
