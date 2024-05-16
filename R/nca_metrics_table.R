@@ -47,15 +47,6 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   
   retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
   
-  # # Remove names on values
-  # retValue <- retValue %>%
-  #   dplyr::mutate(value=as.numeric(value))
-  
-  # if (type == "individual" || type == "individual_wide") {
-  #   retValue <- retValue %>%
-  #     dplyr::mutate(discrete_value=as.character(discrete_value))
-  # }
-  
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
     # browser()
@@ -68,6 +59,24 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
       dplyr::select(-dplyr::all_of(c("value", "categorical"))) %>%
       tidyr::pivot_wider(names_from=metric, values_from=discrete_value)
     
+    categoricalVars <- retValue %>%
+      dplyr::filter(categorical) %>%
+      dplyr::pull(metric)
+    
+    # Force "TRUE" or "FALSE" to be recognised as logical
+    # Otherwise, auto-detection of dichotomous data will not work with gtsummary
+    if (length(categoricalVars) > 0) {
+      autoCastLogical <- function(x) {
+        if (all(x %in% c("TRUE", "FALSE"))) {
+          return(as.logical(x))
+        } else {
+          return(x)
+        }
+      }
+      categoricalData <- categoricalData %>%
+        dplyr::mutate(dplyr::across(categoricalVars, autoCastLogical))
+    }
+
     by <- c("id", names(object@list[[1]]@scenario))
     retValue <- continuousData %>%
       dplyr::left_join(categoricalData, by=by)

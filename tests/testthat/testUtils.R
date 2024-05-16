@@ -5,7 +5,7 @@
 # testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 overwriteNonRegressionFiles <- FALSE
-testFolder <- ""
+testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 generateData1 <- function() {
   rich_sampling <- c(0,1,2,4,6,8,12,16,24)
@@ -123,6 +123,11 @@ outputRegressionTest <- function(data, output=NULL, filename) {
   }
   
   results2 <- read.csv(file=file) %>% tibble::as_tibble()
+  if ("discrete_value" %in% colnames(results2)) {
+    # Otherwise, read as logical if only 2 states
+    results2 <- results2 %>%
+      dplyr::mutate(discrete_value=as.character(discrete_value))
+  }
   expect_equal(results1, results2)
 }
 

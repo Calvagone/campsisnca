@@ -132,7 +132,6 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     
     retValue <- tibble::tibble(metric=object %>% getName(), individual)
     
-
   } else {
     stop("Argument type can only be 'summary', 'individual' or 'individual_wide'.")
   }

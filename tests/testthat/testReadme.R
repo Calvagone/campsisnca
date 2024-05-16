@@ -8,7 +8,7 @@ library(gt)
 
 context("Test all functionalities presented in the README")
 
-source(paste0("", "testUtils.R"))
+source(paste0("C:/prj/campsisnca/tests/testthat/", "testUtils.R"))
 
 campsis <- generateData1()
 
@@ -33,6 +33,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
+    select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
   outputRegressionTest(data=summary, filename="example1_summary")
@@ -75,6 +76,7 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
+    select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
   outputRegressionTest(data=summary, filename="example2_summary")
@@ -98,6 +100,7 @@ test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
+    select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
   outputRegressionTest(data=summary, filename="example3_summary")
@@ -121,6 +124,7 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
+    select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
   outputRegressionTest(data=summary, filename="example4_summary")
@@ -207,6 +211,7 @@ test_that("Geometric Mean / Geometric CV (example 7)", {
   
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
+    select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
   outputRegressionTest(data=summary, filename="example7_summary")
@@ -214,4 +219,49 @@ test_that("Geometric Mean / Geometric CV (example 7)", {
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example7")
+})
+
+test_that("Stats on categorical data with more than 2 levels (example 8)", {
+  
+  getCategory <- function(.x, .y) {
+    values <- Cmax() %>% iValue(.x, .y)
+    retValue <- dplyr::case_when(
+      values < 10 ~ "(1) < 10 ng/mL",
+      values >= 10 & values <= 15 ~ "(2) 10-15 ng/mL",
+      values > 15 ~ "(3) > 15 ng/mL",
+    )
+    return(retValue)
+  }
+
+  # Day 1
+  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+    add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
+    campsisnca::calculate()
+  
+  # Day 7 
+  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+    add(c(Cmax(), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()  
+  table <- table %>%
+    add(c(ncaD1, ncaD7))
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual_wide") %>%
+    filter(id %in% seq_len(10)) # Keep first 10
+  
+  outputRegressionTest(data=summary, filename="example8_summary")
+  outputRegressionTest(data=individual %>% rename(Categories=`Cmax categories`), filename="example8_individual")
+  
+  # Because there are 3 levels (and not 2), both table below are exactly similar
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTableRegressionTest(gttable, "readme_example8")
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE)
+  gtTableRegressionTest(gttable, "readme_example8_all_levels")
+  
 })
