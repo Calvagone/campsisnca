@@ -74,7 +74,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
         }
       }
       categoricalData <- categoricalData %>%
-        dplyr::mutate(dplyr::across(categoricalVars, autoCastLogical))
+        dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
     }
 
     by <- c("id", names(object@list[[1]]@scenario))
