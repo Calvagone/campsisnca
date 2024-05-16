@@ -41,7 +41,7 @@ extractTableInfo <- function(tbl) {
       dplyr::select(dplyr::all_of(c("variable", stats))) %>%
       # rename(!!by:=by) %>%
       tidyr::pivot_longer(cols=dplyr::all_of(stats), names_to="stat")
-    
+
     ret <- dplyr::bind_rows(ret, tmp)
   }
   

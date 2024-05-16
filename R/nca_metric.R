@@ -107,13 +107,31 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     if (nrow(object@summary) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
-    retValue <- tibble::tibble(metric=object %>% getName(), object@summary)
+    retValue <- tibble::tibble(metric=object %>% getName(), object@summary) %>%
+      dplyr::mutate(value=as.numeric(value)) # Remove names on values (e.g. if quantile was used)
   
   } else if (type == "individual" || type == "individual_wide") {
     if (nrow(object@individual) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
-    retValue <- tibble::tibble(metric=object %>% getName(), object@individual)
+    # Always 2 columns 'value' or 'discrete_value' based on field categorical
+    individual <- object@individual
+    if (object@categorical) {
+      individual <- individual %>%
+        dplyr::mutate(discrete_value=as.character(value)) %>%
+        dplyr::mutate(value=as.numeric(NA)) %>%
+        dplyr::relocate(dplyr::all_of(c("value", "discrete_value"))) # value first
+    } else {
+      individual <- individual %>%
+        dplyr::mutate(value=as.numeric(value)) %>%
+        dplyr::mutate(discrete_value=as.character(NA))
+    }
+    # Keep track of categorical in dataframe
+    individual <- individual %>%
+      dplyr::mutate(categorical=object@categorical)
+    
+    retValue <- tibble::tibble(metric=object %>% getName(), individual)
+    
 
   } else {
     stop("Argument type can only be 'summary', 'individual' or 'individual_wide'.")
