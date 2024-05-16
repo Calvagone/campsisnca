@@ -92,7 +92,7 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 Please note the individual metrics can also be exported to  a dataframe using the `export` function as follows:
 
 ```{r, message=FALSE}
-table %>% export(dest="dataframe", type="individual")
+table %>% export(dest="dataframe", type="individual_wide")
 ```
 
 ### Example 2: PK metrics at Day 1 and Day 7 for different body weight ranges
@@ -219,6 +219,36 @@ nca <- NCAMetrics(x=campsis, variable="Y") %>%
 
 table <- NCAMetricsTable() %>%
   add(nca)
+  
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+```
+
+### Example 8: Statistics on categorical data with more than 2 levels
+
+```{r, message=FALSE}
+  getCategory <- function(.x, .y) {
+    values <- Cmax() %>% iValue(.x, .y)
+    retValue <- dplyr::case_when(
+      values < 10 ~ "(1) < 10 ng/mL",
+      values >= 10 & values <= 15 ~ "(2) 10-15 ng/mL",
+      values > 15 ~ "(3) > 15 ng/mL",
+    )
+    return(retValue)
+  }
+
+  # Day 1
+  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+    add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
+    campsisnca::calculate()
+  
+  # Day 7 
+  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+    add(c(Cmax(), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()  
+  table <- table %>%
+    add(c(ncaD1, ncaD7))
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```

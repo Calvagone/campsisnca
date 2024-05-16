@@ -5,7 +5,7 @@
 # testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 overwriteNonRegressionFiles <- FALSE
-testFolder <- "C:/prj/campsisnca/tests/testthat/"
+testFolder <- ""
 
 generateData1 <- function() {
   rich_sampling <- c(0,1,2,4,6,8,12,16,24)

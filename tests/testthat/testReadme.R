@@ -8,7 +8,7 @@ library(gt)
 
 context("Test all functionalities presented in the README")
 
-source(paste0("C:/prj/campsisnca/tests/testthat/", "testUtils.R"))
+source(paste0("", "testUtils.R"))
 
 campsis <- generateData1()
 
