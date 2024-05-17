@@ -42,6 +42,7 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 })
 
 #' @importFrom purrr map_df
+#' @importFrom dplyr all_of filter full_join mutate select pull
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
@@ -79,7 +80,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
 
     by <- c("id", names(object@list[[1]]@scenario))
     retValue <- continuousData %>%
-      dplyr::left_join(categoricalData, by=by)
+      dplyr::full_join(categoricalData, by=by)
   }
   
   if (type == "individual") {

@@ -82,3 +82,34 @@ test_that("Method statDisplayString works as expected when digits is provided", 
   expect_equal(cmax3 %>% campsisnca::statDisplayString(), "10 (7–13)")
   
 })
+
+test_that("Summary stats on categorical data only should work as expected", {
+  
+  getCategory <- ~dplyr::case_when(Cmax < 10 ~ "(1) < 10 ng/mL", Cmax >= 10 & Cmax <= 15 ~ "(2) 10-15 ng/mL", Cmax > 15 ~ "(3) > 15 ng/mL")
+  
+  # Day 1
+  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    campsisnca::calculate()
+  
+  # Day 7 
+  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()  
+  table <- table %>%
+    add(c(ncaD1, ncaD7))
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  expect_equal(nrow(summary), 6) # 2 days * 3 categories * 1 stat
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual_wide")
+  
+  subjects <- length(unique(campsis$ID))
+  expect_equal(nrow(individual), subjects*2) # subjects * 2 categories
+  expect_equal(length(unique(individual$`Cmax categories`)), 3)
+})

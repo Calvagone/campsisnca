@@ -519,6 +519,9 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
     return(retValue)
   }
 
+  # Or equivalently, the 1-line purrr-style lambda expression
+  # getCategory <- ~case_when(Cmax < 10 ~ "(1) < 10 ng/mL", Cmax >= 10 & Cmax <= 15 ~ "(2) 10-15 ng/mL", Cmax > 15 ~ "(3) > 15 ng/mL")
+
   # Day 1
   ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
     add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
