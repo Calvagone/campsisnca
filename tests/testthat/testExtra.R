@@ -113,3 +113,23 @@ test_that("Summary stats on categorical data only should work as expected", {
   expect_equal(nrow(individual), subjects*2) # subjects * 2 categories
   expect_equal(length(unique(individual$`Cmax categories`)), 3)
 })
+
+test_that("Order of metrics when 'individual_wide' is requested should be respected", {
+  # Day 7 
+  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+    add(Cmax()) %>%
+    add(c(CustomMetric(fun=~Cmax > 10, name="Cmax > 10", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    add(AUC()) %>%
+    add(c(CustomMetric(fun=~Cmax > 15, name="Cmax > 15", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()  
+  table <- table %>%
+    add(c(ncaD7))
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual_wide")
+  
+  colnames <- colnames(individual)
+  expect_equal(colnames, c("id", "day", "Cmax", "Cmax > 10", "AUC", "Cmax > 15"))
+})

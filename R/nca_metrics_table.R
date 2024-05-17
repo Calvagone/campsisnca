@@ -42,7 +42,7 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 })
 
 #' @importFrom purrr map_df
-#' @importFrom dplyr all_of filter full_join mutate select pull
+#' @importFrom dplyr all_of any_of filter full_join mutate select pull
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
@@ -50,7 +50,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
-    # browser()
+    allMetrics <- unique(retValue$metric)
+    
     continuousData <- retValue %>%
       dplyr::filter(!categorical) %>%
       dplyr::select(-dplyr::all_of(c("discrete_value", "categorical"))) %>%
@@ -80,7 +81,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
 
     by <- c("id", names(object@list[[1]]@scenario))
     retValue <- continuousData %>%
-      dplyr::full_join(categoricalData, by=by)
+      dplyr::full_join(categoricalData, by=by) %>%
+      dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
   }
   
   if (type == "individual") {
