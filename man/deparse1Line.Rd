@@ -2,8 +2,7 @@
 % Please edit documentation in R/rounding_utils.R
 \name{deparse1Line}
 \alias{deparse1Line}
-\title{Custom deparse function. Works similarly to deparse1.
-However, lines are trimmed before being concatenated.}
+\title{Deparse 1 line.}
 \usage{
 deparse1Line(x)
 }
@@ -14,6 +13,5 @@ deparse1Line(x)
 a single string
 }
 \description{
-Custom deparse function. Works similarly to deparse1.
-However, lines are trimmed before being concatenated.
+Deparse 1 line.
 }

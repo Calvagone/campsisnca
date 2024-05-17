@@ -42,27 +42,60 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 })
 
 #' @importFrom purrr map_df
+#' @importFrom dplyr all_of any_of filter full_join mutate select pull
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
   retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
   
-  # Remove names on values
-  retValue <- retValue %>%
-    mutate(value=as.numeric(value))
-  
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
+    allMetrics <- unique(retValue$metric)
+    
+    continuousData <- retValue %>%
+      dplyr::filter(!categorical) %>%
+      dplyr::select(-dplyr::all_of(c("discrete_value", "categorical"))) %>%
+      tidyr::pivot_wider(names_from=metric, values_from=value)
+    categoricalData <- retValue %>%
+      dplyr::filter(categorical) %>%
+      dplyr::select(-dplyr::all_of(c("value", "categorical"))) %>%
+      tidyr::pivot_wider(names_from=metric, values_from=discrete_value)
+    
+    categoricalVars <- retValue %>%
+      dplyr::filter(categorical) %>%
+      dplyr::pull(metric)
+    
+    # Force "TRUE" or "FALSE" to be recognised as logical
+    # Otherwise, auto-detection of dichotomous data will not work with gtsummary
+    if (length(categoricalVars) > 0) {
+      autoCastLogical <- function(x) {
+        if (all(x %in% c("TRUE", "FALSE"))) {
+          return(as.logical(x))
+        } else {
+          return(x)
+        }
+      }
+      categoricalData <- categoricalData %>%
+        dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
+    }
+
+    by <- c("id", names(object@list[[1]]@scenario))
+    retValue <- continuousData %>%
+      dplyr::full_join(categoricalData, by=by) %>%
+      dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
+  }
+  
+  if (type == "individual") {
+    # Categorical not needed since 2 columns 'value' or 'discrete_value' 
     retValue <- retValue %>%
-      tidyr::pivot_wider(names_from=metric, values_from=value) %>%
-      dplyr::select(-id) # Automatically remove id column (since 1 row per individual in wide format)
+      dplyr::select(-dplyr::all_of(c("categorical")))
   }
   
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, subscripts=FALSE, ...) {
-  code <- object %>% generateTableCode(subscripts=subscripts)
+setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, subscripts=FALSE, all_dichotomous_levels=FALSE, ...) {
+  code <- object %>% generateTableCode(subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels)
   table <- object # Table variable needs to be there!
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
@@ -72,9 +105,9 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definiti
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=function(object, dest, subscripts=FALSE, ...) {
+setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=function(object, dest, subscripts=FALSE, all_dichotomous_levels=FALSE, ...) {
   gtsummaryTable <- object %>%
-    export(dest=new("gtsummary_type"), subscripts=subscripts, ...)
+    export(dest=new("gtsummary_type"), subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, ...)
   
   gtTable <- gtsummaryTable %>%
     toGt(subscripts=subscripts)
@@ -120,20 +153,23 @@ toGt <- function(x, subscripts=FALSE) {
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, max_2dim, ...) {
+setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, all_dichotomous_levels, max_2dim, ...) {
   
+  init <- "individual <- table"
   if (max_2dim) {
-    init <- "individual <- table %>% reduceTo2Dimensions() %>% export(dest=\"dataframe\", type=\"individual_wide\")"
+    init <- init %>%
+      addPipeLayer("reduceTo2Dimensions()")
     object <- object %>% reduceTo2Dimensions()
-  } else {
-    init <- "individual <- table %>% export(dest=\"dataframe\", type=\"individual_wide\")"
   }
+  init <- init %>%
+    addPipeLayer("export(dest=\"dataframe\", type=\"individual_wide\")") %>%
+    addPipeLayer("dplyr::select(-id)")
   
   scenarios <- object %>% getScenarios()
   stratVariables <- unique(scenarios$name)
   
   stats <- getStatisticsCode(object)
-  type <- getVariableTypeCode(object)
+  type <- getVariableTypeCode(object, all_dichotomous_levels=all_dichotomous_levels)
   labels <- getLabelsCode(object, subscripts=subscripts)
   digits <- getDigitsCode(object)
   

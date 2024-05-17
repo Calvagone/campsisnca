@@ -1,13 +1,13 @@
 
 #' 
-#' Custom deparse function. Works similarly to deparse1.
-#' However, lines are trimmed before being concatenated.
+#' Deparse 1 line.
 #' 
 #' @param x expression to deparse
 #' @return a single string
 #' 
 deparse1Line <- function(x) {
-  return(paste0(trimws(deparse(x)), collapse = ""))
+  # return(paste0(trimws(deparse(x)), collapse = ""))
+  return(deparse1(x, collapse="\n"))
 }
 
 #' 

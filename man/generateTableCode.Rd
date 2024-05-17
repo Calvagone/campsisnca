@@ -5,14 +5,28 @@
 \alias{generateTableCode,nca_metrics_table,logical,logical-method}
 \title{Generate table code.}
 \usage{
-generateTableCode(object, subscripts = NULL, max_2dim = NULL, ...)
+generateTableCode(
+  object,
+  subscripts = NULL,
+  all_dichotomous_levels = NULL,
+  max_2dim = NULL,
+  ...
+)
 
-\S4method{generateTableCode}{nca_metrics_table,logical,logical}(object, subscripts = NULL, max_2dim = NULL, ...)
+\S4method{generateTableCode}{nca_metrics_table,logical,logical}(
+  object,
+  subscripts = NULL,
+  all_dichotomous_levels = NULL,
+  max_2dim = NULL,
+  ...
+)
 }
 \arguments{
 \item{object}{table object}
 
 \item{subscripts}{use LaTeX subcripts/superscripts notation when writing labels}
+
+\item{all_dichotomous_levels}{show all dichotomous levels (0 and 1) when data is dichotomous, default is FALSE}
 
 \item{max_2dim}{if TRUE, table will be reduced to 2 dimensions}
 

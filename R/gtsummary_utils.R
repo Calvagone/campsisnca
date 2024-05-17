@@ -41,7 +41,7 @@ extractTableInfo <- function(tbl) {
       dplyr::select(dplyr::all_of(c("variable", stats))) %>%
       # rename(!!by:=by) %>%
       tidyr::pivot_longer(cols=dplyr::all_of(stats), names_to="stat")
-    
+
     ret <- dplyr::bind_rows(ret, tmp)
   }
   
@@ -62,7 +62,7 @@ computeTableSummary <- function(object) {
   
   # Re-use 'standard' table generation code
   stats <- getStatisticsCode(table)
-  type <- getVariableTypeCode(table)
+  type <- getVariableTypeCode(table, all_dichotomous_levels=TRUE) # We expect all levels to be computed
   labels <- getLabelsCode(table, subscripts=TRUE)
   digits <- getDigitsCode(table)
 
@@ -164,8 +164,10 @@ getStatisticsCode <- function(table) {
 #' Get the variable type code for gtsummary.
 #' 
 #' @param table NCA table
+#' @param all_dichotomous_levels show all dichotomous levels (0 and 1) when data is dichotomous
+#' @importFrom gtsummary all_dichotomous
 #' @return code
-getVariableTypeCode <- function(table) {
+getVariableTypeCode <- function(table, all_dichotomous_levels) {
   # Always look at first NCA metric only
   metrics <- table@list[[1]]
   
@@ -179,6 +181,10 @@ getVariableTypeCode <- function(table) {
     type <- sprintf("%s ~ \"%s\"", addBackticks(x %>% getName()), typeStr)
     return(type)
   })
+  
+  if (!all_dichotomous_levels) {
+    retValue <- c(retValue, "all_dichotomous() ~ \"dichotomous\"")
+  }
   
   return(paste0(retValue, collapse=",\n    "))
 }
@@ -246,5 +252,15 @@ factorUsingNaturalOrder <- function(by) {
     return(sprintf(" %%>%% mutate(%s=factor(%s, levels=unique(%s)), %s=factor(%s, levels=unique(%s)))", by[1], by[1], by[1], by[2], by[2], by[2]))
   }
   return("")
+}
+
+addPipeLayer <- function(x, layer) {
+  assertthat::assert_that(x %>% length() != 0, msg="x cannot be length 0")
+  x[x %>% length()] <- paste0(x[x %>% length()], " %>%")
+  return(x %>% append(paste0(getDefaultIndent(), layer)))
+}
+
+getDefaultIndent <- function() {
+  return("\t")
 }
 
