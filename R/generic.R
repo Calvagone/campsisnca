@@ -95,22 +95,30 @@ setGeneric("iValues", function(object, ...) {
 #' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
 #' @param all_dichotomous_levels show all dichotomous levels (0 and 1) when data is dichotomous, default is FALSE
 #' @param max_2dim if TRUE, table will be reduced to 2 dimensions
+#' @param combine_with either 'tbl_stack' or 'tbl_merge'
+#' @param header_label header label name
 #' @param ... extra arguments
 #' @export
 #' @rdname generateTableCode
-generateTableCode <- function(object, subscripts, all_dichotomous_levels, max_2dim, ...) {
+generateTableCode <- function(object, subscripts, all_dichotomous_levels, max_2dim, combine_with, header_label,  ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generateTableCode", function(object, subscripts=NULL, all_dichotomous_levels=NULL, max_2dim=NULL, ...) {
+setGeneric("generateTableCode", function(object, subscripts=NULL, all_dichotomous_levels=NULL, max_2dim=NULL, combine_with=NULL, header_label=NULL, ...) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
+  }
+  if (is.null(all_dichotomous_levels)) {
+    all_dichotomous_levels <- FALSE
   }
   if (is.null(max_2dim)) {
     max_2dim <- FALSE
   }
-  if (is.null(all_dichotomous_levels)) {
-    all_dichotomous_levels <- FALSE
+  if (is.null(combine_with)) {
+    combine_with <- "tbl_stack"
+  }
+  if (is.null(header_label)) {
+    header_label <- "Metric"
   }
   standardGeneric("generateTableCode")
 })

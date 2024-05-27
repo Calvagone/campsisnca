@@ -94,8 +94,10 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definition=function(object, dest, subscripts=FALSE, all_dichotomous_levels=FALSE, ...) {
-  code <- object %>% generateTableCode(subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels)
+#' @inheritParams generateTableCode
+setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
+          definition=function(object, dest, subscripts=NULL, all_dichotomous_levels=NULL, max_2dim=NULL, combine_with=NULL, header_label=NULL, ...) {
+  code <- object %>% generateTableCode(subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, max_2dim=max_2dim, combine_with=combine_with, header_label=header_label, ...)
   table <- object # Table variable needs to be there!
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
@@ -105,9 +107,11 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"), definiti
   return(retValue)
 })
 
-setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=function(object, dest, subscripts=FALSE, all_dichotomous_levels=FALSE, ...) {
+#' @inheritParams generateTableCode
+setMethod("export", signature=c("nca_metrics_table", "gt_type"),
+          definition=function(object, dest, subscripts=NULL, all_dichotomous_levels=NULL, max_2dim=NULL, combine_with=NULL, header_label=NULL, ...) {
   gtsummaryTable <- object %>%
-    export(dest=new("gtsummary_type"), subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, ...)
+    export(dest=new("gtsummary_type"), subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, max_2dim=max_2dim, combine_with=combine_with, header_label=header_label, ...)
   
   gtTable <- gtsummaryTable %>%
     toGt(subscripts=subscripts)
@@ -125,6 +129,9 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"), definition=func
 #' @importFrom stringr str_replace_all
 #' @export
 toGt <- function(x, subscripts=FALSE) {
+  if (is.null(subscripts)) {
+    subscripts <- FALSE
+  }
   
   # Adapt footnote (conversion of custom statistics)
   footnote <- x$table_styling$footnote
@@ -153,7 +160,8 @@ toGt <- function(x, subscripts=FALSE) {
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical"), definition=function(object, subscripts, all_dichotomous_levels, max_2dim, ...) {
+setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical", "logical", "character", "character"),
+          definition=function(object, subscripts, all_dichotomous_levels, max_2dim, combine_with, header_label, ...) {
   
   init <- "individual <- table"
   if (max_2dim) {
@@ -173,15 +181,10 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   labels <- getLabelsCode(object, subscripts=subscripts)
   digits <- getDigitsCode(object)
   
-  if (length(stratVariables)==0) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by="NULL", stats=stats, type=type, labels=labels, digits=digits)
-    
-  } else if (length(stratVariables)==1) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, type=type, labels=labels, digits=digits)
-    
-  } else if (length(stratVariables)==2) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables, stats=stats, type=type, labels=labels, digits=digits)
-    
+  if (length(stratVariables) <= 2) {
+    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables,
+                                stats=stats, type=type, labels=labels, digits=digits,
+                                combine_with=combine_with, header_label=header_label)
   } else {
     stop("Too many stratification variables")
   }

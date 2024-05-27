@@ -127,6 +127,11 @@ table <- NCAMetricsTable() %>%
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
+```{r, message=FALSE}
+# Alternatively, first stratification variable can be seen in columns (use of 'tbl_merge' within gtsummary)
+table %>% export(dest="gt", subscripts=TRUE, combine_with="tbl_merge") %>% as_raw_html()
+```
+
 ### Example 3: Calculate 2-compartment half-life metrics
 
 ```{r, message=FALSE}

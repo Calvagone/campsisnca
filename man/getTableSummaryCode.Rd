@@ -4,7 +4,17 @@
 \alias{getTableSummaryCode}
 \title{Get table summary code.}
 \usage{
-getTableSummaryCode(variable, data, by, stats, type, labels, digits)
+getTableSummaryCode(
+  variable,
+  data,
+  by,
+  stats,
+  type,
+  labels,
+  digits,
+  combine_with,
+  header_label
+)
 }
 \arguments{
 \item{variable}{assigned variable name}
@@ -20,6 +30,10 @@ getTableSummaryCode(variable, data, by, stats, type, labels, digits)
 \item{labels}{the labels to display}
 
 \item{digits}{the digits to be used for rounding}
+
+\item{combine_with}{either 'tbl_stack' or 'tbl_merge'}
+
+\item{header_label}{header label name}
 }
 \value{
 data frame

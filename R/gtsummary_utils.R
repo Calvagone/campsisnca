@@ -68,7 +68,9 @@ computeTableSummary <- function(object) {
 
   individual <- object@individual %>%
 	  dplyr::select(-id)
-  code <- getTableSummaryCode(var="gtTable", data="individual", by="NULL", stats=stats, type=type, labels=labels, digits=digits)
+  code <- getTableSummaryCode(var="gtTable", data="individual", by="NULL",
+                              stats=stats, type=type, labels=labels, digits=digits,
+                              combine_with="tbl_stack", header_label="Metric")
   gtTable <- tryCatch(
     expr=eval(expr=parse(text=code)),
     error=function(cond) {
@@ -95,10 +97,21 @@ computeTableSummary <- function(object) {
 #' @param type type of the variables
 #' @param labels the labels to display
 #' @param digits the digits to be used for rounding
+#' @param combine_with either 'tbl_stack' or 'tbl_merge'
+#' @param header_label header label name
 #' @importFrom gtsummary tbl_summary modify_header
 #' @return data frame
-getTableSummaryCode <- function(variable, data, by, stats, type, labels, digits) {
-  if (length(by) %in% c(0,1)) {
+getTableSummaryCode <- function(variable, data, by, stats, type, labels, digits, combine_with, header_label) {
+  
+  assertthat::assert_that(combine_with %in% c("tbl_stack", "tbl_merge"),
+                          msg="combine_with must be 'tbl_stack' or 'tbl_merge'")
+  
+  # If no stratification, use the NULL string
+  if (length(by)==0) {
+    by <- "NULL"
+  }
+  
+  if (length(by)==1) {
   retValue <- sprintf(
 "%s <- %s%s  %%>%%
 tbl_summary(
@@ -116,8 +129,8 @@ tbl_summary(
     %s
   )
 ) %%>%%
-modify_header(label=\"**Metric**\")
-", variable, data, factorUsingNaturalOrder(by), by, stats, type, labels, digits)
+modify_header(label=\"**%s**\")
+", variable, data, factorUsingNaturalOrder(by), by, stats, type, labels, digits, header_label)
   
   } else if (length(by)==2) {
     retValue <- sprintf(
@@ -138,9 +151,9 @@ strata=%s,
     %s
   )
 ),
-.combine_with=\"tbl_stack\") %%>%%
-modify_header(label=\"**Metric**\")
-", variable, data, factorUsingNaturalOrder(by), by[1], by[2], stats, type, labels, digits)    
+.combine_with=\"%s\") %%>%%
+modify_header(label=\"**%s**\")
+", variable, data, factorUsingNaturalOrder(by), by[1], by[2], stats, type, labels, digits, combine_with, header_label)    
 
 }
   return(retValue)
