@@ -23,7 +23,19 @@ generateData1 <- function() {
   cl <- model %>% campsismod::find(Equation("CL"))
   model <- model %>% campsismod::replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
   
-  campsis <- model %>% simulate(dataset=ds, dest="rxode2", seed=1, outvars="BW")
+  # It should not matter if mrgsolve is used instead of rxode2
+  # Residual variability is now generated with base R on line 32
+  campsis <- model %>% simulate(dataset=ds, dest="mrgsolve", seed=1, outvars=c("BW", "CL", "V2", "Q", "V3", "KA"))
+  
+  # Generate residual variability with base R (see issue #52)
+  set.seed(1)
+  campsis$OBS_CP <- campsis$CP*(rnorm(n=nrow(campsis), mean=0, sd=sqrt(0.025)) + 1)
+  campsis$Y <- campsis$OBS_CP
+  
+  # eps <- campsis$OBS_CP / campsis$CP - 1
+  # eps <- eps[is.finite(eps)]
+  # var(eps)
+  
   return(campsis)
 }
 
