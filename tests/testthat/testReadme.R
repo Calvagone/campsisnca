@@ -31,12 +31,20 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   summary <- table %>%
     export(dest="dataframe")
   
+  summary_wide <- table %>%
+    export(dest="dataframe", type="summary_wide")
+  
+  summary_pretty <- table %>%
+    export(dest="dataframe", type="summary_pretty")
+  
   individual <- table %>%
     export(dest="dataframe", type="individual") %>%
     select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
   outputRegressionTest(data=summary, filename="example1_summary")
+  outputRegressionTest(data=summary_wide, filename="example1_summary_wide")
+  outputRegressionTest(data=summary_pretty, filename="example1_summary_pretty")
   outputRegressionTest(data=individual, filename="example1_individual")
 
   gttable <- table %>% export(dest="gt", subscripts=TRUE)

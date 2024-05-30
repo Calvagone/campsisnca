@@ -91,7 +91,12 @@ table %>% export(dest="dataframe")
     ## 10 Ctrough median   2.88 Day 1
     ## # ℹ 14 more rows
 
-2.  To a HTML table using `gt`:
+When `type` is not specified, default value is `summary`. Argument
+`type` can also be `summary_wide` or `summary_pretty`. In the latter
+case, summary statistics are exported according to the arguments
+`stat_display` and `digits` provided for each metric.
+
+2.  To an HTML table using `gt`:
 
 ``` r
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()

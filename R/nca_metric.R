@@ -102,13 +102,27 @@ setMethod("export", signature=c("nca_metric", "character"), definition=function(
 })
 
 #' @importFrom tibble tibble
+#' @importFrom tidyr pivot_wider
+#' @importFrom dplyr all_of distinct mutate select relocate
 setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
-  if (type == "summary") {
+  if (type == "summary" || type == "summary_wide" || type == "summary_pretty") {
     if (nrow(object@summary) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
     retValue <- tibble::tibble(metric=object %>% getName(), object@summary) %>%
       dplyr::mutate(value=as.numeric(value)) # Remove names on values (e.g. if quantile was used)
+    
+    if (type == "summary_wide") {
+      retValue <- retValue %>%
+        tidyr::pivot_wider(names_from=stat, values_from=value)
+
+    } else if (type == "summary_pretty") {
+      display <- object %>% statDisplayString()
+      retValue <- retValue %>%
+        dplyr::select(-dplyr::all_of(c("value", "stat"))) %>%
+        dplyr::distinct() %>% # Should be 1 row
+        dplyr::mutate("summary_stats"=display)
+    }
   
   } else if (type == "individual" || type == "individual_wide") {
     if (nrow(object@individual) == 0) {
@@ -133,7 +147,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     retValue <- tibble::tibble(metric=object %>% getName(), individual)
     
   } else {
-    stop("Argument type can only be 'summary', 'individual' or 'individual_wide'.")
+    stop("Argument type can be 'summary', 'summary_wide', 'summary_pretty', 'individual' or 'individual_wide'.")
   }
   return(retValue)
 })
