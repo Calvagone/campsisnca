@@ -80,6 +80,15 @@ computeTableSummary <- function(object) {
   # Extract main info (-> stat_display)
   summary <- extractTableInfo(gtTable) %>%
     dplyr::select(-variable)
+
+  # Add discrete category if metric is categorical
+  if (object@categorical) {
+    categories <- getDiscreteCategories(object)
+    summary <- summary %>%
+      dplyr::group_by(stat) %>%
+      dplyr::mutate(category=categories) %>%
+      dplyr::ungroup()
+  }
   
   # Add evaluated stat_display string as a comment to the data frame
   comment(summary) <- gtTable$table_body$stat_0

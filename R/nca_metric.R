@@ -119,8 +119,19 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     } else if (type == "summary_pretty") {
       display <- object %>% statDisplayString()
       retValue <- retValue %>%
-        dplyr::select(-dplyr::all_of(c("value", "stat"))) %>%
-        dplyr::distinct() %>% # Should be 1 row
+        dplyr::select(-dplyr::all_of(c("value", "stat")))
+      
+      if (object@categorical) {
+        retValue <- retValue %>%
+          dplyr::select(-dplyr::all_of(c("category")))
+      }
+      
+      retValue <- retValue %>%
+        dplyr::distinct()
+      
+      assertthat::assert_that(nrow(retValue)==1, msg="There must be exactly 1 row here")
+      
+      retValue <- retValue %>%
         dplyr::mutate("summary_stats"=display)
     }
   
@@ -192,6 +203,12 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...)
 #----                         statDisplayString                             ----
 #_______________________________________________________________________________
 
+getDiscreteCategories <- function(object) {
+  # Unfortunately, this is no other way to retrieve the categories corresponding to the categorical stat values in gtsummary
+  # gtsummary categorical stat values are given in the same order as the alphabetically-sorted categories present in the data
+  return(base::sort(unique(object@individual$value)))
+}
+
 #' @rdname statDisplayString
 setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
   if (nrow(object@summary) > 0) {
@@ -200,7 +217,7 @@ setMethod("statDisplayString", signature=c("nca_metric"), definition=function(ob
     if (object@categorical) {
       comment <- attr$comment
       comment <- comment[!is.na(comment)] # First item always NA (don't know why)
-      categories <- base::sort(unique(object@individual$value))
+      categories <- getDiscreteCategories(object)
       if (length(comment)==length(categories)) {
         retValue <- paste0(paste0(categories, ": ", comment), collapse=", ")
       } else {

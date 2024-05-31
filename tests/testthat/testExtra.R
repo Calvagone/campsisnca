@@ -89,12 +89,12 @@ test_that("Summary stats on categorical data only should work as expected", {
   
   # Day 1
   ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}% ({n}/{N})"))) %>%
     campsisnca::calculate()
   
   # Day 7 
   ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}% ({n}/{N})"))) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
@@ -104,11 +104,21 @@ test_that("Summary stats on categorical data only should work as expected", {
   summary <- table %>%
     export(dest="dataframe")
   
-  expect_equal(nrow(summary), 6) # 2 days * 3 categories * 1 stat
+  expect_equal(nrow(summary), 2*3*3) # 2 days * 3 categories * 3 stat
+  outputRegressionTest(data=summary, filename="categorical_data_summary")
+  
+  summary_wide <- table %>%
+    export(dest="dataframe", type="summary_wide")
+  outputRegressionTest(data=summary_wide, filename="categorical_data_summary_wide")
+  
+  summary_pretty <- table %>%
+    export(dest="dataframe", type="summary_pretty")
+  outputRegressionTest(data=summary_pretty, filename="categorical_data_summary_pretty")
   
   individual <- table %>%
     export(dest="dataframe", type="individual_wide")
-  
+  outputRegressionTest(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), filename="categorical_data_individual")
+
   subjects <- length(unique(campsis$ID))
   expect_equal(nrow(individual), subjects*2) # subjects * 2 categories
   expect_equal(length(unique(individual$`Cmax categories`)), 3)
