@@ -96,8 +96,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
 
 #' @inheritParams generateTableCode
 setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
-          definition=function(object, dest, subscripts=NULL, all_dichotomous_levels=NULL, max_2dim=NULL, combine_with=NULL, header_label=NULL, ...) {
-  code <- object %>% generateTableCode(subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, max_2dim=max_2dim, combine_with=combine_with, header_label=header_label, ...)
+          definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
+  code <- object %>% generateTableCode(init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   table <- object # Table variable needs to be there!
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
@@ -109,9 +109,9 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
 
 #' @inheritParams generateTableCode
 setMethod("export", signature=c("nca_metrics_table", "gt_type"),
-          definition=function(object, dest, subscripts=NULL, all_dichotomous_levels=NULL, max_2dim=NULL, combine_with=NULL, header_label=NULL, ...) {
+          definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
   gtsummaryTable <- object %>%
-    export(dest=new("gtsummary_type"), subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, max_2dim=max_2dim, combine_with=combine_with, header_label=header_label, ...)
+    export(dest=new("gtsummary_type"), init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   
   gtTable <- gtsummaryTable %>%
     toGt(subscripts=subscripts)
@@ -161,18 +161,16 @@ toGt <- function(x, subscripts=FALSE) {
 
 #' @rdname generateTableCode
 setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical", "logical", "character", "character"),
-          definition=function(object, subscripts, all_dichotomous_levels, max_2dim, combine_with, header_label, ...) {
+          definition=function(object, init, subscripts, all_dichotomous_levels, combine_with, header_label, ...) {
   
-  init <- "individual <- table"
-  if (max_2dim) {
-    init <- init %>%
-      addPipeLayer("reduceTo2Dimensions()")
-    object <- object %>% reduceTo2Dimensions()
+  if (init) {
+    initCode <- "individual <- table" %>%
+      addPipeLayer("export(dest=\"dataframe\", type=\"individual_wide\")") %>%
+      addPipeLayer("dplyr::select(-id)")
+  } else {
+    initCode <- NULL
   }
-  init <- init %>%
-    addPipeLayer("export(dest=\"dataframe\", type=\"individual_wide\")") %>%
-    addPipeLayer("dplyr::select(-id)")
-  
+            
   scenarios <- object %>% getScenarios()
   stratVariables <- unique(scenarios$name)
   
@@ -182,14 +180,14 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   digits <- getDigitsCode(object)
   
   if (length(stratVariables) <= 2) {
-    code <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables,
+    body <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables,
                                 stats=stats, type=type, labels=labels, digits=digits,
                                 combine_with=combine_with, header_label=header_label)
   } else {
     stop("Too many stratification variables")
   }
 
-  return(paste0(c(init, code, "gttable"), collapse="\n"))
+  return(paste0(c(initCode, body, "gttable"), collapse="\n"))
 })
 
 #_______________________________________________________________________________
