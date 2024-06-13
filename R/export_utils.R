@@ -42,8 +42,7 @@ fillMissingCategoricalLevels <- function(x, replace_na=TRUE) {
         catValues <- completeCategories %>%
           dplyr::filter(.data$metric==currentMetric & .data$stat==currentstat) %>%
           dplyr::pull(category)
-        print(catValues)
-        
+
         allButValue <- data %>%
           dplyr::select(dplyr::all_of(c("replicate", "metric", "stat", catCols))) %>%
           dplyr::distinct() %>%
