@@ -85,6 +85,9 @@ fillMissingCategoricalLevels <- function(x, replace_na=TRUE) {
 #' @importFrom dplyr all_of mutate select
 #' @export
 discardCategoryColumn <- function(x, split="_") {
+  if (!"category" %in% colnames(x)) {
+    return(x)
+  }
   retValue <- x %>%
     dplyr::mutate(stat=ifelse(is.na(category), stat, paste0(stat, split, category))) %>%
     dplyr::select(-dplyr::all_of("category"))
