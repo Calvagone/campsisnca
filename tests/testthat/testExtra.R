@@ -55,7 +55,7 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
 
   custom1a <- custom1a %>% campsisnca::calculate()
-  expect_equal(custom1a %>% campsisnca::statDisplayString(), "FALSE: 181 / 200 (91%), TRUE: 19 / 200 (9.5%)")
+  expect_equal(custom1a %>% campsisnca::statDisplayString(), "FALSE: 183 / 200 (92%), TRUE: 17 / 200 (8.5%)")
   
   # Vice-versa
   custom1b <- CustomMetric(x=campsis %>% timerange(0,24), variable="Y",
@@ -63,7 +63,7 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
   
   custom1b <- custom1b %>% campsisnca::calculate()
-  expect_equal(custom1b %>% campsisnca::statDisplayString(), "FALSE: 19 / 200 (9.5%), TRUE: 181 / 200 (91%)")
+  expect_equal(custom1b %>% campsisnca::statDisplayString(), "FALSE: 17 / 200 (8.5%), TRUE: 183 / 200 (92%)")
   
 })
 
@@ -71,15 +71,15 @@ test_that("Method statDisplayString works as expected when digits is provided", 
   
   cmax1 <- Cmax(x=campsis %>% timerange(0,24), variable="Y")
   cmax1 <- cmax1 %>% campsisnca::calculate()
-  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.13 (7.37–13.38)")
+  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.21 (7.86–13.13)")
   
   cmax2 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_sigfig(.x))
   cmax2 <- cmax2 %>% campsisnca::calculate()
-  expect_equal(cmax2 %>% campsisnca::statDisplayString(), "10 (7.4–13)")
+  expect_equal(cmax2 %>% campsisnca::statDisplayString(), "10 (7.9–13)")
   
   cmax3 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_number(.x))
   cmax3 <- cmax3 %>% campsisnca::calculate()
-  expect_equal(cmax3 %>% campsisnca::statDisplayString(), "10 (7–13)")
+  expect_equal(cmax3 %>% campsisnca::statDisplayString(), "10 (8–13)")
   
 })
 
@@ -89,12 +89,12 @@ test_that("Summary stats on categorical data only should work as expected", {
   
   # Day 1
   ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}% ({n}/{N})"))) %>%
     campsisnca::calculate()
   
   # Day 7 
   ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
+    add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}% ({n}/{N})"))) %>%
     campsisnca::calculate()
   
   table <- NCAMetricsTable()  
@@ -104,11 +104,21 @@ test_that("Summary stats on categorical data only should work as expected", {
   summary <- table %>%
     export(dest="dataframe")
   
-  expect_equal(nrow(summary), 6) # 2 days * 3 categories * 1 stat
+  expect_equal(nrow(summary), 2*3*3) # 2 days * 3 categories * 3 stat
+  outputRegressionTest(data=summary, filename="categorical_data_summary")
+  
+  summary_wide <- table %>%
+    export(dest="dataframe", type="summary_wide")
+  outputRegressionTest(data=summary_wide, filename="categorical_data_summary_wide")
+  
+  summary_pretty <- table %>%
+    export(dest="dataframe", type="summary_pretty")
+  outputRegressionTest(data=summary_pretty, filename="categorical_data_summary_pretty")
   
   individual <- table %>%
     export(dest="dataframe", type="individual_wide")
-  
+  outputRegressionTest(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), filename="categorical_data_individual")
+
   subjects <- length(unique(campsis$ID))
   expect_equal(nrow(individual), subjects*2) # subjects * 2 categories
   expect_equal(length(unique(individual$`Cmax categories`)), 3)

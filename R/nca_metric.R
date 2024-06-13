@@ -102,13 +102,38 @@ setMethod("export", signature=c("nca_metric", "character"), definition=function(
 })
 
 #' @importFrom tibble tibble
+#' @importFrom tidyr pivot_wider
+#' @importFrom dplyr all_of distinct mutate select relocate
 setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
-  if (type == "summary") {
+  if (type == "summary" || type == "summary_wide" || type == "summary_pretty") {
     if (nrow(object@summary) == 0) {
       stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
     }
     retValue <- tibble::tibble(metric=object %>% getName(), object@summary) %>%
       dplyr::mutate(value=as.numeric(value)) # Remove names on values (e.g. if quantile was used)
+    
+    if (type == "summary_wide") {
+      retValue <- retValue %>%
+        tidyr::pivot_wider(names_from=stat, values_from=value)
+
+    } else if (type == "summary_pretty") {
+      display <- object %>% statDisplayString()
+      retValue <- retValue %>%
+        dplyr::select(-dplyr::all_of(c("value", "stat")))
+      
+      if (object@categorical) {
+        retValue <- retValue %>%
+          dplyr::select(-dplyr::all_of(c("category")))
+      }
+      
+      retValue <- retValue %>%
+        dplyr::distinct()
+      
+      assertthat::assert_that(nrow(retValue)==1, msg="There must be exactly 1 row here")
+      
+      retValue <- retValue %>%
+        dplyr::mutate("summary_stats"=display)
+    }
   
   } else if (type == "individual" || type == "individual_wide") {
     if (nrow(object@individual) == 0) {
@@ -133,7 +158,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     retValue <- tibble::tibble(metric=object %>% getName(), individual)
     
   } else {
-    stop("Argument type can only be 'summary', 'individual' or 'individual_wide'.")
+    stop("Argument type can be 'summary', 'summary_wide', 'summary_pretty', 'individual' or 'individual_wide'.")
   }
   return(retValue)
 })
@@ -178,6 +203,12 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...)
 #----                         statDisplayString                             ----
 #_______________________________________________________________________________
 
+getDiscreteCategories <- function(object) {
+  # Unfortunately, this is no other way to retrieve the categories corresponding to the categorical stat values in gtsummary
+  # gtsummary categorical stat values are given in the same order as the alphabetically-sorted categories present in the data
+  return(base::sort(unique(object@individual$value)))
+}
+
 #' @rdname statDisplayString
 setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
   if (nrow(object@summary) > 0) {
@@ -186,7 +217,7 @@ setMethod("statDisplayString", signature=c("nca_metric"), definition=function(ob
     if (object@categorical) {
       comment <- attr$comment
       comment <- comment[!is.na(comment)] # First item always NA (don't know why)
-      categories <- base::sort(unique(object@individual$value))
+      categories <- getDiscreteCategories(object)
       if (length(comment)==length(categories)) {
         retValue <- paste0(paste0(categories, ": ", comment), collapse=", ")
       } else {

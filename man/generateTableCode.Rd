@@ -2,33 +2,41 @@
 % Please edit documentation in R/generic.R, R/nca_metrics_table.R
 \name{generateTableCode}
 \alias{generateTableCode}
-\alias{generateTableCode,nca_metrics_table,logical,logical-method}
+\alias{generateTableCode,nca_metrics_table,logical,logical,logical,character,character-method}
 \title{Generate table code.}
 \usage{
 generateTableCode(
   object,
+  init = NULL,
   subscripts = NULL,
   all_dichotomous_levels = NULL,
-  max_2dim = NULL,
+  combine_with = NULL,
+  header_label = NULL,
   ...
 )
 
-\S4method{generateTableCode}{nca_metrics_table,logical,logical}(
+\S4method{generateTableCode}{nca_metrics_table,logical,logical,logical,character,character}(
   object,
+  init = NULL,
   subscripts = NULL,
   all_dichotomous_levels = NULL,
-  max_2dim = NULL,
+  combine_with = NULL,
+  header_label = NULL,
   ...
 )
 }
 \arguments{
 \item{object}{table object}
 
+\item{init}{generate initialization code to generate the individuals, default is TRUE}
+
 \item{subscripts}{use LaTeX subcripts/superscripts notation when writing labels}
 
 \item{all_dichotomous_levels}{show all dichotomous levels (0 and 1) when data is dichotomous, default is FALSE}
 
-\item{max_2dim}{if TRUE, table will be reduced to 2 dimensions}
+\item{combine_with}{either 'tbl_stack' or 'tbl_merge'}
+
+\item{header_label}{header label name}
 
 \item{...}{extra arguments}
 }
