@@ -55,7 +55,7 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
 
   custom1a <- custom1a %>% campsisnca::calculate()
-  expect_equal(custom1a %>% campsisnca::statDisplayString(), "FALSE: 183 / 200 (92%), TRUE: 17 / 200 (8.5%)")
+  expect_equal(custom1a %>% campsisnca::statDisplayString(), "FALSE: 183 / 200 (91.5%), TRUE: 17 / 200 (8.50%)")
   
   # Vice-versa
   custom1b <- CustomMetric(x=campsis %>% timerange(0,24), variable="Y",
@@ -63,7 +63,7 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
   
   custom1b <- custom1b %>% campsisnca::calculate()
-  expect_equal(custom1b %>% campsisnca::statDisplayString(), "FALSE: 17 / 200 (8.5%), TRUE: 183 / 200 (92%)")
+  expect_equal(custom1b %>% campsisnca::statDisplayString(), "FALSE: 17 / 200 (8.50%), TRUE: 183 / 200 (91.5%)")
   
 })
 
@@ -71,7 +71,7 @@ test_that("Method statDisplayString works as expected when digits is provided", 
   
   cmax1 <- Cmax(x=campsis %>% timerange(0,24), variable="Y")
   cmax1 <- cmax1 %>% campsisnca::calculate()
-  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.21 (7.86–13.13)")
+  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.2 (7.86–13.1)")
   
   cmax2 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_sigfig(.x))
   cmax2 <- cmax2 %>% campsisnca::calculate()
