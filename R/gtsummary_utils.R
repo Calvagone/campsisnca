@@ -11,89 +11,104 @@ extractBraceValues <- function(x) {
 }
 
 #' 
-#' Extract gtsummary table data.
-#' 
-#' @param tbl gtsummary table
-#' @return data frame
-#' @importFrom tidyr pivot_longer
-#' @importFrom assertthat assert_that
-#' @importFrom dplyr all_of bind_rows select 
-extractTableInfo <- function(tbl) {
-  # by <- tbl$by
-  meta_data <- tbl$meta_data
-  #meta_data <-  tbl
-  ret <- NULL
-  
-  for (index in seq_len(nrow(meta_data))) {
-    row <- meta_data[index, ]
-    variable <- row$variable
-    df_stats <- row$df_stats
-    stat_display <- row$stat_display
-    
-    assertthat::assert_that(length(df_stats)==1)
-    assertthat::assert_that(length(stat_display)==1)
-    
-    df_stats <- df_stats[[1]]
-    stat_display <- stat_display[[1]]
-    stats <- extractBraceValues(stat_display)
-    
-    tmp <- df_stats %>%
-      dplyr::select(dplyr::all_of(c("variable", stats))) %>%
-      # rename(!!by:=by) %>%
-      tidyr::pivot_longer(cols=dplyr::all_of(stats), names_to="stat")
-
-    ret <- dplyr::bind_rows(ret, tmp)
-  }
-  
-  return(ret)
-}
-
-#' 
-#' Compute table summary.
+#' Compute NCA metric summary.
 #' 
 #' @param object NCA metric
 #' @return data frame
 #' @importFrom dplyr select
-computeTableSummary <- function(object) {
-  # Mock a table object with the given metric
-  object@name <- "value"
-  table <- NCAMetricsTable() %>%
-    add(NCAMetrics() %>% add(object))
+#' @export
+computeNCAMetricSummary <- function(object) {
   
-  # Re-use 'standard' table generation code
-  stats <- getStatisticsCode(table)
-  type <- getVariableTypeCode(table, all_dichotomous_levels=TRUE) # We expect all levels to be computed
-  labels <- getLabelsCode(table, subscripts=TRUE)
-  digits <- getDigitsCode(table)
-
-  individual <- object@individual %>%
-	  dplyr::select(-id)
-  code <- getTableSummaryCode(var="gtTable", data="individual", by="NULL",
-                              stats=stats, type=type, labels=labels, digits=digits,
-                              combine_with="tbl_stack", header_label="Metric")
-  gtTable <- tryCatch(
-    expr=eval(expr=parse(text=code)),
-    error=function(cond) {
-      return(sprintf("Failed to create gtsummary table: %s", cond$message))
-    })
+  data <- object@individual
+  stat_display <- object@stat_display
+  digits <- object@digits
+  stats <- extractBraceValues(stat_display)
+  categorical <- object@categorical
   
-  # Extract main info (-> stat_display)
-  summary <- extractTableInfo(gtTable) %>%
-    dplyr::select(-variable)
-
-  # Add discrete category if metric is categorical
-  if (object@categorical) {
-    categories <- getDiscreteCategories(object)
-    summary <- summary %>%
-      dplyr::group_by(stat) %>%
-      dplyr::mutate(category=categories) %>%
-      dplyr::ungroup()
+  p5 <- function(x) as.numeric(quantile(x, 0.05, type=2))
+  p25 <- function(x) as.numeric(quantile(x, 0.25, type=2))
+  p75 <- function(x) as.numeric(quantile(x, 0.75, type=2))
+  p95 <- function(x) as.numeric(quantile(x, 0.95, type=2))
+  N <- function(x) length(x)
+  
+  availableStatsFullList <- list(
+    "N"=N,
+    "mean"=mean,
+    "sd"=sd,
+    "median"=median,
+    "p25"=p25,
+    "p75"=p75,
+    "min"=min,
+    "max"=max,
+    "p5"=p5,
+    "p95"=p95
+  )
+  stats_ <- stats[stats %in% names(availableStatsFullList)]
+  
+  if (categorical) {
+    summary <-
+      cards::ard_categorical(
+        data,
+        by=NULL,
+        variables=dplyr::all_of("value"),
+        statistic=~c("n", "p", "N")
+      )
+  
+    summary <- tibble::as_tibble(summary) %>%
+      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level)) %>%
+      dplyr::arrange(category, dplyr::desc(stat)) # To preserve order in the tests: p, n, N
+    
+    categories <- unique(summary$category)
+    tmp <- categories %>%
+      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary %>% dplyr::filter(category==.x)))
+    comment <- paste0(paste0(categories, ": ", tmp), collapse=", ")
+    
+  } else {
+    summary <-
+      cards::ard_continuous(
+        data,
+        by=NULL,
+        variables=dplyr::all_of("value"),
+        statistic=~cards::continuous_summary_fns(
+          summaries=character(0),
+          other_stats=availableStatsFullList[stats_]
+        )
+      )
+    
+    summary <- tibble::as_tibble(summary) %>%
+      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))
+    
+    # Add evaluated stat_display string as a comment to the data frame
+    comment <- glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary)
   }
-  
-  # Add evaluated stat_display string as a comment to the data frame
-  comment(summary) <- gtTable$table_body$stat_0
-  
+
+  comment(summary) <- comment
+
   return(summary)
+}
+
+#' 
+#' Glue stat display string.
+#' 
+#' @param stat_display stat display string
+#' @param stats statistics, character vector
+#' @param summary summary data frame
+#' @return glued string
+#' @importFrom glue glue
+#' @export
+glueStatDisplay <- function(stat_display, stats, summary) {
+  env <- new.env()
+  values <- summary$value
+  names(values) <- summary$stat
+  
+  for (stat in stats) {
+    value <- values[stat]
+    if (stat=="p") {
+      value <- value * 100
+    }
+    env[[stat]] <- gtsummary::style_sigfig(value, 2)
+  }
+  return(glue::glue(stat_display, .envir=env))
 }
 
 #' 

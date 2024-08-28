@@ -14,7 +14,9 @@ Depends:
 Imports: 
     assertthat,
     campsis (>= 1.4.0),
+    cards,
     dplyr,
+    glue,
     gt,
     gtsummary,
     kableExtra,
@@ -39,7 +41,7 @@ VignetteBuilder:
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.2
 Collate:
     'check.R'
     'consistency_checks.R'
@@ -66,4 +68,3 @@ Collate:
     'thalf.R'
     'theoretical_thalf.R'
     'custom_metric.R'
-    
