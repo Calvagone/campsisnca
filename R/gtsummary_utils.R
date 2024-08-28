@@ -15,7 +15,9 @@ extractBraceValues <- function(x) {
 #' 
 #' @param object NCA metric
 #' @return data frame
-#' @importFrom dplyr select
+#' @importFrom dplyr all_of arrange desc filter transmute
+#' @importFrom cards ard_categorical ard_continuous
+#' @importFrom tibble as_tibble 
 #' @export
 computeNCAMetricSummary <- function(object) {
   
@@ -25,10 +27,11 @@ computeNCAMetricSummary <- function(object) {
   stats <- extractBraceValues(stat_display)
   categorical <- object@categorical
   
-  p5 <- function(x) as.numeric(quantile(x, 0.05, type=2))
-  p25 <- function(x) as.numeric(quantile(x, 0.25, type=2))
-  p75 <- function(x) as.numeric(quantile(x, 0.75, type=2))
-  p95 <- function(x) as.numeric(quantile(x, 0.95, type=2))
+  quantileType <- 1
+  p5 <- function(x) as.numeric(quantile(x, 0.05, type=quantileType))
+  p25 <- function(x) as.numeric(quantile(x, 0.25, type=quantileType))
+  p75 <- function(x) as.numeric(quantile(x, 0.75, type=quantileType))
+  p95 <- function(x) as.numeric(quantile(x, 0.95, type=quantileType))
   N <- function(x) length(x)
   
   availableStatsFullList <- list(
@@ -60,7 +63,7 @@ computeNCAMetricSummary <- function(object) {
     
     categories <- unique(summary$category)
     tmp <- categories %>%
-      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary %>% dplyr::filter(category==.x)))
+      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary %>% dplyr::filter(category==.x), digits=digits))
     comment <- paste0(paste0(categories, ": ", tmp), collapse=", ")
     
   } else {
@@ -79,7 +82,7 @@ computeNCAMetricSummary <- function(object) {
       dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))
     
     # Add evaluated stat_display string as a comment to the data frame
-    comment <- glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary)
+    comment <- glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary, digits=digits)
   }
 
   comment(summary) <- comment
@@ -93,20 +96,42 @@ computeNCAMetricSummary <- function(object) {
 #' @param stat_display stat display string
 #' @param stats statistics, character vector
 #' @param summary summary data frame
+#' @param digits digits to be used for rounding
 #' @return glued string
 #' @importFrom glue glue
 #' @export
-glueStatDisplay <- function(stat_display, stats, summary) {
+glueStatDisplay <- function(stat_display, stats, summary, digits) {
   env <- new.env()
   values <- summary$value
   names(values) <- summary$stat
   
-  for (stat in stats) {
+  for (statIndex in seq_along(stats)) {
+    stat <- stats[statIndex]
     value <- values[stat]
     if (stat=="p") {
       value <- value * 100
     }
-    env[[stat]] <- gtsummary::style_sigfig(value, 2)
+    if (!stat %in% c("n", "N")) {
+      if (length(digits) == 0) {
+        # Default rounding
+        value <- gtsummary::style_sigfig(value, 3)
+      } else {
+        if (statIndex <= length(digits)) {
+          digit <- digits[statIndex]
+        } else {
+          digit <- digits[1]
+        }
+        fun <- eval(expr=parse(text=digit))
+        if (is.numeric(fun)) {
+          value <- round(value, fun)
+        } else if (rlang::is_function(fun)) {
+          value <- fun(value)
+        } else {
+          stop("Digit element must be a function, a purrr-style lambda function or simply an integer")
+        }
+      }
+    }
+    env[[stat]] <- value
   }
   return(glue::glue(stat_display, .envir=env))
 }

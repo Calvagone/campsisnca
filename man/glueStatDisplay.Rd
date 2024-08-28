@@ -4,7 +4,7 @@
 \alias{glueStatDisplay}
 \title{Glue stat display string.}
 \usage{
-glueStatDisplay(stat_display, stats, summary)
+glueStatDisplay(stat_display, stats, summary, digits)
 }
 \arguments{
 \item{stat_display}{stat display string}
@@ -12,6 +12,8 @@ glueStatDisplay(stat_display, stats, summary)
 \item{stats}{statistics, character vector}
 
 \item{summary}{summary data frame}
+
+\item{digits}{digits to be used for rounding}
 }
 \value{
 glued string
