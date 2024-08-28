@@ -27,7 +27,7 @@ computeNCAMetricSummary <- function(object) {
   stats <- extractBraceValues(stat_display)
   categorical <- object@categorical
   
-  quantileType <- 1
+  quantileType <- 7
   p5 <- function(x) as.numeric(quantile(x, 0.05, type=quantileType))
   p25 <- function(x) as.numeric(quantile(x, 0.25, type=quantileType))
   p75 <- function(x) as.numeric(quantile(x, 0.75, type=quantileType))
@@ -58,8 +58,7 @@ computeNCAMetricSummary <- function(object) {
       )
   
     summary <- tibble::as_tibble(summary) %>%
-      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level)) %>%
-      dplyr::arrange(category, dplyr::desc(stat)) # To preserve order in the tests: p, n, N
+      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level))
     
     categories <- unique(summary$category)
     tmp <- categories %>%
