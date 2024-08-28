@@ -44,7 +44,9 @@ computeNCAMetricSummary <- function(object) {
     "min"=min,
     "max"=max,
     "p5"=p5,
-    "p95"=p95
+    "p95"=p95,
+    "geomean"=geomean,
+    "geocv"=geocv
   )
   stats_ <- stats[stats %in% names(availableStatsFullList)]
   
@@ -132,7 +134,9 @@ glueStatDisplay <- function(stat_display, stats, summary, digits) {
     }
     env[[stat]] <- value
   }
-  return(glue::glue(stat_display, .envir=env))
+  retValue <- glue::glue(stat_display, .envir=env) %>% as.character()
+  
+  return(retValue)
 }
 
 #' 
