@@ -18,7 +18,7 @@ Imports:
     dplyr,
     glue,
     gt,
-    gtsummary,
+    gtsummary (>= 2.0.0),
     kableExtra,
     purrr,
     rlang,

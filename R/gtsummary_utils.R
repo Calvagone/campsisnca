@@ -120,13 +120,16 @@ glueStatDisplay <- function(stat_display, stats, summary, digits) {
   for (statIndex in seq_along(stats)) {
     stat <- stats[statIndex]
     value <- values[stat]
-    if (stat=="p") {
-      value <- value * 100
-    }
+    percentage <- stat=="p"
+    
     if (!stat %in% c("n", "N")) {
       if (length(digits) == 0) {
         # Default rounding
-        value <- gtsummary::style_sigfig(value, 3)
+        if (percentage) {
+          value <- gtsummary::style_percent(value, digits=1, symbol=FALSE)
+        } else {
+          value <- gtsummary::style_sigfig(value, digits=3)
+        }
       } else {
         if (statIndex <= length(digits)) {
           digit <- digits[statIndex]
@@ -135,7 +138,11 @@ glueStatDisplay <- function(stat_display, stats, summary, digits) {
         }
         fun <- eval(expr=parse(text=digit))
         if (is.numeric(fun)) {
-          value <- round(value, fun)
+          if (percentage) {
+            value <- round(value*100, fun)
+          } else {
+            value <- round(value, fun)
+          }
         } else if (rlang::is_function(fun)) {
           value <- fun(value)
         } else {
