@@ -140,13 +140,18 @@ outputRegressionTest <- function(data, output=NULL, filename) {
     results2 <- results2 %>%
       dplyr::mutate(discrete_value=as.character(discrete_value))
   }
+  if ("category" %in% colnames(results2)) {
+    # Otherwise, read as logical if only 2 states
+    results2 <- results2 %>%
+      dplyr::mutate(category=as.character(category))
+  }
   expect_equal(results1, results2)
 }
 
 gtTableRegressionTest <- function(gttable, filename) {
-  
+
   file <- paste0(testFolder, "non_regression/", paste0(filename, ".html"))
-  
+
   gttable %>%
     gt::gtsave(filename=file)
 }
