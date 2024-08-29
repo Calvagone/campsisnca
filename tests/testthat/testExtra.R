@@ -178,4 +178,7 @@ test_that("Method statDisplayString works as expected on categorical data when d
                          stat_display="{p}%", digits=0, categorical=TRUE)
   custom <- custom %>% campsisnca::calculate()
   expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 44%, TRUE: 56%")
+  
+  # Extra test, only stat 'p' was computed
+  expect_equal(unique(custom@summary$stat), "p")
 })

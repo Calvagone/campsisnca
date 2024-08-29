@@ -16,7 +16,7 @@ extractBraceValues <- function(x) {
 #' @param object NCA metric
 #' @param quantile_type type of quantile
 #' @return data frame
-#' @importFrom dplyr all_of arrange desc filter transmute
+#' @importFrom dplyr all_of arrange desc everything filter transmute
 #' @importFrom cards ard_categorical ard_continuous
 #' @importFrom tibble as_tibble
 #' @importFrom purrr map_chr
@@ -40,7 +40,7 @@ computeNCAMetricSummary <- function(object, quantile_type) {
         data,
         by=NULL,
         variables=dplyr::all_of("value"),
-        statistic=~stats_
+        statistic=dplyr::everything() ~ stats_
       )
   
     summary <- tibble::as_tibble(summary) %>%
