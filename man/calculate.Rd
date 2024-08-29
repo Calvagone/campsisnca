@@ -8,18 +8,18 @@
 \alias{calculate,theoretical_thalf_metric,numeric-method}
 \title{Calculate.}
 \usage{
-calculate(object, level = NULL, ...)
+calculate(object, quantile_type, ...)
 
-\S4method{calculate}{nca_metric,numeric}(object, level = NULL, ...)
+\S4method{calculate}{nca_metric,numeric}(object, quantile_type, ...)
 
-\S4method{calculate}{nca_metrics,numeric}(object, level = 0.9, ...)
+\S4method{calculate}{nca_metrics,numeric}(object, quantile_type, ...)
 
-\S4method{calculate}{theoretical_thalf_metric,numeric}(object, level = NULL, ...)
+\S4method{calculate}{theoretical_thalf_metric,numeric}(object, quantile_type, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
 
-\item{level}{prediction interval level, default is 0.9 (90\% prediction interval)}
+\item{quantile_type}{type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)}
 
 \item{...}{extra arguments}
 }

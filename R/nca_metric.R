@@ -56,9 +56,9 @@ ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
+setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, quantile_type, ...) {
   object@individual <- iValues(object=object)
-  object@summary <- computeNCAMetricSummary(object=object)
+  object@summary <- computeNCAMetricSummary(object=object, quantile_type=quantile_type)
   return(object)    
 })
 

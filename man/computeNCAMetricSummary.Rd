@@ -4,10 +4,12 @@
 \alias{computeNCAMetricSummary}
 \title{Compute NCA metric summary.}
 \usage{
-computeNCAMetricSummary(object)
+computeNCAMetricSummary(object, quantile_type)
 }
 \arguments{
 \item{object}{NCA metric}
+
+\item{quantile_type}{type of quantile}
 }
 \value{
 data frame

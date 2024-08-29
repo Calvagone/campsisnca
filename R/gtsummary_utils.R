@@ -14,12 +14,13 @@ extractBraceValues <- function(x) {
 #' Compute NCA metric summary.
 #' 
 #' @param object NCA metric
+#' @param quantile_type type of quantile
 #' @return data frame
 #' @importFrom dplyr all_of arrange desc filter transmute
 #' @importFrom cards ard_categorical ard_continuous
 #' @importFrom tibble as_tibble 
 #' @export
-computeNCAMetricSummary <- function(object) {
+computeNCAMetricSummary <- function(object, quantile_type) {
   
   data <- object@individual
   stat_display <- object@stat_display
@@ -27,11 +28,10 @@ computeNCAMetricSummary <- function(object) {
   stats <- extractBraceValues(stat_display)
   categorical <- object@categorical
   
-  quantileType <- 7
-  p5 <- function(x) as.numeric(quantile(x, 0.05, type=quantileType))
-  p25 <- function(x) as.numeric(quantile(x, 0.25, type=quantileType))
-  p75 <- function(x) as.numeric(quantile(x, 0.75, type=quantileType))
-  p95 <- function(x) as.numeric(quantile(x, 0.95, type=quantileType))
+  p5 <- function(x) as.numeric(quantile(x, 0.05, type=quantile_type))
+  p25 <- function(x) as.numeric(quantile(x, 0.25, type=quantile_type))
+  p75 <- function(x) as.numeric(quantile(x, 0.75, type=quantile_type))
+  p95 <- function(x) as.numeric(quantile(x, 0.95, type=quantile_type))
   N <- function(x) length(x)
   
   availableStatsFullList <- list(
