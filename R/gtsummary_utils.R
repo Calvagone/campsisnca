@@ -18,37 +18,18 @@ extractBraceValues <- function(x) {
 #' @return data frame
 #' @importFrom dplyr all_of arrange desc filter transmute
 #' @importFrom cards ard_categorical ard_continuous
-#' @importFrom tibble as_tibble 
+#' @importFrom tibble as_tibble
+#' @importFrom purrr map_chr
+#' @importFrom stringr str_detect
 #' @export
 computeNCAMetricSummary <- function(object, quantile_type) {
   
   data <- object@individual
   stat_display <- object@stat_display
   digits <- object@digits
-  stats <- extractBraceValues(stat_display)
+  stats <- extractBraceValues(stat_display) %>%
+    trimws()
   categorical <- object@categorical
-  
-  p5 <- function(x) as.numeric(quantile(x, 0.05, type=quantile_type))
-  p25 <- function(x) as.numeric(quantile(x, 0.25, type=quantile_type))
-  p75 <- function(x) as.numeric(quantile(x, 0.75, type=quantile_type))
-  p95 <- function(x) as.numeric(quantile(x, 0.95, type=quantile_type))
-  N <- function(x) length(x)
-  
-  availableStatsFullList <- list(
-    "N"=N,
-    "mean"=mean,
-    "sd"=sd,
-    "median"=median,
-    "p25"=p25,
-    "p75"=p75,
-    "min"=min,
-    "max"=max,
-    "p5"=p5,
-    "p95"=p95,
-    "geomean"=geomean,
-    "geocv"=geocv
-  )
-  stats_ <- stats[stats %in% names(availableStatsFullList)]
   
   if (categorical) {
     summary <-
@@ -65,9 +46,34 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     categories <- unique(summary$category)
     tmp <- categories %>%
       purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary %>% dplyr::filter(category==.x), digits=digits))
+    
     comment <- paste0(paste0(categories, ": ", tmp), collapse=", ")
     
   } else {
+    availableContinuousStats <- list(
+      "N"=function(x) length(x),
+      "mean"=mean,
+      "sd"=sd,
+      "median"=median,
+      "min"=min,
+      "max"=max,
+      "geomean"=geomean,
+      "geocv"=geocv,
+      "cv"=cv,
+      "se"=se
+    )
+    
+    # Detect stats that are percentiles
+    percentileStats <- stats[stringr::str_detect(stats, "^p[0-9]+$")]
+    
+    # Add requested percentile functions
+    for (percentileStat in percentileStats) {
+      availableContinuousStats[[percentileStat]] <- quantileFun(str=percentileStat, type=quantile_type)
+    }
+    
+    # In case some stats are not available
+    stats_ <- stats[stats %in% names(availableContinuousStats)]
+    
     summary <-
       cards::ard_continuous(
         data,
@@ -75,20 +81,25 @@ computeNCAMetricSummary <- function(object, quantile_type) {
         variables=dplyr::all_of("value"),
         statistic=~cards::continuous_summary_fns(
           summaries=character(0),
-          other_stats=availableStatsFullList[stats_]
+          other_stats=availableContinuousStats[stats_]
         )
       )
     
     summary <- tibble::as_tibble(summary) %>%
       dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))
-    
-    # Add evaluated stat_display string as a comment to the data frame
-    comment <- glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary, digits=digits)
+
+    comment <- glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary, digits=digits)
   }
 
+  # Add evaluated stat_display string as a comment to the data frame
   comment(summary) <- comment
 
   return(summary)
+}
+
+quantileFun <- function(str, type) {
+  myFun <- sprintf("function(x) {stats::quantile(x, probs=as.numeric(substr('%s', 2, nchar('%s')))/100, type=%i) %%>%% unname()}", str, str, type)
+  return(eval(parse(text=myFun)))
 }
 
 #' 
