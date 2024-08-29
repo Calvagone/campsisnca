@@ -7,7 +7,7 @@ library(gt)
 
 context("Test extra features")
 
-source(paste0("C:/prj/campsisnca/tests/testthat/", "testUtils.R"))
+source(paste0("", "testUtils.R"))
 
 campsis <- generateData1()
 
