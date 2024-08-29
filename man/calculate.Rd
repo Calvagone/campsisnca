@@ -8,13 +8,13 @@
 \alias{calculate,theoretical_thalf_metric,numeric-method}
 \title{Calculate.}
 \usage{
-calculate(object, quantile_type, ...)
+calculate(object, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_metric,numeric}(object, quantile_type, ...)
+\S4method{calculate}{nca_metric,numeric}(object, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_metrics,numeric}(object, quantile_type, ...)
+\S4method{calculate}{nca_metrics,numeric}(object, quantile_type = NULL, ...)
 
-\S4method{calculate}{theoretical_thalf_metric,numeric}(object, quantile_type, ...)
+\S4method{calculate}{theoretical_thalf_metric,numeric}(object, quantile_type = NULL, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
