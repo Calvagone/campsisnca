@@ -64,7 +64,7 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     )
     
     # Detect stats that are percentiles
-    percentileStats <- stats[stringr::str_detect(stats, "^p[0-9]+$")]
+    percentileStats <- stats[stringr::str_detect(stats, "^p[0-9\\.]+$")]
     
     # Add requested percentile functions
     for (percentileStat in percentileStats) {
