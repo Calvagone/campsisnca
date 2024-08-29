@@ -32,12 +32,15 @@ computeNCAMetricSummary <- function(object, quantile_type) {
   categorical <- object@categorical
   
   if (categorical) {
+    # Check stats content, only n, p and N are allowed
+    stats_ <- stats[stats %in% c("n", "p", "N")]
+    
     summary <-
       cards::ard_categorical(
         data,
         by=NULL,
         variables=dplyr::all_of("value"),
-        statistic=~c("n", "p", "N")
+        statistic=~stats_
       )
   
     summary <- tibble::as_tibble(summary) %>%
@@ -45,7 +48,7 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     
     categories <- unique(summary$category)
     tmp <- categories %>%
-      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary %>% dplyr::filter(category==.x), digits=digits))
+      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary %>% dplyr::filter(category==.x), digits=digits))
     
     comment <- paste0(paste0(categories, ": ", tmp), collapse=", ")
     
@@ -71,7 +74,7 @@ computeNCAMetricSummary <- function(object, quantile_type) {
       availableContinuousStats[[percentileStat]] <- quantileFun(str=percentileStat, type=quantile_type)
     }
     
-    # In case some stats are not available
+    # Check stats content, only N, mean, sd, median, min, max, geomean, geocv, cv, se and percentiles are allowed
     stats_ <- stats[stats %in% names(availableContinuousStats)]
     
     summary <-
