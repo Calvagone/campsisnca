@@ -65,7 +65,7 @@ setMethod("getUnit", signature=c("nca_metrics", "character"), definition=functio
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metrics", "numeric"), definition=function(object, level=0.9, ...) {
+setMethod("calculate", signature=c("nca_metrics", "numeric"), definition=function(object, quantile_type, ...) {
   object@list <- object@list %>% purrr::map(.f=function(.x) {
     # Use default dataframe if specific dataframe is empty
     if (nrow(.x@x) == 0) {
@@ -75,7 +75,7 @@ setMethod("calculate", signature=c("nca_metrics", "numeric"), definition=functio
     if (is.na(.x@variable)) {
       .x@variable <- object@variable
     }
-    return(.x %>% calculate(level=level, ...))
+    return(.x %>% calculate(quantile_type=quantile_type, ...))
   })
   return(object)    
 })

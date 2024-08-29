@@ -6,18 +6,18 @@
 #' Calculate.
 #' 
 #' @param object object (PK metric) that needs to be calculated
-#' @param level prediction interval level, default is 0.9 (90\% prediction interval)
+#' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
 #' @param ... extra arguments
 #' @return updated object
 #' @export
 #' @rdname calculate
-calculate <- function(object, level=NULL, ...) {
+calculate <- function(object, quantile_type, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("calculate", function(object, level=NULL, ...) {
-  if (is.null(level)) {
-    level <- 0.9
+setGeneric("calculate", function(object, quantile_type=NULL, ...) {
+  if (is.null(quantile_type)) {
+    quantile_type <- 2
   }
   standardGeneric("calculate")
 })

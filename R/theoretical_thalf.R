@@ -149,7 +149,7 @@ Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), definition=function(object, level, ...) {
+setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), definition=function(object, quantile_type, ...) {
   subtype <- object@subtype
 
   if (subtype == "1cpt") {
@@ -171,7 +171,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), defin
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  object@summary <- computeTableSummary(object=object)
+  object@summary <- computeNCAMetricSummary(object=object, quantile_type=quantile_type)
   return(object)
 })
 

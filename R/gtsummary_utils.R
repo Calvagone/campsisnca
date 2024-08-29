@@ -11,89 +11,143 @@ extractBraceValues <- function(x) {
 }
 
 #' 
-#' Extract gtsummary table data.
+#' Compute NCA metric summary.
 #' 
-#' @param tbl gtsummary table
+#' @param object NCA metric
+#' @param quantile_type type of quantile
 #' @return data frame
-#' @importFrom tidyr pivot_longer
-#' @importFrom assertthat assert_that
-#' @importFrom dplyr all_of bind_rows select 
-extractTableInfo <- function(tbl) {
-  # by <- tbl$by
-  meta_data <- tbl$meta_data
-  #meta_data <-  tbl
-  ret <- NULL
+#' @importFrom dplyr all_of arrange desc filter transmute
+#' @importFrom cards ard_categorical ard_continuous
+#' @importFrom tibble as_tibble
+#' @importFrom purrr map_chr
+#' @importFrom stringr str_detect
+#' @export
+computeNCAMetricSummary <- function(object, quantile_type) {
   
-  for (index in seq_len(nrow(meta_data))) {
-    row <- meta_data[index, ]
-    variable <- row$variable
-    df_stats <- row$df_stats
-    stat_display <- row$stat_display
+  data <- object@individual
+  stat_display <- object@stat_display
+  digits <- object@digits
+  stats <- extractBraceValues(stat_display) %>%
+    trimws()
+  categorical <- object@categorical
+  
+  if (categorical) {
+    summary <-
+      cards::ard_categorical(
+        data,
+        by=NULL,
+        variables=dplyr::all_of("value"),
+        statistic=~c("n", "p", "N")
+      )
+  
+    summary <- tibble::as_tibble(summary) %>%
+      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level))
     
-    assertthat::assert_that(length(df_stats)==1)
-    assertthat::assert_that(length(stat_display)==1)
+    categories <- unique(summary$category)
+    tmp <- categories %>%
+      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats, summary=summary %>% dplyr::filter(category==.x), digits=digits))
     
-    df_stats <- df_stats[[1]]
-    stat_display <- stat_display[[1]]
-    stats <- extractBraceValues(stat_display)
+    comment <- paste0(paste0(categories, ": ", tmp), collapse=", ")
     
-    tmp <- df_stats %>%
-      dplyr::select(dplyr::all_of(c("variable", stats))) %>%
-      # rename(!!by:=by) %>%
-      tidyr::pivot_longer(cols=dplyr::all_of(stats), names_to="stat")
+  } else {
+    availableContinuousStats <- list(
+      "N"=function(x) length(x),
+      "mean"=mean,
+      "sd"=sd,
+      "median"=median,
+      "min"=min,
+      "max"=max,
+      "geomean"=geomean,
+      "geocv"=geocv,
+      "cv"=cv,
+      "se"=se
+    )
+    
+    # Detect stats that are percentiles
+    percentileStats <- stats[stringr::str_detect(stats, "^p[0-9\\.]+$")]
+    
+    # Add requested percentile functions
+    for (percentileStat in percentileStats) {
+      availableContinuousStats[[percentileStat]] <- quantileFun(str=percentileStat, type=quantile_type)
+    }
+    
+    # In case some stats are not available
+    stats_ <- stats[stats %in% names(availableContinuousStats)]
+    
+    summary <-
+      cards::ard_continuous(
+        data,
+        by=NULL,
+        variables=dplyr::all_of("value"),
+        statistic=~cards::continuous_summary_fns(
+          summaries=character(0),
+          other_stats=availableContinuousStats[stats_]
+        )
+      )
+    
+    summary <- tibble::as_tibble(summary) %>%
+      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))
 
-    ret <- dplyr::bind_rows(ret, tmp)
+    comment <- glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary, digits=digits)
   }
-  
-  return(ret)
+
+  # Add evaluated stat_display string as a comment to the data frame
+  comment(summary) <- comment
+
+  return(summary)
+}
+
+quantileFun <- function(str, type) {
+  myFun <- sprintf("function(x) {stats::quantile(x, probs=as.numeric(substr('%s', 2, nchar('%s')))/100, type=%i) %%>%% unname()}", str, str, type)
+  return(eval(parse(text=myFun)))
 }
 
 #' 
-#' Compute table summary.
+#' Glue stat display string.
 #' 
-#' @param object NCA metric
-#' @return data frame
-#' @importFrom dplyr select
-computeTableSummary <- function(object) {
-  # Mock a table object with the given metric
-  object@name <- "value"
-  table <- NCAMetricsTable() %>%
-    add(NCAMetrics() %>% add(object))
+#' @param stat_display stat display string
+#' @param stats statistics, character vector
+#' @param summary summary data frame
+#' @param digits digits to be used for rounding
+#' @return glued string
+#' @importFrom glue glue
+#' @export
+glueStatDisplay <- function(stat_display, stats, summary, digits) {
+  env <- new.env()
+  values <- summary$value
+  names(values) <- summary$stat
   
-  # Re-use 'standard' table generation code
-  stats <- getStatisticsCode(table)
-  type <- getVariableTypeCode(table, all_dichotomous_levels=TRUE) # We expect all levels to be computed
-  labels <- getLabelsCode(table, subscripts=TRUE)
-  digits <- getDigitsCode(table)
-
-  individual <- object@individual %>%
-	  dplyr::select(-id)
-  code <- getTableSummaryCode(var="gtTable", data="individual", by="NULL",
-                              stats=stats, type=type, labels=labels, digits=digits,
-                              combine_with="tbl_stack", header_label="Metric")
-  gtTable <- tryCatch(
-    expr=eval(expr=parse(text=code)),
-    error=function(cond) {
-      return(sprintf("Failed to create gtsummary table: %s", cond$message))
-    })
-  
-  # Extract main info (-> stat_display)
-  summary <- extractTableInfo(gtTable) %>%
-    dplyr::select(-variable)
-
-  # Add discrete category if metric is categorical
-  if (object@categorical) {
-    categories <- getDiscreteCategories(object)
-    summary <- summary %>%
-      dplyr::group_by(stat) %>%
-      dplyr::mutate(category=categories) %>%
-      dplyr::ungroup()
+  for (statIndex in seq_along(stats)) {
+    stat <- stats[statIndex]
+    value <- values[stat]
+    if (stat=="p") {
+      value <- value * 100
+    }
+    if (!stat %in% c("n", "N")) {
+      if (length(digits) == 0) {
+        # Default rounding
+        value <- gtsummary::style_sigfig(value, 3)
+      } else {
+        if (statIndex <= length(digits)) {
+          digit <- digits[statIndex]
+        } else {
+          digit <- digits[1]
+        }
+        fun <- eval(expr=parse(text=digit))
+        if (is.numeric(fun)) {
+          value <- round(value, fun)
+        } else if (rlang::is_function(fun)) {
+          value <- fun(value)
+        } else {
+          stop("Digit element must be a function, a purrr-style lambda function or simply an integer")
+        }
+      }
+    }
+    env[[stat]] <- value
   }
+  retValue <- glue::glue(stat_display, .envir=env) %>% as.character()
   
-  # Add evaluated stat_display string as a comment to the data frame
-  comment(summary) <- gtTable$table_body$stat_0
-  
-  return(summary)
+  return(retValue)
 }
 
 #' 
