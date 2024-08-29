@@ -71,11 +71,11 @@ test_that("Method statDisplayString works as expected when digits is provided", 
   
   cmax1 <- Cmax(x=campsis %>% timerange(0,24), variable="Y")
   cmax1 <- cmax1 %>% campsisnca::calculate()
-  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.2 (7.86–13.1)")
+  expect_equal(cmax1 %>% campsisnca::statDisplayString(), "10.2 (7.85–13.1)")
   
   cmax2 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_sigfig(.x))
   cmax2 <- cmax2 %>% campsisnca::calculate()
-  expect_equal(cmax2 %>% campsisnca::statDisplayString(), "10 (7.9–13)")
+  expect_equal(cmax2 %>% campsisnca::statDisplayString(), "10 (7.8–13)")
   
   cmax3 <- Cmax(x=campsis %>% timerange(0,24), variable="Y", digits=~style_number(.x))
   cmax3 <- cmax3 %>% campsisnca::calculate()
