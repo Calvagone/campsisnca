@@ -56,9 +56,9 @@ ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, level, ...) {
+setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, quantile_type, ...) {
   object@individual <- iValues(object=object)
-  object@summary <- computeTableSummary(object=object)
+  object@summary <- computeNCAMetricSummary(object=object, quantile_type=quantile_type)
   return(object)    
 })
 
@@ -213,20 +213,7 @@ getDiscreteCategories <- function(object) {
 setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
   if (nrow(object@summary) > 0) {
     attr <- attributes(object@summary)
-    
-    if (object@categorical) {
-      comment <- attr$comment
-      comment <- comment[!is.na(comment)] # First item always NA (don't know why)
-      categories <- getDiscreteCategories(object)
-      if (length(comment)==length(categories)) {
-        retValue <- paste0(paste0(categories, ": ", comment), collapse=", ")
-      } else {
-        retValue <- "Can't derive stat display"
-      }
-    } else {
-      retValue <- attr$comment
-    }
-    return(retValue)
+    return(attr$comment)
   } else {
     stop("Summary does not exist yet and must be calculated first")
   }
