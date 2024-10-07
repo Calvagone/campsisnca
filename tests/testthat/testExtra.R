@@ -29,6 +29,24 @@ test_that("Column names can be non-standard", {
   
 })
 
+test_that("Statistics can contain line breaks", {
+  
+  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+    add(c(AUC(stat_display="{geomean}<BR>({geocv}%)"), Cavg(stat_display="{geomean}<BR>({geocv}%)"))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()
+  table <- table %>%
+    add(nca)
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE, fmt_markdown=TRUE)
+  gtTableRegressionTest(gttable, "linebreaks_in_stats")
+  
+})
+
 test_that("Table can be reduced to 2 dimensions on demand", {
   
   nca <- NCAMetrics(x=campsis, variable="Y", scenario=c(a="1", b="1", c="1")) %>%

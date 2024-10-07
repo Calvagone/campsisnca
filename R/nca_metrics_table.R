@@ -114,7 +114,7 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
     export(dest=new("gtsummary_type"), init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   
   gtTable <- gtsummaryTable %>%
-    toGt(subscripts=subscripts)
+    toGt(subscripts=subscripts, ...)
 
   return(gtTable)
 })
@@ -124,11 +124,12 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
 #' 
 #' @param x gtsummary table
 #' @param subscripts use subscripts
+#' @param fmt_markdown transform any markdown-formatted text, logical value. Default is FALSE.
 #' @importFrom gtsummary as_gt
-#' @importFrom gt cells_body text_transform
+#' @importFrom gt cells_body fmt_markdown text_transform
 #' @importFrom stringr str_replace_all
 #' @export
-toGt <- function(x, subscripts=FALSE) {
+toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
   }
@@ -151,6 +152,10 @@ toGt <- function(x, subscripts=FALSE) {
           return(stringr::str_replace_all(string=x, pattern="(_\\{)([^\\}]+)(\\})", replacement="<sub>\\2</sub>"))
         }
       )
+  }
+  if (fmt_markdown) {
+    gtTable <- gtTable %>%
+      gt::fmt_markdown()
   }
   return(gtTable)
 }
