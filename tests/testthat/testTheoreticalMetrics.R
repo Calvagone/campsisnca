@@ -98,7 +98,7 @@ test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
   dataset <- dataset %>% add(Observations(times=seq(0,21*24)))
   
   # Simulate with CAMPSIS
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest="mrgsolve", seed=1, outvars=c("CP", halfLifeRequiredVars))
+  results <- model %>% disable("IIV") %>% simulate(dataset, dest="rxode2", seed=1, outvars=c("CP", halfLifeRequiredVars))
   
   shadedPlot(results, "CP") + ggplot2::scale_y_log10()
   
@@ -116,7 +116,7 @@ test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
   dataset <- dataset %>% add(Observations(times=seq(0,21*24)))
   
   # Simulate with CAMPSIS
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest="mrgsolve", seed=1, outvars=c("CP", "K"))
+  results <- model %>% disable("IIV") %>% simulate(dataset, dest="rxode2", seed=1, outvars=c("CP", "K"))
   
   shadedPlot(results, "CP") + ggplot2::scale_y_log10()
   

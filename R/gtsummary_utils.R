@@ -129,7 +129,7 @@ glueStatDisplay <- function(stat_display, stats, summary, digits) {
       if (length(digits) == 0) {
         # Default rounding
         if (percentage) {
-          value <- gtsummary::style_percent(value, digits=1, symbol=FALSE)
+          value <- gtsummary::style_percent(value, digits=1, suffix="")
         } else {
           value <- gtsummary::style_sigfig(value, digits=3)
         }

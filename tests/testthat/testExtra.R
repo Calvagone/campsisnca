@@ -175,13 +175,13 @@ test_that("Method statDisplayString works as expected on categorical data when d
   
   # 1 digit using style_percent (same as default)
   custom <- CustomMetric(x=campsis_ %>% timerange(0,24), variable="Y", fun=~Cmax > 10,
-                         stat_display="{p}%", digits=~style_percent(.x, digits=1), categorical=TRUE)
+                         stat_display="{p}", digits=~style_percent(.x, digits=1, suffix='%'), categorical=TRUE)
   custom <- custom %>% campsisnca::calculate()
   expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.7%, TRUE: 56.3%")
 
   # 2 digits using style_percent
   custom <- CustomMetric(x=campsis_ %>% timerange(0,24), variable="Y", fun=~Cmax > 10,
-                         stat_display="{p}%", digits=~style_percent(.x, digits=2), categorical=TRUE)
+                         stat_display="{p}", digits=~style_percent(.x, digits=2, suffix='%'), categorical=TRUE)
   custom <- custom %>% campsisnca::calculate()
   expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.72%, TRUE: 56.28%")
 
