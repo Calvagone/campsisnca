@@ -52,12 +52,48 @@ TimeBelowLimit <- function(x=NULL, variable=NULL, limit=NULL, name=NULL, unit=NU
 
 #' @rdname iValue
 setMethod("iValue", signature=c("time_above_below_limit", "numeric", "numeric"), definition=function(object, time, value) {
-  limit <- object@limit
   above <- object@above
+  value <- value - object@limit
+
+  size <- length(time)
+
+  lines <- tibble::tibble(
+    x1=time[1:(size - 1)],
+    y1=value[1:(size - 1)],
+    x2=time[2:size],
+    y2=value[2:size],
+    above=rep(above, size - 1)
+    )
   
-  
-  return(retValue)    
+  durations <- lines %>%
+    purrr::pmap_dbl(computeDuration)
+
+  return(sum(durations))    
 })
+
+computeDuration <- function(x1, y1, x2, y2, above) {
+  duration <- x2 - x1
+  
+  if (y1 >= 0 && y2 >= 0) {
+    return(ifelse(above, duration, 0))
+  }
+  if (y1 <= 0 && y2 <= 0) {
+    return(ifelse(!above, duration, 0))
+  }
+  
+  a <- (y2 - y1) / (x2 - x1)
+  b <- y1 - a*x1
+  intersection <- -b/a
+  
+  if (intersection > x1 && intersection < x2) {
+    if (y1 >= 0) {
+      return(ifelse(above, intersection - x1, x2 - intersection))
+    } else {
+      return(ifelse(!above, intersection - x1, x2 - intersection))
+    }
+  }
+  stop("Should never occur")
+}
 
 #_______________________________________________________________________________
 #----                           getLaTeXName                                ----
