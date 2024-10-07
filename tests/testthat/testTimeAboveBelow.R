@@ -35,6 +35,15 @@ test_that("Dataset 1 - time below 0.75 at day 1 (check reciprocity)", {
   outputRegressionTest(results2@individual, filename="dataset1_time_above_0_75.csv")
 })
 
+test_that("Method 'computeTimeAboveBelow' works as expected", {
+  
+  # Intersection at the middle of the 2 samples
+  expect_equal(computeTimeAboveBelow(x1=0, x2=2, y1=-0.5, y2=0.5, above=TRUE, strictly=TRUE), 1)
+  expect_equal(computeTimeAboveBelow(x1=0, x2=2, y1=-0.5, y2=0.5, above=TRUE, strictly=FALSE), 1)
+  expect_equal(computeTimeAboveBelow(x1=0, x2=2, y1=-0.5, y2=0.5, above=FALSE, strictly=TRUE), 1)
+  expect_equal(computeTimeAboveBelow(x1=0, x2=2, y1=-0.5, y2=0.5, above=FALSE, strictly=FALSE), 1)
+})
+
 test_that("Method 'computeTimeAboveBelow' deals well with special cases", {
   
   # Horizontal line, strictly higher than 0
@@ -70,4 +79,7 @@ test_that("Method 'computeTimeAboveBelow' deals well with special cases", {
   # Vertical line should raise an error
   expect_error(computeTimeAboveBelow(x1=0, x2=0, y1=0, y2=1, above=TRUE, strictly=TRUE), msg="Sample times must be unique")
 
+  # Extreme values
+  expect_equal(computeTimeAboveBelow(x1=0, x2=2, y1=-0.5, y2=9999999999, above=TRUE, strictly=TRUE), 2)
+  expect_equal(computeTimeAboveBelow(x1=0, x2=2, y1=-0.5, y2=-9999999999, above=FALSE, strictly=TRUE), 2)
 })
