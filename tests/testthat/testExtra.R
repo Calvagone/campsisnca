@@ -9,7 +9,7 @@ context("Test extra features")
 
 source(paste0("", "testUtils.R"))
 
-campsis <- generateData1()
+campsis <- generateTestData()
 
 test_that("Column names can be non-standard", {
   

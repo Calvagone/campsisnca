@@ -43,6 +43,7 @@ Language: en-US
 LazyData: true
 RoxygenNote: 7.3.2
 Collate:
+    'test_data.R'
     'check.R'
     'consistency_checks.R'
     'stat_formula.R'

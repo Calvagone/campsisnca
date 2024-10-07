@@ -10,7 +10,7 @@ context("Test all functionalities presented in the README")
 
 source(paste0("", "testUtils.R"))
 
-campsis <- generateData1()
+campsis <- generateTestData()
 
 test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   
