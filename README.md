@@ -27,7 +27,7 @@ Assume some results were simulated with Campsis (see `campsis`
 dataframe) :
 
 ``` r
-campsis <- generateData1()
+campsis <- generateTestData()
 campsis
 ```
 

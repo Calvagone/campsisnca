@@ -31,7 +31,7 @@ library(gt)
 Assume some results were simulated with Campsis (see `campsis` dataframe) :
 
 ```{r, message=FALSE}
-campsis <- generateData1()
+campsis <- generateTestData()
 campsis
 ```
 
