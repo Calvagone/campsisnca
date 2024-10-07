@@ -8,6 +8,7 @@ TimeAboveLimit(
   x = NULL,
   variable = NULL,
   limit = NULL,
+  strictly = FALSE,
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -18,6 +19,10 @@ TimeAboveLimit(
 \item{x}{Campsis/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{limit}{the limit to compare the variable against}
+
+\item{strictly}{whether the variable must be strictly above the limit}
 
 \item{name}{custom metric name (will be exported into table headers)}
 
