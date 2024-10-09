@@ -4,12 +4,14 @@
 \alias{toGt}
 \title{Gtsummary to Gt.}
 \usage{
-toGt(x, subscripts = FALSE)
+toGt(x, subscripts = FALSE, fmt_markdown = FALSE)
 }
 \arguments{
 \item{x}{gtsummary table}
 
 \item{subscripts}{use subscripts}
+
+\item{fmt_markdown}{transform any markdown-formatted text, logical value. Default is FALSE.}
 }
 \description{
 Gtsummary to Gt.

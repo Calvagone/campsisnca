@@ -13,7 +13,7 @@ test_that("Test half life parameters on 1-compartment model ", {
   dataset <- dataset %>% add(Bolus(time=0, amount=amount))
   dataset <- dataset %>% add(Observations(times=times))
   
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest="mrgsolve", seed=1, outvars=c("CP", required))
+  results <- model %>% disable("IIV") %>% simulate(dataset, dest="rxode2", seed=1, outvars=c("CP", required))
   
   nca <- NCAMetrics(x=results %>% mutate(DOSE=amount, TAU=24), variable="CP", scenario=c(xx="Half-lives"))
   nca <- nca %>% add(c(Thalf.1cpt(), Thalf(x=results %>% timerange(50,150)))) 
@@ -46,7 +46,7 @@ test_that("Test half life parameters on 2-compartment model ", {
   dataset <- dataset %>% add(Bolus(time=0, amount=amount))
   dataset <- dataset %>% add(Observations(times=times))
   
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest="mrgsolve", seed=1, outvars=c("CP", required))
+  results <- model %>% disable("IIV") %>% simulate(dataset, dest="rxode2", seed=1, outvars=c("CP", required))
   
   nca <- NCAMetrics(x=results %>% mutate(DOSE=amount, TAU=24), variable="CP", scenario=c(xx="Half-lives"))
   nca <- nca %>% add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z(), Thalf(x=results %>% timerange(50,150))))

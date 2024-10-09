@@ -9,7 +9,7 @@ context("Test extra features")
 
 source(paste0("", "testUtils.R"))
 
-campsis <- generateData1()
+campsis <- generateTestData()
 
 test_that("Column names can be non-standard", {
   
@@ -26,6 +26,24 @@ test_that("Column names can be non-standard", {
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "non_standard_column_name")
+  
+})
+
+test_that("Statistics can contain line breaks", {
+  
+  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+    add(c(AUC(stat_display="{geomean}<BR>({geocv}%)"), Cavg(stat_display="{geomean}<BR>({geocv}%)"))) %>%
+    campsisnca::calculate()
+  
+  table <- NCAMetricsTable()
+  table <- table %>%
+    add(nca)
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE, fmt_markdown=TRUE)
+  gtTableRegressionTest(gttable, "linebreaks_in_stats")
   
 })
 
@@ -157,13 +175,13 @@ test_that("Method statDisplayString works as expected on categorical data when d
   
   # 1 digit using style_percent (same as default)
   custom <- CustomMetric(x=campsis_ %>% timerange(0,24), variable="Y", fun=~Cmax > 10,
-                         stat_display="{p}%", digits=~style_percent(.x, digits=1), categorical=TRUE)
+                         stat_display="{p}", digits=~style_percent(.x, digits=1, suffix='%'), categorical=TRUE)
   custom <- custom %>% campsisnca::calculate()
   expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.7%, TRUE: 56.3%")
 
   # 2 digits using style_percent
   custom <- CustomMetric(x=campsis_ %>% timerange(0,24), variable="Y", fun=~Cmax > 10,
-                         stat_display="{p}%", digits=~style_percent(.x, digits=2), categorical=TRUE)
+                         stat_display="{p}", digits=~style_percent(.x, digits=2, suffix='%'), categorical=TRUE)
   custom <- custom %>% campsisnca::calculate()
   expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.72%, TRUE: 56.28%")
 
