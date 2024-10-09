@@ -243,3 +243,34 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
+
+### Example 9: Time above or below a certain threshold
+
+In the example below, we look at the individual time above (or below) 10 ng/mL at Day 1 for the 10 first subjects.
+
+```{r, message=FALSE}
+day1 <- campsis %>%
+  timerange(0, 24) %>%
+  dplyr::filter(ID %in% (1:10))
+
+campsis::spaghettiPlot(day1 , "Y") +
+  ggplot2::geom_hline(yintercept=10, linetype="dashed", color="red")
+```
+```{r, message=FALSE}
+nca <- NCAMetrics(x=day1, variable="Y") %>%
+  add(c(Cmax(unit="ng/mL*h", stat_display="{mean}"),
+        TimeAboveLimit(limit=10, unit="h", stat_display="{mean}"),
+        TimeBelowLimit(limit=10, unit="h", stat_display="{mean}"))) %>%
+  calculate()
+
+table <- NCAMetricsTable() %>%
+  add(nca)
+  
+table %>% export(dest="dataframe", type="individual_wide")
+```
+
+Summary statistics can also be exported:
+
+```{r, message=FALSE}
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+```

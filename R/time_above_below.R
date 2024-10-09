@@ -30,7 +30,7 @@ setClass(
 #' @export
 TimeAboveLimit <- function(x=NULL, variable=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="time_above_below_limit", def_name="Timeabove")
+                           metric_name="time_above_below_limit", def_name=sprintf("Time above %s", as.character(limit)))
   metric@limit <- limit
   metric@above <- TRUE
   metric@strictly <- strictly
@@ -46,7 +46,7 @@ TimeAboveLimit <- function(x=NULL, variable=NULL, limit=NULL, strictly=FALSE, na
 #' @export
 TimeBelowLimit <- function(x=NULL, variable=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="time_above_below_limit", def_name="Timebelow")
+                           metric_name="time_above_below_limit", def_name=sprintf("Time below %s", as.character(limit)))
   metric@limit <- limit
   metric@above <- FALSE
   metric@strictly <- strictly
@@ -133,17 +133,3 @@ computeTimeAboveBelow <- function(x1, y1, x2, y2, above, strictly) {
   }
   stop("intersection should lie between x1 or x2")
 }
-
-#_______________________________________________________________________________
-#----                           getLaTeXName                                ----
-#_______________________________________________________________________________
-
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("time_above_below_limit"), definition=function(x) {
-  if (x@above) {
-    return(subscriptOccurrence(x %>% getName(), "above"))
-  } else {
-    return(subscriptOccurrence(x %>% getName(), "below"))
-  }
-})
-
