@@ -14,6 +14,6 @@ LaTeX: pdfLaTeX
 
 BuildType: Package
 PackageUseDevtools: Yes
-PackageInstallArgs: --without-keep.source
+PackageInstallArgs: --without-keep.source --install-tests
 PackageBuildArgs: --no-build-vignettes
 PackageCheckArgs: --no-build-vignettes
