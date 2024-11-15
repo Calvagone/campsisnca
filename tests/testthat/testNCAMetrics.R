@@ -62,6 +62,17 @@ test_that("Dataset 1 - day 1 & day 7 - seed 1 & seed 2", {
   # Export to dataframe
   df <- table %>% export(dest="dataframe")
   
+  # A small test to show values will be slightly different based on the seed value
+  medAucSeed1 <- df %>%
+    filter(metric=="AUC", seed=="Seed 1", stat=="median", day=="Day 1") %>%
+    pull(value)
+  expect_equal(round(medAucSeed1, 1), 13.1)
+  
+  medAucSeed2 <- df %>%
+    filter(metric=="AUC", seed=="Seed 2", stat=="median", day=="Day 1") %>%
+    pull(value)
+  expect_equal(round(medAucSeed2, 1), 12.8)
+  
   # Export to HTML table
   gtTable <- table %>% export(dest="gt")
   gtTable

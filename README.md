@@ -1,5 +1,12 @@
 
-# campsisnca
+# campsisnca <img src='man/figures/r_package_campsisnca.png' align="right" width="120"/>
+
+<!-- badges: start -->
+
+[![R-CMD-check](https://github.com/Calvagone/campsisnca/workflows/R-CMD-check/badge.svg)](https://github.com/Calvagone/campsisnca/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/Calvagone/campsisnca/graph/badge.svg)](https://app.codecov.io/gh/Calvagone/campsisnca)
+<!-- badges: end -->
 
 Analyse your simulation output using non-compartmental analysis.
 

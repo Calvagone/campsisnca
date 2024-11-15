@@ -22,34 +22,42 @@ standardiseOutput <- function(ncaOutput, metric) {
   ncaOutput <- ncaOutput %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID)
   if (!is.null(metric)) {
     ncaOutput <- ncaOutput %>% dplyr::select(ID, dplyr::all_of(metric))
-    ncaOutput <- ncaOutput %>% rename(id=ID)
-    ncaOutput <- ncaOutput %>% rename_at(.vars=metric, .funs=~"value")
+    ncaOutput <- ncaOutput %>% dplyr::rename(id=ID)
+    ncaOutput <- ncaOutput %>% dplyr::rename_at(.vars=metric, .funs=~"value")
   }
   return(ncaOutput %>% tibble::as_tibble())
 }
 
-# THis is needed because of Cavg, Cmin funtions etc
-# that make the ncappc package not to work properly
-# Test it with the global variable: Cavg=0
-detachCampsisNCA <- function() {
-  if("campsisnca" %in% (.packages())){
-    detach("package:campsisnca", unload=TRUE) 
-  }
-}
-
 ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
-  detachCampsisNCA()
-  out <- ncappc::ncappc(
-    obsFile=nmDataset,
-    method=convertMethod(method),
-    doseType=doseType,
-    doseTime=doseTime,
-    Tau=Tau,
-    onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
-    extrapolate=extrapolate,
-    printOut=F,
-    noPlot=T
-  )
+  envir <- list()
+  envir$obsFile=nmDataset
+  envir$method=convertMethod(method)
+  envir$doseType=doseType
+  envir$doseTime=doseTime
+  envir$Tau=Tau
+  envir$extrapolate=extrapolate
+
+  out <- eval(
+    expr=parse(
+      text="
+      Cmax <<- NA # See global variable in ncappc::est.nca
+      Cmin <<- NA # See global variable in ncappc::est.nca
+      Clast <<- NA # See global variable in ncappc::est.nca
+      Tmin <<- NA # See global variable in ncappc::est.nca
+      Tmax <<- NA # See global variable in ncappc::est.nca
+      Cavg <<- NA # See global variable in ncappc::est.nca
+      ncappc::ncappc(
+        obsFile=obsFile,
+        method=method,
+        doseType=doseType,
+        doseTime=doseTime,
+        Tau=Tau,
+        onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
+        extrapolate=extrapolate,
+        printOut=F,
+        noPlot=T)"
+    ), envir=envir, enclos=NULL)
+  
   return(standardiseOutput(out$ncaOutput, metric))
 }
 

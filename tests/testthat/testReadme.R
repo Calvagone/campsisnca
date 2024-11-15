@@ -164,6 +164,30 @@ test_that("Round your PK metrics (example 5)", {
   table <- table %>%
     add(c(ncaD1, ncaD7))
 
+  summary <- table %>%
+    export(dest="dataframe", type="summary_pretty")
+  
+  auc1 <- summary %>%
+    filter(metric=="AUC1", day=="Day 1") %>%
+    pull(summary_stats)
+  
+  auc2 <- summary %>%
+    filter(metric=="AUC2", day=="Day 1") %>%
+    pull(summary_stats)
+  
+  auc3 <- summary %>%
+    filter(metric=="AUC3", day=="Day 1") %>%
+    pull(summary_stats)
+  
+  auc4 <- summary %>%
+    filter(metric=="AUC4", day=="Day 1") %>%
+    pull(summary_stats)
+  
+  expect_equal(auc1, "134 (102–168)") # At least 2 significant figures
+  expect_equal(auc2, "134 (102.03–167.51)") # 1/2/2 digits
+  expect_equal(auc3, "130 (100–170)") # 2 first significant digits
+  expect_equal(auc4, "135 (102–168)") # Specific functions, see above
+
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
   gtTableRegressionTest(gttable, "readme_example5")
 })
