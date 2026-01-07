@@ -7,9 +7,14 @@ library(gt)
 
 context("Test extra features")
 
-source(paste0("", "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 campsis <- generateTestData()
+
+getRefFile <- function(filename) {
+  return(file.path(testFolder, "non_regression", filename))
+}
 
 test_that("Column names can be non-standard", {
   
@@ -27,7 +32,7 @@ test_that("Column names can be non-standard", {
   expect_true(all(c("Area Under Curve", "Cavg") %in% summary$metric))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "non_standard_column_name")
+  gtTableRegressionTest(gttable, getRefFile("non_standard_column_name.html"))
   
 })
 
@@ -48,7 +53,7 @@ test_that("Statistics can contain line breaks", {
   expect_equal(summary$summary_stats, c("909<BR>(35.2%)", "3.79<BR>(35.2%)")) # No conversion yet at this stage
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE, fmt_markdown=TRUE)
-  gtTableRegressionTest(gttable, "linebreaks_in_stats")
+  gtTableRegressionTest(gttable, getRefFile("linebreaks_in_stats.html"))
   
 })
 
@@ -68,7 +73,7 @@ test_that("Table can be reduced to 2 dimensions on demand", {
   expect_equal(scenario, c(a_b="1 / 1", c="1"))
 
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "reduction_to_2dim")
+  gtTableRegressionTest(gttable, getRefFile("reduction_to_2dim.html"))
 })
 
 test_that("Method statDisplayString on categorical data should work", {
@@ -128,19 +133,19 @@ test_that("Summary stats on categorical data only should work as expected", {
     export(dest="dataframe")
   
   expect_equal(nrow(summary), 2*3*3) # 2 days * 3 categories * 3 stat
-  outputRegressionTest(data=summary, filename="categorical_data_summary")
+  outputRegressionTest(data=summary, file=getRefFile("categorical_data_summary.csv"))
   
   summary_wide <- table %>%
     export(dest="dataframe", type="summary_wide")
-  outputRegressionTest(data=summary_wide, filename="categorical_data_summary_wide")
+  outputRegressionTest(data=summary_wide, file=getRefFile("categorical_data_summary_wide.csv"))
   
   summary_pretty <- table %>%
     export(dest="dataframe", type="summary_pretty")
-  outputRegressionTest(data=summary_pretty, filename="categorical_data_summary_pretty")
+  outputRegressionTest(data=summary_pretty, file=getRefFile("categorical_data_summary_pretty.csv"))
   
   individual <- table %>%
     export(dest="dataframe", type="individual_wide")
-  outputRegressionTest(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), filename="categorical_data_individual")
+  outputRegressionTest(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), file=getRefFile("categorical_data_individual.csv"))
 
   subjects <- length(unique(campsis$ID))
   expect_equal(nrow(individual), subjects*2) # subjects * 2 categories

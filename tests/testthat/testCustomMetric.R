@@ -4,7 +4,8 @@ library(dplyr)
 library(campsis)
 context("Test custom metric")
 
-source(paste0("", "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 test_that("Auto-replace of known NCA metrics works as expected", {
   custom1 <- CustomMetric(fun=~Cmax > 12, name="Cmax > 12", categorical=TRUE)

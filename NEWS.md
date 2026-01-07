@@ -1,3 +1,8 @@
+# campsisnca 1.5.2
+
+* Tests should not be based on results including RUV #71
+* Review tests #72
+
 # campsisnca 1.5.1
 
 * Set up code coverage report with codecov.io #67

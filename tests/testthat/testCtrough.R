@@ -4,8 +4,8 @@ library(dplyr)
 library(campsis)
 context("Test CAt and Ctrough methods")
 
-testFolder <- ""
-source(paste0(testFolder, "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 test_that("Dataset 1 - Ctrough at steady state", {
   ds <- dataset1()

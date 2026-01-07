@@ -2,10 +2,8 @@
 # setwd("C:/prj/campsisnca/")
 # roxygen2::roxygenise()
 # setwd("C:/prj/campsisnca/tests/")
-# testFolder <- "C:/prj/campsisnca/tests/testthat/"
 
 overwriteNonRegressionFiles <- FALSE
-testFolder <- ""
 
 convertMethod <- function(method) {
   if (method==1) {
@@ -92,10 +90,9 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
 #' 
 #' @param data newly generated data
 #' @param output variables to compare, if NULL, all column names are compared
-#' @param filename reference file
-#' @param times filter reference results on specific times, NULL by default
+#' @param file reference file
 #' @importFrom tibble as_tibble
-outputRegressionTest <- function(data, output=NULL, filename) {
+outputRegressionTest <- function(data, output=NULL, file) {
   if (is.null(output)) {
     output <- colnames(data)
   }
@@ -103,8 +100,6 @@ outputRegressionTest <- function(data, output=NULL, filename) {
   results1 <- data %>%
     dplyr::select(dplyr::all_of(output)) %>%
     dplyr::mutate_if(is.numeric, round, digits=2)
-  
-  file <- paste0(testFolder, "non_regression/", paste0(filename, ".csv"))
   
   if (overwriteNonRegressionFiles) {
     write.table(results1, file=file, sep=",", row.names=FALSE)
@@ -124,9 +119,7 @@ outputRegressionTest <- function(data, output=NULL, filename) {
   expect_equal(results1, results2)
 }
 
-gtTableRegressionTest <- function(gttable, filename) {
-
-  file <- paste0(testFolder, "non_regression/", paste0(filename, ".html"))
+gtTableRegressionTest <- function(gttable, file) {
 
   gttable %>%
     gt::gtsave(filename=file)

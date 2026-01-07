@@ -8,9 +8,14 @@ library(gt)
 
 context("Test all functionalities presented in the README")
 
-source(paste0("", "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 campsis <- generateTestData()
+
+getRefFile <- function(filename) {
+  return(file.path(testFolder, "non_regression", filename))
+}
 
 test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   
@@ -42,13 +47,13 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
     select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, filename="example1_summary")
-  outputRegressionTest(data=summary_wide, filename="example1_summary_wide")
-  outputRegressionTest(data=summary_pretty, filename="example1_summary_pretty")
-  outputRegressionTest(data=individual, filename="example1_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example1_summary.csv"))
+  outputRegressionTest(data=summary_wide, file=getRefFile("example1_summary_wide.csv"))
+  outputRegressionTest(data=summary_pretty, file=getRefFile("example1_summary_pretty.csv"))
+  outputRegressionTest(data=individual, file=getRefFile("example1_individual.csv"))
 
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example1")
+  gtTableRegressionTest(gttable, getRefFile("readme_example1.html"))
 })
 
 test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (example 2) can be reproduced", {
@@ -87,11 +92,11 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
     select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, filename="example2_summary")
-  outputRegressionTest(data=individual, filename="example2_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example2_summary.csv"))
+  outputRegressionTest(data=individual, file=getRefFile("example2_individual.csv"))
 
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example2")
+  gtTableRegressionTest(gttable, getRefFile("readme_example2.html"))
 })
 
 test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can be reproduced", {
@@ -111,11 +116,11 @@ test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can
     select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, filename="example3_summary")
-  outputRegressionTest(data=individual, filename="example3_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example3_summary.csv"))
+  outputRegressionTest(data=individual, file=getRefFile("example3_individual.csv"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example3")
+  gtTableRegressionTest(gttable, getRefFile("readme_example3.html"))
 })
 
 test_that("Compute terminal half-live based on data (example 4) can be reproduced", {
@@ -135,11 +140,11 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
     select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, filename="example4_summary")
-  outputRegressionTest(data=individual, filename="example4_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example4_summary.csv"))
+  outputRegressionTest(data=individual, file=getRefFile("example4_individual.csv"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example4")
+  gtTableRegressionTest(gttable, getRefFile("readme_example4.html"))
 })
 
 test_that("Round your PK metrics (example 5)", {
@@ -189,7 +194,7 @@ test_that("Round your PK metrics (example 5)", {
   expect_equal(auc4, "135 (102–168)") # Specific functions, see above
 
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example5")
+  gtTableRegressionTest(gttable, getRefFile("readme_example5.html"))
 })
 
 
@@ -219,14 +224,14 @@ test_that("Export custom metrics (example 6)", {
     export(dest="dataframe", type="individual") %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, filename="example6_summary")
-  outputRegressionTest(data=individual, filename="example6_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example6_summary.csv"))
+  outputRegressionTest(data=individual, file=getRefFile("example6_individual.csv"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example6")
+  gtTableRegressionTest(gttable, getRefFile("readme_example6.html"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE)
-  gtTableRegressionTest(gttable, "readme_example6_all_levels")
+  gtTableRegressionTest(gttable, getRefFile("readme_example6_all_levels.html"))
 })
 
 test_that("Geometric Mean / Geometric CV (example 7)", {
@@ -246,11 +251,11 @@ test_that("Geometric Mean / Geometric CV (example 7)", {
     select(-discrete_value) %>%
     filter(id %in% c(1,2,3)) # Keep first 3
   
-  outputRegressionTest(data=summary, filename="example7_summary")
-  outputRegressionTest(data=individual, filename="example7_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example7_summary.csv"))
+  outputRegressionTest(data=individual, file=getRefFile("example7_individual.csv"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example7")
+  gtTableRegressionTest(gttable, getRefFile("readme_example7.html"))
 })
 
 test_that("Stats on categorical data with more than 2 levels (example 8)", {
@@ -286,14 +291,14 @@ test_that("Stats on categorical data with more than 2 levels (example 8)", {
     export(dest="dataframe", type="individual_wide") %>%
     filter(id %in% seq_len(10)) # Keep first 10
   
-  outputRegressionTest(data=summary, filename="example8_summary")
-  outputRegressionTest(data=individual %>% rename(Categories=`Cmax categories`), filename="example8_individual")
+  outputRegressionTest(data=summary, file=getRefFile("example8_summary.csv"))
+  outputRegressionTest(data=individual %>% rename(Categories=`Cmax categories`), file=getRefFile("example8_individual.csv"))
   
   # Because there are 3 levels (and not 2), both table below are exactly similar
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, "readme_example8")
+  gtTableRegressionTest(gttable, getRefFile("readme_example8.html"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE)
-  gtTableRegressionTest(gttable, "readme_example8_all_levels")
+  gtTableRegressionTest(gttable, getRefFile("readme_example8_all_levels.html"))
   
 })

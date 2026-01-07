@@ -7,8 +7,8 @@ library(gtsummary)
 
 context("Test NCA metrics and NCA metrics table object")
 
-testFolder <- ""
-source(paste0(testFolder, "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 test_that("Dataset 1 - day 1 & day 7", {
   ds <- dataset1()
@@ -66,12 +66,14 @@ test_that("Dataset 1 - day 1 & day 7 - seed 1 & seed 2", {
   medAucSeed1 <- df %>%
     filter(metric=="AUC", seed=="Seed 1", stat=="median", day=="Day 1") %>%
     pull(value)
-  expect_equal(round(medAucSeed1, 1), 13.1)
+  expect_equal(round(medAucSeed1), 13)
   
   medAucSeed2 <- df %>%
     filter(metric=="AUC", seed=="Seed 2", stat=="median", day=="Day 1") %>%
     pull(value)
-  expect_equal(round(medAucSeed2, 1), 12.8)
+  expect_equal(round(medAucSeed2), 13)
+  
+  expect_false(round(medAucSeed1, 3) == round(medAucSeed2, 3))
   
   # Export to HTML table
   gtTable <- table %>% export(dest="gt")
