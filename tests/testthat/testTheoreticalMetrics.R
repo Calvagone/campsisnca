@@ -4,8 +4,8 @@ library(dplyr)
 library(campsis)
 context("Compute theoritical NCA metrics from PK parameters")
 
-testFolder <- ""
-source(paste0(testFolder, "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 test_that("Check errors are well detected", {
   x <- data.frame(ID=1, TIME=0, TAU=12, DOSE=10000, CL=48, V2=208, Q=18, V3=684, K=3.3)

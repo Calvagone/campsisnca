@@ -4,8 +4,12 @@ library(dplyr)
 library(campsis)
 context("Test the 'TimeAboveLimit' and 'TimeBelowLimit' methods")
 
-testFolder <- ""
-source(paste0(testFolder, "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
+
+getRefFile <- function(filename) {
+  return(file.path(testFolder, "non_regression", filename))
+}
 
 test_that("Dataset 1 - time above 0.75 at day 1", {
   ds <- dataset1()
@@ -19,7 +23,7 @@ test_that("Dataset 1 - time above 0.75 at day 1", {
   results1 <- TimeAboveLimit(x=campsis, variable="CP", limit=0.75) %>% campsisnca::calculate()
   results1@individual
   
-  outputRegressionTest(results1@individual, filename="dataset1_time_above_0_75.csv")
+  outputRegressionTest(results1@individual, file=getRefFile("dataset1_time_above_0_75.csv"))
 })
 
 test_that("Dataset 1 - time below 0.75 at day 1 (check reciprocity)", {
@@ -32,7 +36,7 @@ test_that("Dataset 1 - time below 0.75 at day 1 (check reciprocity)", {
   results2@individual$value <- 24 - results2@individual$value
   results2@individual
   
-  outputRegressionTest(results2@individual, filename="dataset1_time_above_0_75.csv")
+  outputRegressionTest(results2@individual, file=getRefFile("dataset1_time_above_0_75.csv"))
 })
 
 test_that("Method 'computeTimeAboveBelow' works as expected", {

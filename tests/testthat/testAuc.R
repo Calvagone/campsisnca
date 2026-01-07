@@ -5,8 +5,8 @@ library(campsis)
 
 context("Test Auc metric")
 
-testFolder <- ""
-source(paste0(testFolder, "testUtils.R"))
+testFolder <-  file.path(getwd(), test_path())
+source(file.path(testFolder, "testUtils.R"))
 
 
 test_that("Dataset 1 - AUC0-24 at day 1 (method 1)", {
