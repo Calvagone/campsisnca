@@ -2,58 +2,68 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://calvagone.github.io/campsis.doc/schema/1.0/campsisnca.schema.json",
   "$comment": "Campsisnca JSON Schema v1.0 © 2025 [Nicolas Luyckx / Calvagone]. Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt this schema with attribution.",
-  "title": "Campsis JSON Schema",
-  "$ref": "#/$defs/metrics",
+  "title": "Campsisnca JSON Schema",
+  "$ref": "#/$defs/nca_configuration",
   "$defs": {
-    "stratification_variables": {
-      "type": "array",
-      "items": {
-        "type": "string"
+    "nca_configuration": {
+      "type": "object",
+      "properties": {
+        "stratification_variables": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Stratification variable names present in the simulation output. Strata names are automatically identified from the simulation output."
+        },
+        "analyses": {
+          "type": "array",
+          "items": {
+            "type": "analysis"
+          },
+          "description": "List of NCA analyses. For example, one analysis may focus on NCA metrics for day 1, and another on those for day 7."
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/auc"
+              },
+              {
+                "$ref": "#/$defs/cmax"
+              },
+              {
+                "$ref": "#/$defs/cavg"
+              }
+            ]
+          }
+        }
       },
-      "description": "Stratification variable names present in the simulation output. Strata names are automatically identified from the simulation output."
+      "required": [
+        "stratification_variables",
+        "analyses",
+        "metrics"
+      ]
     },
-    "periods": {
-      "type": "array",
-      "items": {
-        "type": "period"
-      },
-      "description": "List of analysis periods or groups."
-    },
-    "period": {
+    "analysis": {
       "properties": {
         "name": {
           "type": "string",
-          "description": "Name of this period/group. This name will appear in the table. All names must be unique."
+          "description": "Name of this analysis. This name will appear in the table. All names must be unique."
         },
         "default_start_time": {
           "type": "number",
-          "description": "Default start time for this period/group. Can be overridden if needed in the metric itself. If undefined, default start time is 0."
+          "description": "Default start time for this analysis. Can be overridden if needed in the metric itself. If undefined, default start time is 0."
         },
         "default_end_time": {
           "type": "number",
-          "description": "Default end time for this period/group. Can be overridden if needed in the metric itself. If undefined, default end time is the last time in the simulation output."
+          "description": "Default end time for this analysis. Can be overridden if needed in the metric itself. If undefined, default end time is the last time in the simulation output."
         }
       },
       "required": [
         "name"
       ],
       "description": "Definition of a period or a group."
-    },
-    "metrics": {
-      "type": "array",
-      "items": {
-        "oneOf": [
-          {
-            "$ref": "#/$defs/auc"
-          },
-          {
-            "$ref": "#/$defs/cmax"
-          },
-          {
-            "$ref": "#/$defs/cavg"
-          }
-        ]
-      }
     },
     "metric": {
       "title": "Base Metric",
@@ -74,12 +84,25 @@
         "stat_display": {
           "type": "string",
           "description": "Statistic display. E.g. '{median} ({p5}–{p95})'."
+        },
+        "analysis_ref": {
+          "type": "string",
+          "description": "Reference analysis name."
+        },
+        "custom_start_time": {
+          "type": "number",
+          "description": "Custom start time. This will override the 'default_start_time' property of the analysis."
+        },
+        "custom_end_time": {
+          "type": "number",
+          "description": "Custom end time. This will override the 'default_end_time' property of the analysis."
         }
       },
       "required": [
         "name",
         "stat_display",
-        "output_variable"
+        "output_variable",
+        "analysis_ref"
       ]
     },
     "auc": {
@@ -93,9 +116,41 @@
             "type": {
               "const": "auc"
             },
-            "method" : {
+            "method": {
               "$ref": "#/$defs/auc_method",
               "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
+            }
+          },
+          "required": []
+        }
+      ]
+    },
+    "cmax": {
+      "title": "Cmax Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cmax"
+            }
+          },
+          "required": []
+        }
+      ]
+    },
+    "cavg": {
+      "title": "Cavg Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cavg"
             }
           },
           "required": []
