@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://calvagone.github.io/campsis.doc/schema/1.0/campsisnca.schema.json",
+  "$comment": "Campsisnca JSON Schema v1.0 © 2025 [Nicolas Luyckx / Calvagone]. Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt this schema with attribution.",
+  "title": "Campsis JSON Schema",
+  "$ref": "#/$defs/metrics",
+  "$defs": {
+    "stratification_variables": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "Stratification variable names present in the simulation output. Strata names are automatically identified from the simulation output."
+    },
+    "periods": {
+      "type": "array",
+      "items": {
+        "type": "period"
+      },
+      "description": "List of analysis periods or groups."
+    },
+    "period": {
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of this period/group. This name will appear in the table. All names must be unique."
+        },
+        "default_start_time": {
+          "type": "number",
+          "description": "Default start time for this period/group. Can be overridden if needed in the metric itself. If undefined, default start time is 0."
+        },
+        "default_end_time": {
+          "type": "number",
+          "description": "Default end time for this period/group. Can be overridden if needed in the metric itself. If undefined, default end time is the last time in the simulation output."
+        }
+      },
+      "required": [
+        "name"
+      ],
+      "description": "Definition of a period or a group."
+    },
+    "metrics": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {
+            "$ref": "#/$defs/auc"
+          },
+          {
+            "$ref": "#/$defs/cmax"
+          },
+          {
+            "$ref": "#/$defs/cavg"
+          }
+        ]
+      }
+    },
+    "metric": {
+      "title": "Base Metric",
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the metric. This name can include grouping variables. E.g. '<METRIC> <PERIOD>'"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Informative unit string for this metric."
+        },
+        "output_variable": {
+          "type": "string",
+          "description": "Output variable on which the metric must be computed."
+        },
+        "stat_display": {
+          "type": "string",
+          "description": "Statistic display. E.g. '{median} ({p5}–{p95})'."
+        }
+      },
+      "required": [
+        "name",
+        "stat_display",
+        "output_variable"
+      ]
+    },
+    "auc": {
+      "title": "AUC Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "auc"
+            },
+            "method" : {
+              "$ref": "#/$defs/auc_method",
+              "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
+            }
+          },
+          "required": []
+        }
+      ]
+    },
+    "auc_method": {
+      "type": "string",
+      "enum": [
+        "linlin",
+        "linlog",
+        "tmax_linlog"
+      ],
+      "description": "Method used to compute AUC"
+    }
+  }
+}
