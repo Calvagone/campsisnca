@@ -8,44 +8,44 @@
     "nca_configuration": {
       "type": "object",
       "properties": {
-        "stratification_variables": {
+        "strat_vars": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "description": "Stratification variable names present in the simulation output. Strata names are automatically identified from the simulation output."
         },
-        "analyses": {
+        "nca_analyses": {
           "type": "array",
           "items": {
-            "$ref": "#/$defs/analysis"
+            "$ref": "#/$defs/nca_analysis"
           },
           "description": "List of NCA analyses. For example, one analysis may focus on NCA metrics for day 1, and another on those for day 7."
         },
-        "metrics": {
+        "nca_metrics": {
           "type": "array",
           "items": {
             "oneOf": [
               {
-                "$ref": "#/$defs/auc"
+                "$ref": "#/$defs/auc_metric"
               },
               {
-                "$ref": "#/$defs/cmax"
+                "$ref": "#/$defs/cmax_metric"
               },
               {
-                "$ref": "#/$defs/cavg"
+                "$ref": "#/$defs/cavg_metric"
               }
             ]
           }
         }
       },
       "required": [
-        "stratification_variables",
-        "analyses",
-        "metrics"
+        "strat_vars",
+        "nca_analyses",
+        "nca_metrics"
       ]
     },
-    "analysis": {
+    "nca_analysis": {
       "type": "object",
       "properties": {
         "name": {
@@ -66,8 +66,8 @@
       ],
       "description": "Definition of a period or a group."
     },
-    "metric": {
-      "title": "Base Metric",
+    "nca_metric": {
+      "title": "Base NCA Metric",
       "type": "object",
       "properties": {
         "name": {
@@ -78,7 +78,7 @@
           "type": "string",
           "description": "Informative unit string for this metric."
         },
-        "output_variable": {
+        "variable": {
           "type": "string",
           "description": "Output variable on which the metric must be computed."
         },
@@ -101,20 +101,20 @@
       },
       "required": [
         "name",
-        "output_variable",
+        "variable",
         "analysis_ref"
       ]
     },
-    "auc": {
+    "auc_metric": {
       "title": "AUC Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/metric"
+          "$ref": "#/$defs/nca_metric"
         },
         {
           "properties": {
             "type": {
-              "const": "auc"
+              "const": "auc_metric"
             },
             "method": {
               "$ref": "#/$defs/auc_method",
@@ -125,32 +125,32 @@
         }
       ]
     },
-    "cmax": {
+    "cmax_metric": {
       "title": "Cmax Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/metric"
+          "$ref": "#/$defs/nca_metric"
         },
         {
           "properties": {
             "type": {
-              "const": "cmax"
+              "const": "cmax_metric"
             }
           },
           "required": ["type"]
         }
       ]
     },
-    "cavg": {
+    "cavg_metric": {
       "title": "Cavg Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/metric"
+          "$ref": "#/$defs/nca_metric"
         },
         {
           "properties": {
             "type": {
-              "const": "cavg"
+              "const": "cavg_metric"
             }
           },
           "required": ["type"]

@@ -45,6 +45,7 @@ RoxygenNote: 7.3.3
 Collate:
     'test_data.R'
     'check.R'
+    'utilities.R'
     'consistency_checks.R'
     'stat_formula.R'
     'export_type.R'
@@ -70,3 +71,7 @@ Collate:
     'theoretical_thalf.R'
     'time_above_below.R'
     'custom_metric.R'
+    'nca_analysis.R'
+    'nca_analyses.R'
+    'nca_configuration.R'
+    'json_interface.R'

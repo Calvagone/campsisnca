@@ -1,6 +1,6 @@
 {
-  "stratification_variables": [],
-  "analyses": [
+  "strat_vars": [],
+  "nca_analyses": [
     {
       "name": "Day 1",
       "default_start_time": 0,
@@ -12,17 +12,17 @@
       "default_end_time": 168
     }
   ],
-  "metrics": [
+  "nca_metrics": [
     {
-      "type": "auc",
+      "type": "auc_metric",
       "name": "AUC",
-      "output_variable": "Y",
+      "variable": "Y",
       "analysis_ref": "Day 1"
     },
     {
-      "type": "auc",
+      "type": "auc_metric",
       "name": "AUC",
-      "output_variable": "Y",
+      "variable": "Y",
       "analysis_ref": "Day 7"
     }
   ]

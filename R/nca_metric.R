@@ -164,6 +164,17 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 })
 
 #_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("nca_metric", "json_element"), definition=function(object, json) {
+  analysis_ref <- json@data$analysis_ref
+  json@data$analysis_ref <- NULL
+  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  return(object)
+})
+
+#_______________________________________________________________________________
 #----                             iValues                                   ----
 #_______________________________________________________________________________
 
