@@ -1,3 +1,7 @@
+# campsisnca 1.6.0
+
+* JSON-based interface to import NCA configuration #74
+
 # campsisnca 1.5.2
 
 * Tests should not be based on results including RUV #71

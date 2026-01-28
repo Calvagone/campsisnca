@@ -18,7 +18,7 @@
         "analyses": {
           "type": "array",
           "items": {
-            "type": "analysis"
+            "$ref": "#/$defs/analysis"
           },
           "description": "List of NCA analyses. For example, one analysis may focus on NCA metrics for day 1, and another on those for day 7."
         },
@@ -46,6 +46,7 @@
       ]
     },
     "analysis": {
+      "type": "object",
       "properties": {
         "name": {
           "type": "string",
@@ -100,7 +101,6 @@
       },
       "required": [
         "name",
-        "stat_display",
         "output_variable",
         "analysis_ref"
       ]
@@ -121,7 +121,7 @@
               "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
             }
           },
-          "required": []
+          "required": ["type"]
         }
       ]
     },
@@ -137,7 +137,7 @@
               "const": "cmax"
             }
           },
-          "required": []
+          "required": ["type"]
         }
       ]
     },
@@ -153,7 +153,7 @@
               "const": "cavg"
             }
           },
-          "required": []
+          "required": ["type"]
         }
       ]
     },

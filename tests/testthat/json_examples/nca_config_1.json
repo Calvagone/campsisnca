@@ -1,0 +1,29 @@
+{
+  "stratification_variables": [],
+  "analyses": [
+    {
+      "name": "Day 1",
+      "default_start_time": 0,
+      "default_end_time": 24
+    },
+    {
+      "name": "Day 7",
+      "default_start_time": 144,
+      "default_end_time": 168
+    }
+  ],
+  "metrics": [
+    {
+      "type": "auc",
+      "name": "AUC",
+      "output_variable": "Y",
+      "analysis_ref": "Day 1"
+    },
+    {
+      "type": "auc",
+      "name": "AUC",
+      "output_variable": "Y",
+      "analysis_ref": "Day 7"
+    }
+  ]
+}
