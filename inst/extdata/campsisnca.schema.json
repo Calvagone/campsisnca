@@ -189,7 +189,7 @@
         },
         "time_unit": {
           "$ref": "#/$defs/nca_metric",
-          "description": "Time unit of properties 'start' and 'end'"
+          "description": "Time unit of properties 'start' and 'end'. Default unit is 'hour."
         },
         "exclude_start": {
           "type": "boolean",
