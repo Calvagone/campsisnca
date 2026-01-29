@@ -40,7 +40,7 @@ processEndArgument <- function(x) {
 #' @param exclude_end exclude end time when filtering
 #' @return a time range object
 #' @export
-TimeRange <- function(start=0, end="last", time_unit="hour", exclude_start=FALSE, exclude_end=FALSE) {
+NCATimeRange <- function(start=0, end="last", time_unit="hour", exclude_start=FALSE, exclude_end=FALSE) {
   return(new("nca_time_range",
              start=start,
              end=processEndArgument(end),
