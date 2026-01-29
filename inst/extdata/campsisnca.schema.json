@@ -52,19 +52,19 @@
           "type": "string",
           "description": "Name of this analysis. This name will appear in the table. All names must be unique."
         },
-        "default_start_time": {
-          "type": "number",
-          "description": "Default start time for this analysis. Can be overridden if needed in the metric itself. If undefined, default start time is 0."
+        "time_range": {
+          "$ref": "#/$defs/nca_time_range",
+          "description": "Default time range for this analysis. If not specified, default time range is from 0 to 'last'."
         },
-        "default_end_time": {
-          "type": "number",
-          "description": "Default end time for this analysis. Can be overridden if needed in the metric itself. If undefined, default end time is the last time in the simulation output."
+        "variable": {
+          "type": "string",
+          "description": "Default output variable for this analysis. If not specified, the variable name MUST be specified in each metric."
         }
       },
       "required": [
         "name"
       ],
-      "description": "Definition of a period or a group."
+      "description": "Definition of a analysis."
     },
     "nca_metric": {
       "title": "Base NCA Metric",
@@ -90,18 +90,13 @@
           "type": "string",
           "description": "Reference analysis name."
         },
-        "custom_start_time": {
-          "type": "number",
-          "description": "Custom start time. This will override the 'default_start_time' property of the analysis."
-        },
-        "custom_end_time": {
-          "type": "number",
-          "description": "Custom end time. This will override the 'default_end_time' property of the analysis."
+        "time_range": {
+          "$ref": "#/$defs/nca_time_range",
+          "description": "Specific time range to use for this metric (e.g. if time range from the analysis needs to be overridden)"
         }
       },
       "required": [
         "name",
-        "variable",
         "analysis_ref"
       ]
     },
@@ -121,7 +116,9 @@
               "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
             }
           },
-          "required": ["type"]
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -137,7 +134,9 @@
               "const": "cmax_metric"
             }
           },
-          "required": ["type"]
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -153,7 +152,9 @@
               "const": "cavg_metric"
             }
           },
-          "required": ["type"]
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -165,6 +166,56 @@
         "tmax_linlog"
       ],
       "description": "Method used to compute AUC"
+    },
+    "nca_time_range": {
+      "title": "NCA time range",
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "number",
+          "description": "Start time of the range."
+        },
+        "end": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^last$"
+            }
+          ],
+          "description": "End time of the range. Use 'last' to refer to the last value of the simulation output."
+        },
+        "time_unit": {
+          "$ref": "#/$defs/nca_metric",
+          "description": "Time unit of properties 'start' and 'end'"
+        },
+        "exclude_start": {
+          "type": "boolean",
+          "description": "Exclude start time. Default is false. If true, the next time point shall delimit the start of the range."
+        },
+        "exclude_end": {
+          "type": "boolean",
+          "description": "Exclude end time. Default is false. If true, the previous time point shall delimit the end of the range."
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "time_unit": {
+      "type": "string",
+      "enum": [
+        "second",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year"
+      ]
     }
   }
 }

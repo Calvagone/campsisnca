@@ -15,6 +15,14 @@ setClass(
   )
 )
 
+#' 
+#' Create an empty NCA configuration.
+#' 
+#' @export
+NCAConfiguration <- function() {
+  return(new("nca_configuration"))
+}
+
 #_______________________________________________________________________________
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
