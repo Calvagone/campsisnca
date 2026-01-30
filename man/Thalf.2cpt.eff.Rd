@@ -5,7 +5,6 @@
 \title{Theoretical effective half life for a 2-compartment model.}
 \usage{
 Thalf.2cpt.eff(
-  x = NULL,
   map = NULL,
   name = NULL,
   unit = NULL,

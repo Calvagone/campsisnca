@@ -5,7 +5,6 @@
 \title{Theoretical elimination half life for a 2-compartment model.}
 \usage{
 Thalf.2cpt.z(
-  x = NULL,
   map = NULL,
   name = NULL,
   unit = NULL,

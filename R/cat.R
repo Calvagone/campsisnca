@@ -63,7 +63,7 @@ ValueAt <- function(variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display
 #' @param time what time to read the concentrations. If not provided, last concentrations from x will be returned.
 #' @export
 CAt <- function(variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="conc_at_metric")
   metric@observed_time <- ifelse(is.null(time), as.numeric(NA), time)
   return(setDefaultNameIfNA(metric))

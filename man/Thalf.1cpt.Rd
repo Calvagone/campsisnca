@@ -5,7 +5,6 @@
 \title{Theoretical half life for a 1-compartment model.}
 \usage{
 Thalf.1cpt(
-  x = NULL,
   map = NULL,
   name = NULL,
   unit = NULL,
