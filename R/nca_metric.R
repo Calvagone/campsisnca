@@ -3,11 +3,20 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble", "stat_display", "categorical", "concentration")))
+  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble",
+                                   "stat_display", "categorical", "concentration")))
+}
+
+getStatDisplayDefault <- function(categorical=FALSE) {
+  if (categorical) {
+    return("{n} / {N} ({p}%)")
+  } else {
+    return("{median} ({p5}\U2013{p95})") # En dash
+  }
 }
 
 #' 
-#' NCA metric class. See this class as an interface.
+#' NCA metric class. See this class as abstract class.
 #' 
 #' @export
 setClass(
@@ -17,25 +26,19 @@ setClass(
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
-    stat_display = "character",   # statistics display (see package gtsummary)
     categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
+    stat_display = "character",   # statistics display (see package gtsummary)
     digits = "character",         # rounding digits definitions for gtsummary
     concentration = "logical",    # concentration-related metric, NA by default
     individual = "data.frame",    # transient individual results
     summary = "data.frame"       # transient summary results
   ),
   contains="pmx_element",
-  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE, digits=character(0), concentration=as.logical(NA)),
+  prototype=prototype(variable=as.character(NA), name="Unknown metric", unit=as.character(NA),
+                      ivalue_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
+                      digits=character(0), concentration=as.logical(NA)),
   validity=validateMetric
 )
-
-getStatDisplayDefault <- function(categorical=FALSE) {
-  if (categorical) {
-    return("{n} / {N} ({p}%)")
-  } else {
-    return("{median} ({p5}\U2013{p95})") # En dash
-  }
-}
 
 ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric_name, def_name) {
   # x <- processDataframe(x)

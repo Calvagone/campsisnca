@@ -40,19 +40,19 @@ Slot "method":
 [1] 1
 
 Slot "variable":
-character(0)
+[1] NA
 
 Slot "name":
 [1] "AUC"
 
 Slot "unit":
-character(0)
+[1] NA
 
 Slot "ivalue_tibble":
 [1] FALSE
 
 Slot "stat_display":
-character(0)
+[1] "{median} ({p5}–{p95})"
 
 Slot "categorical":
 [1] FALSE
@@ -111,19 +111,19 @@ Slot "method":
 [1] 1
 
 Slot "variable":
-character(0)
+[1] NA
 
 Slot "name":
 [1] "AUC"
 
 Slot "unit":
-character(0)
+[1] NA
 
 Slot "ivalue_tibble":
 [1] FALSE
 
 Slot "stat_display":
-character(0)
+[1] "{median} ({p5}–{p95})"
 
 Slot "categorical":
 [1] FALSE
