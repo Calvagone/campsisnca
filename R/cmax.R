@@ -7,6 +7,18 @@ validateMaxMetric <- function(object) {
 }
 
 #' 
+#' Abstract max metric class.
+#' 
+#' @export
+setClass(
+  "abstract_max_metric",
+  representation(
+  ),
+  contains="nca_metric",
+  validity=validateMaxMetric
+)
+
+#' 
 #' Max metric class.
 #' 
 #' @export
@@ -14,8 +26,7 @@ setClass(
   "max_metric",
   representation(
   ),
-  contains="nca_metric",
-  validity=validateMaxMetric
+  contains="abstract_max_metric"
 )
 
 #' 
@@ -26,8 +37,7 @@ setClass(
   "cmax_metric",
   representation(
   ),
-  contains="max_metric",
-  validity=validateMaxMetric
+  contains="abstract_max_metric"
 )
 
 #' 
@@ -71,7 +81,7 @@ setMethod("getDefaultName", signature=c("cmax_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("max_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("iValue", signature=c("abstract_max_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(max(value))    
 })
 
@@ -80,7 +90,7 @@ setMethod("iValue", signature=c("max_metric", "numeric", "numeric"), definition=
 #_______________________________________________________________________________
 
 #' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("max_metric"), definition = function(x) {
+setMethod("getLaTeXName", signature=c("abstract_max_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "max"))
 })
 
@@ -88,7 +98,7 @@ setMethod("getLaTeXName", signature=c("max_metric"), definition = function(x) {
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("max_metric", "json_element"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("abstract_max_metric", "json_element"), definition=function(object, json) {
   object <- mapJSONPropertiesToS4Slots(object=object, json=json)
   return(setDefaultNameIfNA(object))
 })

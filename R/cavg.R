@@ -7,6 +7,18 @@ validateAvgMetric <- function(object) {
 }
 
 #' 
+#' Abstract avg metric class.
+#' 
+#' @export
+setClass(
+  "abstract_avg_metric",
+  representation(
+  ),
+  contains="nca_metric",
+  validity=validateAvgMetric
+)
+
+#' 
 #' Avg metric class.
 #' 
 #' @export
@@ -14,8 +26,7 @@ setClass(
   "avg_metric",
   representation(
   ),
-  contains="nca_metric",
-  validity=validateAvgMetric
+  contains="abstract_avg_metric"
 )
 
 #' 
@@ -26,8 +37,7 @@ setClass(
   "cavg_metric",
   representation(
   ),
-  contains="avg_metric",
-  validity=validateAvgMetric
+  contains="abstract_avg_metric"
 )
 
 #' 
@@ -71,7 +81,7 @@ setMethod("getDefaultName", signature=c("cavg_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("avg_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("iValue", signature=c("abstract_avg_metric", "numeric", "numeric"), definition=function(object, time, value) {
   start <- time[1]
   end <- time[length(time)]
   auc <- trap(x=time, y=value, method=1L)
@@ -83,7 +93,7 @@ setMethod("iValue", signature=c("avg_metric", "numeric", "numeric"), definition=
 #_______________________________________________________________________________
 
 #' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("avg_metric"), definition = function(x) {
+setMethod("getLaTeXName", signature=c("abstract_avg_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "avg"))
 })
 
@@ -91,7 +101,7 @@ setMethod("getLaTeXName", signature=c("avg_metric"), definition = function(x) {
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("avg_metric", "json_element"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("abstract_avg_metric", "json_element"), definition=function(object, json) {
   object <- mapJSONPropertiesToS4Slots(object=object, json=json)
   return(setDefaultNameIfNA(object))
 })

@@ -123,11 +123,25 @@
         }
       ]
     },
+    "abstract_max_metric": {
+      "title": "Abstract Max Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
     "max_metric": {
       "title": "Max Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/nca_metric"
+          "$ref": "#/$defs/abstract_max_metric"
         },
         {
           "properties": {
@@ -144,7 +158,7 @@
       "title": "Cmax Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/nca_metric"
+          "$ref": "#/$defs/abstract_max_metric"
         },
         {
           "properties": {
@@ -157,11 +171,25 @@
         }
       ]
     },
+    "abstract_avg_metric": {
+      "title": "Abstract Avg Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
     "avg_metric": {
       "title": "Avg Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/nca_metric"
+          "$ref": "#/$defs/abstract_avg_metric"
         },
         {
           "properties": {
@@ -178,7 +206,7 @@
       "title": "Cavg Metric",
       "allOf": [
         {
-          "$ref": "#/$defs/nca_metric"
+          "$ref": "#/$defs/abstract_avg_metric"
         },
         {
           "properties": {

@@ -23,12 +23,16 @@ test_that("Import NCA config 1", {
   analysis1 <- NCAAnalysis(name="Day 1", time_range=NCATimeRange(0, 24), variable="Y") %>%
     add(AUC()) %>%
     add(Cmax()) %>%
-    add(Cavg())
+    add(Cavg()) %>%
+    add(Max()) %>%
+    add(Avg())
   
   analysis2 <- NCAAnalysis(name="Day 7", time_range=NCATimeRange(144, 168), variable="Y") %>%
     add(AUC()) %>%
     add(Cmax()) %>%
-    add(Cavg())
+    add(Cavg()) %>%
+    add(Max()) %>%
+    add(Avg())
   
   expected_config <- NCAConfiguration() %>%
     add(analysis1) %>%
