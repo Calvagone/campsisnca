@@ -14,8 +14,6 @@ Tmax(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
 
 \item{name}{custom metric name (will be exported into table headers)}

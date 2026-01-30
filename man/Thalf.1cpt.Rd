@@ -14,8 +14,6 @@ Thalf.1cpt(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{map}{character vector used for column mapping, only one key is possible: K}
 
 \item{name}{custom metric name (will be exported into table headers)}

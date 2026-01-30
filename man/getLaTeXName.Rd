@@ -4,11 +4,12 @@
 \name{getLaTeXName}
 \alias{getLaTeXName}
 \alias{getLaTeXName,nca_metric-method}
+\alias{getLaTeXName,max_metric-method}
 \alias{getLaTeXName,tmax_metric-method}
 \alias{getLaTeXName,cmin_metric-method}
 \alias{getLaTeXName,tmin_metric-method}
 \alias{getLaTeXName,cat_metric-method}
-\alias{getLaTeXName,cavg_metric-method}
+\alias{getLaTeXName,avg_metric-method}
 \alias{getLaTeXName,thalf_metric-method}
 \alias{getLaTeXName,theoretical_thalf_metric-method}
 \title{Get the name of the metric in LaTeX notation (with subscript coded with an underscore and brackets).}
@@ -17,7 +18,7 @@ getLaTeXName(x, ...)
 
 \S4method{getLaTeXName}{nca_metric}(x)
 
-\S4method{getLaTeXName}{nca_metric}(x)
+\S4method{getLaTeXName}{max_metric}(x)
 
 \S4method{getLaTeXName}{tmax_metric}(x)
 
@@ -27,7 +28,7 @@ getLaTeXName(x, ...)
 
 \S4method{getLaTeXName}{cat_metric}(x)
 
-\S4method{getLaTeXName}{cavg_metric}(x)
+\S4method{getLaTeXName}{avg_metric}(x)
 
 \S4method{getLaTeXName}{thalf_metric}(x)
 

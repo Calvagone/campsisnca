@@ -29,13 +29,22 @@ setClass(
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
 #' @export
-AUC <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="auc_metric", def_name="AUC")
+AUC <- function(variable=NULL, method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="auc_metric")
   assertthat::assert_that(method %in% c(1,2,3), msg="method must be 1, 2 or 3")
   metric@method <- as.integer(method)
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("auc_metric"), definition=function(object, ...) {
+  return("AUC") 
+})
 
 #_______________________________________________________________________________
 #----                            iValue                                     ----
@@ -52,9 +61,6 @@ setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=
 
 setMethod("loadFromJSON", signature=c("auc_metric", "json_element"), definition=function(object, json) {
   object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  if (is.na(object@name)) {
-    object@name <- "AUC"
-  }
-  return(object)
+  return(setDefaultNameIfNA(object))
 })
 

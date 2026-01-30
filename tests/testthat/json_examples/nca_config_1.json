@@ -11,6 +11,12 @@
       "metrics": [
         {
           "type": "auc_metric"
+        },
+        {
+          "type": "cmax_metric"
+        },
+        {
+          "type": "cavg_metric"
         }
       ]
     },
@@ -24,6 +30,12 @@
       "metrics": [
         {
           "type": "auc_metric"
+        },
+        {
+          "type": "cmax_metric"
+        },
+        {
+          "type": "cavg_metric"
         }
       ]
     }

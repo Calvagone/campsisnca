@@ -180,6 +180,24 @@ setGeneric("getUnit", function(object, metric, ...) {
 })
 
 #_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' Get default name.
+#' 
+#' @param object get default name of this object
+#' @param ... optional extra arguments
+#' @export
+#' @rdname setDefaultName
+getDefaultName <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getDefaultName", function(object, ...) {
+  standardGeneric("getDefaultName")
+})
+
+#_______________________________________________________________________________
 #----                         statDisplayString                             ----
 #_______________________________________________________________________________
 

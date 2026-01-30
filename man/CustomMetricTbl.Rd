@@ -15,8 +15,6 @@ CustomMetricTbl(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{fun}{any custom function with exactly 1 argument: data}
 
 \item{name}{custom metric name (will be exported into table headers)}

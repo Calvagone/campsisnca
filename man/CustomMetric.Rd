@@ -16,8 +16,6 @@ CustomMetric(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
 
 \item{fun}{any custom function with exactly 2 arguments: time and value}

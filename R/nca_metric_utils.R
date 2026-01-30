@@ -24,14 +24,13 @@ processUnit <- function(unit) {
 
 #' Main metrics parameters.
 #' 
-#' @param x Campsis/NONMEM dataframe
 #' @param variable dependent variable
 #' @param name custom metric name (will be exported into table headers)
 #' @param unit metric unit (will be exported into table headers if provided)
 #' @param categorical categorical endpoint, logical
 #' @param stat_display statistics display, default is '\{median\} [\{p5\}-\{p95\}]' for continuous data or '\{n\} / \{N\} (\{p\}\%)' for categorical data
 #' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README
-metricsParams <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, categorical=NULL, stat_display=NULL, digits=NULL) {
+metricsParams <- function(variable=NULL, name=NULL, unit=NULL, categorical=NULL, stat_display=NULL, digits=NULL) {
   # Do nothing
 }
 

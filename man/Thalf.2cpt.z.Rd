@@ -14,8 +14,6 @@ Thalf.2cpt.z(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{map}{character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA}
 
 \item{name}{custom metric name (will be exported into table headers)}

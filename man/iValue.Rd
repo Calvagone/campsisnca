@@ -5,12 +5,12 @@
 \name{iValue}
 \alias{iValue}
 \alias{iValue,auc_metric,numeric,numeric-method}
-\alias{iValue,cmax_metric,numeric,numeric-method}
+\alias{iValue,max_metric,numeric,numeric-method}
 \alias{iValue,tmax_metric,numeric,numeric-method}
 \alias{iValue,cmin_metric,numeric,numeric-method}
 \alias{iValue,tmin_metric,numeric,numeric-method}
 \alias{iValue,cat_metric,numeric,numeric-method}
-\alias{iValue,cavg_metric,numeric,numeric-method}
+\alias{iValue,avg_metric,numeric,numeric-method}
 \alias{iValue,thalf_metric,numeric,numeric-method}
 \alias{iValue,time_above_below_limit,numeric,numeric-method}
 \alias{iValue,custom_metric,numeric,numeric-method}
@@ -20,7 +20,7 @@ iValue(object, time, value, ...)
 
 \S4method{iValue}{auc_metric,numeric,numeric}(object, time, value)
 
-\S4method{iValue}{cmax_metric,numeric,numeric}(object, time, value)
+\S4method{iValue}{max_metric,numeric,numeric}(object, time, value)
 
 \S4method{iValue}{tmax_metric,numeric,numeric}(object, time, value)
 
@@ -30,7 +30,7 @@ iValue(object, time, value, ...)
 
 \S4method{iValue}{cat_metric,numeric,numeric}(object, time, value)
 
-\S4method{iValue}{cavg_metric,numeric,numeric}(object, time, value)
+\S4method{iValue}{avg_metric,numeric,numeric}(object, time, value)
 
 \S4method{iValue}{thalf_metric,numeric,numeric}(object, time, value)
 

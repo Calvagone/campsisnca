@@ -5,7 +5,6 @@
 \title{Cavg.}
 \usage{
 Cavg(
-  x = NULL,
   variable = NULL,
   name = NULL,
   unit = NULL,
@@ -14,8 +13,6 @@ Cavg(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
 
 \item{name}{custom metric name (will be exported into table headers)}

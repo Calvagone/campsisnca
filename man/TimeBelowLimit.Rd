@@ -16,8 +16,6 @@ TimeBelowLimit(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
 
 \item{limit}{the limit to compare the variable against}

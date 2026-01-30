@@ -21,10 +21,14 @@ test_that("Import NCA config 1", {
   imported_config <- loadFromJSON(NCAConfiguration(), file.path(testFolder, "json_examples", "nca_config_1.json"))
 
   analysis1 <- NCAAnalysis(name="Day 1", time_range=NCATimeRange(0, 24), variable="Y") %>%
-    add(AUC())
+    add(AUC()) %>%
+    add(Cmax()) %>%
+    add(Cavg())
   
   analysis2 <- NCAAnalysis(name="Day 7", time_range=NCATimeRange(144, 168), variable="Y") %>%
-    add(AUC())
+    add(AUC()) %>%
+    add(Cmax()) %>%
+    add(Cavg())
   
   expected_config <- NCAConfiguration() %>%
     add(analysis1) %>%

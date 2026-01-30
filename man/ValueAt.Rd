@@ -15,8 +15,6 @@ ValueAt(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
 
 \item{time}{what time to read the values. If not provided, last values from x will be returned.}

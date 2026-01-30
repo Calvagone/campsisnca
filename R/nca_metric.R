@@ -40,10 +40,11 @@ setClass(
   validity=validateMetric
 )
 
-ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric_name, def_name) {
-  # x <- processDataframe(x)
+ncaConstructor <- function(variable, name, unit, stat_display, digits, metric_name) {
+  if (is.null(name)) {
+    name <- as.character(NA)
+  }
   variable <- processVariable(variable)
-  name <- if (is.null(name)) def_name else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)
   if (is.null(stat_display)) {
@@ -52,6 +53,13 @@ ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric
   metric <- new(metric_name, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
   return(metric)
 }
+
+setDefaultNameIfNA <- function(object) {
+  if (is.na(object@name)) {
+    object@name <- object %>% getDefaultName()
+  }
+  return(object)
+} 
 
 #_______________________________________________________________________________
 #----                            calculate                                  ----
@@ -81,6 +89,15 @@ subscriptOccurrence <- function(x, occurrence, replacement=NULL) {
 #' @rdname getLaTeXName
 setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
   return(x %>% getName())
+})
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("nca_metric"), definition=function(object, ...) {
+  return("Unknown metric name") 
 })
 
 #_______________________________________________________________________________

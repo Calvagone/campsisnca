@@ -5,7 +5,6 @@
 \title{AUC.}
 \usage{
 AUC(
-  x = NULL,
   variable = NULL,
   method = 1,
   name = NULL,
@@ -15,8 +14,6 @@ AUC(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
 
 \item{method}{method:
