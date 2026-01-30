@@ -274,7 +274,7 @@ Slot "variable":
 [1] NA
 
 Slot "name":
-[1] "Last value"
+[1] NA
 
 Slot "unit":
 [1] NA
@@ -307,7 +307,7 @@ Slot "variable":
 [1] NA
 
 Slot "name":
-[1] "Ctrough"
+[1] NA
 
 Slot "unit":
 [1] NA
@@ -609,7 +609,7 @@ Slot "variable":
 [1] NA
 
 Slot "name":
-[1] "Last value"
+[1] NA
 
 Slot "unit":
 [1] NA
@@ -642,7 +642,7 @@ Slot "variable":
 [1] NA
 
 Slot "name":
-[1] "Ctrough"
+[1] NA
 
 Slot "unit":
 [1] NA
@@ -678,4 +678,3 @@ Slot "type":
 
 Slot "type":
 [1] "nca_analysis"
-

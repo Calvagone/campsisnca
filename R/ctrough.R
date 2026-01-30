@@ -43,7 +43,7 @@ setClass(
 Last <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="last_metric")
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 #' 
@@ -54,7 +54,7 @@ Last <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=
 Ctrough <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="ctrough_metric")
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 #_______________________________________________________________________________

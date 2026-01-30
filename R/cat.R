@@ -52,7 +52,7 @@ ValueAt <- function(variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display
   metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="value_at_metric")
   metric@observed_time <- ifelse(is.null(time), as.numeric(NA), time)
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 
@@ -66,7 +66,7 @@ CAt <- function(variable=NULL, time=NULL, name=NULL, unit=NULL, stat_display=NUL
   metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="conc_at_metric")
   metric@observed_time <- ifelse(is.null(time), as.numeric(NA), time)
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 #_______________________________________________________________________________
