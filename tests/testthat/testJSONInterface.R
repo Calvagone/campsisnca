@@ -18,7 +18,17 @@ test_that("Import time range from JSON", {
 test_that("Import NCA config 1", {
   
   # Import NCA configuration from JSON
-  nca_config <- loadFromJSON(NCAConfiguration(), file.path(testFolder, "json_examples", "nca_config_1.json"))
-  # 
-  # expect_equal(expectedModel, model)
+  imported_config <- loadFromJSON(NCAConfiguration(), file.path(testFolder, "json_examples", "nca_config_1.json"))
+
+  analysis1 <- NCAAnalysis(name="Day 1", time_range=NCATimeRange(0, 24), variable="Y") %>%
+    add(AUC(name="AUC"))
+  
+  analysis2 <- NCAAnalysis(name="Day 7", time_range=NCATimeRange(144, 168), variable="Y") %>%
+    add(AUC(name="AUC"))
+  
+  expected_config <- NCAConfiguration() %>%
+    add(analysis1) %>%
+    add(analysis2)
+  
+  expect_equal(imported_config, expected_config)
 })

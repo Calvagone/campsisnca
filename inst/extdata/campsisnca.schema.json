@@ -21,8 +21,29 @@
             "$ref": "#/$defs/nca_analysis"
           },
           "description": "List of NCA analyses. For example, one analysis may focus on NCA metrics for day 1, and another on those for day 7."
+        }
+      },
+      "required": [
+        "strat_vars",
+        "nca_analyses"
+      ]
+    },
+    "nca_analysis": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of this analysis. This name will appear in the table. All names must be unique."
         },
-        "nca_metrics": {
+        "time_range": {
+          "$ref": "#/$defs/nca_time_range",
+          "description": "Default time range for this analysis. If not specified, default time range is from 0 to 'last'."
+        },
+        "variable": {
+          "type": "string",
+          "description": "Default output variable for this analysis. If not specified, the variable name MUST be specified in each metric."
+        },
+        "metrics": {
           "type": "array",
           "items": {
             "oneOf": [
@@ -40,29 +61,8 @@
         }
       },
       "required": [
-        "strat_vars",
-        "nca_analyses",
-        "nca_metrics"
-      ]
-    },
-    "nca_analysis": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "description": "Name of this analysis. This name will appear in the table. All names must be unique."
-        },
-        "time_range": {
-          "$ref": "#/$defs/nca_time_range",
-          "description": "Default time range for this analysis. If not specified, default time range is from 0 to 'last'."
-        },
-        "variable": {
-          "type": "string",
-          "description": "Default output variable for this analysis. If not specified, the variable name MUST be specified in each metric."
-        }
-      },
-      "required": [
-        "name"
+        "name",
+        "metrics"
       ],
       "description": "Definition of a analysis."
     },
@@ -86,18 +86,13 @@
           "type": "string",
           "description": "Statistic display. E.g. '{median} ({p5}–{p95})'."
         },
-        "analysis_ref": {
-          "type": "string",
-          "description": "Reference analysis name."
-        },
         "time_range": {
           "$ref": "#/$defs/nca_time_range",
           "description": "Specific time range to use for this metric (e.g. if time range from the analysis needs to be overridden)"
         }
       },
       "required": [
-        "name",
-        "analysis_ref"
+        "name"
       ]
     },
     "auc_metric": {

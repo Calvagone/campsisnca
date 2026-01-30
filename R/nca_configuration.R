@@ -9,10 +9,10 @@
 setClass(
   "nca_configuration",
   representation(
-    strat_vars = "character",       # stratification variables
-    nca_analyses = "nca_analyses",  # NCA analyses
-    nca_metrics = "nca_metrics"     # NCA metrics
-  )
+    strat_vars = "character",      # stratification variables
+    nca_analyses = "nca_analyses"  # NCA analyses
+  ),
+  prototype=prototype(strat_vars=character(0))
 )
 
 #' 
@@ -24,6 +24,15 @@ NCAConfiguration <- function() {
 }
 
 #_______________________________________________________________________________
+#----                           add                                   ----
+#_______________________________________________________________________________
+
+setMethod("add", signature = c("nca_configuration", "nca_analysis"), definition = function(object, x) {
+  object@nca_analyses <- object@nca_analyses %>% add(x)
+  return(object)
+})
+
+#_______________________________________________________________________________
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
@@ -31,10 +40,7 @@ setMethod("loadFromJSON", signature=c("nca_configuration", "json_element"), defi
   json <- json@data
   object@strat_vars <- as.character(json$strat_vars)
   object@nca_analyses@list <- json$nca_analyses %>%
-    purrr::map(~loadFromJSON(new("nca_analysis"), JSONElement(.x)))
-  object@nca_metrics@list <- json$nca_metrics %>%
-    purrr::map(~loadFromJSON(new(.x$type), JSONElement(.x)))
-  
+    purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
   return(object)
 })
 

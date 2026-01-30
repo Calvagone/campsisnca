@@ -2,40 +2,24 @@
 #----                          nca_metrics class                            ----
 #_______________________________________________________________________________
 
-validateNCAMetrics <- function(object) {
-  return(c(expectOne(object, "variable")))
-}
-
 #' 
-#' NCA metric class. See this class as an interface.
+#' NCA metrics class. See this class as a list of NCA metrics.
 #' 
 #' @export
 setClass(
   "nca_metrics",
   representation(
-    x = "data.frame",         # default dataframe
-    variable = "character",   # default variable
-    scenario = "character"    # named character vector, e.g. c(day='Day 1', fasted='Fasted')
   ),
-  contains=c("pmx_element", "pmx_list"), # PMX element in nca_metrics_table
-  prototype = prototype(type="nca_metric"),
-  validity=validateNCAMetrics
+  contains=c("pmx_list"),
+  prototype = prototype(type="nca_metric")
 )
 
 #' 
 #' NCA metrics
 #' 
-#' @inheritParams metricsParams
-#' @param scenario character vector used to describe the current scenario.
-#' E.g. c(day="Day 1", condition="Fasted)
 #' @export
-NCAMetrics <- function(x=NULL, variable=NULL, scenario=NULL) {
-  x = processDataframe(x)
-  variable = processVariable(variable)
-  if (is.null(scenario)) {
-    scenario <- character()
-  }
-  return(new("nca_metrics", x=x, variable=variable, scenario=scenario))
+NCAMetrics <- function() {
+  return(new("nca_metrics"))
 }
 
 #_______________________________________________________________________________
@@ -43,7 +27,7 @@ NCAMetrics <- function(x=NULL, variable=NULL, scenario=NULL) {
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("nca_metrics"), definition=function(x) {
-  return(paste0("NCA metrics: ", paste0(x@scenario, collapse=" / ")))
+  return(paste0("NCA metrics: ", paste0(x@list %>% purrr::map(~getName(.x)), collapse=" / ")))
 })
 
 #_______________________________________________________________________________

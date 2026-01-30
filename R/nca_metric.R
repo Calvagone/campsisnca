@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble", "stat_display")))
+  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble", "stat_display", "categorical", "concentration")))
 }
 
 #' 
@@ -13,20 +13,19 @@ validateMetric <- function(object) {
 setClass(
   "nca_metric",
   representation(
-    x = "data.frame",             # specific dataframe
     variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
-    individual = "data.frame",    # individual results
-    summary = "data.frame",       # summary results
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
     stat_display = "character",   # statistics display (see package gtsummary)
     categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
     digits = "character",         # rounding digits definitions for gtsummary
-    concentration = "logical"     # concentration-related metric, NA by default
+    concentration = "logical",    # concentration-related metric, NA by default
+    individual = "data.frame",    # transient individual results
+    summary = "data.frame"       # transient summary results
   ),
   contains="pmx_element",
-  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE, concentration=as.logical(NA)),
+  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE, digits=character(0), concentration=as.logical(NA)),
   validity=validateMetric
 )
 
@@ -39,7 +38,7 @@ getStatDisplayDefault <- function(categorical=FALSE) {
 }
 
 ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric_name, def_name) {
-  x <- processDataframe(x)
+  # x <- processDataframe(x)
   variable <- processVariable(variable)
   name <- if (is.null(name)) def_name else name
   unit <- processUnit(unit)
@@ -47,7 +46,7 @@ ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric
   if (is.null(stat_display)) {
     stat_display <- getStatDisplayDefault(categorical=FALSE) # Continuous by default
   }
-  metric <- new(metric_name, x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
+  metric <- new(metric_name, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
   return(metric)
 }
 
