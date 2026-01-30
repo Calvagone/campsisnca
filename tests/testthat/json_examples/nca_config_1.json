@@ -41,6 +41,14 @@
         },
         {
           "type": "tmax_metric"
+        },
+        {
+          "type": "time_above_limit_metric",
+          "limit": 10.0
+        },
+        {
+          "type": "time_below_limit_metric",
+          "limit": 10.0
         }
       ]
     },
@@ -84,6 +92,14 @@
         },
         {
           "type": "tmax_metric"
+        },
+        {
+          "type": "time_above_limit_metric",
+          "limit": 20.0
+        },
+        {
+          "type": "time_below_limit_metric",
+          "limit": 20.0
         }
       ]
     }

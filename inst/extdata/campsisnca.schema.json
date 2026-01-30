@@ -79,6 +79,12 @@
               },
               {
                 "$ref": "#/$defs/tmax_metric"
+              },
+              {
+                "$ref": "#/$defs/time_above_limit_metric"
+              },
+              {
+                "$ref": "#/$defs/time_below_limit_metric"
               }
             ]
           }
@@ -94,7 +100,9 @@
       "title": "Base NCA Metric",
       "type": "object",
       "properties": {
-        "type": { "type": "string" },
+        "type": {
+          "type": "string"
+        },
         "name": {
           "type": "string",
           "description": "Name of the metric. This name can include grouping variables. E.g. '<METRIC> <PERIOD>'"
@@ -360,6 +368,63 @@
           "properties": {
             "type": {
               "const": "tmax_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_time_above_or_below_limit_metric": {
+      "title": "Abstract Time Above or Below Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Horizontal limit or threshold."
+            },
+            "strictly": {
+              "type": "boolean",
+              "description": "Whether the variable must be strictly above or below the limit. Default is false."
+            }
+          },
+          "required": [
+            "limit"
+          ]
+        }
+      ]
+    },
+    "time_above_limit_metric": {
+      "title": "Time Above Limit Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_time_above_or_below_limit_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "time_above_limit_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "time_below_limit_metric": {
+      "title": "Time Below Limit Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_time_above_or_below_limit_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "time_below_limit_metric"
             }
           },
           "required": [

@@ -5,7 +5,6 @@
 \title{Time below a certain limit.}
 \usage{
 TimeBelowLimit(
-  x = NULL,
   variable = NULL,
   limit = NULL,
   strictly = FALSE,

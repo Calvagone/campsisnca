@@ -13,7 +13,7 @@
 \alias{iValue,abstract_last_metric,numeric,numeric-method}
 \alias{iValue,abstract_avg_metric,numeric,numeric-method}
 \alias{iValue,thalf_metric,numeric,numeric-method}
-\alias{iValue,time_above_below_limit,numeric,numeric-method}
+\alias{iValue,abstract_time_above_or_below_limit_metric,numeric,numeric-method}
 \alias{iValue,custom_metric,numeric,numeric-method}
 \title{Compute the individual value of an individual.}
 \usage{
@@ -37,7 +37,7 @@ iValue(object, time, value, ...)
 
 \S4method{iValue}{thalf_metric,numeric,numeric}(object, time, value)
 
-\S4method{iValue}{time_above_below_limit,numeric,numeric}(object, time, value)
+\S4method{iValue}{abstract_time_above_or_below_limit_metric,numeric,numeric}(object, time, value)
 
 \S4method{iValue}{custom_metric,numeric,numeric}(object, time, value)
 }
