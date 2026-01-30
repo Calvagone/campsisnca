@@ -6,6 +6,7 @@
 \usage{
 AUC(
   variable = NULL,
+  filter = NCATimeRange(),
   method = 1,
   name = NULL,
   unit = NULL,
@@ -15,6 +16,8 @@ AUC(
 }
 \arguments{
 \item{variable}{dependent variable}
+
+\item{filter}{time range to use for filtering data}
 
 \item{method}{method:
 * 1: linear up - linear down

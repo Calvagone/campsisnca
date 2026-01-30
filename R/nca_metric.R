@@ -23,6 +23,7 @@ setClass(
   "nca_metric",
   representation(
     variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
+    filter = "nca_time_range",    # time range for filtering data
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
@@ -34,13 +35,13 @@ setClass(
     summary = "data.frame"       # transient summary results
   ),
   contains="pmx_element",
-  prototype=prototype(variable=as.character(NA), name=as.character(NA), unit=as.character(NA),
+  prototype=prototype(variable=as.character(NA), filter=NCATimeRange(), name=as.character(NA), unit=as.character(NA),
                       ivalue_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
                       digits=character(0), concentration=as.logical(NA)),
   validity=validateMetric
 )
 
-ncaConstructor <- function(variable, name, unit, stat_display, digits, metric_name) {
+ncaConstructor <- function(variable, filter, name, unit, stat_display, digits, metric_name) {
   if (is.null(name)) {
     name <- as.character(NA)
   }
@@ -50,7 +51,7 @@ ncaConstructor <- function(variable, name, unit, stat_display, digits, metric_na
   if (is.null(stat_display)) {
     stat_display <- getStatDisplayDefault(categorical=FALSE) # Continuous by default
   }
-  metric <- new(metric_name, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
+  metric <- new(metric_name, variable=variable, filter=filter, name=name, unit=unit, stat_display=stat_display, digits=digits)
   return(metric)
 }
 
