@@ -51,7 +51,13 @@
                 "$ref": "#/$defs/auc_metric"
               },
               {
+                "$ref": "#/$defs/max_metric"
+              },
+              {
                 "$ref": "#/$defs/cmax_metric"
+              },
+              {
+                "$ref": "#/$defs/avg_metric"
               },
               {
                 "$ref": "#/$defs/cavg_metric"
@@ -70,6 +76,7 @@
       "title": "Base NCA Metric",
       "type": "object",
       "properties": {
+        "type": { "type": "string" },
         "name": {
           "type": "string",
           "description": "Name of the metric. This name can include grouping variables. E.g. '<METRIC> <PERIOD>'"
@@ -92,6 +99,7 @@
         }
       },
       "required": [
+        "type"
       ]
     },
     "auc_metric": {
@@ -111,7 +119,23 @@
             }
           },
           "required": [
-            "type"
+          ]
+        }
+      ]
+    },
+    "max_metric": {
+      "title": "Max Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "max_metric"
+            }
+          },
+          "required": [
           ]
         }
       ]
@@ -129,7 +153,23 @@
             }
           },
           "required": [
-            "type"
+          ]
+        }
+      ]
+    },
+    "avg_metric": {
+      "title": "Avg Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "avg_metric"
+            }
+          },
+          "required": [
           ]
         }
       ]
@@ -147,7 +187,6 @@
             }
           },
           "required": [
-            "type"
           ]
         }
       ]
