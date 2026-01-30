@@ -6,7 +6,6 @@
 on the given data x.}
 \usage{
 Thalf(
-  x = NULL,
   variable = NULL,
   name = NULL,
   unit = NULL,

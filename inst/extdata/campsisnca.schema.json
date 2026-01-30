@@ -85,6 +85,9 @@
               },
               {
                 "$ref": "#/$defs/time_below_limit_metric"
+              },
+              {
+                "$ref": "#/$defs/thalf_metric"
               }
             ]
           }
@@ -425,6 +428,23 @@
           "properties": {
             "type": {
               "const": "time_below_limit_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "thalf_metric": {
+      "title": "Thalf Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "thalf_metric"
             }
           },
           "required": [
