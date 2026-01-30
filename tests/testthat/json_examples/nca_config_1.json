@@ -10,8 +10,7 @@
       "variable": "Y",
       "metrics": [
         {
-          "type": "auc_metric",
-          "name": "AUC"
+          "type": "auc_metric"
         }
       ]
     },
@@ -24,8 +23,7 @@
       "variable": "Y",
       "metrics": [
         {
-          "type": "auc_metric",
-          "name": "AUC"
+          "type": "auc_metric"
         }
       ]
     }

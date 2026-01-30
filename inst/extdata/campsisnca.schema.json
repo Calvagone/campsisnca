@@ -92,7 +92,6 @@
         }
       },
       "required": [
-        "name"
       ]
     },
     "auc_metric": {

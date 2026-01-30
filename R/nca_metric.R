@@ -34,7 +34,7 @@ setClass(
     summary = "data.frame"       # transient summary results
   ),
   contains="pmx_element",
-  prototype=prototype(variable=as.character(NA), name="Unknown metric", unit=as.character(NA),
+  prototype=prototype(variable=as.character(NA), name=as.character(NA), unit=as.character(NA),
                       ivalue_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
                       digits=character(0), concentration=as.logical(NA)),
   validity=validateMetric
@@ -163,17 +163,6 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     stop("Argument type can be 'summary', 'summary_wide', 'summary_pretty', 'individual' or 'individual_wide'.")
   }
   return(retValue)
-})
-
-#_______________________________________________________________________________
-#----                           loadFromJSON                                ----
-#_______________________________________________________________________________
-
-setMethod("loadFromJSON", signature=c("nca_metric", "json_element"), definition=function(object, json) {
-  analysis_ref <- json@data$analysis_ref
-  json@data$analysis_ref <- NULL
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(object)
 })
 
 #_______________________________________________________________________________

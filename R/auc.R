@@ -45,3 +45,16 @@ AUC <- function(x=NULL, variable=NULL, method=1, name=NULL, unit=NULL, stat_disp
 setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(trap(x=time, y=value, method=object@method))    
 })
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("auc_metric", "json_element"), definition=function(object, json) {
+  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  if (is.na(object@name)) {
+    object@name <- "AUC"
+  }
+  return(object)
+})
+
