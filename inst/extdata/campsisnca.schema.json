@@ -67,6 +67,12 @@
               },
               {
                 "$ref": "#/$defs/cavg_metric"
+              },
+              {
+                "$ref": "#/$defs/last_metric"
+              },
+              {
+                "$ref": "#/$defs/ctrough_metric"
               }
             ]
           }
@@ -266,6 +272,54 @@
           "properties": {
             "type": {
               "const": "cavg_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_last_metric": {
+      "title": "Abstract Last Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "ctrough_metric": {
+      "title": "Ctrough Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_last_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "ctrough_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "last_metric": {
+      "title": "Last Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_last_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "last_metric"
             }
           },
           "required": [

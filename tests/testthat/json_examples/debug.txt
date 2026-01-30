@@ -51,11 +51,275 @@ Slot "unit":
 Slot "ivalue_tibble":
 [1] FALSE
 
+Slot "categorical":
+[1] FALSE
+
 Slot "stat_display":
 [1] "{median} ({p5}–{p95})"
 
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[2]]
+An object of class "cmax_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Cmax"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
 Slot "categorical":
 [1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[3]]
+An object of class "cmin_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Cmin"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[4]]
+An object of class "cavg_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Cavg"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[5]]
+An object of class "max_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Max"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[6]]
+An object of class "min_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Min"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[7]]
+An object of class "avg_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Avg"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[8]]
+An object of class "last_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Last value"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[9]]
+An object of class "ctrough_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Ctrough"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
 
 Slot "digits":
 character(0)
@@ -122,11 +386,275 @@ Slot "unit":
 Slot "ivalue_tibble":
 [1] FALSE
 
+Slot "categorical":
+[1] FALSE
+
 Slot "stat_display":
 [1] "{median} ({p5}–{p95})"
 
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[2]]
+An object of class "cmax_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Cmax"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
 Slot "categorical":
 [1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[3]]
+An object of class "cmin_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Cmin"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[4]]
+An object of class "cavg_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Cavg"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[5]]
+An object of class "max_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Max"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[6]]
+An object of class "min_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Min"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[7]]
+An object of class "avg_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Avg"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[8]]
+An object of class "last_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Last value"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+[[9]]
+An object of class "ctrough_metric"
+Slot "variable":
+[1] NA
+
+Slot "name":
+[1] "Ctrough"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] FALSE
+
+Slot "stat_display":
+[1] "{median} ({p5}–{p95})"
 
 Slot "digits":
 character(0)
@@ -150,3 +678,4 @@ Slot "type":
 
 Slot "type":
 [1] "nca_analysis"
+

@@ -29,6 +29,12 @@
         },
         {
           "type": "avg_metric"
+        },
+        {
+          "type": "last_metric"
+        },
+        {
+          "type": "ctrough_metric"
         }
       ]
     },
@@ -60,6 +66,12 @@
         },
         {
           "type": "avg_metric"
+        },
+        {
+          "type": "last_metric"
+        },
+        {
+          "type": "ctrough_metric"
         }
       ]
     }

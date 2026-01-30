@@ -5,7 +5,6 @@
 \title{Value at (value at specific time).}
 \usage{
 ValueAt(
-  x = NULL,
   variable = NULL,
   time = NULL,
   name = NULL,

@@ -69,6 +69,7 @@ Collate:
     'cmin.R'
     'tmin.R'
     'cat.R'
+    'ctrough.R'
     'cavg.R'
     'thalf.R'
     'theoretical_thalf.R'

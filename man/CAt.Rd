@@ -5,7 +5,6 @@
 \title{CAt (concentration at specific time).}
 \usage{
 CAt(
-  x = NULL,
   variable = NULL,
   time = NULL,
   name = NULL,
