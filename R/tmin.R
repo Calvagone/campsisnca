@@ -23,11 +23,20 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="tmin_metric", def_name="tmin")
-  return(metric)
+Tmin <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="tmin_metric")
+  return(setDefaultNameIfNA(metric))
 }
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("tmin_metric"), definition=function(object, ...) {
+  return("tmin") 
+})
 
 #_______________________________________________________________________________
 #----                            iValue                                     ----
@@ -46,3 +55,13 @@ setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition
 setMethod("getLaTeXName", signature=c("tmin_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "min"))
 })
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("tmin_metric", "json_element"), definition=function(object, json) {
+  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  return(setDefaultNameIfNA(object))
+})
+

@@ -188,7 +188,7 @@ setGeneric("getUnit", function(object, metric, ...) {
 #' @param object get default name of this object
 #' @param ... optional extra arguments
 #' @export
-#' @rdname setDefaultName
+#' @rdname getDefaultName
 getDefaultName <- function(object, ...) {
   stop("No default function is provided")
 }

@@ -29,7 +29,9 @@ test_that("Import NCA config 1", {
     add(Min()) %>%
     add(Avg()) %>%
     add(Last()) %>%
-    add(Ctrough())
+    add(Ctrough()) %>%
+    add(Tmin()) %>%
+    add(Tmax())
   
   analysis2 <- NCAAnalysis(name="Day 7", time_range=NCATimeRange(144, 168), variable="Y") %>%
     add(AUC()) %>%
@@ -40,7 +42,9 @@ test_that("Import NCA config 1", {
     add(Min()) %>%
     add(Avg()) %>%
     add(Last()) %>%
-    add(Ctrough())
+    add(Ctrough()) %>%
+    add(Tmin()) %>%
+    add(Tmax())
   
   expected_config <- NCAConfiguration() %>%
     add(analysis1) %>%

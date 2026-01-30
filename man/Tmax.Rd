@@ -5,7 +5,6 @@
 \title{Tmax.}
 \usage{
 Tmax(
-  x = NULL,
   variable = NULL,
   name = NULL,
   unit = NULL,

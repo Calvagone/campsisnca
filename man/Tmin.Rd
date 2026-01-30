@@ -5,7 +5,6 @@
 \title{Tmin.}
 \usage{
 Tmin(
-  x = NULL,
   variable = NULL,
   name = NULL,
   unit = NULL,

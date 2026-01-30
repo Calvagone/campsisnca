@@ -23,11 +23,20 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Tmax <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="tmax_metric", def_name="tmax")
-  return(metric)
+Tmax <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+                           metric_name="tmax_metric")
+  return(setDefaultNameIfNA(metric))
 }
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("tmax_metric"), definition=function(object, ...) {
+  return("tmax") 
+})
 
 #_______________________________________________________________________________
 #----                            iValue                                     ----
@@ -45,5 +54,14 @@ setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric"), definition
 #' @rdname getLaTeXName
 setMethod("getLaTeXName", signature=c("tmax_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "max"))
+})
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("tmax_metric", "json_element"), definition=function(object, json) {
+  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  return(setDefaultNameIfNA(object))
 })
 

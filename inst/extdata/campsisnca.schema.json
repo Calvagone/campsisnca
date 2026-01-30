@@ -73,6 +73,12 @@
               },
               {
                 "$ref": "#/$defs/ctrough_metric"
+              },
+              {
+                "$ref": "#/$defs/tmin_metric"
+              },
+              {
+                "$ref": "#/$defs/tmax_metric"
               }
             ]
           }
@@ -320,6 +326,40 @@
           "properties": {
             "type": {
               "const": "last_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "tmin_metric": {
+      "title": "Tmin Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "tmin_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "tmax_metric": {
+      "title": "Tmax Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "tmax_metric"
             }
           },
           "required": [
