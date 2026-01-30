@@ -16,10 +16,16 @@
           "type": "cmax_metric"
         },
         {
+          "type": "cmin_metric"
+        },
+        {
           "type": "cavg_metric"
         },
         {
           "type": "max_metric"
+        },
+        {
+          "type": "min_metric"
         },
         {
           "type": "avg_metric"
@@ -41,10 +47,16 @@
           "type": "cmax_metric"
         },
         {
+          "type": "cmin_metric"
+        },
+        {
           "type": "cavg_metric"
         },
         {
           "type": "max_metric"
+        },
+        {
+          "type": "min_metric"
         },
         {
           "type": "avg_metric"

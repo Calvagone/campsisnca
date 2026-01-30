@@ -57,6 +57,12 @@
                 "$ref": "#/$defs/cmax_metric"
               },
               {
+                "$ref": "#/$defs/min_metric"
+              },
+              {
+                "$ref": "#/$defs/cmin_metric"
+              },
+              {
                 "$ref": "#/$defs/avg_metric"
               },
               {
@@ -171,6 +177,54 @@
         }
       ]
     },
+    "abstract_min_metric": {
+      "title": "Abstract Min Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "min_metric": {
+      "title": "Min Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_min_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "min_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "cmin_metric": {
+      "title": "Cmin Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_min_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cmin_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
     "abstract_avg_metric": {
       "title": "Abstract Avg Metric",
       "allOf": [
@@ -249,7 +303,7 @@
           "description": "End time of the range. Use 'last' to refer to the last value of the simulation output."
         },
         "time_unit": {
-          "$ref": "#/$defs/nca_metric",
+          "$ref": "#/$defs/time_unit",
           "description": "Time unit of properties 'start' and 'end'. Default unit is 'hour."
         },
         "exclude_start": {
