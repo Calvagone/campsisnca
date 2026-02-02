@@ -5,7 +5,7 @@
 \title{Custom metric (input data as tibble).}
 \usage{
 CustomMetricTbl(
-  window = TimeWindow(),
+  window = NULL,
   fun,
   name = NULL,
   unit = NULL,

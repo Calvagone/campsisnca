@@ -50,7 +50,7 @@ setClass(
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly above the limit
 #' @export
-TimeAboveLimit <- function(variable=NULL, window=TimeWindow(), limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+TimeAboveLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="time_above_limit_metric")
   metric@limit <- limit
@@ -65,7 +65,7 @@ TimeAboveLimit <- function(variable=NULL, window=TimeWindow(), limit=NULL, stric
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly below the limit
 #' @export
-TimeBelowLimit <- function(variable=NULL, window=TimeWindow(), limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+TimeBelowLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="time_below_limit_metric")
   metric@limit <- limit

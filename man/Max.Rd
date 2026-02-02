@@ -6,7 +6,7 @@
 \usage{
 Max(
   variable = NULL,
-  window = TimeWindow(),
+  window = NULL,
   name = NULL,
   unit = NULL,
   stat_display = NULL,

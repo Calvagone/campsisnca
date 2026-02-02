@@ -45,7 +45,7 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Min <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Min <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="min_metric")
@@ -57,7 +57,7 @@ Min <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_d
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmin <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Cmin <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="cmin_metric")

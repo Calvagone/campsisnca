@@ -6,7 +6,7 @@
 \usage{
 CAt(
   variable = NULL,
-  window = TimeWindow(),
+  window = NULL,
   time = NULL,
   name = NULL,
   unit = NULL,

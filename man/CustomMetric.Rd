@@ -6,7 +6,7 @@
 \usage{
 CustomMetric(
   variable = NULL,
-  window = TimeWindow(),
+  window = NULL,
   fun,
   name = NULL,
   unit = NULL,

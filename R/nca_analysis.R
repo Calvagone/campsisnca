@@ -10,12 +10,12 @@ setClass(
   "nca_analysis",
   representation(
     name = "character",              # analysis name
-    window = "nca_time_window",   # default time range
+    window = "nca_time_window",      # default time range
     variable = "character",          # default variable name
     metrics = "nca_metrics"          # metrics contained in this analysis
   ),
   contains="pmx_element",
-  prototype=prototype(name="Default", window=TimeWindow(), variable=character(0), metrics=NCAMetrics())
+  prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA), metrics=NCAMetrics())
 )
 
 #' 
@@ -28,7 +28,7 @@ setClass(
 #' @export
 NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, metrics=NCAMetrics()) {
   if (is.null(variable)) {
-    variable = character(0)
+    variable = as.character(NA)
   }
   return(new("nca_analysis", name=name, window=window, variable=variable, metrics=metrics))
 }
@@ -48,6 +48,29 @@ setMethod("add", signature = c("nca_analysis", "nca_metric"), definition = funct
 
 setMethod("getName", signature=c("nca_analysis"), definition = function(x) {
   return(x@name)
+})
+
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
+  object@metrics@list <- object@metrics@list %>% purrr::map(.f=function(.x) {
+    
+    # Use default analysis variable
+    if (is.na(.x@variable) && !is.na(object@variable)) {
+      .x@variable <- object@variable
+    }
+    
+    # Use default analysis window
+    if (is(.x@window, "undefined_nca_time_window")) {
+      .x@window <- object@window
+    }
+    
+    return(.x %>% calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...))
+  })
+  return(object)    
 })
 
 #_______________________________________________________________________________

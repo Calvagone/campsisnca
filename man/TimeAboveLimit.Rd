@@ -6,7 +6,7 @@
 \usage{
 TimeAboveLimit(
   variable = NULL,
-  window = TimeWindow(),
+  window = NULL,
   limit = NULL,
   strictly = FALSE,
   name = NULL,

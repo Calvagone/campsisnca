@@ -18,9 +18,9 @@ getRefFile <- function(filename) {
 
 test_that("Column names can be non-standard", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable()
   table <- table %>%

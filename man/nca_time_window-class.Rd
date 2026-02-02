@@ -3,7 +3,7 @@
 \docType{class}
 \name{nca_time_window-class}
 \alias{nca_time_window-class}
-\title{NCA time range class.}
+\title{NCA time window class.}
 \description{
-NCA time range class.
+NCA time window class.
 }

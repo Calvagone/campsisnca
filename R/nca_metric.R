@@ -35,7 +35,7 @@ setClass(
     summary = "data.frame"       # transient summary results
   ),
   contains="pmx_element",
-  prototype=prototype(variable=as.character(NA), window=TimeWindow(), name=as.character(NA), unit=as.character(NA),
+  prototype=prototype(variable=as.character(NA), window=UndefinedTimeWindow(), name=as.character(NA), unit=as.character(NA),
                       ivalue_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
                       digits=character(0), concentration=as.logical(NA)),
   validity=validateMetric
@@ -44,6 +44,9 @@ setClass(
 ncaConstructor <- function(variable, window, name, unit, stat_display, digits, metric_name) {
   if (is.null(name)) {
     name <- as.character(NA)
+  }
+  if (is.null(window)) {
+    window <- UndefinedTimeWindow()
   }
   variable <- processVariable(variable)
   unit <- processUnit(unit)

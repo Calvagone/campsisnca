@@ -29,7 +29,7 @@ setClass(
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
 #' @export
-AUC <- function(variable=NULL, window=TimeWindow(), method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+AUC <- function(variable=NULL, window=NULL, method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="auc_metric")

@@ -2,7 +2,7 @@
 % Please edit documentation in R/nca_time_window.R
 \name{TimeWindow}
 \alias{TimeWindow}
-\title{Create a time range object.}
+\title{Create a time window object.}
 \usage{
 TimeWindow(
   start = 0,
@@ -13,9 +13,9 @@ TimeWindow(
 )
 }
 \arguments{
-\item{start}{start time of the range}
+\item{start}{start time of window}
 
-\item{end}{end time of the range, use 'last' to specify the end of the simulation output}
+\item{end}{end time of window, use 'last' to specify the end of the simulation output}
 
 \item{time_unit}{time unit of 'start' and 'end'}
 
@@ -27,5 +27,5 @@ TimeWindow(
 a time range object
 }
 \description{
-Create a time range object.
+Create a time window object.
 }

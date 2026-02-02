@@ -26,7 +26,7 @@ setClass(
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 2 arguments: time and value
 #' @export
-CustomMetric <- function(variable=NULL, window=TimeWindow(), fun, name=NULL, unit=NULL,
+CustomMetric <- function(variable=NULL, window=NULL, fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
   metric <- CustomMetricTbl(window=window, fun=fun, name=name, unit=unit,
                             categorical=categorical, stat_display=stat_display, digits=digits)
@@ -46,12 +46,15 @@ CustomMetric <- function(variable=NULL, window=TimeWindow(), fun, name=NULL, uni
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 1 argument: data
 #' @export
-CustomMetricTbl <- function(window=TimeWindow(), fun, name=NULL, unit=NULL,
+CustomMetricTbl <- function(window=NULL, fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
   name <- if (is.null(name)) "Custom" else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)
   fun <- deparseCustomFun(fun)
+  if (is.null(window)) {
+    window <- UndefinedTimeWindow()
+  }
   return(new("custom_metric", variable=as.character(NA), window=window, name=name, unit=unit, custom_function=fun,
              categorical=categorical, stat_display=stat_display, digits=digits, ivalue_tibble=TRUE))
 }

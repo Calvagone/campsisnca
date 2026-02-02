@@ -7,7 +7,7 @@ validateTimeWindow <- function(object) {
 }
 
 #' 
-#' NCA time range class.
+#' NCA time window class.
 #' 
 #' @export
 setClass(
@@ -17,10 +17,21 @@ setClass(
     end = "numeric",              # End time. Note: use Inf for 'last'
     time_unit = "character",      # Default is 'hour'
     exclude_start = "logical",    # Exclude first time point
-    exclude_end = "logical"       # Exclude last time point
+    exclude_end = "logical"  
   ),
   prototype=prototype(start=0, end=Inf, time_unit="hour", exclude_start=FALSE, exclude_end=FALSE),
   validity=validateTimeWindow
+)
+
+#' 
+#' Undefined NCA time window class.
+#' 
+#' @export
+setClass(
+  "undefined_nca_time_window",
+  representation(
+  ),
+  contains="nca_time_window"
 )
 
 processEndArgument <- function(x) {
@@ -31,10 +42,10 @@ processEndArgument <- function(x) {
 }
 
 #' 
-#' Create a time range object.
+#' Create a time window object.
 #' 
-#' @param start start time of the range
-#' @param end end time of the range, use 'last' to specify the end of the simulation output
+#' @param start start time of window
+#' @param end end time of window, use 'last' to specify the end of the simulation output
 #' @param time_unit time unit of 'start' and 'end'
 #' @param exclude_start exclude start time when filtering
 #' @param exclude_end exclude end time when filtering
@@ -47,6 +58,15 @@ TimeWindow <- function(start=0, end="last", time_unit="hour", exclude_start=FALS
              time_unit=time_unit,
              exclude_start=exclude_start,
              exclude_end=exclude_end))
+}
+
+#' 
+#' Create an undefined time window.
+#' 
+#' @return undefined time window
+#' @export
+UndefinedTimeWindow <- function() {
+  return(new("undefined_nca_time_window"))
 }
 
 #_______________________________________________________________________________

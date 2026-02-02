@@ -6,7 +6,7 @@
 \usage{
 AUC(
   variable = NULL,
-  window = TimeWindow(),
+  window = NULL,
   method = 1,
   name = NULL,
   unit = NULL,

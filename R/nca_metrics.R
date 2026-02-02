@@ -45,24 +45,6 @@ setMethod("getUnit", signature=c("nca_metrics", "character"), definition=functio
 })
 
 #_______________________________________________________________________________
-#----                            calculate                                  ----
-#_______________________________________________________________________________
-
-#' @rdname calculate
-setMethod("calculate", signature=c("nca_metrics", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
-  object@list <- object@list %>% purrr::map(.f=function(.x) {
-    
-    # # Use default dependent variable if specific variable is empty
-    # if (is.na(.x@variable)) {
-    #   .x@variable <- object@variable
-    # }
-    
-    return(.x %>% calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...))
-  })
-  return(object)    
-})
-
-#_______________________________________________________________________________
 #----                                export                                 ----
 #_______________________________________________________________________________
 

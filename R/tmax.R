@@ -23,7 +23,7 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Tmax <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Tmax <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="tmax_metric")
