@@ -6,6 +6,7 @@
 \usage{
 CAt(
   variable = NULL,
+  window = TimeWindow(),
   time = NULL,
   name = NULL,
   unit = NULL,
@@ -15,6 +16,8 @@ CAt(
 }
 \arguments{
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{time}{what time to read the concentrations. If not provided, last concentrations from x will be returned.}
 

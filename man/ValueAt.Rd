@@ -6,6 +6,7 @@
 \usage{
 ValueAt(
   variable = NULL,
+  window = TimeWindow(),
   time = NULL,
   name = NULL,
   unit = NULL,
@@ -15,6 +16,8 @@ ValueAt(
 }
 \arguments{
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{time}{what time to read the values. If not provided, last values from x will be returned.}
 

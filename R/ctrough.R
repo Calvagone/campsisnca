@@ -40,8 +40,9 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Last <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Last <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="last_metric")
   return(setDefaultNameIfNA(metric))
 }
@@ -51,8 +52,9 @@ Last <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=
 #' 
 #' @inheritParams metricsParams
 #' @export
-Ctrough <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Ctrough <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="ctrough_metric")
   return(setDefaultNameIfNA(metric))
 }
@@ -77,12 +79,7 @@ setMethod("getDefaultName", signature=c("ctrough_metric"), definition=function(o
 
 #' @rdname iValue
 setMethod("iValue", signature=c("abstract_last_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  index <- which(time==observed_time)
-  if (length(index)==0) {
-    stop(paste0("Could not find any sample at t=", observed_time))
-  } else {
-    return(value[index[1]])
-  }
+  return(value[length(value)])
 })
 
 #_______________________________________________________________________________
