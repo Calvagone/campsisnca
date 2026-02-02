@@ -6,6 +6,7 @@
 \usage{
 Cavg(
   variable = NULL,
+  window = TimeWindow(),
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -14,6 +15,8 @@ Cavg(
 }
 \arguments{
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{name}{custom metric name (will be exported into table headers)}
 
