@@ -9,9 +9,10 @@
 setClass(
   "nca_metrics_table",
   representation(
+    configuration = "nca_configuration"
   ),
   contains="pmx_list",
-  prototype = prototype(type="nca_analysis")
+  prototype = prototype(configuration=NCAConfiguration())
 )
 
 #' 
@@ -23,11 +24,20 @@ NCAMetricsTable <- function() {
 }
 
 #_______________________________________________________________________________
+#----                           add                                   ----
+#_______________________________________________________________________________
+
+setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition = function(object, x) {
+  object@configuration <- object@configuration %>% add(x)
+  return(object)
+})
+
+#_______________________________________________________________________________
 #----                                export                                 ----
 #_______________________________________________________________________________
 
 setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
-  if (object %>% length() == 0) {
+  if (object@configuration@nca_analyses %>% length() == 0) {
     stop("No metrics to export")
   }
   if (dest=="dataframe") {
@@ -46,7 +56,7 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
-  retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
+  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
   
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
@@ -175,6 +185,8 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   } else {
     initCode <- NULL
   }
+  
+            browser()          
             
   scenarios <- object %>% getScenarios()
   stratVariables <- unique(scenarios$name)
@@ -201,7 +213,7 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
 
 #' @rdname getScenarios
 setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  retValue <- object@list %>% purrr::map_df(~tibble::enframe(.x@scenario))
+  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(~tibble::tibble(name="analysis", value=.x@name))
   return(retValue)
 })
 
@@ -211,10 +223,10 @@ setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(
 
 #' @rdname getUnit
 setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
-  if (object %>% length()==0) {
+  if (object@configuration@nca_analyses %>% length()==0) {
     stop("No metrics in table at this stage")
   }
-  return(object@list[[1]] %>% getUnit(metric=metric, ...))
+  return(object@configuration@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
 })
 
 #_______________________________________________________________________________
@@ -223,7 +235,7 @@ setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=f
 
 #' @rdname reduceTo2Dimensions
 setMethod("reduceTo2Dimensions", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  object@list <- object@list %>%
+  object@configuration@nca_analyses@list <- object@configuration@nca_analyses@list %>%
     purrr::map(~reduceTo2Dimensions(.x, ...))
   
   return(object)

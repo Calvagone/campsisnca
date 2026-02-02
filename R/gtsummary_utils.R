@@ -244,9 +244,9 @@ modify_header(label=\"**%s**\")
 #' @return code
 getStatisticsCode <- function(table) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
+  retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
   
   return(paste0(retValue, collapse=",\n    "))
 }
@@ -260,9 +260,9 @@ getStatisticsCode <- function(table) {
 #' @return code
 getVariableTypeCode <- function(table, all_dichotomous_levels) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+  retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     categorical <- x@categorical
     if (categorical) {
       typeStr <-  "categorical"
@@ -288,9 +288,9 @@ getVariableTypeCode <- function(table, all_dichotomous_levels) {
 #' @return code
 getLabelsCode <- function(table, subscripts) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+  retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     unit <- x@unit
     if (subscripts) {
       resultingName <-  x %>% getLaTeXName()
@@ -315,9 +315,9 @@ getLabelsCode <- function(table, subscripts) {
 #' @return code
 getDigitsCode <- function(table) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+  retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     digits <- x@digits
     if (length(digits) > 0) {
       digit <- sprintf("%s ~ list(%s)", addBackticks(x %>% getName()), paste0(digits, collapse=","))

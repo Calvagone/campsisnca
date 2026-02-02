@@ -61,7 +61,6 @@ Collate:
     'theoretical_metrics.R'
     'nca_metric.R'
     'nca_metrics.R'
-    'nca_metrics_table.R'
     'auc_trap_rule.R'
     'auc.R'
     'cmax.R'
@@ -78,4 +77,5 @@ Collate:
     'nca_analysis.R'
     'nca_analyses.R'
     'nca_configuration.R'
+    'nca_metrics_table.R'
     'json_interface.R'
