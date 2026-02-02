@@ -7,6 +7,7 @@ on the given data x.}
 \usage{
 Thalf(
   variable = NULL,
+  window = TimeWindow(),
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -15,6 +16,8 @@ Thalf(
 }
 \arguments{
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{name}{custom metric name (will be exported into table headers)}
 

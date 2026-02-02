@@ -26,9 +26,9 @@ setClass(
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 2 arguments: time and value
 #' @export
-CustomMetric <- function(x=NULL, variable=NULL, fun, name=NULL, unit=NULL,
+CustomMetric <- function(variable=NULL, window=TimeWindow(), fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
-  metric <- CustomMetricTbl(x=x, fun=fun, name=name, unit=unit,
+  metric <- CustomMetricTbl(window=window, fun=fun, name=name, unit=unit,
                             categorical=categorical, stat_display=stat_display, digits=digits)
   metric@variable <- processVariable(variable)
   metric@ivalue_tibble <- FALSE
@@ -46,14 +46,13 @@ CustomMetric <- function(x=NULL, variable=NULL, fun, name=NULL, unit=NULL,
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 1 argument: data
 #' @export
-CustomMetricTbl <- function(x=NULL, fun, name=NULL, unit=NULL,
+CustomMetricTbl <- function(window=TimeWindow(), fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
-  x <- processDataframe(x)
   name <- if (is.null(name)) "Custom" else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)
   fun <- deparseCustomFun(fun)
-  return(new("custom_metric", x=x, variable=as.character(NA), name=name, unit=unit, custom_function=fun,
+  return(new("custom_metric", variable=as.character(NA), window=window, name=name, unit=unit, custom_function=fun,
              categorical=categorical, stat_display=stat_display, digits=digits, ivalue_tibble=TRUE))
 }
 
@@ -106,7 +105,6 @@ setMethod("replaceAll", signature=c("custom_metric", "nca_metrics", "character")
   object <- object %>%
     replaceAll(pattern=AUC(), replacement=replacement, fun_name="AUC") %>%
     replaceAll(pattern=CAt(), replacement=replacement, fun_name="CAt") %>%
-    replaceAll(pattern=Clast(), replacement=replacement, fun_name="Clast") %>%
     replaceAll(pattern=Ctrough(), replacement=replacement, fun_name="Ctrough") %>%
     replaceAll(pattern=ValueAt(), replacement=replacement, fun_name="ValueAt") %>%
     replaceAll(pattern=Last(), replacement=replacement, fun_name="Last") %>%

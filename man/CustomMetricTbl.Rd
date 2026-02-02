@@ -5,7 +5,7 @@
 \title{Custom metric (input data as tibble).}
 \usage{
 CustomMetricTbl(
-  x = NULL,
+  window = TimeWindow(),
   fun,
   name = NULL,
   unit = NULL,
@@ -15,6 +15,8 @@ CustomMetricTbl(
 )
 }
 \arguments{
+\item{window}{time window on which this metric should be computed}
+
 \item{fun}{any custom function with exactly 1 argument: data}
 
 \item{name}{custom metric name (will be exported into table headers)}

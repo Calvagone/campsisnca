@@ -205,7 +205,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
     retValue <- x %>%
       dplyr::group_by(dplyr::across(c(strat_vars, "ID"))) %>%
       dplyr::group_modify(~ {
-        ivalue <- # your calculation on .x
+        ivalue <- object %>% iValueTbl(data=.x)
         tibble::tibble(value=ivalue)
       }) %>%
       dplyr::ungroup()
