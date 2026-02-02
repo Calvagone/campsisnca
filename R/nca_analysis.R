@@ -10,12 +10,12 @@ setClass(
   "nca_analysis",
   representation(
     name = "character",              # analysis name
-    time_range = "nca_time_range",   # default time range
+    time_range = "nca_time_window",   # default time range
     variable = "character",          # default variable name
     metrics = "nca_metrics"          # metrics contained in this analysis
   ),
   contains="pmx_element",
-  prototype=prototype(name="Default", time_range=NCATimeRange(), variable=character(0), metrics=NCAMetrics())
+  prototype=prototype(name="Default", time_range=TimeWindow(), variable=character(0), metrics=NCAMetrics())
 )
 
 #' 
@@ -26,7 +26,7 @@ setClass(
 #' @param variable default variable which is analysed
 #' @param metrics list of metrics
 #' @export
-NCAAnalysis <- function(name="Default", time_range=NCATimeRange(), variable=NULL, metrics=NCAMetrics()) {
+NCAAnalysis <- function(name="Default", time_range=TimeWindow(), variable=NULL, metrics=NCAMetrics()) {
   if (is.null(variable)) {
     variable = character(0)
   }
@@ -56,7 +56,7 @@ setMethod("getName", signature=c("nca_analysis"), definition = function(x) {
 
 setMethod("loadFromJSON", signature=c("nca_analysis", "json_element"), definition=function(object, json) {
   # Assign type to type range
-  json@data$time_range$type <- "nca_time_range"
+  json@data$time_range$type <- "nca_time_window"
   
   # Retrieve metrics
   jsonMetrics <- json@data$metrics

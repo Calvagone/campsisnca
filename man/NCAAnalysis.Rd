@@ -6,7 +6,7 @@
 \usage{
 NCAAnalysis(
   name = "Default",
-  time_range = NCATimeRange(),
+  time_range = TimeWindow(),
   variable = NULL,
   metrics = NCAMetrics()
 )

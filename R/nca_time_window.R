@@ -1,8 +1,8 @@
 #_______________________________________________________________________________
-#----                         nca_time_range class                          ----
+#----                         nca_time_window class                          ----
 #_______________________________________________________________________________
 
-validateTimeRange <- function(object) {
+validateTimeWindow <- function(object) {
   return(expectOneForAll(object, c("start", "end", "time_unit", "exclude_start", "exclude_end")))
 }
 
@@ -11,7 +11,7 @@ validateTimeRange <- function(object) {
 #' 
 #' @export
 setClass(
-  "nca_time_range",
+  "nca_time_window",
   representation(
     start = "numeric",            # Any starting time
     end = "numeric",              # End time. Note: use Inf for 'last'
@@ -20,7 +20,7 @@ setClass(
     exclude_end = "logical"       # Exclude last time point
   ),
   prototype=prototype(start=0, end=Inf, time_unit="hour", exclude_start=FALSE, exclude_end=FALSE),
-  validity=validateTimeRange
+  validity=validateTimeWindow
 )
 
 processEndArgument <- function(x) {
@@ -40,8 +40,8 @@ processEndArgument <- function(x) {
 #' @param exclude_end exclude end time when filtering
 #' @return a time range object
 #' @export
-NCATimeRange <- function(start=0, end="last", time_unit="hour", exclude_start=FALSE, exclude_end=FALSE) {
-  return(new("nca_time_range",
+TimeWindow <- function(start=0, end="last", time_unit="hour", exclude_start=FALSE, exclude_end=FALSE) {
+  return(new("nca_time_window",
              start=start,
              end=processEndArgument(end),
              time_unit=time_unit,
@@ -50,10 +50,22 @@ NCATimeRange <- function(start=0, end="last", time_unit="hour", exclude_start=FA
 }
 
 #_______________________________________________________________________________
+#----                           applyTimeWindow                             ----
+#_______________________________________________________________________________
+
+setMethod("applyTimeWindow", signature=c("data.frame", "nca_time_window"), definition=function(x, window) {
+  return(timerange(x=x, min=window@start, max=window@end, exclmin=window@exclude_start, exclmax=window@exclude_end))
+})
+
+setMethod("applyTimeWindow", signature=c("tbl_df", "nca_time_window"), definition=function(x, window) {
+  return(timerange(x=x, min=window@start, max=window@end, exclmin=window@exclude_start, exclmax=window@exclude_end))
+})
+
+#_______________________________________________________________________________
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("nca_time_range", "json_element"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("nca_time_window", "json_element"), definition=function(object, json) {
   json@data$end <- processEndArgument(json@data$end)
   return(mapJSONPropertiesToS4Slots(object=object, json=json))
 })

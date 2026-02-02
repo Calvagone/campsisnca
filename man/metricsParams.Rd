@@ -6,7 +6,7 @@
 \usage{
 metricsParams(
   variable = NULL,
-  filter = NULL,
+  window = NULL,
   name = NULL,
   unit = NULL,
   categorical = NULL,
@@ -17,7 +17,7 @@ metricsParams(
 \arguments{
 \item{variable}{dependent variable}
 
-\item{filter}{time range to use for filtering data}
+\item{window}{time window on which this metric should be computed}
 
 \item{name}{custom metric name (will be exported into table headers)}
 

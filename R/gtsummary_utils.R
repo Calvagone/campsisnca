@@ -14,6 +14,7 @@ extractBraceValues <- function(x) {
 #' Compute NCA metric summary.
 #' 
 #' @param object NCA metric
+#' @param strat_vars stratification variable names in data
 #' @param quantile_type type of quantile
 #' @return data frame
 #' @importFrom dplyr all_of arrange desc everything filter transmute
@@ -22,7 +23,7 @@ extractBraceValues <- function(x) {
 #' @importFrom purrr map_chr
 #' @importFrom stringr str_detect
 #' @export
-computeNCAMetricSummary <- function(object, quantile_type) {
+computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
   
   data <- object@individual
   stat_display <- object@stat_display
@@ -38,10 +39,12 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     summary <-
       cards::ard_categorical(
         data,
-        by=NULL,
+        by=strat_vars,
         variables=dplyr::all_of("value"),
         statistic=dplyr::everything() ~ stats_
       )
+    
+    print(summary)
   
     summary <- tibble::as_tibble(summary) %>%
       dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level))
@@ -80,13 +83,15 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     summary <-
       cards::ard_continuous(
         data,
-        by=NULL,
+        by=strat_vars,
         variables=dplyr::all_of("value"),
         statistic=~cards::continuous_summary_fns(
           summaries=character(0),
           other_stats=availableContinuousStats[stats_]
         )
       )
+    
+    print(summary)
     
     summary <- tibble::as_tibble(summary) %>%
       dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))

@@ -1,3 +1,22 @@
+#_______________________________________________________________________________
+#----                           applyTimeWindow                             ----
+#_______________________________________________________________________________
+
+#' Apply time window.
+#' 
+#' @param x input data for the calculation, data frame
+#' @param window time window
+#' @param ... extra arguments
+#' @return updated object
+#' @export
+#' @rdname applyTimeWindow
+applyTimeWindow <- function(x, window, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("applyTimeWindow", function(x, window, ...) {
+  standardGeneric("applyTimeWindow")
+})
 
 #_______________________________________________________________________________
 #----                             calculate                                 ----
@@ -6,18 +25,23 @@
 #' Calculate.
 #' 
 #' @param object object (PK metric) that needs to be calculated
+#' @param x input data for the calculation, data frame
+#' @param strat_vars stratification variable names
 #' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
 #' @param ... extra arguments
 #' @return updated object
 #' @export
 #' @rdname calculate
-calculate <- function(object, quantile_type, ...) {
+calculate <- function(object, x, strat_vars, quantile_type, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("calculate", function(object, quantile_type=NULL, ...) {
+setGeneric("calculate", function(object, x, strat_vars=NULL, quantile_type=NULL, ...) {
   if (is.null(quantile_type)) {
     quantile_type <- 2
+  }
+  if (is.null(strat_vars)) {
+    strat_vars <- character(0)
   }
   standardGeneric("calculate")
 })
@@ -70,18 +94,20 @@ setGeneric("iValueTbl", function(object, data, ...) {
 #----                             iValues                                   ----
 #_______________________________________________________________________________
 
-#' Compute the individual values of a population.
+#' Compute the individual values on a simulation output.
 #' 
 #' @param object PK metric
+#' @param x input data for the calculation, data frame
+#' @param strat_vars stratification variable names
 #' @param ... extra arguments
 #' @return individual values
 #' @export
 #' @rdname iValues
-iValues <- function(object, ...) {
+iValues <- function(object, x, strat_vars, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("iValues", function(object, ...) {
+setGeneric("iValues", function(object, x, strat_vars, ...) {
   standardGeneric("iValues")
 })
 

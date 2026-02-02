@@ -6,7 +6,7 @@
 \usage{
 AUC(
   variable = NULL,
-  filter = NCATimeRange(),
+  window = TimeWindow(),
   method = 1,
   name = NULL,
   unit = NULL,
@@ -17,7 +17,7 @@ AUC(
 \arguments{
 \item{variable}{dependent variable}
 
-\item{filter}{time range to use for filtering data}
+\item{window}{time window on which this metric should be computed}
 
 \item{method}{method:
 * 1: linear up - linear down

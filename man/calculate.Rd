@@ -3,21 +3,25 @@
 %   R/theoretical_thalf.R
 \name{calculate}
 \alias{calculate}
-\alias{calculate,nca_metric,numeric-method}
-\alias{calculate,nca_metrics,numeric-method}
-\alias{calculate,theoretical_thalf_metric,numeric-method}
+\alias{calculate,nca_metric,data.frame,character,numeric-method}
+\alias{calculate,nca_metrics,numeric,ANY,ANY-method}
+\alias{calculate,theoretical_thalf_metric,data.frame,character,numeric-method}
 \title{Calculate.}
 \usage{
-calculate(object, quantile_type = NULL, ...)
+calculate(object, x, strat_vars = NULL, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_metric,numeric}(object, quantile_type = NULL, ...)
+\S4method{calculate}{nca_metric,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_metrics,numeric}(object, quantile_type = NULL, ...)
+\S4method{calculate}{nca_metrics,numeric,ANY,ANY}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
 
-\S4method{calculate}{theoretical_thalf_metric,numeric}(object, quantile_type = NULL, ...)
+\S4method{calculate}{theoretical_thalf_metric,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
+
+\item{x}{input data for the calculation, data frame}
+
+\item{strat_vars}{stratification variable names}
 
 \item{quantile_type}{type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)}
 

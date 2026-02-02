@@ -53,7 +53,7 @@ Collate:
     'export_type.R'
     'generic.R'
     'export_utils.R'
-    'nca_time_range.R'
+    'nca_time_window.R'
     'nca_metric_utils.R'
     'gtsummary_utils.R'
     'filter_utils.R'

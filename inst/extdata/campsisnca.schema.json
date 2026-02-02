@@ -35,9 +35,9 @@
           "type": "string",
           "description": "Name of this analysis. This name will appear in the table. All names must be unique."
         },
-        "time_range": {
-          "$ref": "#/$defs/nca_time_range",
-          "description": "Default time range for this analysis. If not specified, default time range is from 0 to 'last'."
+        "window": {
+          "$ref": "#/$defs/nca_time_window",
+          "description": "Default time window for this analysis. If not specified, default time range is from 0 to 'last'."
         },
         "variable": {
           "type": "string",
@@ -106,6 +106,14 @@
         "type": {
           "type": "string"
         },
+        "variable": {
+          "type": "string",
+          "description": "Output variable on which the metric must be computed."
+        },
+        "window": {
+          "$ref": "#/$defs/nca_time_window",
+          "description": "Specific time window to use for this metric (e.g. if time window from the analysis needs to be overridden)"
+        },
         "name": {
           "type": "string",
           "description": "Name of the metric. This name can include grouping variables. E.g. '<METRIC> <PERIOD>'"
@@ -114,17 +122,9 @@
           "type": "string",
           "description": "Informative unit string for this metric."
         },
-        "variable": {
-          "type": "string",
-          "description": "Output variable on which the metric must be computed."
-        },
         "stat_display": {
           "type": "string",
           "description": "Statistic display. E.g. '{median} ({p5}–{p95})'."
-        },
-        "time_range": {
-          "$ref": "#/$defs/nca_time_range",
-          "description": "Specific time range to use for this metric (e.g. if time range from the analysis needs to be overridden)"
         }
       },
       "required": [
@@ -461,13 +461,13 @@
       ],
       "description": "Method used to compute AUC"
     },
-    "nca_time_range": {
-      "title": "NCA time range",
+    "nca_time_window": {
+      "title": "NCA Time Window",
       "type": "object",
       "properties": {
         "start": {
           "type": "number",
-          "description": "Start time of the range."
+          "description": "Start time of the window."
         },
         "end": {
           "oneOf": [
@@ -479,7 +479,7 @@
               "pattern": "^last$"
             }
           ],
-          "description": "End time of the range. Use 'last' to refer to the last value of the simulation output."
+          "description": "End time of the window. Use 'last' to refer to the last value of the simulation output."
         },
         "time_unit": {
           "$ref": "#/$defs/time_unit",
