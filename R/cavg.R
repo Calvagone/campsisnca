@@ -45,8 +45,9 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Avg <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Avg <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="avg_metric")
   return(setDefaultNameIfNA(metric))
 }
@@ -56,8 +57,9 @@ Avg <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=N
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cavg <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Cavg <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="cavg_metric")
   return(setDefaultNameIfNA(metric))
 }
