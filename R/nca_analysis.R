@@ -42,12 +42,26 @@ setMethod("add", signature = c("nca_analysis", "nca_metric"), definition = funct
   return(object)
 })
 
+setMethod("add", signature = c("nca_analysis", "list"), definition = function(object, x) {
+  object@metrics <- object@metrics %>% add(x)
+  return(object)
+})
+
 #_______________________________________________________________________________
 #----                             getName                                   ----
 #_______________________________________________________________________________
 
 setMethod("getName", signature=c("nca_analysis"), definition = function(x) {
   return(x@name)
+})
+
+#_______________________________________________________________________________
+#----                              getUnit                                  ----
+#_______________________________________________________________________________
+
+#' @rdname getUnit
+setMethod("getUnit", signature=c("nca_analysis", "character"), definition=function(object, metric, ...) {
+  return(object@metrics %>% getUnit(metric=metric, ...))
 })
 
 #_______________________________________________________________________________
@@ -72,6 +86,50 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
   })
   return(object)    
 })
+
+#_______________________________________________________________________________
+#----                                export                                 ----
+#_______________________________________________________________________________
+
+setMethod("export", signature=c("nca_analysis", "character"), definition=function(object, dest, ...) {
+  if (dest=="dataframe") {
+    return(object %>% export(new("dataframe_type"), ...))
+  } else {
+    stop("Only dataframe is supported for now")
+  }
+})
+
+setMethod("export", signature=c("nca_analysis", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
+  retValue <- object@metrics@list %>% purrr::map_df(~.x %>% export(dest=dest, type=type, ...))
+  # names <- names(object@scenario)
+  # values <- as.character(object@scenario)
+  # for (name in names) {
+  #   retValue <- retValue %>% dplyr::mutate(!!name := values[[which(name==names)]])
+  # }
+  retValue <- retValue %>% dplyr::mutate(analysis=object@name)
+  return(retValue)
+})
+
+#_______________________________________________________________________________
+#----                       reduceTo2Dimensions                             ----
+#_______________________________________________________________________________
+
+#' @rdname reduceTo2Dimensions
+setMethod("reduceTo2Dimensions", signature=c("nca_metrics"), definition=function(object, ...) {
+  scenario <- object@scenario
+  size <- length(scenario)
+  if (size > 2) {
+    names <- names(scenario)
+    values <- as.character(scenario)
+    hNames <- names[1:(size-1)]
+    hValues <- values[1:(size-1)]
+    hVec <- paste0(hValues, collapse=" / ")
+    names(hVec) <- paste0(hNames, collapse="_") # Variables concatenated with _
+    object@scenario <- c(hVec, scenario[size])
+  }
+  return(object)
+})
+
 
 #_______________________________________________________________________________
 #----                           loadFromJSON                                ----

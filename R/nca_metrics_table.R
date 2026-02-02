@@ -11,7 +11,7 @@ setClass(
   representation(
   ),
   contains="pmx_list",
-  prototype = prototype(type="nca_metrics")
+  prototype = prototype(type="nca_analysis")
 )
 
 #' 
