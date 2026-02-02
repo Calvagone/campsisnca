@@ -6,6 +6,7 @@
 \usage{
 TimeBelowLimit(
   variable = NULL,
+  window = TimeWindow(),
   limit = NULL,
   strictly = FALSE,
   name = NULL,
@@ -16,6 +17,8 @@ TimeBelowLimit(
 }
 \arguments{
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{limit}{the limit to compare the variable against}
 
