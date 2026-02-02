@@ -30,7 +30,8 @@ setClass(
 #' * 3: linear before Tmax, logarithmic after Tmax
 #' @export
 AUC <- function(variable=NULL, window=TimeWindow(), method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="auc_metric")
   assertthat::assert_that(method %in% c(1,2,3), msg="method must be 1, 2 or 3")
   metric@method <- as.integer(method)

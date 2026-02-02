@@ -45,8 +45,9 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Max <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Max <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="max_metric")
   return(setDefaultNameIfNA(metric))
 }
@@ -56,8 +57,9 @@ Max <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=N
 #' 
 #' @inheritParams metricsParams
 #' @export
-Cmax <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Cmax <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="cmax_metric")
   return(setDefaultNameIfNA(metric))
 }
