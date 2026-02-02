@@ -23,8 +23,9 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Tmin <- function(variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
+Tmin <- function(variable=NULL, window=TimeWindow(), name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="tmin_metric")
   return(setDefaultNameIfNA(metric))
 }

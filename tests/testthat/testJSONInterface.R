@@ -8,11 +8,11 @@ test_that("Import time range from JSON", {
   
   json <- jsonlite::read_json(file.path(testFolder, "json_examples", "nca_config_1.json"))
   
-  time_range <- loadFromJSON(NCATimeRange(), JSONElement(json$nca_analyses[[1]]$time_range))
-  expect_equal(time_range, NCATimeRange(0, 24))
+  time_range <- loadFromJSON(TimeWindow(), JSONElement(json$nca_analyses[[1]]$window))
+  expect_equal(time_range, TimeWindow(0, 24))
   
-  time_range <- loadFromJSON(NCATimeRange(), JSONElement(json$nca_analyses[[2]]$time_range))
-  expect_equal(time_range, NCATimeRange(144, 168))
+  time_range <- loadFromJSON(TimeWindow(), JSONElement(json$nca_analyses[[2]]$window))
+  expect_equal(time_range, TimeWindow(144, 168))
 })
 
 test_that("Import NCA config 1", {
@@ -20,7 +20,7 @@ test_that("Import NCA config 1", {
   # Import NCA configuration from JSON
   imported_config <- loadFromJSON(NCAConfiguration(), file.path(testFolder, "json_examples", "nca_config_1.json"))
 
-  analysis1 <- NCAAnalysis(name="Day 1", time_range=NCATimeRange(0, 24), variable="Y") %>%
+  analysis1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
     add(AUC()) %>%
     add(Cmax()) %>%
     add(Cmin()) %>%
@@ -36,7 +36,7 @@ test_that("Import NCA config 1", {
     add(TimeBelowLimit(limit=10)) %>%
     add(Thalf())
   
-  analysis2 <- NCAAnalysis(name="Day 7", time_range=NCATimeRange(144, 168), variable="Y") %>%
+  analysis2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(AUC()) %>%
     add(Cmax()) %>%
     add(Cmin()) %>%
