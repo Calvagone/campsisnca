@@ -188,8 +188,8 @@ test_that("Round your PK metrics (example 5)", {
 
 test_that("Export custom metrics (example 6)", {
   
-  custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="Cmax custom", unit="ng/mL")
-  custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
+  custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="C_{max} custom", unit="ng/mL")
+  custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="C_{max} > 12", unit="%", categorical=TRUE)
   
   # Day 1
   ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
@@ -224,9 +224,9 @@ test_that("Export custom metrics (example 6)", {
 
 test_that("Geometric Mean / Geometric CV (example 7)", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable() %>%
     add(nca)
@@ -259,14 +259,14 @@ test_that("Stats on categorical data with more than 2 levels (example 8)", {
   }
 
   # Day 1
-  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
-    campsisnca::calculate()
+  ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+    add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))) %>%
+    campsisnca::calculate(campsis)
   
   # Day 7 
-  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(Cmax(), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
-    campsisnca::calculate()
+  ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+    add(c(Cmax(), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))) %>%
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable()  
   table <- table %>%
@@ -280,7 +280,7 @@ test_that("Stats on categorical data with more than 2 levels (example 8)", {
     filter(id %in% seq_len(10)) # Keep first 10
   
   outputRegressionTest(data=summary, file=getRefFile("example8_summary.csv"))
-  outputRegressionTest(data=individual %>% rename(Categories=`Cmax categories`), file=getRefFile("example8_individual.csv"))
+  outputRegressionTest(data=individual %>% rename(Categories=`C_{max} categories`), file=getRefFile("example8_individual.csv"))
   
   # Because there are 3 levels (and not 2), both table below are exactly similar
   gttable <- table %>% export(dest="gt", subscripts=TRUE)

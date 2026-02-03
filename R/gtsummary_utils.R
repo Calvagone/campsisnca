@@ -42,9 +42,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
         variables=dplyr::all_of("value"),
         statistic=dplyr::everything() ~ stats_
       )
-    
-    print(summary)
-  
+
     summary <- tibble::as_tibble(summary) %>%
       dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level))
     
@@ -89,8 +87,6 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
           other_stats=availableContinuousStats[stats_]
         )
       )
-    
-    print(summary)
     
     summary <- tibble::as_tibble(summary)
     # Identify the group_level columns

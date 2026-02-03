@@ -110,7 +110,7 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
           definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
   code <- object %>% generateTableCode(init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   table <- object # Table variable needs to be there!
-  cat(code)
+  # cat(code)
   # browser()
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
