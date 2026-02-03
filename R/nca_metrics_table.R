@@ -56,8 +56,9 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
-  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
-  
+  analysis_strat <- length(object@configuration@nca_analyses) > 1
+  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, analysis_strat=analysis_strat, ...))
+
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
     allMetrics <- unique(retValue$metric)
@@ -89,7 +90,8 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
         dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
     }
 
-    by <- c("id", names(object@list[[1]]@scenario))
+    by <- c("id", object %>% getStrata(keep_single=FALSE) %>%
+              dplyr::pull("name") %>% unique())
     retValue <- continuousData %>%
       dplyr::full_join(categoricalData, by=by) %>%
       dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
@@ -109,9 +111,12 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
           definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
   code <- object %>% generateTableCode(init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   table <- object # Table variable needs to be there!
+  cat(code)
+  # browser()
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
     error=function(cond) {
+      print(cond)
       return(sprintf("Failed to create gtsummary table: %s", cond$message))
     })
   return(retValue)
@@ -185,11 +190,9 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   } else {
     initCode <- NULL
   }
-  
-            browser()          
-            
-  scenarios <- object %>% getScenarios()
-  stratVariables <- unique(scenarios$name)
+ 
+  stratas <- object %>% getStrata(keep_single=FALSE)
+  stratVariables <- unique(stratas$name)
   
   stats <- getStatisticsCode(object)
   type <- getVariableTypeCode(object, all_dichotomous_levels=all_dichotomous_levels)
@@ -208,12 +211,20 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
 })
 
 #_______________________________________________________________________________
-#----                           getScenarios                                ----
+#----                             getStrata                                 ----
 #_______________________________________________________________________________
 
-#' @rdname getScenarios
-setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(~tibble::tibble(name="analysis", value=.x@name))
+#' @rdname getStrata
+setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=function(object, keep_single, ...) {
+  retValue <- object@configuration@nca_analyses@list %>%
+    purrr::map_df(~tibble::tibble(name="analysis", value=.x@name))
+  
+  # Remove single strata values
+  if (!keep_single) {
+    retValue <- retValue %>%
+      dplyr::filter(dplyr::n() > 1, .by = name)
+  }
+  
   return(retValue)
 })
 

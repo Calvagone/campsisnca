@@ -171,19 +171,23 @@ setGeneric("getLaTeXName", function(x, ...) {
 #----                           getScenarios                                ----
 #_______________________________________________________________________________
 
-#' Get all scenarios that were added to the table object.
+#' Get all stratas.
 #' 
 #' @param object table object
+#' @param keep_single keep single stratification values, logical (default TRUE)
 #' @param ... extra arguments
 #' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
 #' @export
-#' @rdname getScenarios
-getScenarios <- function(object, ...) {
+#' @rdname getStrata
+getStrata <- function(object, keep_single, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("getScenarios", function(object, ...) {
-  standardGeneric("getScenarios")
+setGeneric("getStrata", function(object, keep_single=NULL, ...) {
+  if (is.null(keep_single)) {
+    keep_single <- TRUE
+  }
+  standardGeneric("getStrata")
 })
 
 #_______________________________________________________________________________

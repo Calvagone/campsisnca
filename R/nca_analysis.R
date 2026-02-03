@@ -12,10 +12,12 @@ setClass(
     name = "character",              # analysis name
     window = "nca_time_window",      # default time range
     variable = "character",          # default variable name
-    metrics = "nca_metrics"          # metrics contained in this analysis
+    metrics = "nca_metrics",         # metrics contained in this analysis
+    strat_vars = "character"         # expected stratification variables in data
   ),
   contains="pmx_element",
-  prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA), metrics=NCAMetrics())
+  prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA),
+                      metrics=NCAMetrics(), strat_vars=character(0))
 )
 
 #' 
@@ -82,6 +84,11 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
       .x@window <- object@window
     }
     
+    # Use default 'expected' stratification variables of this analysis
+    if (length(strat_vars) == 0 && length(object@strat_vars)) {
+      strat_vars <- object@strat_vars
+    }
+    
     return(.x %>% calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...))
   })
   return(object)    
@@ -91,22 +98,21 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
 #----                                export                                 ----
 #_______________________________________________________________________________
 
-setMethod("export", signature=c("nca_analysis", "character"), definition=function(object, dest, ...) {
+setMethod("export", signature=c("nca_analysis", "character"), definition=function(object, dest, analysis_strat=TRUE, ...) {
   if (dest=="dataframe") {
-    return(object %>% export(new("dataframe_type"), ...))
+    return(object %>% export(new("dataframe_type"), analysis_strat=analysis_strat, ...))
   } else {
     stop("Only dataframe is supported for now")
   }
 })
 
-setMethod("export", signature=c("nca_analysis", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
+setMethod("export", signature=c("nca_analysis", "dataframe_type"), definition=function(object, dest, type="summary", analysis_strat=TRUE, ...) {
   retValue <- object@metrics@list %>% purrr::map_df(~.x %>% export(dest=dest, type=type, ...))
-  # names <- names(object@scenario)
-  # values <- as.character(object@scenario)
-  # for (name in names) {
-  #   retValue <- retValue %>% dplyr::mutate(!!name := values[[which(name==names)]])
-  # }
-  retValue <- retValue %>% dplyr::mutate(analysis=object@name)
+  if (analysis_strat) {
+    retValue <- retValue %>%
+      dplyr::mutate(analysis=object@name)
+  }
+  
   return(retValue)
 })
 
