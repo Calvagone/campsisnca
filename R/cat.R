@@ -90,7 +90,7 @@ setMethod("getDefaultName", signature=c("conc_at_metric"), definition=function(o
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("abstract_value_at_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("iValue", signature=c("abstract_value_at_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
   observed_time <- object@observed_time
   if (is.na(observed_time)) {
     return(value[length(value)])

@@ -56,17 +56,21 @@ setGeneric("calculate", function(object, x, strat_vars=NULL, quantile_type=NULL,
 #' @param object PK metric
 #' @param time time vector, numeric
 #' @param value value vector, numeric
+#' @param window time window object
 #' @param ... extra arguments
 #' @return individual value
 #' @export
 #' @rdname iValue
-iValue <- function(object, time, value, ...) {
+iValue <- function(object, time, value, window) {
   stop("No default function is provided")
 }
 
-setGeneric("iValue", function(object, time, value, ...) {
+setGeneric("iValue", function(object, time, value, window=NULL) {
   assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
   assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
+  if (is.null(window)) {
+    window <- UndefinedTimeWindow()
+  }
   standardGeneric("iValue")
 })
 

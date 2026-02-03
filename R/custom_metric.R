@@ -74,7 +74,7 @@ setMethod("iValueTbl", signature=c("custom_metric", "tbl_df"), definition=functi
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("iValue", signature=c("custom_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
   fun <- eval(expr=parse(text=object@custom_function))
   return(fun(time, value))    
 })

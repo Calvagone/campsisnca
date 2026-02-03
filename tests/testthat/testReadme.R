@@ -20,14 +20,14 @@ getRefFile <- function(filename) {
 test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   
   # Day 1
-  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+  ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
     add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   # Day 7 
-  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+  ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable()  
   table <- table %>%

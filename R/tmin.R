@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateTminMetric <- function(object) {
-  return(TRUE)
+  return(expectOne(object, "rebase"))
 }
 
 #' 
@@ -13,6 +13,7 @@ validateTminMetric <- function(object) {
 setClass(
   "tmin_metric",
   representation(
+    rebase="logical"
   ),
   contains="nca_metric",
   validity=validateTminMetric
@@ -22,11 +23,13 @@ setClass(
 #' Tmin.
 #' 
 #' @inheritParams metricsParams
+#' @param rebase rebase time according to start time of window
 #' @export
-Tmin <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Tmin <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="tmin_metric")
+  metric@rebase <- rebase
   return(setDefaultNameIfNA(metric))
 }
 
@@ -44,8 +47,12 @@ setMethod("getDefaultName", signature=c("tmin_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  return(time[which.min(value)])    
+setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+  retValue <- time[which.min(value)]
+  if (object@rebase) {
+    retValue <- retValue - window@start
+  }
+  return(retValue)    
 })
 
 #_______________________________________________________________________________

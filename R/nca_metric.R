@@ -215,7 +215,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
   } else {
     retValue <- x %>%
       dplyr::group_by(dplyr::across(c(strat_vars, "ID"))) %>%
-      dplyr::summarise(ivalue=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
+      dplyr::summarise(ivalue=object %>% iValue(time=.data$TIME, value=.data[[variable]], window=object@window)) %>%
       dplyr::ungroup() %>%
       dplyr::transmute(ID, value=ivalue)
   }

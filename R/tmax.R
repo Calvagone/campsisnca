@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateTmaxMetric <- function(object) {
-  return(TRUE)
+  return(expectOne(object, "rebase"))
 }
 
 #' 
@@ -13,8 +13,10 @@ validateTmaxMetric <- function(object) {
 setClass(
   "tmax_metric",
   representation(
+    rebase="logical"
   ),
   contains="nca_metric",
+  prototype=prototype(rebase=TRUE),
   validity=validateTmaxMetric
 )
 
@@ -22,11 +24,13 @@ setClass(
 #' Tmax.
 #' 
 #' @inheritParams metricsParams
+#' @param rebase rebase time according to start time of window
 #' @export
-Tmax <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Tmax <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="tmax_metric")
+  metric@rebase <- rebase
   return(setDefaultNameIfNA(metric))
 }
 
@@ -44,8 +48,11 @@ setMethod("getDefaultName", signature=c("tmax_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  return(time[which.max(value)])    
+setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+  retValue <- time[which.max(value)]
+  if (object@rebase) {
+    retValue <- retValue - window@start
+  } 
 })
 
 #_______________________________________________________________________________
