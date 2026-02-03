@@ -1,4 +1,4 @@
-"metric","id","value","discrete_value","day"
+"metric","id","value","discrete_value","analysis"
 "Cmax",1,9.78,NA,"Day 1"
 "Cmax",2,6.11,NA,"Day 1"
 "Cmax",3,10.92,NA,"Day 1"

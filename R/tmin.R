@@ -16,6 +16,7 @@ setClass(
     rebase="logical"
   ),
   contains="nca_metric",
+  prototype=prototype(rebase=TRUE),
   validity=validateTminMetric
 )
 

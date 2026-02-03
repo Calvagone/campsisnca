@@ -138,20 +138,20 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
 test_that("Round your PK metrics (example 5)", {
   
   # Day 1
-  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+  ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
     add(AUC(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
     add(AUC(digits=c(1,2,2), name="AUC2")) %>% # Respectively 1/2/2 digit(s) after decimal for med, p5 and p95
     add(AUC(digits=~signif(.x, 2), name="AUC3")) %>% # 2 significant digits only
     add(AUC(digits=list(~round(.x/5)*5, ~round(.x, 1) , ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   # Day 7 
-  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+  ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(AUC(name="AUC1")) %>%
     add(AUC(name="AUC2")) %>%
     add(AUC(name="AUC3")) %>%
     add(AUC(name="AUC4")) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable()  
   table <- table %>%
@@ -161,19 +161,19 @@ test_that("Round your PK metrics (example 5)", {
     export(dest="dataframe", type="summary_pretty")
   
   auc1 <- summary %>%
-    filter(metric=="AUC1", day=="Day 1") %>%
+    filter(metric=="AUC1", analysis=="Day 1") %>%
     pull(summary_stats)
   
   auc2 <- summary %>%
-    filter(metric=="AUC2", day=="Day 1") %>%
+    filter(metric=="AUC2", analysis=="Day 1") %>%
     pull(summary_stats)
   
   auc3 <- summary %>%
-    filter(metric=="AUC3", day=="Day 1") %>%
+    filter(metric=="AUC3", analysis=="Day 1") %>%
     pull(summary_stats)
   
   auc4 <- summary %>%
-    filter(metric=="AUC4", day=="Day 1") %>%
+    filter(metric=="AUC4", analysis=="Day 1") %>%
     pull(summary_stats)
   
   expect_equal(auc1, "134 (102–168)") # At least 2 significant figures
@@ -192,14 +192,14 @@ test_that("Export custom metrics (example 6)", {
   custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
   
   # Day 1
-  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+  ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
     add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2)) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   # Day 7 
-  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+  ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(c(Cmax(), Tmax(), custom1, custom2)) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable()  
   table <- table %>%
