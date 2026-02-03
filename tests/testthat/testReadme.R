@@ -89,9 +89,9 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
 
 test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can be reproduced", {
   
-  nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis %>% mutate(DOSE=1000, TAU=24))
   
   table <- NCAMetricsTable() %>%
     add(nca)
@@ -113,9 +113,9 @@ test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can
 
 test_that("Compute terminal half-live based on data (example 4) can be reproduced", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
-    add(c(Thalf(x=campsis %>% timerange(7*24, 10*24)))) %>%
-    campsisnca::calculate()
+  nca <- NCAAnalysis(variable="Y") %>%
+    add(c(Thalf(window=TimeWindow(7*24, 10*24)))) %>%
+    campsisnca::calculate(campsis)
   
   table <- NCAMetricsTable() %>%
     add(nca)

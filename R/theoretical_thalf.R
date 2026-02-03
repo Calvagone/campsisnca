@@ -88,7 +88,8 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' @export
 Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "1cpt"
-  metric <- ncaConstructor(variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=TRUE)
   metric@map <- map
@@ -104,7 +105,8 @@ Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits
 #' @export
 Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.dist"
-  metric <- ncaConstructor(variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=FALSE)
   metric@map <- map
@@ -120,7 +122,8 @@ Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, d
 #' @export
 Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.z"
-  metric <- ncaConstructor(variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=FALSE)
   metric@map <- map
@@ -136,7 +139,8 @@ Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digi
 #' @export
 Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.eff"
-  metric <- ncaConstructor(variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=FALSE)
   metric@map <- map
@@ -162,11 +166,11 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "ch
   subtype <- object@subtype
 
   if (subtype == "1cpt") {
-    ind <- metrics.1cpt(object@x, map=object@map)
+    ind <- metrics.1cpt(x, map=object@map)
     ind <- ind %>% dplyr::transmute(id=ID, value=THALF)
 
   } else if (subtype %>% startsWith("2cpt")) {
-    ind <- metrics.2cpt(object@x, map=object@map)
+    ind <- metrics.2cpt(x, map=object@map)
 
     if (subtype == "2cpt.dist") {
       ind <- ind %>% dplyr::transmute(id=ID, value=THALF_D)
@@ -180,7 +184,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "ch
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  object@summary <- computeNCAMetricSummary(object=object, quantile_type=quantile_type)
+  object@summary <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
   return(object)
 })
 
