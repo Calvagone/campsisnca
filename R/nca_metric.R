@@ -206,7 +206,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
 
   if (object@ivalue_tibble) {
     retValue <- x %>%
-      dplyr::group_by(dplyr::across(c(strat_vars, "ID"))) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
       dplyr::group_modify(~ {
         ivalue <- object %>% iValueTbl(data=.x)
         tibble::tibble(value=ivalue)
@@ -214,7 +214,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
       dplyr::ungroup()
   } else {
     retValue <- x %>%
-      dplyr::group_by(dplyr::across(c(strat_vars, "ID"))) %>%
+      dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
       dplyr::summarise(value=object %>% iValue(time=.data$TIME, value=.data[[variable]], window=object@window)) %>%
       dplyr::ungroup()
   }
