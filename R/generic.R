@@ -180,7 +180,7 @@ setGeneric("getLaTeXName", function(x, ...) {
 #' @param object table object
 #' @param keep_single keep single stratification values, logical (default TRUE)
 #' @param ... extra arguments
-#' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
+#' @return list of stratification variable names
 #' @export
 #' @rdname getStrata
 getStrata <- function(object, keep_single, ...) {

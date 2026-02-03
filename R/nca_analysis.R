@@ -28,11 +28,14 @@ setClass(
 #' @param variable default variable which is analysed
 #' @param metrics list of metrics
 #' @export
-NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, metrics=NCAMetrics()) {
+NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, metrics=NCAMetrics(), strat_vars=NULL) {
   if (is.null(variable)) {
     variable = as.character(NA)
   }
-  return(new("nca_analysis", name=name, window=window, variable=variable, metrics=metrics))
+  if (is.null(strat_vars)) {
+    strat_vars = character(0)
+  }
+  return(new("nca_analysis", name=name, window=window, variable=variable, metrics=metrics, strat_vars=strat_vars))
 }
 
 #_______________________________________________________________________________
@@ -85,7 +88,7 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
     }
     
     # Use default 'expected' stratification variables of this analysis
-    if (length(strat_vars) == 0 && length(object@strat_vars)) {
+    if (length(strat_vars) == 0 && length(object@strat_vars) > 0) {
       strat_vars <- object@strat_vars
     }
     
@@ -112,6 +115,9 @@ setMethod("export", signature=c("nca_analysis", "dataframe_type"), definition=fu
     retValue <- retValue %>%
       dplyr::mutate(analysis=object@name)
   }
+  
+  # For backwards-compatibility in tests
+  retValue <- dplyr::relocate(retValue, dplyr::any_of(c("analysis", object@strat_vars)), .after=dplyr::last_col())
   
   return(retValue)
 })

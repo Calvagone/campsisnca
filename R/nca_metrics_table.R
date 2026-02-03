@@ -90,8 +90,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
         dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
     }
 
-    by <- c("id", object %>% getStrata(keep_single=FALSE) %>%
-              dplyr::pull("name") %>% unique())
+    by <- c("id", object %>% getStrata(keep_single=FALSE))
     retValue <- continuousData %>%
       dplyr::full_join(categoricalData, by=by) %>%
       dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
@@ -191,8 +190,7 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
     initCode <- NULL
   }
  
-  stratas <- object %>% getStrata(keep_single=FALSE)
-  stratVariables <- unique(stratas$name)
+  stratVariables <- object %>% getStrata(keep_single=FALSE)
   
   stats <- getStatisticsCode(object)
   type <- getVariableTypeCode(object, all_dichotomous_levels=all_dichotomous_levels)
@@ -216,16 +214,17 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
 
 #' @rdname getStrata
 setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=function(object, keep_single, ...) {
-  retValue <- object@configuration@nca_analyses@list %>%
-    purrr::map_df(~tibble::tibble(name="analysis", value=.x@name))
+  retValue <- NULL
   
-  # Remove single strata values
-  if (!keep_single) {
-    retValue <- retValue %>%
-      dplyr::filter(dplyr::n() > 1, .by = name)
+  if (length(object@configuration@nca_analyses) > 1) {
+    retValue <- "analysis"
   }
   
-  return(retValue)
+  strat_vars <- object@configuration@nca_analyses@list %>%
+    purrr::map(~.x@strat_vars) %>%
+    purrr::flatten_chr()
+  
+  return(c(retValue, unique(strat_vars)))
 })
 
 #_______________________________________________________________________________

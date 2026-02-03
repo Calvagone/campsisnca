@@ -24,7 +24,6 @@ extractBraceValues <- function(x) {
 #' @importFrom stringr str_detect
 #' @export
 computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
-  
   data <- object@individual
   stat_display <- object@stat_display
   digits <- object@digits
@@ -93,9 +92,22 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
     
     print(summary)
     
-    summary <- tibble::as_tibble(summary) %>%
-      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))
+    summary <- tibble::as_tibble(summary)
+    # Identify the group_level columns
+    if (length(strat_vars) > 0) {
+      renameVec <- paste0("group", seq_along(strat_vars), "_level")
+      names(renameVec) <- strat_vars
+      summary <- summary %>%
+        dplyr::rename(!!!renameVec)
+    }
+    
+    summary <- summary %>%
+      dplyr::select(dplyr::all_of(c(strat_vars, "stat_name", "stat"))) %>%
+      dplyr::rename(stat=stat_name, value=stat) %>%
+      dplyr::mutate(value=as.numeric(value)) %>%
+      dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), unlist))
 
+    #TODO: fix me
     comment <- glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary, digits=digits)
   }
 

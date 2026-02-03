@@ -17,7 +17,7 @@ getStrata(object, keep_single = NULL, ...)
 \item{...}{extra arguments}
 }
 \value{
-a dataframe with 2 columns name (stratification variable) and value (all level values)
+list of stratification variable names
 }
 \description{
 Get all stratas.
