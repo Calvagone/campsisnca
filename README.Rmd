@@ -268,3 +268,51 @@ Summary statistics can also be exported:
 ```{r, message=FALSE}
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
+
+### Example 10: Summary statistics across arms and scenarios
+
+Let's generate some fictitious results where two treatment arms are simulated (`1g QD` and `2g QD`) and where scenarios are included too (`Base scenario` and `Lower clearance`).
+
+```{r, message=FALSE}
+library(campsis)
+arm1 <- Arm(subjects=24, label="1g QD") %>%
+    add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
+    add(Observations(seq(0,24,0.1), rep=DosingSchedule()))
+  
+arm2 <- Arm(subjects=24, label="2g QD") %>%
+  add(Bolus(time=0, amount=2000, compartment="ABS", ii=24, addl=6)) %>%
+  add(Observations(seq(0,24,0.1), rep=DosingSchedule()))
+
+dataset <- Dataset() %>%
+  add(c(arm1, arm2))
+
+scenario1 <- Scenario(name="Base scenario", model=~.x, dataset=~.x)
+scenario2 <- Scenario(name="Lower clearance", model=~.x %>%
+                        replace(Theta(name="CL", value=2)), dataset=~.x)
+scenarios <- Scenarios() %>% add(c(scenario1, scenario2))
+results <- simulate(model=model_suite$pk$`2cpt_fo`, dataset=dataset, seed=1, dest="mrgsolve", scenarios=scenarios)
+
+shadedPlot(results, "CONC", colour="ARM", strat_extra="SCENARIO") +
+  ggplot2::facet_wrap(~SCENARIO) +
+  ggplot2::xlab("Time (h)") +
+  ggplot2::ylab("Concentrations (ng/mL)") +
+  ggplot2::labs(colour="Arm", fill="Arm")
+```
+
+NCA summary statistics can be obtained for each strata by specifying the argument `strat_vars` when calling `calculate`. It's as simple as that.
+
+```{r, message=FALSE}
+nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
+    add(AUC(unit="ng/mL*h")) %>%
+    add(Cmax(unit="ng/mL")) %>%
+    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(Tmax(unit="h", digits=2)) %>%
+    add(Ctrough(unit="ng/mL"))
+  
+table <- NCAMetricsTable() %>%
+  add(nca) %>%
+  campsisnca::calculate(results, strat_vars=c("ARM", "SCENARIO"))
+
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+```
+
