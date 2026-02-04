@@ -67,7 +67,7 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
 
   custom1a <- custom1a %>% campsisnca::calculate(campsis)
-  expect_equal(custom1a %>% campsisnca::statDisplayString(), "FALSE: 183 / 200 (91.5%), TRUE: 17 / 200 (8.50%)")
+  expect_equal(custom1a %>% campsisnca::statDisplayString(), c("FALSE: 183 / 200 (91.5%)", "TRUE: 17 / 200 (8.50%)"))
   
   # Vice-versa
   custom1b <- CustomMetric("Y", TimeWindow(0, 24),
@@ -75,7 +75,7 @@ test_that("Method statDisplayString on categorical data should work", {
                          name="Cmax > 12", unit="%", categorical=TRUE)
   
   custom1b <- custom1b %>% campsisnca::calculate(campsis)
-  expect_equal(custom1b %>% campsisnca::statDisplayString(), "FALSE: 17 / 200 (8.50%), TRUE: 183 / 200 (91.5%)")
+  expect_equal(custom1b %>% campsisnca::statDisplayString(), c("FALSE: 17 / 200 (8.50%)", "TRUE: 183 / 200 (91.5%)"))
   
 })
 
@@ -165,31 +165,31 @@ test_that("Method statDisplayString works as expected on categorical data when d
   custom <- CustomMetric("Y", TimeWindow(0, 24), fun=~Cmax > 10,
                          stat_display="{p}%", digits=NULL, categorical=TRUE)
   custom <- custom %>% campsisnca::calculate(campsis_)
-  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.7%, TRUE: 56.3%")
+  expect_equal(custom %>% campsisnca::statDisplayString(), c("FALSE: 43.7%", "TRUE: 56.3%"))
   
   # 1 digit using style_percent (same as default)
   custom <- CustomMetric("Y", TimeWindow(0, 24), fun=~Cmax > 10,
                          stat_display="{p}", digits=~style_percent(.x, digits=1, suffix='%'), categorical=TRUE)
   custom <- custom %>% campsisnca::calculate(campsis_)
-  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.7%, TRUE: 56.3%")
+  expect_equal(custom %>% campsisnca::statDisplayString(), c("FALSE: 43.7%", "TRUE: 56.3%"))
 
   # 2 digits using style_percent
   custom <- CustomMetric("Y", TimeWindow(0, 24), fun=~Cmax > 10,
                          stat_display="{p}", digits=~style_percent(.x, digits=2, suffix='%'), categorical=TRUE)
   custom <- custom %>% campsisnca::calculate(campsis_)
-  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.72%, TRUE: 56.28%")
+  expect_equal(custom %>% campsisnca::statDisplayString(), c("FALSE: 43.72%", "TRUE: 56.28%"))
 
   # digits=2
   custom <- CustomMetric("Y", TimeWindow(0, 24), , fun=~Cmax > 10,
                          stat_display="{p}%", digits=2, categorical=TRUE)
   custom <- custom %>% campsisnca::calculate(campsis_)
-  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 43.72%, TRUE: 56.28%")
+  expect_equal(custom %>% campsisnca::statDisplayString(), c("FALSE: 43.72%", "TRUE: 56.28%"))
   
   # digits=0
   custom <- CustomMetric("Y", TimeWindow(0, 24), , fun=~Cmax > 10,
                          stat_display="{p}%", digits=0, categorical=TRUE)
   custom <- custom %>% campsisnca::calculate(campsis_)
-  expect_equal(custom %>% campsisnca::statDisplayString(), "FALSE: 44%, TRUE: 56%")
+  expect_equal(custom %>% campsisnca::statDisplayString(), c("FALSE: 44%", "TRUE: 56%"))
   
   # Extra test, only stat 'p' was computed
   expect_equal(unique(custom@summary$stat), "p")

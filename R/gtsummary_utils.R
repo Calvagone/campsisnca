@@ -10,6 +10,16 @@ extractBraceValues <- function(x) {
   return(stringr::str_extract_all(x, '(?<=\\{)[^\\}]+')[[1]])
 }
 
+identifyGroupLevels <- function(x, strat_vars) {
+  if (length(strat_vars) > 0) {
+    renameVec <- paste0("group", seq_along(strat_vars), "_level")
+    names(renameVec) <- strat_vars
+    x <- x %>%
+      dplyr::rename(!!!renameVec)
+  }
+  return(x)
+}
+
 #' 
 #' Compute NCA metric summary.
 #' 
@@ -42,15 +52,25 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
         variables=dplyr::all_of("value"),
         statistic=dplyr::everything() ~ stats_
       )
+    
+    summary <- tibble::as_tibble(summary)
+    
+    # Identify the group_level columns
+    summary <- identifyGroupLevels(summary, strat_vars)
+    
+    # Process cards data frame
+    summary <- summary %>%
+      dplyr::select(dplyr::all_of(c(strat_vars, "stat_name", "stat", "variable_level"))) %>%
+      dplyr::rename(stat=stat_name, value=stat, category=variable_level) %>%
+      dplyr::mutate(value=as.numeric(value), category=as.character(category)) %>%
+      dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), unlist))
 
-    summary <- tibble::as_tibble(summary) %>%
-      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level))
-    
-    categories <- unique(summary$category)
-    tmp <- categories %>%
-      purrr::map_chr(~glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary %>% dplyr::filter(category==.x), digits=digits))
-    
-    comment <- paste0(paste0(categories, ": ", tmp), collapse=", ")
+    # Make summary pretty
+    summary_pretty <- summary %>%
+      dplyr::group_split(dplyr::across(dplyr::all_of(c(strat_vars, "category")))) %>%
+      purrr::map_df(~.x %>% dplyr::select(-stat, -value) %>%
+                      dplyr::distinct() %>%
+                      mutate("summary_stats"=glueStatDisplay(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
     
   } else {
     availableContinuousStats <- list(
@@ -89,28 +109,26 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
       )
     
     summary <- tibble::as_tibble(summary)
-    # Identify the group_level columns
-    if (length(strat_vars) > 0) {
-      renameVec <- paste0("group", seq_along(strat_vars), "_level")
-      names(renameVec) <- strat_vars
-      summary <- summary %>%
-        dplyr::rename(!!!renameVec)
-    }
     
+    # Identify the group_level columns
+    summary <- identifyGroupLevels(summary, strat_vars)
+    
+    # Process cards data frame
     summary <- summary %>%
       dplyr::select(dplyr::all_of(c(strat_vars, "stat_name", "stat"))) %>%
       dplyr::rename(stat=stat_name, value=stat) %>%
       dplyr::mutate(value=as.numeric(value)) %>%
       dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), unlist))
 
-    #TODO: fix me
-    comment <- glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary, digits=digits)
+    # Make summary pretty
+    summary_pretty <- summary %>%
+      dplyr::group_split(dplyr::across(dplyr::all_of(strat_vars))) %>%
+      purrr::map_df(~.x %>% dplyr::select(-stat, -value) %>%
+                      dplyr::distinct() %>%
+                      mutate("summary_stats"=glueStatDisplay(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
   }
 
-  # Add evaluated stat_display string as a comment to the data frame
-  comment(summary) <- comment
-
-  return(summary)
+  return(list(summary=summary, summary_pretty=summary_pretty))
 }
 
 quantileFun <- function(str, type) {

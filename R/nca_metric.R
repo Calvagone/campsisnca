@@ -32,7 +32,8 @@ setClass(
     digits = "character",         # rounding digits definitions for gtsummary
     concentration = "logical",    # concentration-related metric, NA by default
     individual = "data.frame",    # transient individual results
-    summary = "data.frame"       # transient summary results
+    summary = "data.frame",       # transient summary results
+    summary_pretty = "data.frame" # transient summary_pretty results (statistics are glued)
   ),
   contains="pmx_element",
   prototype=prototype(variable=as.character(NA), window=UndefinedTimeWindow(), name=as.character(NA), unit=as.character(NA),
@@ -72,7 +73,9 @@ setDefaultNameIfNA <- function(object) {
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metric", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
   object@individual <- iValues(object=object, x=x, strat_vars=strat_vars)
-  object@summary <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
+  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
+  object@summary <- structuredObj$summary
+  object@summary_pretty <- structuredObj$summary_pretty
   return(object)    
 })
 
@@ -140,22 +143,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
         tidyr::pivot_wider(names_from=stat, values_from=value)
 
     } else if (type == "summary_pretty") {
-      display <- object %>% statDisplayString()
-      retValue <- retValue %>%
-        dplyr::select(-dplyr::all_of(c("value", "stat")))
-      
-      if (object@categorical) {
-        retValue <- retValue %>%
-          dplyr::select(-dplyr::all_of(c("category")))
-      }
-      
-      retValue <- retValue %>%
-        dplyr::distinct()
-      
-      assertthat::assert_that(nrow(retValue)==1, msg="There must be exactly 1 row here")
-      
-      retValue <- retValue %>%
-        dplyr::mutate("summary_stats"=display)
+      retValue <- tibble::tibble(metric=object %>% getName(), object@summary_pretty)
     }
   
   } else if (type == "individual" || type == "individual_wide") {
@@ -234,9 +222,13 @@ getDiscreteCategories <- function(object) {
 
 #' @rdname statDisplayString
 setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
-  if (nrow(object@summary) > 0) {
-    attr <- attributes(object@summary)
-    return(attr$comment)
+  if (nrow(object@summary_pretty) > 0) {
+    if ("category" %in% colnames(object@summary_pretty)) {
+      temp <- object@summary_pretty %>% dplyr::mutate(summary_stats_final=paste0(category, ": ", summary_stats))
+      return(as.character(temp$summary_stats_final))
+    } else {
+      return(as.character(object@summary_pretty$summary_stats))
+    }
   } else {
     stop("Summary does not exist yet and must be calculated first")
   }

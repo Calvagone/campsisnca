@@ -325,6 +325,9 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   summary <- table %>%
     export(dest="dataframe")
   
+  individual <- table %>%
+    export(dest="dataframe", type="summary_pretty")
+  
   outputRegressionTest(data=summary, file=getRefFile("example10_summary.csv"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
