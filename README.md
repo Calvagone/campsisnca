@@ -55,25 +55,25 @@ campsis
     ## # ℹ 6 more variables: Q <dbl>, V3 <dbl>, KA <dbl>, CP <dbl>, OBS_CP <dbl>,
     ## #   Y <dbl>
 
-Let’s calculate PK metrics at Day 1 and Day 7 as follows:
+Let’s define our PK metrics at Day 1 and Day 7 as follows:
 
 ``` r
 # Day 1
 ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
-  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-  calculate(campsis)
+  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
   
 # Day 7 
 ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
-  add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-  calculate(campsis)
+  add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 ```
 
-These 2 metrics may be imported into a metrics table object, as follows:
+These 2 metrics may be imported into a metrics table object, as follows.
+Use the `calculate` method to calculate the metrics in the table.
 
 ``` r
 table <- NCAMetricsTable() %>%
-  add(c(ncaD1, ncaD7))
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
 ```
 
 This table can be exported:
@@ -172,16 +172,15 @@ library(dplyr)
 campsis_ <- campsis %>%
     mutate(Scenario=ifelse(BW >= 75, ">=75kg patients", "<75kg patients")) 
   
-day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strat_vars="Scenario") %>% 
-  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-  calculate(campsis_)
+day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>% 
+  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
 
-day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strat_vars="Scenario") %>% 
-  add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-  calculate(campsis_)
+day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>% 
+  add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
 table <- NCAMetricsTable() %>%
-  add(c(day1, day7))
+  add(c(day1, day7)) %>%
+  calculate(campsis_, strat_vars="Scenario")
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -299,11 +298,12 @@ N = 97</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-ali
 
 ``` r
 nca <- NCAAnalysis(variable="Y") %>%
-  add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
-  calculate(campsis %>% mutate(DOSE=1000, TAU=24))
+  add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
 
 table <- NCAMetricsTable() %>%
-  add(nca)
+  add(nca) %>%
+  calculate(campsis %>% mutate(DOSE=1000, TAU=24))
+
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
@@ -335,11 +335,12 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 
 ``` r
 nca <- NCAAnalysis(variable="Y") %>%
-  add(c(Thalf(window=TimeWindow(7*24, 10*24)))) %>%
-  calculate(campsis)
+  add(c(Thalf(window=TimeWindow(7*24, 10*24))))
 
 table <- NCAMetricsTable() %>%
-  add(nca)
+  add(nca) %>%
+  calculate(campsis)
+
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
 
@@ -374,20 +375,19 @@ ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
   add(AUC(digits=list(~round(.x/5)*5,
                       ~round(.x, 1) ,
                       ~style_number(.x)),
-          name="AUC4")) %>% # 1 specific function for med, p5 and p95
-  calculate(campsis)
+          name="AUC4")) # 1 specific function for med, p5 and p95
 
 # Day 7 
 ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
   add(AUC(name="AUC1")) %>%
   add(AUC(name="AUC2")) %>%
   add(AUC(name="AUC3")) %>%
-  add(AUC(name="AUC4")) %>%
-  calculate(campsis)
+  add(AUC(name="AUC4"))
 
 table <- NCAMetricsTable()  
 table <- table %>%
-  add(c(ncaD1, ncaD7))
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -440,17 +440,16 @@ custom3 <- CustomMetric(fun=~Cmax > 13, name="C_{max}> 13", unit="%", categorica
 
 # Day 1
 ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
-  add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2, custom3)) %>%
-  calculate(campsis)
+  add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2, custom3))
 
 # Day 7 
 ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
-  add(c(Cmax(), Tmax(), custom1, custom2, custom3)) %>%
-  calculate(campsis)
+  add(c(Cmax(), Tmax(), custom1, custom2, custom3))
 
 table <- NCAMetricsTable()  
 table <- table %>%
-  add(c(ncaD1, ncaD7))
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -548,11 +547,11 @@ N = 200</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 
 ``` r
 nca <- NCAAnalysis(variable="Y") %>%
-    add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
-    calculate(campsis)
+    add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)")))
 
 table <- NCAMetricsTable() %>%
-  add(nca)
+  add(nca) %>%
+    calculate(campsis)
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -597,21 +596,18 @@ getCategory <- function(.x, .y) {
 
   # Day 1
 ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
-  add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))) %>%
-  campsisnca::calculate(campsis)
+  add(Cmax(unit="ng/mL")) %>%
+  add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
   
 # Day 7 
 ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
-  add(c(Cmax(), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))) %>%
-  campsisnca::calculate(campsis)
+  add(Cmax()) %>%
+  add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
 
 table <- NCAMetricsTable()  
 table <- table %>%
-  add(c(ncaD1, ncaD7))
-
-table <- NCAMetricsTable()  
-table <- table %>%
-  add(c(ncaD1, ncaD7))
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
   
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -660,7 +656,7 @@ ng/mL at Day 1 for the 10 first subjects.
 ``` r
 day1 <- campsis %>%
   timerange(0, 24) %>%
-  dplyr::filter(ID %in% (1:10))
+  filter(ID %in% (1:10))
 
 campsis::spaghettiPlot(day1 , "Y") +
   ggplot2::geom_hline(yintercept=10, linetype="dashed", color="red")
@@ -669,14 +665,14 @@ campsis::spaghettiPlot(day1 , "Y") +
 ![](README_files/figure-gfm/unnamed-chunk-17-1.png)<!-- -->
 
 ``` r
-nca <- NCAAnalysis(variable="Y") %>%
-  add(c(Cmax(unit="ng/mL*h", stat_display="{mean}"),
-        TimeAboveLimit(limit=10, unit="h", stat_display="{mean}"),
-        TimeBelowLimit(limit=10, unit="h", stat_display="{mean}"))) %>%
-  calculate(day1)
+nca <- NCAAnalysis(window=TimeWindow(0, 24), variable="Y") %>%
+  add(Cmax(unit="ng/mL*h", stat_display="{mean}")) %>%
+  add(TimeAboveLimit(limit=10, unit="h", stat_display="{mean}")) %>%
+  add(TimeBelowLimit(limit=10, unit="h", stat_display="{mean}"))
 
 table <- NCAMetricsTable() %>%
-  add(nca)
+  add(nca) %>%
+  calculate(campsis %>% filter(ID %in% (1:10)))
   
 table %>% export(dest="dataframe", type="individual_wide")
 ```
