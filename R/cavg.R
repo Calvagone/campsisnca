@@ -83,7 +83,7 @@ setMethod("getDefaultName", signature=c("cavg_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("abstract_avg_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("abstract_avg_metric", "numeric", "numeric"), definition=function(object, time, value) {
   start <- time[1]
   end <- time[length(time)]
   auc <- trap(x=time, y=value, method=1L)

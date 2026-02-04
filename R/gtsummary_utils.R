@@ -38,7 +38,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
     summary <-
       cards::ard_categorical(
         data,
-        by=strat_vars,
+        by=dplyr::all_of(strat_vars),
         variables=dplyr::all_of("value"),
         statistic=dplyr::everything() ~ stats_
       )
@@ -80,7 +80,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
     summary <-
       cards::ard_continuous(
         data,
-        by=strat_vars,
+        by=dplyr::all_of(strat_vars),
         variables=dplyr::all_of("value"),
         statistic=~cards::continuous_summary_fns(
           summaries=character(0),

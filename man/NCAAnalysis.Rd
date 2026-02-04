@@ -8,8 +8,7 @@ NCAAnalysis(
   name = "Default",
   window = TimeWindow(),
   variable = NULL,
-  metrics = NCAMetrics(),
-  strat_vars = NULL
+  metrics = NCAMetrics()
 )
 }
 \arguments{

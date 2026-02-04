@@ -4,42 +4,42 @@
 %   R/time_above_below.R, R/custom_metric.R
 \name{iValue}
 \alias{iValue}
-\alias{iValue,auc_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,abstract_max_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,tmax_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,abstract_min_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,tmin_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,abstract_value_at_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,abstract_last_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,abstract_avg_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,thalf_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,abstract_time_above_or_below_limit_metric,numeric,numeric,nca_time_window-method}
-\alias{iValue,custom_metric,numeric,numeric,nca_time_window-method}
+\alias{iValue,auc_metric,numeric,numeric-method}
+\alias{iValue,abstract_max_metric,numeric,numeric-method}
+\alias{iValue,tmax_metric,numeric,numeric-method}
+\alias{iValue,abstract_min_metric,numeric,numeric-method}
+\alias{iValue,tmin_metric,numeric,numeric-method}
+\alias{iValue,abstract_value_at_metric,numeric,numeric-method}
+\alias{iValue,abstract_last_metric,numeric,numeric-method}
+\alias{iValue,abstract_avg_metric,numeric,numeric-method}
+\alias{iValue,thalf_metric,numeric,numeric-method}
+\alias{iValue,abstract_time_above_or_below_limit_metric,numeric,numeric-method}
+\alias{iValue,custom_metric,numeric,numeric-method}
 \title{Compute the individual value of an individual.}
 \usage{
-iValue(object, time, value, window = NULL)
+iValue(object, time, value = NULL)
 
-\S4method{iValue}{auc_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{auc_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{abstract_max_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{abstract_max_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{tmax_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{tmax_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{abstract_min_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{abstract_min_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{tmin_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{tmin_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{abstract_value_at_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{abstract_value_at_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{abstract_last_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{abstract_last_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{abstract_avg_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{abstract_avg_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{thalf_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{thalf_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{abstract_time_above_or_below_limit_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{abstract_time_above_or_below_limit_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{iValue}{custom_metric,numeric,numeric,nca_time_window}(object, time, value, window = NULL)
+\S4method{iValue}{custom_metric,numeric,numeric}(object, time, value = NULL)
 }
 \arguments{
 \item{object}{PK metric}
@@ -47,8 +47,6 @@ iValue(object, time, value, window = NULL)
 \item{time}{time vector, numeric}
 
 \item{value}{value vector, numeric}
-
-\item{window}{time window object}
 
 \item{...}{extra arguments}
 }

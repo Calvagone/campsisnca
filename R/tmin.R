@@ -48,10 +48,10 @@ setMethod("getDefaultName", signature=c("tmin_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
   retValue <- time[which.min(value)]
   if (object@rebase) {
-    retValue <- retValue - window@start
+    retValue <- retValue - object@window@start
   }
   return(retValue)    
 })

@@ -46,7 +46,7 @@ setMethod("getDefaultName", signature=c("thalf_metric"), definition=function(obj
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("thalf_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("thalf_metric", "numeric", "numeric"), definition=function(object, time, value) {
   linearMod <- lm(log(value) ~ time)
   k <- -linearMod$coefficients[["time"]]
   return(log(2)/k)    

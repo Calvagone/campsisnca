@@ -52,7 +52,7 @@ setMethod("getDefaultName", signature=c("auc_metric"), definition=function(objec
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("auc_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(trap(x=time, y=value, method=object@method))    
 })
 

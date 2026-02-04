@@ -14,9 +14,9 @@ campsis <- generateTestData()
 
 test_that("Dynamic computation of quantiles works as expected (type=2)", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   prettyString <- NCAMetricsTable() %>%
     add(nca) %>%
@@ -25,9 +25,9 @@ test_that("Dynamic computation of quantiles works as expected (type=2)", {
   
   expect_equal(prettyString, "511.5-1493.1")
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
   prettyString <- NCAMetricsTable() %>%
     add(nca) %>%
@@ -39,9 +39,9 @@ test_that("Dynamic computation of quantiles works as expected (type=2)", {
 
 test_that("Dynamic computation of quantiles works as expected (type=7)", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
-    campsisnca::calculate(quantile_type=7)
+    campsisnca::calculate(campsis, quantile_type=7)
   
   prettyString <- NCAMetricsTable() %>%
     add(nca) %>%
@@ -50,9 +50,9 @@ test_that("Dynamic computation of quantiles works as expected (type=7)", {
   
   expect_equal(prettyString, "516.1-1490.7")
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
-    campsisnca::calculate(quantile_type=7)
+    campsisnca::calculate(campsis, quantile_type=7)
   
   prettyString <- NCAMetricsTable() %>%
     add(nca) %>%

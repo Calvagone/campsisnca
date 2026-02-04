@@ -20,7 +20,7 @@ test_that("Dataset 1 - tmax at day 7", {
   ds <- dataset1()
   campsis <- ds$campsis
   nonmem <- ds$nonmem
-  tmax1 <- Tmax("Y", TimeWindow(144, 168)) %>% campsisnca::calculate(campsis)
+  tmax1 <- Tmax("Y", TimeWindow(144, 168), rebase=FALSE) %>% campsisnca::calculate(campsis)
   tmax2 <- ncappcOutput(nonmem %>% timerange(144, 168), metric="Tmax")
   expect_equal(tmax1@individual, tmax2, tolerance=1e-3)
 })

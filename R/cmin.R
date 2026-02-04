@@ -83,7 +83,7 @@ setMethod("getDefaultName", signature=c("cmin_metric"), definition=function(obje
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("abstract_min_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("abstract_min_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(min(value))    
 })
 

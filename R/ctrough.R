@@ -78,7 +78,7 @@ setMethod("getDefaultName", signature=c("ctrough_metric"), definition=function(o
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("abstract_last_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("abstract_last_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(value[length(value)])
 })
 

@@ -92,7 +92,7 @@ setMethod("getDefaultName", signature=c("time_below_limit_metric"), definition=f
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("abstract_time_above_or_below_limit_metric", "numeric", "numeric", "nca_time_window"), definition=function(object, time, value, window) {
+setMethod("iValue", signature=c("abstract_time_above_or_below_limit_metric", "numeric", "numeric"), definition=function(object, time, value) {
   if (is(object, "time_above_limit_metric")) {
     above <- TRUE
   } else if (is(object, "time_below_limit_metric")) {
