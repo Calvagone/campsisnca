@@ -47,8 +47,6 @@ iValue(object, time, value = NULL)
 \item{time}{time vector, numeric}
 
 \item{value}{value vector, numeric}
-
-\item{...}{extra arguments}
 }
 \value{
 individual value

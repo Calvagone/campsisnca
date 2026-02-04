@@ -14,11 +14,11 @@ NCAAnalysis(
 \arguments{
 \item{name}{name of this analysis, e.g. 'Day 1'}
 
+\item{window}{time window, see \link{TimeWindow}}
+
 \item{variable}{default variable which is analysed}
 
 \item{metrics}{list of metrics}
-
-\item{time_range}{default time range for this analysis}
 }
 \description{
 Create an NCA analysis.

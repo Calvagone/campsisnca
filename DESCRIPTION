@@ -48,6 +48,7 @@ Collate:
     'test_data.R'
     'check.R'
     'utilities.R'
+    'special_operators.R'
     'consistency_checks.R'
     'stat_formula.R'
     'export_type.R'

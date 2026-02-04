@@ -24,7 +24,7 @@ setClass(
 #' Create an NCA analysis.
 #' 
 #' @param name name of this analysis, e.g. 'Day 1'
-#' @param time_range default time range for this analysis
+#' @param window time window, see \link{TimeWindow}
 #' @param variable default variable which is analysed
 #' @param metrics list of metrics
 #' @export

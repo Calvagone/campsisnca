@@ -56,7 +56,6 @@ setGeneric("calculate", function(object, x, strat_vars=NULL, quantile_type=NULL,
 #' @param object PK metric
 #' @param time time vector, numeric
 #' @param value value vector, numeric
-#' @param ... extra arguments
 #' @return individual value
 #' @export
 #' @rdname iValue
