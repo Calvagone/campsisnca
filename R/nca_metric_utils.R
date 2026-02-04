@@ -36,21 +36,25 @@ metricsParams <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, cate
 }
 
 #' 
-#' Standardise CAMPSIS/NONMEM dataframe for NCA analysis.
+#' Standardise Campsis/NONMEM dataframe for NCA analysis.
 #' Additional checks will also be performed.
 #' 
-#' @param x CAMPSIS/NONMEM dataframe
+#' @param x Campsis/NONMEM dataframe
 #' @param variable dependent variable
+#' @param strat_vars stratification variables in x (e.g. 'SCENARIO')
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr rename_at
 #' @importFrom campsis obsOnly
 #' 
-standardise <- function(x, variable) {
+standardise <- function(x, variable, strat_vars) {
   assertthat::assert_that(is.character(variable) && length(variable)==1, msg="variable must be a single character value")
   assertthat::assert_that(is.data.frame(x), msg="x is not a data frame")
   if (!is.na(variable)) {
     assertthat::assert_that(variable %in% colnames(x), msg=paste0("Variable '", variable, "' not found in data frame"))
   }
+  strat_vars_check <- strat_vars %in% colnames(x)
+  assertthat::assert_that(all(strat_vars_check), msg=sprintf("Stratification variable(s) not found in data frame: %s",
+                                                             paste0(strat_vars[!strat_vars_check], collapse=", ")))
 
   # Use only observations
   x <- x %>% campsis::obsOnly()
@@ -62,7 +66,7 @@ standardise <- function(x, variable) {
   checkNAObservations(x, variable=variable)
   
   # Check time is monotonically increasing
-  checkTimesAreIncreasing(x)
+  checkTimesAreIncreasing(x, strat_vars)
   
   return(x)
 }

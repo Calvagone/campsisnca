@@ -200,7 +200,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
     stop(sprintf("No variable provided for metric '%s'", x %>% getName()))
   }
   x <- x %>% 
-    standardise(variable)
+    standardise(variable=variable, strat_vars=strat_vars)
   x <- x %>%
     applyTimeWindow(object@window)
 

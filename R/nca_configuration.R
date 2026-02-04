@@ -33,6 +33,17 @@ setMethod("add", signature = c("nca_configuration", "nca_analysis"), definition 
 })
 
 #_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_configuration", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
+  object@nca_analyses <- object@nca_analyses %>%
+    calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...)
+  return(object)
+})
+
+#_______________________________________________________________________________
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 

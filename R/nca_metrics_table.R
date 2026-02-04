@@ -33,6 +33,17 @@ setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition 
 })
 
 #_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
+  object@configuration <- object@configuration %>%
+    calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...)
+  return(object)  
+})
+
+#_______________________________________________________________________________
 #----                                export                                 ----
 #_______________________________________________________________________________
 
