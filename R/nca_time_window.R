@@ -73,10 +73,12 @@ UndefinedTimeWindow <- function() {
 #----                           applyTimeWindow                             ----
 #_______________________________________________________________________________
 
+#' @rdname applyTimeWindow
 setMethod("applyTimeWindow", signature=c("data.frame", "nca_time_window"), definition=function(x, window) {
   return(timerange(x=x, min=window@start, max=window@end, exclmin=window@exclude_start, exclmax=window@exclude_end))
 })
 
+#' @rdname applyTimeWindow
 setMethod("applyTimeWindow", signature=c("tbl_df", "nca_time_window"), definition=function(x, window) {
   return(timerange(x=x, min=window@start, max=window@end, exclmin=window@exclude_start, exclmax=window@exclude_end))
 })
