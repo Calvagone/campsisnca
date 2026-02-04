@@ -60,25 +60,6 @@ test_that("Statistics can contain line breaks", {
   
 })
 
-# test_that("Table can be reduced to 2 dimensions on demand", {
-#   
-#   nca <- NCAAnalysis(variable="Y", scenario=c(a="1", b="1", c="1")) %>%
-#     add(AUC()) %>%
-#     campsisnca::calculate()
-#   
-#   table <- NCAMetricsTable()  
-#   table <- table %>%
-#     add(nca)
-#   
-#   table <- table %>% campsisnca::reduceTo2Dimensions()
-#   
-#   scenario <- table@list[[1]]@scenario
-#   expect_equal(scenario, c(a_b="1 / 1", c="1"))
-# 
-#   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-#   gtTableRegressionTest(gttable, getRefFile("reduction_to_2dim.html"))
-# })
-
 test_that("Method statDisplayString on categorical data should work", {
   
   custom1a <- CustomMetric("Y", TimeWindow(0, 24),

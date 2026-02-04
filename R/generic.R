@@ -244,22 +244,3 @@ statDisplayString <- function(object, ...) {
 setGeneric("statDisplayString", function(object, ...) {
   standardGeneric("statDisplayString")
 })
-
-#_______________________________________________________________________________
-#----                       reduceTo2Dimensions                             ----
-#_______________________________________________________________________________
-
-#' Reduce table to 2 dimensions.
-#' 
-#' @param object generic object
-#' @param ... extra arguments
-#' @return same object/table with max 2 dimensions (useful before export)
-#' @export
-#' @rdname reduceTo2Dimensions
-reduceTo2Dimensions <- function(object, ...) {
-  stop("No default function is provided")
-}
-
-setGeneric("reduceTo2Dimensions", function(object, ...) {
-  standardGeneric("reduceTo2Dimensions")
-})

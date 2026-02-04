@@ -249,15 +249,3 @@ setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=f
   }
   return(object@configuration@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
 })
-
-#_______________________________________________________________________________
-#----                       reduceTo2Dimensions                             ----
-#_______________________________________________________________________________
-
-#' @rdname reduceTo2Dimensions
-setMethod("reduceTo2Dimensions", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  object@configuration@nca_analyses@list <- object@configuration@nca_analyses@list %>%
-    purrr::map(~reduceTo2Dimensions(.x, ...))
-  
-  return(object)
-})
