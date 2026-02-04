@@ -311,7 +311,7 @@ nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %
   
 table <- NCAMetricsTable() %>%
   add(nca) %>%
-  campsisnca::calculate(results, strat_vars=c("ARM", "SCENARIO"))
+  calculate(results, strat_vars=c("ARM", "SCENARIO"))
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
