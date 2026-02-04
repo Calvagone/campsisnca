@@ -13,7 +13,7 @@ setClass(
     window = "nca_time_window",      # default time range
     variable = "character",          # default variable name
     metrics = "nca_metrics",         # metrics contained in this analysis
-    strat_vars = "character"         # expected stratification variables in data
+    strat_vars = "character"         # stratification variables in data, transient field: updated when calculate is called
   ),
   contains="pmx_element",
   prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA),
@@ -28,14 +28,11 @@ setClass(
 #' @param variable default variable which is analysed
 #' @param metrics list of metrics
 #' @export
-NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, metrics=NCAMetrics(), strat_vars=NULL) {
+NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, metrics=NCAMetrics()) {
   if (is.null(variable)) {
     variable = as.character(NA)
   }
-  if (is.null(strat_vars)) {
-    strat_vars = character(0)
-  }
-  return(new("nca_analysis", name=name, window=window, variable=variable, metrics=metrics, strat_vars=strat_vars))
+  return(new("nca_analysis", name=name, window=window, variable=variable, metrics=metrics))
 }
 
 #_______________________________________________________________________________
@@ -75,6 +72,9 @@ setMethod("getUnit", signature=c("nca_analysis", "character"), definition=functi
 
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
+  # Update transient field 'strat_vars'
+  object@strat_vars <- strat_vars
+  
   object@metrics@list <- object@metrics@list %>% purrr::map(.f=function(.x) {
     
     # Use default analysis variable
@@ -85,11 +85,6 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
     # Use default analysis window
     if (is(.x@window, "undefined_nca_time_window")) {
       .x@window <- object@window
-    }
-    
-    # Use default 'expected' stratification variables of this analysis
-    if (length(strat_vars) == 0 && length(object@strat_vars) > 0) {
-      strat_vars <- object@strat_vars
     }
     
     return(.x %>% calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...))
