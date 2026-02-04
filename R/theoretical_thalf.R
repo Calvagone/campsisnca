@@ -1,5 +1,5 @@
 #_______________________________________________________________________________
-#----                      theoretical_thalf_metric class                   ----
+#----                      theoretical_thalf_metric classes                 ----
 #_______________________________________________________________________________
 
 validateTheoreticalThalfMetric <- function(object) {
@@ -86,14 +86,15 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, only one key is possible: K
 #' @export
-Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "1cpt"
-  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=TRUE)
   metric@map <- map
   metric@subtype <- subtype
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 #' 
@@ -102,14 +103,15 @@ Thalf.1cpt <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.dist"
-  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 #' 
@@ -118,14 +120,15 @@ Thalf.2cpt.dist <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.z"
-  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
 
 #' 
@@ -134,30 +137,40 @@ Thalf.2cpt.z <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NU
 #' @inheritParams metricsParams
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
-Thalf.2cpt.eff <- function(x=NULL, map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.eff"
-  metric <- ncaConstructor(x=x, variable=as.character(NA), name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="theoretical_thalf_metric", def_name=getDefaultTHalfName(subtype))
+  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="theoretical_thalf_metric")
   map <- checkMap(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
-  return(metric)
+  return(setDefaultNameIfNA(metric))
 }
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("theoretical_thalf_metric"), definition=function(object, ...) {
+  return(getDefaultTHalfName(object@subtype)) 
+})
 
 #_______________________________________________________________________________
 #----                            calculate                                  ----
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), definition=function(object, quantile_type, ...) {
+setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
   subtype <- object@subtype
 
   if (subtype == "1cpt") {
-    ind <- metrics.1cpt(object@x, map=object@map)
+    ind <- metrics.1cpt(x, map=object@map)
     ind <- ind %>% dplyr::transmute(id=ID, value=THALF)
 
   } else if (subtype %>% startsWith("2cpt")) {
-    ind <- metrics.2cpt(object@x, map=object@map)
+    ind <- metrics.2cpt(x, map=object@map)
 
     if (subtype == "2cpt.dist") {
       ind <- ind %>% dplyr::transmute(id=ID, value=THALF_D)
@@ -171,7 +184,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "numeric"), defin
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  object@summary <- computeNCAMetricSummary(object=object, quantile_type=quantile_type)
+  object@summary <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
   return(object)
 })
 

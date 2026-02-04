@@ -9,9 +9,10 @@
 setClass(
   "nca_metrics_table",
   representation(
+    configuration = "nca_configuration"
   ),
   contains="pmx_list",
-  prototype = prototype(type="nca_metrics")
+  prototype = prototype(configuration=NCAConfiguration())
 )
 
 #' 
@@ -23,11 +24,31 @@ NCAMetricsTable <- function() {
 }
 
 #_______________________________________________________________________________
+#----                           add                                   ----
+#_______________________________________________________________________________
+
+setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition = function(object, x) {
+  object@configuration <- object@configuration %>% add(x)
+  return(object)
+})
+
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
+  object@configuration <- object@configuration %>%
+    calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...)
+  return(object)  
+})
+
+#_______________________________________________________________________________
 #----                                export                                 ----
 #_______________________________________________________________________________
 
 setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
-  if (object %>% length() == 0) {
+  if (object@configuration@nca_analyses %>% length() == 0) {
     stop("No metrics to export")
   }
   if (dest=="dataframe") {
@@ -46,8 +67,9 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
-  retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
-  
+  analysis_strat <- length(object@configuration@nca_analyses) > 1
+  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, analysis_strat=analysis_strat, ...))
+
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
     allMetrics <- unique(retValue$metric)
@@ -79,7 +101,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
         dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
     }
 
-    by <- c("id", names(object@list[[1]]@scenario))
+    by <- c("id", object %>% getStrata(keep_single=FALSE))
     retValue <- continuousData %>%
       dplyr::full_join(categoricalData, by=by) %>%
       dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
@@ -99,9 +121,12 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
           definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
   code <- object %>% generateTableCode(init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   table <- object # Table variable needs to be there!
+  # cat(code)
+  # browser()
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
     error=function(cond) {
+      print(cond)
       return(sprintf("Failed to create gtsummary table: %s", cond$message))
     })
   return(retValue)
@@ -175,9 +200,8 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   } else {
     initCode <- NULL
   }
-            
-  scenarios <- object %>% getScenarios()
-  stratVariables <- unique(scenarios$name)
+ 
+  stratVariables <- object %>% getStrata(keep_single=FALSE)
   
   stats <- getStatisticsCode(object)
   type <- getVariableTypeCode(object, all_dichotomous_levels=all_dichotomous_levels)
@@ -196,13 +220,22 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
 })
 
 #_______________________________________________________________________________
-#----                           getScenarios                                ----
+#----                             getStrata                                 ----
 #_______________________________________________________________________________
 
-#' @rdname getScenarios
-setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  retValue <- object@list %>% purrr::map_df(~tibble::enframe(.x@scenario))
-  return(retValue)
+#' @rdname getStrata
+setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=function(object, keep_single, ...) {
+  retValue <- NULL
+  
+  if (length(object@configuration@nca_analyses) > 1) {
+    retValue <- "analysis"
+  }
+  
+  strat_vars <- object@configuration@nca_analyses@list %>%
+    purrr::map(~.x@strat_vars) %>%
+    purrr::flatten_chr()
+  
+  return(c(retValue, unique(strat_vars)))
 })
 
 #_______________________________________________________________________________
@@ -211,10 +244,10 @@ setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(
 
 #' @rdname getUnit
 setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
-  if (object %>% length()==0) {
+  if (object@configuration@nca_analyses %>% length()==0) {
     stop("No metrics in table at this stage")
   }
-  return(object@list[[1]] %>% getUnit(metric=metric, ...))
+  return(object@configuration@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
 })
 
 #_______________________________________________________________________________
@@ -223,7 +256,7 @@ setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=f
 
 #' @rdname reduceTo2Dimensions
 setMethod("reduceTo2Dimensions", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  object@list <- object@list %>%
+  object@configuration@nca_analyses@list <- object@configuration@nca_analyses@list %>%
     purrr::map(~reduceTo2Dimensions(.x, ...))
   
   return(object)

@@ -4,15 +4,7 @@
 \alias{NCAMetrics}
 \title{NCA metrics}
 \usage{
-NCAMetrics(x = NULL, variable = NULL, scenario = NULL)
-}
-\arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
-\item{variable}{dependent variable}
-
-\item{scenario}{character vector used to describe the current scenario.
-E.g. c(day="Day 1", condition="Fasted)}
+NCAMetrics()
 }
 \description{
 NCA metrics

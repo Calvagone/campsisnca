@@ -13,14 +13,13 @@ getRefFile <- function(filename) {
 
 test_that("Dataset 1 - time above 0.75 at day 1", {
   ds <- dataset1()
-  campsis <- ds$campsis %>% timerange(0, 24)
-  spaghettiPlot(campsis, "CP")
-  
+  campsis <- ds$campsis
+  # spaghettiPlot(campsis, "CP")
   # ind1 <- campsis %>% filter(ID %in% c(1,2,3,4,5))
   # spaghettiPlot(ind1, "CP") +
   #   ggplot2::geom_hline(yintercept=0.75, linetype="dashed")
   
-  results1 <- TimeAboveLimit(x=campsis, variable="CP", limit=0.75) %>% campsisnca::calculate()
+  results1 <- TimeAboveLimit("CP", TimeWindow(0, 24), limit=0.75) %>% campsisnca::calculate(campsis)
   results1@individual
   
   outputRegressionTest(results1@individual, file=getRefFile("dataset1_time_above_0_75.csv"))
@@ -28,11 +27,10 @@ test_that("Dataset 1 - time above 0.75 at day 1", {
 
 test_that("Dataset 1 - time below 0.75 at day 1 (check reciprocity)", {
   ds <- dataset1()
-  campsis <- ds$campsis %>% timerange(0, 24)
-  spaghettiPlot(campsis, "CP")
+  campsis <- ds$campsis
 
   # Make sure results are reciprocal with first test
-  results2 <- TimeBelowLimit(x=campsis, variable="CP", limit=0.75) %>% campsisnca::calculate()
+  results2 <- TimeBelowLimit("CP", TimeWindow(0, 24), limit=0.75) %>% campsisnca::calculate(campsis)
   results2@individual$value <- 24 - results2@individual$value
   results2@individual
   

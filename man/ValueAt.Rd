@@ -5,8 +5,8 @@
 \title{Value at (value at specific time).}
 \usage{
 ValueAt(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   time = NULL,
   name = NULL,
   unit = NULL,
@@ -15,9 +15,9 @@ ValueAt(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{time}{what time to read the values. If not provided, last values from x will be returned.}
 

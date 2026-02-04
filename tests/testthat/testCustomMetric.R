@@ -33,19 +33,19 @@ test_that("Auto-replace of known NCA metrics works as expected", {
 test_that("Dataset 1 - Cmax at day 1 via custom metric", {
   ds <- dataset1()
   
-  campsis <- ds$campsis %>% timerange(0, 24)
-  nonmem <- ds$nonmem %>% timerange(0, 24)
+  campsis <- ds$campsis
+  nonmem <- ds$nonmem
   
   customFun <- function(time, value) {
     max(value)
   }
   
-  cmax1a <- Cmax(campsis, variable="Y") %>% campsisnca::calculate()
-  cmax1b <- CustomMetric(campsis, variable="Y", fun=~max(.y)) %>% campsisnca::calculate() # Lambda
-  cmax1c <- CustomMetric(campsis, variable="Y", fun=customFun) %>% campsisnca::calculate() # Normal function
-  cmax1d <- CustomMetricTbl(campsis, fun=~max(.x$Y)) %>% campsisnca::calculate() # Lambda using tibble
+  cmax1a <- Cmax("Y", TimeWindow(0, 24)) %>% campsisnca::calculate(campsis)
+  cmax1b <- CustomMetric("Y", TimeWindow(0, 24), fun=~max(.y)) %>% campsisnca::calculate(campsis) # Lambda
+  cmax1c <- CustomMetric("Y", TimeWindow(0, 24), fun=customFun) %>% campsisnca::calculate(campsis) # Normal function
+  cmax1d <- CustomMetricTbl(TimeWindow(0, 24), fun=~max(.x$Y)) %>% campsisnca::calculate(campsis) # Lambda using tibble
   
-  cmax2 <- ncappcOutput(nonmem, metric="Cmax")
+  cmax2 <- ncappcOutput(nonmem %>% timerange(0, 24), metric="Cmax")
   
   expect_equal(cmax1a@individual, cmax2, tolerance=1e-3)
   expect_equal(cmax1b@individual, cmax2, tolerance=1e-3)

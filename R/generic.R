@@ -1,3 +1,22 @@
+#_______________________________________________________________________________
+#----                           applyTimeWindow                             ----
+#_______________________________________________________________________________
+
+#' Apply time window.
+#' 
+#' @param x input data for the calculation, data frame
+#' @param window time window
+#' @param ... extra arguments
+#' @return updated object
+#' @export
+#' @rdname applyTimeWindow
+applyTimeWindow <- function(x, window, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("applyTimeWindow", function(x, window, ...) {
+  standardGeneric("applyTimeWindow")
+})
 
 #_______________________________________________________________________________
 #----                             calculate                                 ----
@@ -6,18 +25,23 @@
 #' Calculate.
 #' 
 #' @param object object (PK metric) that needs to be calculated
+#' @param x input data for the calculation, data frame
+#' @param strat_vars stratification variable names
 #' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
 #' @param ... extra arguments
 #' @return updated object
 #' @export
 #' @rdname calculate
-calculate <- function(object, quantile_type, ...) {
+calculate <- function(object, x, strat_vars, quantile_type, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("calculate", function(object, quantile_type=NULL, ...) {
+setGeneric("calculate", function(object, x, strat_vars=NULL, quantile_type=NULL, ...) {
   if (is.null(quantile_type)) {
     quantile_type <- 2
+  }
+  if (is.null(strat_vars)) {
+    strat_vars <- character(0)
   }
   standardGeneric("calculate")
 })
@@ -32,15 +56,14 @@ setGeneric("calculate", function(object, quantile_type=NULL, ...) {
 #' @param object PK metric
 #' @param time time vector, numeric
 #' @param value value vector, numeric
-#' @param ... extra arguments
 #' @return individual value
 #' @export
 #' @rdname iValue
-iValue <- function(object, time, value, ...) {
+iValue <- function(object, time, value) {
   stop("No default function is provided")
 }
 
-setGeneric("iValue", function(object, time, value, ...) {
+setGeneric("iValue", function(object, time, value=NULL) {
   assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
   assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
   standardGeneric("iValue")
@@ -70,18 +93,20 @@ setGeneric("iValueTbl", function(object, data, ...) {
 #----                             iValues                                   ----
 #_______________________________________________________________________________
 
-#' Compute the individual values of a population.
+#' Compute the individual values on a simulation output.
 #' 
 #' @param object PK metric
+#' @param x input data for the calculation, data frame
+#' @param strat_vars stratification variable names
 #' @param ... extra arguments
 #' @return individual values
 #' @export
 #' @rdname iValues
-iValues <- function(object, ...) {
+iValues <- function(object, x, strat_vars, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("iValues", function(object, ...) {
+setGeneric("iValues", function(object, x, strat_vars, ...) {
   standardGeneric("iValues")
 })
 
@@ -145,19 +170,23 @@ setGeneric("getLaTeXName", function(x, ...) {
 #----                           getScenarios                                ----
 #_______________________________________________________________________________
 
-#' Get all scenarios that were added to the table object.
+#' Get all stratas.
 #' 
 #' @param object table object
+#' @param keep_single keep single stratification values, logical (default TRUE)
 #' @param ... extra arguments
-#' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
+#' @return list of stratification variable names
 #' @export
-#' @rdname getScenarios
-getScenarios <- function(object, ...) {
+#' @rdname getStrata
+getStrata <- function(object, keep_single, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("getScenarios", function(object, ...) {
-  standardGeneric("getScenarios")
+setGeneric("getStrata", function(object, keep_single=NULL, ...) {
+  if (is.null(keep_single)) {
+    keep_single <- TRUE
+  }
+  standardGeneric("getStrata")
 })
 
 #_______________________________________________________________________________
@@ -177,6 +206,24 @@ getUnit <- function(object, metric, ...) {
 
 setGeneric("getUnit", function(object, metric, ...) {
   standardGeneric("getUnit")
+})
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' Get default name.
+#' 
+#' @param object get default name of this object
+#' @param ... optional extra arguments
+#' @export
+#' @rdname getDefaultName
+getDefaultName <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getDefaultName", function(object, ...) {
+  standardGeneric("getDefaultName")
 })
 
 #_______________________________________________________________________________
