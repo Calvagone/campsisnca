@@ -14,6 +14,7 @@ extractBraceValues <- function(x) {
 #' Compute NCA metric summary.
 #' 
 #' @param object NCA metric
+#' @param strat_vars stratification variable names in data
 #' @param quantile_type type of quantile
 #' @return data frame
 #' @importFrom dplyr all_of arrange desc everything filter transmute
@@ -22,8 +23,7 @@ extractBraceValues <- function(x) {
 #' @importFrom purrr map_chr
 #' @importFrom stringr str_detect
 #' @export
-computeNCAMetricSummary <- function(object, quantile_type) {
-  
+computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
   data <- object@individual
   stat_display <- object@stat_display
   digits <- object@digits
@@ -38,11 +38,11 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     summary <-
       cards::ard_categorical(
         data,
-        by=NULL,
+        by=dplyr::all_of(strat_vars),
         variables=dplyr::all_of("value"),
         statistic=dplyr::everything() ~ stats_
       )
-  
+
     summary <- tibble::as_tibble(summary) %>%
       dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat), category=as.character(variable_level))
     
@@ -80,7 +80,7 @@ computeNCAMetricSummary <- function(object, quantile_type) {
     summary <-
       cards::ard_continuous(
         data,
-        by=NULL,
+        by=dplyr::all_of(strat_vars),
         variables=dplyr::all_of("value"),
         statistic=~cards::continuous_summary_fns(
           summaries=character(0),
@@ -88,9 +88,22 @@ computeNCAMetricSummary <- function(object, quantile_type) {
         )
       )
     
-    summary <- tibble::as_tibble(summary) %>%
-      dplyr::transmute(stat=stat_name, value=as.numeric(summary$stat))
+    summary <- tibble::as_tibble(summary)
+    # Identify the group_level columns
+    if (length(strat_vars) > 0) {
+      renameVec <- paste0("group", seq_along(strat_vars), "_level")
+      names(renameVec) <- strat_vars
+      summary <- summary %>%
+        dplyr::rename(!!!renameVec)
+    }
+    
+    summary <- summary %>%
+      dplyr::select(dplyr::all_of(c(strat_vars, "stat_name", "stat"))) %>%
+      dplyr::rename(stat=stat_name, value=stat) %>%
+      dplyr::mutate(value=as.numeric(value)) %>%
+      dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), unlist))
 
+    #TODO: fix me
     comment <- glueStatDisplay(stat_display=stat_display, stats=stats_, summary=summary, digits=digits)
   }
 
@@ -239,9 +252,9 @@ modify_header(label=\"**%s**\")
 #' @return code
 getStatisticsCode <- function(table) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
+  retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
   
   return(paste0(retValue, collapse=",\n    "))
 }
@@ -255,9 +268,9 @@ getStatisticsCode <- function(table) {
 #' @return code
 getVariableTypeCode <- function(table, all_dichotomous_levels) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+  retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     categorical <- x@categorical
     if (categorical) {
       typeStr <-  "categorical"
@@ -283,9 +296,9 @@ getVariableTypeCode <- function(table, all_dichotomous_levels) {
 #' @return code
 getLabelsCode <- function(table, subscripts) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+  retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     unit <- x@unit
     if (subscripts) {
       resultingName <-  x %>% getLaTeXName()
@@ -310,9 +323,9 @@ getLabelsCode <- function(table, subscripts) {
 #' @return code
 getDigitsCode <- function(table) {
   # Always look at first NCA metric only
-  metrics <- table@list[[1]]
+  analyses <- table@configuration@nca_analyses@list[[1]]
   
-  retValue <- metrics@list %>% purrr::map_chr(.f=function(x) {
+  retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     digits <- x@digits
     if (length(digits) > 0) {
       digit <- sprintf("%s ~ list(%s)", addBackticks(x %>% getName()), paste0(digits, collapse=","))

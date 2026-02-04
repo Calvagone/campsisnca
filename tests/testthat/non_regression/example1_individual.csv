@@ -1,4 +1,4 @@
-"metric","id","value","day"
+"metric","id","value","analysis"
 "AUC",1,122.38,"Day 1"
 "AUC",2,92.64,"Day 1"
 "AUC",3,119.21,"Day 1"

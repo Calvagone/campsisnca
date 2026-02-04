@@ -6,8 +6,8 @@
 on the given data x.}
 \usage{
 Thalf(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -15,9 +15,9 @@ Thalf(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{name}{custom metric name (will be exported into table headers)}
 

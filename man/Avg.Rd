@@ -5,8 +5,8 @@
 \title{Avg.}
 \usage{
 Avg(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -14,9 +14,9 @@ Avg(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{name}{custom metric name (will be exported into table headers)}
 

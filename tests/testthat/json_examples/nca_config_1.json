@@ -3,31 +3,111 @@
   "nca_analyses": [
     {
       "name": "Day 1",
-      "time_range": {
+      "window": {
         "start": 0,
         "end": 24
       },
-      "variable": "Y"
+      "variable": "Y",
+      "metrics": [
+        {
+          "type": "auc_metric"
+        },
+        {
+          "type": "cmax_metric"
+        },
+        {
+          "type": "cmin_metric"
+        },
+        {
+          "type": "cavg_metric"
+        },
+        {
+          "type": "max_metric"
+        },
+        {
+          "type": "min_metric"
+        },
+        {
+          "type": "avg_metric"
+        },
+        {
+          "type": "last_metric"
+        },
+        {
+          "type": "ctrough_metric"
+        },
+        {
+          "type": "tmin_metric"
+        },
+        {
+          "type": "tmax_metric"
+        },
+        {
+          "type": "time_above_limit_metric",
+          "limit": 10.0
+        },
+        {
+          "type": "time_below_limit_metric",
+          "limit": 10.0
+        },
+        {
+          "type": "thalf_metric"
+        }
+      ]
     },
     {
       "name": "Day 7",
-      "time_range": {
+      "window": {
         "start": 144,
         "end": 168
       },
-      "variable": "Y"
-    }
-  ],
-  "nca_metrics": [
-    {
-      "type": "auc_metric",
-      "name": "AUC",
-      "analysis_ref": "Day 1"
-    },
-    {
-      "type": "auc_metric",
-      "name": "AUC",
-      "analysis_ref": "Day 7"
+      "variable": "Y",
+      "metrics": [
+        {
+          "type": "auc_metric"
+        },
+        {
+          "type": "cmax_metric"
+        },
+        {
+          "type": "cmin_metric"
+        },
+        {
+          "type": "cavg_metric"
+        },
+        {
+          "type": "max_metric"
+        },
+        {
+          "type": "min_metric"
+        },
+        {
+          "type": "avg_metric"
+        },
+        {
+          "type": "last_metric"
+        },
+        {
+          "type": "ctrough_metric"
+        },
+        {
+          "type": "tmin_metric"
+        },
+        {
+          "type": "tmax_metric"
+        },
+        {
+          "type": "time_above_limit_metric",
+          "limit": 20.0
+        },
+        {
+          "type": "time_below_limit_metric",
+          "limit": 20.0
+        },
+        {
+          "type": "thalf_metric"
+        }
+      ]
     }
   ]
 }

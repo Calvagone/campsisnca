@@ -3,7 +3,7 @@
 \docType{class}
 \name{nca_metrics-class}
 \alias{nca_metrics-class}
-\title{NCA metric class. See this class as an interface.}
+\title{NCA metrics class. See this class as a list of NCA metrics.}
 \description{
-NCA metric class. See this class as an interface.
+NCA metrics class. See this class as a list of NCA metrics.
 }

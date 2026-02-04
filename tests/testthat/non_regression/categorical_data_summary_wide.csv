@@ -1,4 +1,4 @@
-"metric","category","n","N","p","day"
+"metric","category","n","N","p","analysis"
 "Cmax categories","(1) < 10 ng/mL",87,200,0.44,"Day 1"
 "Cmax categories","(2) 10-15 ng/mL",111,200,0.56,"Day 1"
 "Cmax categories","(3) > 15 ng/mL",2,200,0.01,"Day 1"

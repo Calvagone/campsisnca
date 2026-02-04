@@ -12,7 +12,9 @@ checkNAObservations <- function(x, variable) {
   }
 }
 
-checkTimesAreIncreasing <- function(x) {
-  tmp <- x %>% dplyr::group_by(ID) %>% dplyr::summarise(INC=all(TIME==cummax(TIME)))
+checkTimesAreIncreasing <- function(x, strat_vars) {
+  tmp <- x %>%
+    dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
+    dplyr::summarise(INC=all(TIME==cummax(TIME)))
   assertthat::assert_that(all(tmp$INC), msg="Times must be monotonically increasing")
 }
