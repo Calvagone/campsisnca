@@ -290,11 +290,11 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   
   arm1 <- Arm(subjects=24, label="1g QD") %>%
     add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
-    add(Observations(seq(0,24,0.1), rep=DosingSchedule()))
+    add(Observations(seq(0,14*24,by=0.1)))
   
   arm2 <- Arm(subjects=24, label="0.5g BID") %>%
     add(Bolus(time=0, amount=500, compartment="ABS", ii=12, addl=13)) %>%
-    add(Observations(seq(0,24,0.1), rep=DosingSchedule()))
+    add(Observations(seq(0,14*24,by=0.1)))
   
   dataset <- Dataset() %>%
     add(c(arm1, arm2))
@@ -316,7 +316,8 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Cmax(unit="ng/mL")) %>%
     add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
     add(Tmax(unit="h", digits=2)) %>%
-    add(Ctrough(unit="ng/mL"))
+    add(Ctrough(unit="ng/mL")) %>%
+    add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
   table <- NCAMetricsTable() %>%
     add(nca) %>%
@@ -339,14 +340,16 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Cmax(unit="ng/mL")) %>%
     add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
     add(Tmax(unit="h", digits=2)) %>%
-    add(Ctrough(unit="ng/mL"))
+    add(Ctrough(unit="ng/mL")) %>%
+    add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
   ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168), variable="CONC", strata=c(ARM="0.5g BID")) %>%
-    add(AUC()) %>%
-    add(Cmax()) %>%
-    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", categorical=TRUE)) %>%
-    add(Tmax()) %>%
-    add(Ctrough())
+    add(AUC(unit="ng/mL*h")) %>%
+    add(Cmax(unit="ng/mL")) %>%
+    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(Tmax(unit="h", digits=2)) %>%
+    add(Ctrough(unit="ng/mL")) %>%
+    add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
   table <- NCAMetricsTable() %>%
     add(ncaArm1) %>%
