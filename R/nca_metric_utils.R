@@ -68,5 +68,9 @@ standardise <- function(x, variable, strat_vars) {
   # Check time is monotonically increasing
   checkTimesAreIncreasing(x, strat_vars)
   
+  # Factor all columns in 'strat_vars' by natural order
+  x <- x %>%
+    dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), ~ factor(.x, levels=unique(.x))))
+  
   return(x)
 }

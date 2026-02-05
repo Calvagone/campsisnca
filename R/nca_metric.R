@@ -206,6 +206,10 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
       dplyr::summarise(value=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
       dplyr::ungroup()
   }
+  
+  # Stratification variables back to character vectors
+  retValue <- retValue %>%
+    dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), as.character))
 
   return(retValue %>% dplyr::rename(id=ID))  
 })
