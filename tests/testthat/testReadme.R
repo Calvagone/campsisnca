@@ -328,8 +328,36 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   individual <- table %>%
     export(dest="dataframe", type="summary_pretty")
   
-  outputRegressionTest(data=summary, file=getRefFile("example10_summary.csv"))
+  outputRegressionTest(data=summary, file=getRefFile("example10a_summary.csv"))
   
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
-  gtTableRegressionTest(gttable, getRefFile("readme_example10.html"))
+  gtTableRegressionTest(gttable, getRefFile("readme_example10a.html"))
+  
+  # Alternatively
+  ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168), variable="CONC", strata=c(ARM="1g QD")) %>%
+    add(AUC(unit="ng/mL*h")) %>%
+    add(Cmax(unit="ng/mL")) %>%
+    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(Tmax(unit="h", digits=2)) %>%
+    add(Ctrough(unit="ng/mL"))
+  
+  ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168), variable="CONC", strata=c(ARM="0.5g BID")) %>%
+    add(AUC()) %>%
+    add(Cmax()) %>%
+    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", categorical=TRUE)) %>%
+    add(Tmax()) %>%
+    add(Ctrough())
+  
+  table <- NCAMetricsTable() %>%
+    add(ncaArm1) %>%
+    add(ncaArm2) %>%
+    campsisnca::calculate(results, strat_vars=c("SCENARIO"))
+  
+  summary <- table %>%
+    export(dest="dataframe")
+  
+  outputRegressionTest(data=summary, file=getRefFile("example10b_summary.csv"))
+  
+  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTableRegressionTest(gttable, getRefFile("readme_example10b.html"))
 })

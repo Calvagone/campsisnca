@@ -80,11 +80,11 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
   object@strat_vars <- strat_vars
   
   # Filter input data frame to specific strata
-  x <- x %>%
-    dplyr::filter(
-      dplyr::if_all(dplyr::all_of(names(object@strata)),
-                    ~ . == object@strata[dplyr::cur_column()])
-    )
+  x_reduced <- purrr::reduce(
+    names(object@strata),
+    ~ dplyr::filter(.x, .data[[.y]] == object@strata[[.y]]),
+    .init = x
+  )
   
   object@metrics@list <- object@metrics@list %>% purrr::map(.f=function(.x) {
     
@@ -98,7 +98,7 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
       .x@window <- object@window
     }
     
-    return(.x %>% calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...))
+    return(.x %>% calculate(x=x_reduced, strat_vars=strat_vars, quantile_type=quantile_type, ...))
   })
   return(object)    
 })
