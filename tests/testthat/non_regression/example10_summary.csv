@@ -23,30 +23,30 @@
 "Cmax","median",72.42,NA,"2g QD","Lower clearance"
 "Cmax","p5",56.06,NA,"2g QD","Lower clearance"
 "Cmax","p95",82.79,NA,"2g QD","Lower clearance"
-"C_{max} > 30","n",9,"FALSE",NA,NA
-"C_{max} > 30","N",24,"FALSE",NA,NA
-"C_{max} > 30","p",0.38,"FALSE",NA,NA
-"C_{max} > 30","n",15,"TRUE",NA,NA
-"C_{max} > 30","N",24,"TRUE",NA,NA
-"C_{max} > 30","p",0.62,"TRUE",NA,NA
-"C_{max} > 30","n",3,"FALSE",NA,NA
-"C_{max} > 30","N",24,"FALSE",NA,NA
-"C_{max} > 30","p",0.12,"FALSE",NA,NA
-"C_{max} > 30","n",21,"TRUE",NA,NA
-"C_{max} > 30","N",24,"TRUE",NA,NA
-"C_{max} > 30","p",0.88,"TRUE",NA,NA
-"C_{max} > 30","n",0,"FALSE",NA,NA
-"C_{max} > 30","N",24,"FALSE",NA,NA
-"C_{max} > 30","p",0,"FALSE",NA,NA
-"C_{max} > 30","n",24,"TRUE",NA,NA
-"C_{max} > 30","N",24,"TRUE",NA,NA
-"C_{max} > 30","p",1,"TRUE",NA,NA
-"C_{max} > 30","n",0,"FALSE",NA,NA
-"C_{max} > 30","N",24,"FALSE",NA,NA
-"C_{max} > 30","p",0,"FALSE",NA,NA
-"C_{max} > 30","n",24,"TRUE",NA,NA
-"C_{max} > 30","N",24,"TRUE",NA,NA
-"C_{max} > 30","p",1,"TRUE",NA,NA
+"C_{max} > 30","n",9,"FALSE","1g QD","Base scenario"
+"C_{max} > 30","N",24,"FALSE","1g QD","Base scenario"
+"C_{max} > 30","p",0.38,"FALSE","1g QD","Base scenario"
+"C_{max} > 30","n",15,"TRUE","1g QD","Base scenario"
+"C_{max} > 30","N",24,"TRUE","1g QD","Base scenario"
+"C_{max} > 30","p",0.62,"TRUE","1g QD","Base scenario"
+"C_{max} > 30","n",3,"FALSE","1g QD","Lower clearance"
+"C_{max} > 30","N",24,"FALSE","1g QD","Lower clearance"
+"C_{max} > 30","p",0.12,"FALSE","1g QD","Lower clearance"
+"C_{max} > 30","n",21,"TRUE","1g QD","Lower clearance"
+"C_{max} > 30","N",24,"TRUE","1g QD","Lower clearance"
+"C_{max} > 30","p",0.88,"TRUE","1g QD","Lower clearance"
+"C_{max} > 30","n",0,"FALSE","2g QD","Base scenario"
+"C_{max} > 30","N",24,"FALSE","2g QD","Base scenario"
+"C_{max} > 30","p",0,"FALSE","2g QD","Base scenario"
+"C_{max} > 30","n",24,"TRUE","2g QD","Base scenario"
+"C_{max} > 30","N",24,"TRUE","2g QD","Base scenario"
+"C_{max} > 30","p",1,"TRUE","2g QD","Base scenario"
+"C_{max} > 30","n",0,"FALSE","2g QD","Lower clearance"
+"C_{max} > 30","N",24,"FALSE","2g QD","Lower clearance"
+"C_{max} > 30","p",0,"FALSE","2g QD","Lower clearance"
+"C_{max} > 30","n",24,"TRUE","2g QD","Lower clearance"
+"C_{max} > 30","N",24,"TRUE","2g QD","Lower clearance"
+"C_{max} > 30","p",1,"TRUE","2g QD","Lower clearance"
 "tmax","median",0.8,NA,"1g QD","Base scenario"
 "tmax","p5",0.5,NA,"1g QD","Base scenario"
 "tmax","p95",1.7,NA,"1g QD","Base scenario"
