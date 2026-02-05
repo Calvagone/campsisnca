@@ -184,7 +184,9 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "ch
     stop(paste0("Unknown subtype ", subtype))
   }
   object@individual <- ind
-  object@summary <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
+  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
+  object@summary <- structuredObj$summary
+  object@summary_pretty <- structuredObj$summary_pretty
   return(object)
 })
 
