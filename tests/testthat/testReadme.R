@@ -290,11 +290,11 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   
   arm1 <- Arm(subjects=24, label="1g QD") %>%
     add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
-    add(Observations(seq(0,14*24,by=0.1)))
+    add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
   
   arm2 <- Arm(subjects=24, label="0.5g BID") %>%
     add(Bolus(time=0, amount=500, compartment="ABS", ii=12, addl=13)) %>%
-    add(Observations(seq(0,14*24,by=0.1)))
+    add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
   
   dataset <- Dataset() %>%
     add(c(arm1, arm2))

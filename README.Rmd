@@ -242,7 +242,7 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 
 In the example below, we look at the individual time above (or below) 10 ng/mL at Day 1 for the 10 first subjects.
 
-```{r, message=FALSE}
+```{r, example9-plot, fig.width=10, fig.height=6, message=FALSE}
 day1 <- campsis %>%
   timerange(0, 24) %>%
   filter(ID %in% (1:10))
@@ -273,15 +273,15 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 
 Let's generate some fictitious results where two treatment arms are simulated (`1g QD` and `2g QD`) and where scenarios are included too (`Base scenario` and `Lower clearance`).
 
-```{r, message=FALSE}
+```{r, example10-plot, fig.width=10, fig.height=6, message=FALSE}
 library(campsis)
 arm1 <- Arm(subjects=24, label="1g QD") %>%
-    add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
-    add(Observations(seq(0,24,0.1), rep=DosingSchedule()))
-  
-arm2 <- Arm(subjects=24, label="2g QD") %>%
-  add(Bolus(time=0, amount=2000, compartment="ABS", ii=24, addl=6)) %>%
-  add(Observations(seq(0,24,0.1), rep=DosingSchedule()))
+  add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
+  add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
+
+arm2 <- Arm(subjects=24, label="0.5g BID") %>%
+  add(Bolus(time=0, amount=500, compartment="ABS", ii=12, addl=13)) %>%
+  add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
 
 dataset <- Dataset() %>%
   add(c(arm1, arm2))
@@ -303,11 +303,12 @@ NCA summary statistics can be obtained for each strata by specifying the argumen
 
 ```{r, message=FALSE}
 nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
-    add(AUC(unit="ng/mL*h")) %>%
-    add(Cmax(unit="ng/mL")) %>%
-    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
-    add(Tmax(unit="h", digits=2)) %>%
-    add(Ctrough(unit="ng/mL"))
+  add(AUC(unit="ng/mL*h")) %>%
+  add(Cmax(unit="ng/mL")) %>%
+  add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+  add(Tmax(unit="h", digits=2)) %>%
+  add(Ctrough(unit="ng/mL")) %>%
+  add(Thalf(unit="h", window=TimeWindow(200, "last"))) # Thalf will be estimated by dosing a linear regression on the range [200, 'last']
   
 table <- NCAMetricsTable() %>%
   add(nca) %>%
@@ -315,4 +316,32 @@ table <- NCAMetricsTable() %>%
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
+
+In the previous example, statistics are summarized on Day 7. In you wish specifics statistics for each one your arm, you could also proceed sightly differently by creating 2 analyses (1 for each strata) and remove `ARM` from the generic stratification variables.
+
+```{r, message=FALSE}
+ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168), variable="CONC", strata=c(ARM="1g QD")) %>%
+    add(AUC(unit="ng/mL*h")) %>%
+    add(Cmax(unit="ng/mL")) %>%
+    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(Tmax(unit="h", digits=2)) %>%
+    add(Ctrough(unit="ng/mL")) %>%
+    add(Thalf(unit="h", window=TimeWindow(200, "last")))
+  
+ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168), variable="CONC", strata=c(ARM="0.5g BID")) %>%
+  add(AUC(unit="ng/mL*h")) %>%
+  add(Cmax(unit="ng/mL")) %>%
+  add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+  add(Tmax(unit="h", digits=2)) %>%
+  add(Ctrough(unit="ng/mL")) %>%
+  add(Thalf(unit="h", window=TimeWindow(200, "last")))
+
+table <- NCAMetricsTable() %>%
+  add(ncaArm1) %>%
+  add(ncaArm2) %>%
+  calculate(results, strat_vars=c("SCENARIO")) # ARM removed since defined in the analyses
+
+table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+```
+
 
