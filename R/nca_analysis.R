@@ -13,11 +13,12 @@ setClass(
     window = "nca_time_window",      # default time range
     variable = "character",          # default variable name
     metrics = "nca_metrics",         # metrics contained in this analysis
+    strata = "character",            # named vector
     strat_vars = "character"         # stratification variables in data, transient field: updated when calculate is called
   ),
   contains="pmx_element",
   prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA),
-                      metrics=NCAMetrics(), strat_vars=character(0))
+                      metrics=NCAMetrics(), strata=character(0), strat_vars=character(0))
 )
 
 #' 
@@ -26,13 +27,16 @@ setClass(
 #' @param name name of this analysis, e.g. 'Day 1'
 #' @param window time window, see \link{TimeWindow}
 #' @param variable default variable which is analysed
-#' @param metrics list of metrics
+#' @param strata specific strata this analysis refers to, named vector (e.g. c(ARM='1g QD'))
 #' @export
-NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, metrics=NCAMetrics()) {
+NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, strata=NULL) {
   if (is.null(variable)) {
     variable = as.character(NA)
   }
-  return(new("nca_analysis", name=name, window=window, variable=variable, metrics=metrics))
+  if (is.null(strata)) {
+    strata = character(0)
+  }
+  return(new("nca_analysis", name=name, window=window, variable=variable, strata=strata))
 }
 
 #_______________________________________________________________________________
@@ -74,6 +78,13 @@ setMethod("getUnit", signature=c("nca_analysis", "character"), definition=functi
 setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
   # Update transient field 'strat_vars'
   object@strat_vars <- strat_vars
+  
+  # Filter input data frame to specific strata
+  x <- x %>%
+    dplyr::filter(
+      dplyr::if_all(dplyr::all_of(names(object@strata)),
+                    ~ . == object@strata[dplyr::cur_column()])
+    )
   
   object@metrics@list <- object@metrics@list %>% purrr::map(.f=function(.x) {
     

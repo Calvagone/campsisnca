@@ -8,7 +8,7 @@ NCAAnalysis(
   name = "Default",
   window = TimeWindow(),
   variable = NULL,
-  metrics = NCAMetrics()
+  strata = NULL
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ NCAAnalysis(
 
 \item{variable}{default variable which is analysed}
 
-\item{metrics}{list of metrics}
+\item{strata}{specific strata this analysis refers to, named vector (e.g. c(ARM='1g QD'))}
 }
 \description{
 Create an NCA analysis.
