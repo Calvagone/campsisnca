@@ -270,7 +270,7 @@ modify_header(label=\"**%s**\")
 #' @return code
 getStatisticsCode <- function(table) {
   # Always look at first NCA metric only
-  analyses <- table@configuration@nca_analyses@list[[1]]
+  analyses <- table@nca_analyses@list[[1]]
   
   retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
   
@@ -286,7 +286,7 @@ getStatisticsCode <- function(table) {
 #' @return code
 getVariableTypeCode <- function(table, all_dichotomous_levels) {
   # Always look at first NCA metric only
-  analyses <- table@configuration@nca_analyses@list[[1]]
+  analyses <- table@nca_analyses@list[[1]]
   
   retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     categorical <- x@categorical
@@ -314,7 +314,7 @@ getVariableTypeCode <- function(table, all_dichotomous_levels) {
 #' @return code
 getLabelsCode <- function(table, subscripts) {
   # Always look at first NCA metric only
-  analyses <- table@configuration@nca_analyses@list[[1]]
+  analyses <- table@nca_analyses@list[[1]]
   
   retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     unit <- x@unit
@@ -341,7 +341,7 @@ getLabelsCode <- function(table, subscripts) {
 #' @return code
 getDigitsCode <- function(table) {
   # Always look at first NCA metric only
-  analyses <- table@configuration@nca_analyses@list[[1]]
+  analyses <- table@nca_analyses@list[[1]]
   
   retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     digits <- x@digits

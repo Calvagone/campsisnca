@@ -8,7 +8,7 @@ NCAAnalysis(
   name = "Default",
   window = TimeWindow(),
   variable = NULL,
-  strata = NULL
+  strata = getDefaultStrata()
 )
 }
 \arguments{
@@ -18,7 +18,10 @@ NCAAnalysis(
 
 \item{variable}{default variable which is analysed}
 
-\item{strata}{specific strata this analysis refers to, named vector (e.g. c(ARM='1g QD'))}
+\item{strata}{strata levels this analysis refers to, named vector, e.g. c(ARM='1g QD').
+Note, the default strata are c(ARM='all', SCENARIO='all').
+Use 'all' if this analysis refers to all levels for the specified stratification variable.
+By default, a stratification variable that has only 1 level is ignored.}
 }
 \description{
 Create an NCA analysis.

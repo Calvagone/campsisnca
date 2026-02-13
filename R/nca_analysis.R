@@ -2,6 +2,34 @@
 #----                           nca_analysis class                          ----
 #_______________________________________________________________________________
 
+allStrataLevels <- function() {
+  return("all")
+}
+
+getDefaultStrata <- function() {
+  return(c(ARM=allStrataLevels(), SCENARIO=allStrataLevels()))
+}
+
+getEffectiveStratVars <- function(strata, x) {
+  retValue <- NULL
+  colnames_ <- colnames(x)
+  for (index in seq_along(strata)) {
+    strat_var <- names(strata)[index]
+    strat_vars_level <- as.character(strata)[index]
+    if (strat_var %in% colnames_) {
+      if (strat_vars_level == allStrataLevels() && length(unique(x %>% dplyr::pull(strat_var))) > 1) {
+        retValue <- c(retValue, strat_var)
+      }
+    } else {
+      message(sprintf("Stratification variable '%s' not in dataframe", strat_var))
+    }
+  }
+  if (is.null(retValue)) {
+    retValue <- character(0)
+  }
+  return(retValue)
+}
+
 #' 
 #' NCA analysis class.
 #' 
@@ -9,16 +37,16 @@
 setClass(
   "nca_analysis",
   representation(
-    name = "character",              # analysis name
-    window = "nca_time_window",      # default time range
-    variable = "character",          # default variable name
-    metrics = "nca_metrics",         # metrics contained in this analysis
-    strata = "character",            # named vector
-    strat_vars = "character"         # stratification variables in data, transient field: updated when calculate is called
+    name = "character",                # analysis name
+    window = "nca_time_window",        # default time range
+    variable = "character",            # default variable name
+    metrics = "nca_metrics",           # metrics contained in this analysis
+    strata = "character",              # named vector
+    effective_strat_vars = "character" # effective stratification variables in data, transient field: updated when calculate is called
   ),
   contains="pmx_element",
   prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA),
-                      metrics=NCAMetrics(), strata=character(0), strat_vars=character(0))
+                      metrics=NCAMetrics(), strata=getDefaultStrata(), strat_vars=character(0))
 )
 
 #' 
@@ -27,14 +55,17 @@ setClass(
 #' @param name name of this analysis, e.g. 'Day 1'
 #' @param window time window, see \link{TimeWindow}
 #' @param variable default variable which is analysed
-#' @param strata specific strata this analysis refers to, named vector (e.g. c(ARM='1g QD'))
+#' @param strata strata levels this analysis refers to, named vector, e.g. c(ARM='1g QD').
+#'  Note, the default strata are c(ARM='all', SCENARIO='all').
+#'  Use 'all' if this analysis refers to all levels for the specified stratification variable.
+#'  By default, a stratification variable that has only 1 level is ignored.
 #' @export
-NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, strata=NULL) {
+NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, strata=getDefaultStrata()) {
   if (is.null(variable)) {
     variable = as.character(NA)
   }
   if (is.null(strata)) {
-    strata = character(0)
+    strata = getDefaultStrata()
   }
   return(new("nca_analysis", name=name, window=window, variable=variable, strata=strata))
 }
@@ -76,13 +107,16 @@ setMethod("getUnit", signature=c("nca_analysis", "character"), definition=functi
 
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
-  # Update transient field 'strat_vars'
-  object@strat_vars <- strat_vars
+  # Effective stratification variables based on strata and x
+  object@effective_strat_vars <- getEffectiveStratVars(strata=object@strata, x=x)
+  
+  # Detect the specific strata
+  specific_strata <- object@strata[object@strata != allStrataLevels()]
   
   # Filter input data frame to specific strata
   x_reduced <- purrr::reduce(
-    names(object@strata),
-    ~ dplyr::filter(.x, .data[[.y]] == object@strata[[.y]]),
+    names(specific_strata),
+    ~ dplyr::filter(.x, .data[[.y]] == specific_strata[[.y]]),
     .init = x
   )
   
@@ -98,7 +132,7 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "character", "n
       .x@window <- object@window
     }
     
-    return(.x %>% calculate(x=x_reduced, strat_vars=strat_vars, quantile_type=quantile_type, ...))
+    return(.x %>% calculate(x=x_reduced, strat_vars=object@effective_strat_vars, quantile_type=quantile_type, ...))
   })
   return(object)    
 })
@@ -123,7 +157,8 @@ setMethod("export", signature=c("nca_analysis", "dataframe_type"), definition=fu
   }
   
   # For backwards-compatibility in tests
-  retValue <- dplyr::relocate(retValue, dplyr::any_of(c("analysis", object@strat_vars)), .after=dplyr::last_col())
+  strat_vars <- names(object@strata)
+  retValue <- dplyr::relocate(retValue, dplyr::any_of(c("analysis", strat_vars)), .after=dplyr::last_col())
   
   return(retValue)
 })

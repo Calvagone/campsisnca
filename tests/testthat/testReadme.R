@@ -25,7 +25,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
 
   # Day 7
   ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
-    add(c(AUC(), Cmax(), Tmax()))
+    add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
   table <- NCAMetricsTable()
   table <- table %>%
@@ -57,40 +57,6 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
     export(dest="dataframe", type="individual_wide") %>%
     select(-id)
   
-  gttable <- individual %>% mutate(analysis=factor(analysis, levels=unique(analysis)))  %>%
-    tbl_summary(
-      by=analysis,
-      statistic=list(
-        `AUC` ~ "{median} ({p5}–{p95})",
-        `Cmax` ~ "{median} ({p5}–{p95})",
-        `tmax` ~ "{median} ({p5}–{p95})",
-        `Ctrough` ~ "{median} ({p5}–{p95})"
-      ),
-      type=list(
-        `AUC` ~ "continuous",
-        `Cmax` ~ "continuous",
-        `tmax` ~ "continuous",
-        `Ctrough` ~ "continuous",
-        all_dichotomous() ~ "dichotomous"
-      ),
-      label=list(
-        `AUC` ~ "AUC (ng/mL*h)",
-        `Cmax` ~ "C_{max} (ng/mL)",
-        `tmax` ~ "t_{max} (h)",
-        `Ctrough` ~ "C_{trough} (ng/mL)"
-      ),
-      digits=list(
-        
-      ),
-      missing = "no"
-    ) %>%
-    modify_header(label="**Metric**") %>%
-    modify_table_body(
-      ~ .x %>% mutate(across(where(is.character), ~ ifelse(. == "NA (NA–NA)", "Not applicable", .)))
-    )
-  
-  gttable
-  
   gtTableRegressionTest(gttable, getRefFile("readme_example1.html"))
 })
 
@@ -99,15 +65,15 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   campsis_ <- campsis %>%
     mutate(Scenario=ifelse(BW >= 75, ">=75kg patients", "<75kg patients"))
 
-  day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+  day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(Scenario="all")) %>%
     add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
 
-  day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+  day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
   table <- NCAMetricsTable() %>%
     add(c(day1, day7)) %>%
-    campsisnca::calculate(campsis_, strat_vars="Scenario")
+    campsisnca::calculate(campsis_)
 
   summary <- table %>%
     export(dest="dataframe")
@@ -360,7 +326,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   
   table <- NCAMetricsTable() %>%
     add(nca) %>%
-    campsisnca::calculate(results, strat_vars=c("ARM", "SCENARIO"))
+    campsisnca::calculate(results)
   
   summary <- table %>%
     export(dest="dataframe")
@@ -374,7 +340,8 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   gtTableRegressionTest(gttable, getRefFile("readme_example10a.html"))
   
   # Alternatively
-  ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168), variable="CONC", strata=c(ARM="1g QD")) %>%
+  ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168),
+                         variable="CONC", strata=c(ARM="1g QD", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
     add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
@@ -382,7 +349,8 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
-  ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168), variable="CONC", strata=c(ARM="0.5g BID")) %>%
+  ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168),
+                         variable="CONC", strata=c(ARM="0.5g BID", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
     add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
@@ -393,7 +361,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   table <- NCAMetricsTable() %>%
     add(ncaArm1) %>%
     add(ncaArm2) %>%
-    campsisnca::calculate(results, strat_vars=c("SCENARIO"))
+    campsisnca::calculate(results)
   
   summary <- table %>%
     export(dest="dataframe")
