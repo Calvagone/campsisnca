@@ -3,18 +3,11 @@
   "$id": "https://calvagone.github.io/campsis.doc/schema/1.0/campsisnca.schema.json",
   "$comment": "Campsisnca JSON Schema v1.0 © 2025 [Nicolas Luyckx / Calvagone]. Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt this schema with attribution.",
   "title": "Campsisnca JSON Schema",
-  "$ref": "#/$defs/nca_configuration",
+  "$ref": "#/$defs/nca_table",
   "$defs": {
-    "nca_configuration": {
+    "nca_table": {
       "type": "object",
       "properties": {
-        "strat_vars": {
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "description": "Stratification variable names present in the simulation output. Strata names are automatically identified from the simulation output."
-        },
         "nca_analyses": {
           "type": "array",
           "items": {
@@ -24,7 +17,6 @@
         }
       },
       "required": [
-        "strat_vars",
         "nca_analyses"
       ]
     },
@@ -91,6 +83,10 @@
               }
             ]
           }
+        },
+        "strata": {
+          "$ref": "#/$defs/nca_strata",
+          "description": "Named strata filters used to subset the dataset. See nca_strata definition."
         }
       },
       "required": [
@@ -510,6 +506,14 @@
         "month",
         "year"
       ]
+    },
+    "nca_strata": {
+      "type": "object",
+      "description": "Named strata filters used to subset the dataset (e.g., ARM, SCENARIO). Each property name represents a column and its value the level to select.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1
     }
   }
 }

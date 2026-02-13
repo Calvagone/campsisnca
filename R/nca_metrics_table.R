@@ -9,10 +9,10 @@
 setClass(
   "nca_metrics_table",
   representation(
-    configuration = "nca_configuration"
+    nca_analyses = "nca_analyses"  # NCA analyses
   ),
   contains="pmx_list",
-  prototype = prototype(configuration=NCAConfiguration())
+  prototype = prototype(nca_analyses=new("nca_analyses"))
 )
 
 #' 
@@ -28,7 +28,7 @@ NCAMetricsTable <- function() {
 #_______________________________________________________________________________
 
 setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition = function(object, x) {
-  object@configuration <- object@configuration %>% add(x)
+  object@nca_analyses <- object@nca_analyses %>% add(x)
   return(object)
 })
 
@@ -38,7 +38,7 @@ setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition 
 
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
-  object@configuration <- object@configuration %>%
+  object@nca_analyses <- object@nca_analyses %>%
     calculate(x=x, strat_vars=strat_vars, quantile_type=quantile_type, ...)
   return(object)  
 })
@@ -48,7 +48,7 @@ setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "character
 #_______________________________________________________________________________
 
 setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
-  if (object@configuration@nca_analyses %>% length() == 0) {
+  if (object@nca_analyses %>% length() == 0) {
     stop("No metrics to export")
   }
   if (dest=="dataframe") {
@@ -67,8 +67,8 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
-  analysis_strat <- length(object@configuration@nca_analyses) > 1
-  retValue <- object@configuration@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, analysis_strat=analysis_strat, ...))
+  analysis_strat <- length(object@nca_analyses) > 1
+  retValue <- object@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, analysis_strat=analysis_strat, ...))
 
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
@@ -121,7 +121,7 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
           definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
   code <- object %>% generateTableCode(init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   table <- object # Table variable needs to be there!
-  # cat(code)
+  cat(code)
   # browser()
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
@@ -227,11 +227,11 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
 setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=function(object, keep_single, ...) {
   retValue <- NULL
   
-  if (length(object@configuration@nca_analyses) > 1) {
+  if (length(object@nca_analyses) > 1) {
     retValue <- "analysis"
   }
   
-  strat_vars <- object@configuration@nca_analyses@list %>%
+  strat_vars <- object@nca_analyses@list %>%
     purrr::map(~.x@strat_vars) %>%
     purrr::flatten_chr()
   
@@ -244,8 +244,25 @@ setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=f
 
 #' @rdname getUnit
 setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
-  if (object@configuration@nca_analyses %>% length()==0) {
+  if (object@nca_analyses %>% length()==0) {
     stop("No metrics in table at this stage")
   }
-  return(object@configuration@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
+  return(object@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
 })
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), definition=function(object, json) {
+  json <- json@data
+  object@nca_analyses@list <- json$nca_analyses %>%
+    purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
+  return(object)
+})
+
+setMethod("loadFromJSON", signature=c("nca_metrics_table", "character"), definition=function(object, json) {
+  schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
+  return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
+})
+

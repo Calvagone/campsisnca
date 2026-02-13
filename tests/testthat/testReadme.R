@@ -25,7 +25,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
 
   # Day 7
   ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
-    add(c(AUC(), Cmax(), Tmax(), Ctrough()))
+    add(c(AUC(), Cmax(), Tmax()))
 
   table <- NCAMetricsTable()
   table <- table %>%
@@ -52,6 +52,45 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   outputRegressionTest(data=individual, file=getRefFile("example1_individual.csv"))
 
   gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  
+  individual <- table %>%
+    export(dest="dataframe", type="individual_wide") %>%
+    select(-id)
+  
+  gttable <- individual %>% mutate(analysis=factor(analysis, levels=unique(analysis)))  %>%
+    tbl_summary(
+      by=analysis,
+      statistic=list(
+        `AUC` ~ "{median} ({p5}–{p95})",
+        `Cmax` ~ "{median} ({p5}–{p95})",
+        `tmax` ~ "{median} ({p5}–{p95})",
+        `Ctrough` ~ "{median} ({p5}–{p95})"
+      ),
+      type=list(
+        `AUC` ~ "continuous",
+        `Cmax` ~ "continuous",
+        `tmax` ~ "continuous",
+        `Ctrough` ~ "continuous",
+        all_dichotomous() ~ "dichotomous"
+      ),
+      label=list(
+        `AUC` ~ "AUC (ng/mL*h)",
+        `Cmax` ~ "C_{max} (ng/mL)",
+        `tmax` ~ "t_{max} (h)",
+        `Ctrough` ~ "C_{trough} (ng/mL)"
+      ),
+      digits=list(
+        
+      ),
+      missing = "no"
+    ) %>%
+    modify_header(label="**Metric**") %>%
+    modify_table_body(
+      ~ .x %>% mutate(across(where(is.character), ~ ifelse(. == "NA (NA–NA)", "Not applicable", .)))
+    )
+  
+  gttable
+  
   gtTableRegressionTest(gttable, getRefFile("readme_example1.html"))
 })
 
