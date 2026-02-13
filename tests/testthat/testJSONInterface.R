@@ -20,7 +20,7 @@ test_that("Import NCA config 1", {
   # Import NCA configuration from JSON
   imported_table <- loadFromJSON(NCAMetricsTable(), file.path(testFolder, "json_examples", "nca_table_1.json"))
 
-  analysis1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+  analysis1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(ARM="Specific arm")) %>%
     add(AUC()) %>%
     add(Cmax()) %>%
     add(Cmin()) %>%
@@ -36,7 +36,7 @@ test_that("Import NCA config 1", {
     add(TimeBelowLimit(limit=10)) %>%
     add(Thalf())
   
-  analysis2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+  analysis2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(ARM="Specific arm")) %>%
     add(AUC()) %>%
     add(Cmax()) %>%
     add(Cmin()) %>%

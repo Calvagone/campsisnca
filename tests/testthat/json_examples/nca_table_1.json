@@ -52,7 +52,10 @@
         {
           "type": "thalf_metric"
         }
-      ]
+      ],
+      "strata": {
+        "ARM": "Specific arm"
+      }
     },
     {
       "name": "Day 7",
@@ -106,7 +109,10 @@
         {
           "type": "thalf_metric"
         }
-      ]
+      ],
+      "strata": {
+        "ARM": "Specific arm"
+      }
     }
   ]
 }
