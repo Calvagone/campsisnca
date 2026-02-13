@@ -172,15 +172,15 @@ library(dplyr)
 campsis_ <- campsis %>%
     mutate(Scenario=ifelse(BW >= 75, ">=75kg patients", "<75kg patients")) 
   
-day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>% 
+day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(Scenario="all")) %>% 
   add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
 
-day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>% 
+day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>% 
   add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
 table <- NCAMetricsTable() %>%
   add(c(day1, day7)) %>%
-  calculate(campsis_, strat_vars="Scenario")
+  calculate(campsis_)
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -755,8 +755,8 @@ shadedPlot(results, "CONC", colour="ARM", strat_extra="SCENARIO") +
 
 ![](README_files/figure-gfm/example10-plot-1.png)<!-- -->
 
-NCA summary statistics can be obtained for each strata by specifying the
-argument `strat_vars` when calling `calculate`. It’s as simple as that.
+NCA summary statistics are automatically calculated across all strata
+levels in ARM and SCENARIO.
 
 ``` r
 nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
@@ -769,7 +769,7 @@ nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %
   
 table <- NCAMetricsTable() %>%
   add(nca) %>%
-  calculate(results, strat_vars=c("ARM", "SCENARIO"))
+  calculate(results)
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```
@@ -838,12 +838,13 @@ N = 24</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-ali
 </div>
 
 In the previous example, statistics are summarized on Day 7. In you wish
-specifics statistics for each one your arm, you could also proceed
-sightly differently by creating 2 analyses (1 for each strata) and
-remove `ARM` from the generic stratification variables.
+specifics statistics for each one of your arms, you could also proceed
+sightly differently by creating 2 analyses (1 for each strata) and refer
+to specific arms by overriding the default strata.
 
 ``` r
-ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168), variable="CONC", strata=c(ARM="1g QD")) %>%
+ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168),
+                       variable="CONC", strata=c(ARM="1g QD", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
     add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
@@ -851,7 +852,8 @@ ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 1
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
-ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168), variable="CONC", strata=c(ARM="0.5g BID")) %>%
+ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168),
+                       variable="CONC", strata=c(ARM="0.5g BID", SCENARIO="all")) %>%
   add(AUC(unit="ng/mL*h")) %>%
   add(Cmax(unit="ng/mL")) %>%
   add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
@@ -862,7 +864,7 @@ ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156,
 table <- NCAMetricsTable() %>%
   add(ncaArm1) %>%
   add(ncaArm2) %>%
-  calculate(results, strat_vars=c("SCENARIO")) # ARM removed since defined in the analyses
+  calculate(results)
 
 table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 ```

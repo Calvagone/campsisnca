@@ -40,16 +40,16 @@ test_that("Dataset 1 - day 1 & day 7 - seed 1 & seed 2", {
   ds <- rbind(dataset1(seed=1)$campsis %>% mutate(Scenario="Seed 1"),
               dataset1(seed=2)$campsis %>% mutate(Scenario="Seed 2"))
   
-  nca_d1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+  nca_d1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(Scenario="all")) %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough()))
   
-  nca_d2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+  nca_d2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough()))
   
   table <- NCAMetricsTable() %>%
     add(nca_d1) %>%
     add(nca_d2) %>%
-    campsisnca::calculate(ds, strat_vars="Scenario")
+    campsisnca::calculate(ds)
   
   # Export to dataframe
   df <- table %>%
