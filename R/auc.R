@@ -61,12 +61,16 @@ setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=
 #_______________________________________________________________________________
 
 aucMethodToInteger <- function(method) {
-  if (method=="linlin") {
-    return(1L)
-  } else if (method=="linlog") {
-    return(2L)
-  } else if (method=="tmax_linlog") {
-    return(3L)
+  if (length(method)==0) {
+    return(1L) # Default
+  } else {
+    if (method=="linlin") {
+      return(1L)
+    } else if (method=="linlog") {
+      return(2L)
+    } else if (method=="tmax_linlog") {
+      return(3L)
+    }
   }
   stop(sprintf("Unknown AUC method '%s'", method))
 }

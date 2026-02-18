@@ -26,7 +26,7 @@ Slot "exclude_end":
 
 
 Slot "variable":
-[1] "CONC"
+[1] NA
 
 Slot "metrics":
 An object of class "nca_metrics"

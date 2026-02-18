@@ -64,7 +64,7 @@ test_that("Import NCA table 2 (default analysis, AUC only)", {
   # Import NCA configuration from JSON
   imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_2.json"))
   
-  analysis <- NCAAnalysis(name="Default") %>%
+  analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(AUC(stat_display="{median} ({p5}–{p95})"))
   
   expected_table <- NCAMetricsTable() %>%
