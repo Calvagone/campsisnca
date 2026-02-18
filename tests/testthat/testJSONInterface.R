@@ -18,7 +18,7 @@ test_that("Import time range from JSON", {
 test_that("Import NCA config 1", {
   
   # Import NCA configuration from JSON
-  imported_table <- loadFromJSON(NCAMetricsTable(), file.path(testFolder, "json_examples", "nca_table_1.json"))
+  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_1.json"))
 
   analysis1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(ARM="Specific arm")) %>%
     add(AUC()) %>%

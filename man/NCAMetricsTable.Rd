@@ -4,7 +4,10 @@
 \alias{NCAMetricsTable}
 \title{NCA metrics table.}
 \usage{
-NCAMetricsTable()
+NCAMetricsTable(json = NULL)
+}
+\arguments{
+\item{json}{path to JSON table file or JSON content in string form}
 }
 \description{
 NCA metrics table.

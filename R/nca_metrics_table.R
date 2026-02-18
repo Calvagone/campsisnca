@@ -18,9 +18,14 @@ setClass(
 #' 
 #' NCA metrics table.
 #' 
+#' @param json path to JSON table file or JSON content in string form
 #' @export
-NCAMetricsTable <- function() {
-  return(new("nca_metrics_table"))
+NCAMetricsTable <- function(json=NULL) {
+  table <- new("nca_metrics_table")
+  if (!is.null(json)) {
+    table <- loadFromJSON(object=table, json=json)
+  }
+  return(table)
 }
 
 #_______________________________________________________________________________
