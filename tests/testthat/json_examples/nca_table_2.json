@@ -1,0 +1,27 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Default",
+      "window": {
+        "start": 0.0,
+        "end": "last",
+        "time_unit": "hour",
+        "exclude_start": false,
+        "exclude_end": false
+      },
+      "variable": "CONC",
+      "metrics": [
+        {
+          "type": "auc_metric",
+          "name": "AUC",
+          "stat_display": "{median} ({p5}–{p95})",
+          "method": "linlin"
+        }
+      ],
+      "strata": {
+        "ARM": "all",
+        "SCENARIO": "all"
+      }
+    }
+  ]
+}

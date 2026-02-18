@@ -60,7 +60,19 @@ setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
+aucMethodToInteger <- function(method) {
+  if (method=="linlin") {
+    return(1L)
+  } else if (method=="linlog") {
+    return(2L)
+  } else if (method=="tmax_linlog") {
+    return(3L)
+  }
+  stop(sprintf("Unknown AUC method '%s'", method))
+}
+
 setMethod("loadFromJSON", signature=c("auc_metric", "json_element"), definition=function(object, json) {
+  json@data$method <- aucMethodToInteger(json@data$method)
   object <- mapJSONPropertiesToS4Slots(object=object, json=json)
   return(setDefaultNameIfNA(object))
 })

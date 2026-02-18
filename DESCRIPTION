@@ -80,3 +80,5 @@ Collate:
     'nca_analyses.R'
     'nca_metrics_table.R'
     'json_interface.R'
+Remotes: 
+    Calvagone/campsismod@develop

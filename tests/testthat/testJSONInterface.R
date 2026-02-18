@@ -15,7 +15,7 @@ test_that("Import time range from JSON", {
   expect_equal(time_range, TimeWindow(144, 168))
 })
 
-test_that("Import NCA config 1", {
+test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
   
   # Import NCA configuration from JSON
   imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_1.json"))
@@ -55,6 +55,20 @@ test_that("Import NCA config 1", {
   expected_table <- NCAMetricsTable() %>%
     add(analysis1) %>%
     add(analysis2)
+  
+  expect_equal(imported_table, expected_table)
+})
+
+test_that("Import NCA table 2 (default analysis, AUC only)", {
+  
+  # Import NCA configuration from JSON
+  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_2.json"))
+  
+  analysis <- NCAAnalysis(name="Default") %>%
+    add(AUC(stat_display="{median} ({p5}–{p95})"))
+  
+  expected_table <- NCAMetricsTable() %>%
+    add(analysis)
   
   expect_equal(imported_table, expected_table)
 })
