@@ -77,7 +77,6 @@ aucMethodToInteger <- function(method) {
 
 setMethod("loadFromJSON", signature=c("auc_metric", "json_element"), definition=function(object, json) {
   json@data$method <- aucMethodToInteger(json@data$method)
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(loadMetricFromJSON(object=object, json=json))
 })
 

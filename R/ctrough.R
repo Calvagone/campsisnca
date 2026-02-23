@@ -103,8 +103,7 @@ setMethod("getLaTeXName", signature=c("ctrough_metric"), definition = function(x
 #_______________________________________________________________________________
 
 setMethod("loadFromJSON", signature=c("abstract_last_metric", "json_element"), definition=function(object, json) {
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(loadMetricFromJSON(object=object, json=json))
 })
 
 

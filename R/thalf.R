@@ -66,7 +66,6 @@ setMethod("getLaTeXName", signature=c("thalf_metric"), definition = function(x) 
 #_______________________________________________________________________________
 
 setMethod("loadFromJSON", signature=c("thalf_metric", "json_element"), definition=function(object, json) {
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(loadMetricFromJSON(object=object, json=json))
 })
 

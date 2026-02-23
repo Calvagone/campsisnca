@@ -215,6 +215,20 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
 })
 
 #_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+loadMetricFromJSON <- function(object, json) {
+  if (!is.null(json@data$window)) {
+    # Assign type to window element
+    json@data$window$type <- "nca_time_window"
+  }
+  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  return(setDefaultNameIfNA(object))
+}
+
+
+#_______________________________________________________________________________
 #----                         statDisplayString                             ----
 #_______________________________________________________________________________
 

@@ -179,7 +179,6 @@ computeTimeAboveBelow <- function(x1, y1, x2, y2, above, strictly) {
 #_______________________________________________________________________________
 
 setMethod("loadFromJSON", signature=c("abstract_time_above_or_below_limit_metric", "json_element"), definition=function(object, json) {
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(loadMetricFromJSON(object=object, json=json))
 })
 

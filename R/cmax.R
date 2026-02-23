@@ -101,7 +101,6 @@ setMethod("getLaTeXName", signature=c("abstract_max_metric"), definition = funct
 #_______________________________________________________________________________
 
 setMethod("loadFromJSON", signature=c("abstract_max_metric", "json_element"), definition=function(object, json) {
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(loadMetricFromJSON(object=object, json=json))
 })
 

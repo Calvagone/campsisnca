@@ -119,8 +119,7 @@ setMethod("getLaTeXName", signature=c("abstract_value_at_metric"), definition = 
 #_______________________________________________________________________________
 
 setMethod("loadFromJSON", signature=c("abstract_value_at_metric", "json_element"), definition=function(object, json) {
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(loadMetricFromJSON(object=object, json=json))
 })
 
 
