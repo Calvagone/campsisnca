@@ -1,0 +1,40 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Default",
+      "window": {
+        "start": 0.0,
+        "end": "last",
+        "time_unit": "hour",
+        "exclude_start": false,
+        "exclude_end": false
+      },
+      "variable": "CONC",
+      "metrics": [
+        {
+          "type": "auc_metric",
+          "name": "AUC",
+          "stat_display": "{median} ({p5}–{p95})",
+          "method": "linlin"
+        },
+        {
+          "type": "auc_metric",
+          "window": {
+            "start": 0.0,
+            "end": 12.0,
+            "time_unit": "hour",
+            "exclude_start": false,
+            "exclude_end": false
+          },
+          "name": "AUC custom",
+          "stat_display": "{median} ({p5}–{p95})",
+          "method": "linlin"
+        }
+      ],
+      "strata": {
+        "SCENARIO": "all",
+        "ARM": "all"
+      }
+    }
+  ]
+}
