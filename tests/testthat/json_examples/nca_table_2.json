@@ -19,8 +19,8 @@
         }
       ],
       "strata": {
-        "ARM": "all",
-        "SCENARIO": "all"
+        "SCENARIO": "all",
+        "ARM": "all"
       }
     }
   ]

@@ -7,7 +7,7 @@ allStrataLevels <- function() {
 }
 
 getDefaultStrata <- function() {
-  return(c(ARM=allStrataLevels(), SCENARIO=allStrataLevels()))
+  return(c(SCENARIO=allStrataLevels(), ARM=allStrataLevels()))
 }
 
 getEffectiveStratVars <- function(strata, x) {
@@ -56,7 +56,7 @@ setClass(
 #' @param window time window, see \link{TimeWindow}
 #' @param variable default variable which is analysed
 #' @param strata strata levels this analysis refers to, named vector, e.g. c(ARM='1g QD').
-#'  Note, the default strata are c(ARM='all', SCENARIO='all').
+#'  Note, the default strata are c(SCENARIO='all', ARM='all').
 #'  Use 'all' if this analysis refers to all levels for the specified stratification variable.
 #'  By default, a stratification variable that has only 1 level is ignored.
 #' @export
