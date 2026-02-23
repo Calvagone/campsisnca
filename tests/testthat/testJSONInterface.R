@@ -87,3 +87,8 @@ test_that("Import NCA table 3 (default analysis, AUC and AUC custom)", {
   
   expect_equal(imported_table, expected_table)
 })
+
+test_that("Import NCA table 4 (default analysis, custom metric)", {
+  
+
+})

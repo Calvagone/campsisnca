@@ -80,6 +80,9 @@
               },
               {
                 "$ref": "#/$defs/thalf_metric"
+              },
+              {
+                "$ref": "#/$defs/custom_metric"
               }
             ]
           }
@@ -448,6 +451,38 @@
         }
       ]
     },
+    "custom_metric": {
+      "title": "Custom Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "custom_metric"
+            },
+            "categorical": {
+              "type": "boolean",
+              "description": "Whether the custom function returns a boolean or string (categorical) or returns a continuous value (not categorical)."
+            },
+            "custom_function": {
+              "type": "string",
+              "description": "e.g. ~(AUC() %>% iValue(.x, .y)) > 100 or simply ~AUC > 100. See documentation on campsisnca repository."
+            },
+            "input_type": {
+              "$ref": "#/$defs/custom_function_input_type",
+              "description": "Either 'tibble' (the whole simulated output is given) or 'vector' (first vector .x is the TIME vector, second vector .y is the VALUE vector)."
+            }
+          },
+          "required": [
+            "categorical",
+            "custom_function",
+            "input_type"
+          ]
+        }
+      ]
+    },
     "auc_method": {
       "type": "string",
       "enum": [
@@ -505,6 +540,13 @@
         "week",
         "month",
         "year"
+      ]
+    },
+    "custom_function_input_type": {
+      "type": "string",
+      "enum": [
+        "vector",
+        "tibble"
       ]
     },
     "nca_strata": {
