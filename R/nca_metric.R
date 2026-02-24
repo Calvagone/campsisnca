@@ -223,6 +223,18 @@ loadMetricFromJSON <- function(object, json) {
     # Assign type to window element
     json@data$window$type <- "nca_time_window"
   }
+  if (!is.null(json@data$rounding)) {
+    digits <- json@data$rounding$digits
+    mode <- json@data$rounding$mode
+    if (mode == "significant") {
+      json@data$digits <- sprintf("rlang::as_function(~style_sigfig(.x, %s))", as.character(digits))
+    } else if (mode == "decimals") {
+      json@data$digits <- sprintf("%s", as.character(digits))
+    } else {
+      stop("Rounding mode must 'significant' or 'decimals'")
+    }
+    json@data$rounding <- NULL
+  }
   object <- mapJSONPropertiesToS4Slots(object=object, json=json)
   return(setDefaultNameIfNA(object))
 }

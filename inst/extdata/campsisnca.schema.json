@@ -124,6 +124,10 @@
         "stat_display": {
           "type": "string",
           "description": "Statistic display. E.g. '{median} ({p5}–{p95})'."
+        },
+        "rounding": {
+          "$ref": "#/$defs/rounding_options",
+          "description": "Rounding options. See type 'rounding_options'."
         }
       },
       "required": [
@@ -530,6 +534,25 @@
         "end"
       ]
     },
+    "rounding_options": {
+      "title": "Rounding Options",
+      "type": "object",
+      "properties": {
+        "digits": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of decimals or significant figures."
+        },
+        "mode": {
+          "$ref": "#/$defs/rounding_mode",
+          "description": "Rounding mode: decimals or significant figures."
+        }
+      },
+      "required": [
+        "digits",
+        "mode"
+      ]
+    },
     "time_unit": {
       "type": "string",
       "enum": [
@@ -540,6 +563,13 @@
         "week",
         "month",
         "year"
+      ]
+    },
+    "rounding_mode": {
+      "type": "string",
+      "enum": [
+        "decimals",
+        "significant"
       ]
     },
     "custom_function_input_type": {

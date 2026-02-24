@@ -102,3 +102,19 @@ test_that("Import NCA table 4 (default analysis, custom metric)", {
   expect_equal(imported_table, expected_table)
 
 })
+
+test_that("Import NCA table 5 (default analysis, Cmax with rounding options)", {
+  
+  # Import NCA configuration from JSON
+  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_5.json"))
+  
+  analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
+    add(Cmax(name="Cmax 1", stat_display="{median} ({p5}–{p95})", digits=~style_sigfig(.x, 3))) %>%
+    add(Cmax(name="Cmax 2", stat_display="{median} ({p5}–{p95})", digits=1))
+  
+  expected_table <- NCAMetricsTable() %>%
+    add(analysis)
+  
+  expect_equal(imported_table, expected_table)
+  
+})
