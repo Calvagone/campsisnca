@@ -32,9 +32,9 @@ Slot "metrics":
 An object of class "nca_metrics"
 Slot "list":
 [[1]]
-An object of class "auc_metric"
-Slot "method":
-[1] 1
+An object of class "custom_metric"
+Slot "custom_function":
+[1] "rlang::as_function(~iValue(AUC(),.x,.y) > 100)"
 
 Slot "variable":
 [1] NA
@@ -58,7 +58,7 @@ Slot "exclude_end":
 
 
 Slot "name":
-[1] "AUC"
+[1] "Custom"
 
 Slot "unit":
 [1] NA
@@ -67,67 +67,10 @@ Slot "ivalue_tibble":
 [1] FALSE
 
 Slot "categorical":
-[1] FALSE
+[1] TRUE
 
 Slot "stat_display":
-[1] "{median} ({p5}–{p95})"
-
-Slot "digits":
-character(0)
-
-Slot "concentration":
-[1] NA
-
-Slot "individual":
-tableau de données (data frame) avec 0 colonnes et 0 ligne
-
-Slot "summary":
-tableau de données (data frame) avec 0 colonnes et 0 ligne
-
-Slot "summary_pretty":
-tableau de données (data frame) avec 0 colonnes et 0 ligne
-
-
-[[2]]
-An object of class "auc_metric"
-Slot "method":
-[1] 1
-
-Slot "variable":
-[1] NA
-
-Slot "window":
-An object of class "nca_time_window"
-Slot "start":
-[1] 0
-
-Slot "end":
-[1] 12
-
-Slot "time_unit":
-[1] "hour"
-
-Slot "exclude_start":
-[1] FALSE
-
-Slot "exclude_end":
-[1] FALSE
-
-
-Slot "name":
-[1] "AUC custom"
-
-Slot "unit":
-[1] NA
-
-Slot "ivalue_tibble":
-[1] FALSE
-
-Slot "categorical":
-[1] FALSE
-
-Slot "stat_display":
-[1] "{median} ({p5}–{p95})"
+[1] "{p}%"
 
 Slot "digits":
 character(0)

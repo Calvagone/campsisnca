@@ -80,7 +80,7 @@ setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definiti
 })
 
 
-#' @importFrom rlang is_function is_lambda
+#' @importFrom rlang is_function is_formula
 deparseCustomFun <- function(fun) {
   if (rlang::is_function(fun)) {
     retValue <- deparse1Line(fun)
@@ -93,6 +93,33 @@ deparseCustomFun <- function(fun) {
   }
   return(retValue)
 }
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("custom_metric", "json_element"), definition=function(object, json) {
+  type <- json@data$input_type
+  if (type == "vector") {
+    object@ivalue_tibble <- FALSE
+  } else if (type == "tibble") {
+    object@ivalue_tibble <- TRUE
+  } else {
+    stop("input_type must be either 'vector' or 'tibble'")
+  }
+  json@data$input_type <- NULL
+  
+  metric <- loadMetricFromJSON(object=object, json=json)
+  
+  # Process fun
+  metric@custom_function <- sprintf("rlang::as_function(%s)", metric@custom_function)
+  
+  # Auto-replace known NCA metrics
+  metric <- metric %>%
+    replaceAll(pattern=NCAMetrics(), replacement="auto")
+  
+  return(metric)
+})
 
 #_______________________________________________________________________________
 #----                             replaceAll                                ----

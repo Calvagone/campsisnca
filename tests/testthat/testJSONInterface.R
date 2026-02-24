@@ -90,5 +90,15 @@ test_that("Import NCA table 3 (default analysis, AUC and AUC custom)", {
 
 test_that("Import NCA table 4 (default analysis, custom metric)", {
   
+  # Import NCA configuration from JSON
+  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_4.json"))
+  
+  analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
+    add(CustomMetric(fun=~AUC > 100, stat_display="{p}%"))
+  
+  expected_table <- NCAMetricsTable() %>%
+    add(analysis)
+  
+  expect_equal(imported_table, expected_table)
 
 })
