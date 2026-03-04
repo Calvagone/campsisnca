@@ -71,7 +71,9 @@ setDefaultNameIfNA <- function(object) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metric", "data.frame", "character", "numeric"), definition=function(object, x, strat_vars, quantile_type, ...) {
+setMethod("calculate", signature=c("nca_metric", "data.frame", "numeric"), definition=function(object, x, quantile_type, ...) {
+  args <- list(...)
+  strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- iValues(object=object, x=x, strat_vars=strat_vars)
   structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
   object@summary <- structuredObj$summary

@@ -4,31 +4,29 @@
 %   R/nca_metrics_table.R
 \name{calculate}
 \alias{calculate}
-\alias{calculate,nca_metric,data.frame,character,numeric-method}
-\alias{calculate,theoretical_thalf_metric,data.frame,character,numeric-method}
-\alias{calculate,nca_analysis,data.frame,character,numeric-method}
-\alias{calculate,nca_analyses,data.frame,character,numeric-method}
-\alias{calculate,nca_metrics_table,data.frame,character,numeric-method}
+\alias{calculate,nca_metric,data.frame,numeric-method}
+\alias{calculate,theoretical_thalf_metric,data.frame,numeric-method}
+\alias{calculate,nca_analysis,data.frame,numeric-method}
+\alias{calculate,nca_analyses,data.frame,numeric-method}
+\alias{calculate,nca_metrics_table,data.frame,numeric-method}
 \title{Calculate.}
 \usage{
-calculate(object, x, strat_vars = NULL, quantile_type = NULL, ...)
+calculate(object, x, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_metric,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
+\S4method{calculate}{nca_metric,data.frame,numeric}(object, x, quantile_type = NULL, ...)
 
-\S4method{calculate}{theoretical_thalf_metric,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
+\S4method{calculate}{theoretical_thalf_metric,data.frame,numeric}(object, x, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_analysis,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
+\S4method{calculate}{nca_analysis,data.frame,numeric}(object, x, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_analyses,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
+\S4method{calculate}{nca_analyses,data.frame,numeric}(object, x, quantile_type = NULL, ...)
 
-\S4method{calculate}{nca_metrics_table,data.frame,character,numeric}(object, x, strat_vars = NULL, quantile_type = NULL, ...)
+\S4method{calculate}{nca_metrics_table,data.frame,numeric}(object, x, quantile_type = NULL, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
 
 \item{x}{input data for the calculation, data frame}
-
-\item{strat_vars}{stratification variable names}
 
 \item{quantile_type}{type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)}
 
