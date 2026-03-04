@@ -11,6 +11,12 @@
 #' @return dataset subset
 #' @export
 timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE, rebase=FALSE) {
+  if (!is.numeric(x$TIME))
+    stop("TIME must be numeric")
+  
+  if (!is.numeric(min) || !is.numeric(max))
+    stop("min and max must be numeric")
+  
   time_var <- "TIME"
   id_var <- "ID"
   checkNATimes(x, time_var=time_var) 
