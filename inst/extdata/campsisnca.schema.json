@@ -14,6 +14,9 @@
             "$ref": "#/$defs/nca_analysis"
           },
           "description": "List of NCA analyses. For example, one analysis may focus on NCA metrics for day 1, and another on those for day 7."
+        },
+        "tab_options": {
+          "$ref": "#/$defs/gt_tab_options"
         }
       },
       "required": [
@@ -552,6 +555,18 @@
         "digits",
         "mode"
       ]
+    },
+    "gt_tab_options": {
+      "type": "object",
+      "description": "Options passed to gt::tab_options()",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ]
+      }
     },
     "time_unit": {
       "type": "string",

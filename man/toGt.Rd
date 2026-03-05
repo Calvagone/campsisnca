@@ -4,7 +4,7 @@
 \alias{toGt}
 \title{Gtsummary to Gt.}
 \usage{
-toGt(x, subscripts = FALSE, fmt_markdown = FALSE)
+toGt(x, subscripts = FALSE, fmt_markdown = FALSE, tab_options = list())
 }
 \arguments{
 \item{x}{gtsummary table}
@@ -12,6 +12,8 @@ toGt(x, subscripts = FALSE, fmt_markdown = FALSE)
 \item{subscripts}{use subscripts}
 
 \item{fmt_markdown}{transform any markdown-formatted text, logical value. Default is FALSE.}
+
+\item{tab_options}{gt tab options}
 }
 \description{
 Gtsummary to Gt.

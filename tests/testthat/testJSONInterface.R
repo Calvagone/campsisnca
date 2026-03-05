@@ -112,7 +112,7 @@ test_that("Import NCA table 5 (default analysis, Cmax with rounding options)", {
     add(Cmax(name="Cmax 1", stat_display="{median} ({p5}–{p95})", digits=~style_sigfig(.x, 3))) %>%
     add(Cmax(name="Cmax 2", stat_display="{median} ({p5}–{p95})", digits=1))
   
-  expected_table <- NCAMetricsTable() %>%
+  expected_table <- NCAMetricsTable(tab_options=list(table.font.size="14px")) %>%
     add(analysis)
   
   expect_equal(imported_table, expected_table)

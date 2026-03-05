@@ -35,6 +35,9 @@
         "ARM": "all"
       }
     }
-  ]
+  ],
+  "tab_options": {
+    "table.font.size": "14px"
+  }
 }
 

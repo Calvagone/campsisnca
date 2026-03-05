@@ -4,10 +4,12 @@
 \alias{NCAMetricsTable}
 \title{NCA metrics table.}
 \usage{
-NCAMetricsTable(json = NULL)
+NCAMetricsTable(json = NULL, tab_options = list())
 }
 \arguments{
 \item{json}{path to JSON table file or JSON content in string form}
+
+\item{tab_options}{list of options to pass to gt::tab_options}
 }
 \description{
 NCA metrics table.

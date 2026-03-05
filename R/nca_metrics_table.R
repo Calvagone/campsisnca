@@ -9,9 +9,9 @@
 setClass(
   "nca_metrics_table",
   representation(
-    nca_analyses = "nca_analyses"  # NCA analyses
+    nca_analyses = "nca_analyses",  # NCA analyses
+    tab_options = "list"
   ),
-  contains="pmx_list",
   prototype = prototype(nca_analyses=new("nca_analyses"))
 )
 
@@ -19,9 +19,10 @@ setClass(
 #' NCA metrics table.
 #' 
 #' @param json path to JSON table file or JSON content in string form
+#' @param tab_options list of options to pass to gt::tab_options
 #' @export
-NCAMetricsTable <- function(json=NULL) {
-  table <- new("nca_metrics_table")
+NCAMetricsTable <- function(json=NULL, tab_options=list()) {
+  table <- new("nca_metrics_table", tab_options=tab_options)
   if (!is.null(json)) {
     table <- loadFromJSON(object=table, json=json)
   }
@@ -33,6 +34,11 @@ NCAMetricsTable <- function(json=NULL) {
 #_______________________________________________________________________________
 
 setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition = function(object, x) {
+  object@nca_analyses <- object@nca_analyses %>% add(x)
+  return(object)
+})
+
+setMethod("add", signature = c("nca_metrics_table", "list"), definition = function(object, x) {
   object@nca_analyses <- object@nca_analyses %>% add(x)
   return(object)
 })
@@ -155,11 +161,12 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
 #' @param x gtsummary table
 #' @param subscripts use subscripts
 #' @param fmt_markdown transform any markdown-formatted text, logical value. Default is FALSE.
+#' @param tab_options gt tab options
 #' @importFrom gtsummary as_gt
-#' @importFrom gt cells_body fmt_markdown text_transform
+#' @importFrom gt cells_body fmt_markdown tab_options text_transform
 #' @importFrom stringr str_replace_all
 #' @export
-toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE) {
+toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE, tab_options=list()) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
   }
@@ -183,10 +190,17 @@ toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE) {
         }
       )
   }
+  
   if (fmt_markdown) {
     gtTable <- gtTable %>%
       gt::fmt_markdown()
   }
+  
+  if (length(tab_options) > 0) {
+    gtTable %>%
+      do.call(gt::tab_options, c(list(data=gtTable), tab_options))
+  }
+
   return(gtTable)
 }
 
@@ -263,6 +277,9 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
   json <- json@data
   object@nca_analyses@list <- json$nca_analyses %>%
     purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
+  if (!is.null(json$tab_options)) {
+    object@tab_options <- json$tab_options
+  }
   return(object)
 })
 
