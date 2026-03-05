@@ -150,7 +150,7 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
     export(dest=new("gtsummary_type"), init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   
   gtTable <- gtsummaryTable %>%
-    toGt(subscripts=subscripts, ...)
+    toGt(subscripts=subscripts, opts=object@tab_options, ...)
 
   return(gtTable)
 })
@@ -161,12 +161,12 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
 #' @param x gtsummary table
 #' @param subscripts use subscripts
 #' @param fmt_markdown transform any markdown-formatted text, logical value. Default is FALSE.
-#' @param tab_options gt tab options
+#' @param opts gt tab options
 #' @importFrom gtsummary as_gt
 #' @importFrom gt cells_body fmt_markdown tab_options text_transform
 #' @importFrom stringr str_replace_all
 #' @export
-toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE, tab_options=list()) {
+toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE, opts=list()) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
   }
@@ -196,9 +196,12 @@ toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE, tab_options=list()) {
       gt::fmt_markdown()
   }
   
-  if (length(tab_options) > 0) {
-    gtTable %>%
-      do.call(gt::tab_options, c(list(data=gtTable), tab_options))
+  if (length(opts) > 0) {
+    print(opts)
+    gtTable <- do.call(
+      gt::tab_options,
+      c(list(data = gtTable), opts)
+    )
   }
 
   return(gtTable)
