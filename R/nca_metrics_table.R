@@ -48,6 +48,9 @@ NCATable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=NULL) {
     }
     table <- new("nca_metrics_table", tab_options=tab_options, title=title, subtitle=subtitle)
   } else {
+    if (is.list(json)) {
+      json <- JSONElement(json)
+    }
     table <- loadFromJSON(object=new("nca_metrics_table"), json=json)
   }
   return(table)
