@@ -27,7 +27,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
-  table <- NCAMetricsTable()
+  table <- NCATable()
   table <- table %>%
     add(c(ncaD1, ncaD7)) %>%
     campsisnca::calculate(campsis)
@@ -71,7 +71,7 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(c(day1, day7)) %>%
     campsisnca::calculate(campsis_)
 
@@ -95,7 +95,7 @@ test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can
   nca <- NCAAnalysis(variable="Y") %>%
     add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
 
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(nca) %>%
     campsisnca::calculate(campsis %>% mutate(DOSE=1000, TAU=24))
 
@@ -119,7 +119,7 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
   nca <- NCAAnalysis(variable="Y") %>%
     add(c(Thalf(window=TimeWindow(7*24, 10*24))))
 
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(nca) %>%
     campsisnca::calculate(campsis)
 
@@ -154,7 +154,7 @@ test_that("Round your PK metrics (example 5)", {
     add(AUC(name="AUC3")) %>%
     add(AUC(name="AUC4"))
 
-  table <- NCAMetricsTable()
+  table <- NCATable()
   table <- table %>%
     add(c(ncaD1, ncaD7)) %>%
     campsisnca::calculate(campsis)
@@ -201,7 +201,7 @@ test_that("Export custom metrics (example 6)", {
   ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(c(Cmax(), Tmax(), custom1, custom2))
 
-  table <- NCAMetricsTable()
+  table <- NCATable()
   table <- table %>%
     add(c(ncaD1, ncaD7)) %>%
     campsisnca::calculate(campsis)
@@ -228,7 +228,7 @@ test_that("Geometric Mean / Geometric CV (example 7)", {
   nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)")))
 
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(nca) %>%
     campsisnca::calculate(campsis)
 
@@ -267,7 +267,7 @@ test_that("Stats on categorical data with more than 2 levels (example 8)", {
   ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(c(Cmax(), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE)))
 
-  table <- NCAMetricsTable()
+  table <- NCATable()
   table <- table %>%
     add(c(ncaD1, ncaD7)) %>%
     campsisnca::calculate(campsis)
@@ -324,7 +324,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(nca) %>%
     campsisnca::calculate(results)
   
@@ -358,7 +358,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
   
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(ncaArm1) %>%
     add(ncaArm2) %>%
     campsisnca::calculate(results)

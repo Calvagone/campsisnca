@@ -25,7 +25,7 @@ test_that("Dataset 1 - day 1 & day 7", {
   
   expect_equal(nca_d7@metrics %>% getNames(), c("AUC", "Cmax", "tmax", "Ctrough"))
   
-  table <- NCAMetricsTable()  
+  table <- NCATable()  
   table <- table %>% add(c(nca_d1, nca_d7))
   
   # Export to dataframe
@@ -46,7 +46,7 @@ test_that("Dataset 1 - day 1 & day 7 - seed 1 & seed 2", {
   nca_d2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough()))
   
-  table <- NCAMetricsTable() %>%
+  table <- NCATable() %>%
     add(nca_d1) %>%
     add(nca_d2) %>%
     campsisnca::calculate(ds)

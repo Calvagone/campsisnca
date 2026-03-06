@@ -36,6 +36,8 @@
       }
     }
   ],
+  "title": "Table 5 title",
+  "subtitle": "Table 5 subtitle",
   "tab_options": {
     "table.font.size": "14px"
   }

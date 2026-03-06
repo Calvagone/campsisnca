@@ -18,7 +18,7 @@ test_that("Dynamic computation of quantiles works as expected (type=2)", {
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
     campsisnca::calculate(campsis)
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats
@@ -29,7 +29,7 @@ test_that("Dynamic computation of quantiles works as expected (type=2)", {
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
     campsisnca::calculate(campsis)
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats
@@ -43,7 +43,7 @@ test_that("Dynamic computation of quantiles works as expected (type=7)", {
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
     campsisnca::calculate(campsis, quantile_type=7)
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats
@@ -54,7 +54,7 @@ test_that("Dynamic computation of quantiles works as expected (type=7)", {
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
     campsisnca::calculate(campsis, quantile_type=7)
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats

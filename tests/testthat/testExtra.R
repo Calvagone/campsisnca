@@ -22,7 +22,7 @@ test_that("Column names can be non-standard", {
     add(c(AUC(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
     campsisnca::calculate(campsis)
   
-  table <- NCAMetricsTable()
+  table <- NCATable()
   table <- table %>%
     add(nca)
   
@@ -45,7 +45,7 @@ test_that("Statistics can contain line breaks", {
     add(c(AUC(stat_display="{geomean}<BR>({geocv}%)"), Cavg(stat_display="{geomean}<BR>({geocv}%)"))) %>%
     campsisnca::calculate(campsis)
   
-  table <- NCAMetricsTable()
+  table <- NCATable()
   table <- table %>%
     add(nca)
   
@@ -109,7 +109,7 @@ test_that("Summary stats on categorical data only should work as expected", {
     add(c(CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE, stat_display="{p}% ({n}/{N})"))) %>%
     campsisnca::calculate(campsis)
   
-  table <- NCAMetricsTable()  
+  table <- NCATable()  
   table <- table %>%
     add(c(ncaD1, ncaD7))
   
@@ -145,7 +145,7 @@ test_that("Order of metrics when 'individual_wide' is requested should be respec
     add(c(CustomMetric(fun=~Cmax > 15, name="Cmax > 15", unit="%", categorical=TRUE, stat_display="{p}%"))) %>%
     campsisnca::calculate(campsis)
   
-  table <- NCAMetricsTable()  
+  table <- NCATable()  
   table <- table %>%
     add(c(ncaD7))
   

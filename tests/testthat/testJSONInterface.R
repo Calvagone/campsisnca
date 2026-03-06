@@ -18,7 +18,7 @@ test_that("Import time range from JSON", {
 test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_1.json"))
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_1.json"))
 
   analysis1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(ARM="Specific arm")) %>%
     add(AUC()) %>%
@@ -52,7 +52,7 @@ test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
     add(TimeBelowLimit(limit=20)) %>%
     add(Thalf())
   
-  expected_table <- NCAMetricsTable() %>%
+  expected_table <- NCATable() %>%
     add(analysis1) %>%
     add(analysis2)
   
@@ -62,12 +62,12 @@ test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
 test_that("Import NCA table 2 (default analysis, AUC only)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_2.json"))
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_2.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(AUC(stat_display="{median} ({p5}–{p95})"))
   
-  expected_table <- NCAMetricsTable() %>%
+  expected_table <- NCATable() %>%
     add(analysis)
   
   expect_equal(imported_table, expected_table)
@@ -76,13 +76,13 @@ test_that("Import NCA table 2 (default analysis, AUC only)", {
 test_that("Import NCA table 3 (default analysis, AUC and AUC custom)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_3.json"))
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_3.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(AUC(stat_display="{median} ({p5}–{p95})")) %>%
     add(AUC(window=TimeWindow(0, 12), name="AUC custom", stat_display="{median} ({p5}–{p95})"))
   
-  expected_table <- NCAMetricsTable() %>%
+  expected_table <- NCATable() %>%
     add(analysis)
   
   expect_equal(imported_table, expected_table)
@@ -91,12 +91,12 @@ test_that("Import NCA table 3 (default analysis, AUC and AUC custom)", {
 test_that("Import NCA table 4 (default analysis, custom metric)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_4.json"))
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_4.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(CustomMetric(fun=~AUC > 100, stat_display="{p}%", categorical=TRUE))
   
-  expected_table <- NCAMetricsTable() %>%
+  expected_table <- NCATable() %>%
     add(analysis)
   
   expect_equal(imported_table, expected_table)
@@ -106,13 +106,13 @@ test_that("Import NCA table 4 (default analysis, custom metric)", {
 test_that("Import NCA table 5 (default analysis, Cmax with rounding options)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCAMetricsTable(json=file.path(testFolder, "json_examples", "nca_table_5.json"))
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_5.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(Cmax(name="Cmax 1", stat_display="{median} ({p5}–{p95})", digits=~style_sigfig(.x, 3))) %>%
     add(Cmax(name="Cmax 2", stat_display="{median} ({p5}–{p95})", digits=1))
   
-  expected_table <- NCAMetricsTable(tab_options=list(table.font.size="14px")) %>%
+  expected_table <- NCATable(title="Table 5 title", subtitle="Table 5 subtitle", tab_options=list(table.font.size="14px")) %>%
     add(analysis)
   
   expect_equal(imported_table, expected_table)

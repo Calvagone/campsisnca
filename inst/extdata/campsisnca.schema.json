@@ -13,10 +13,19 @@
           "items": {
             "$ref": "#/$defs/nca_analysis"
           },
-          "description": "List of NCA analyses. For example, one analysis may focus on NCA metrics for day 1, and another on those for day 7."
+          "description": "List of NCA analyses. For example, one analysis could focus on NCA metrics from day 1, and another on those from day 7."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of this table (optional)."
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Subtitle of this table (optional)."
         },
         "tab_options": {
-          "$ref": "#/$defs/gt_tab_options"
+          "$ref": "#/$defs/gt_tab_options",
+          "description": "Table options that will be passed to gt when the table is rendered."
         }
       },
       "required": [

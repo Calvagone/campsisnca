@@ -9,22 +9,46 @@
 setClass(
   "nca_metrics_table",
   representation(
+    title = "character",
+    subtitle = "character",
     nca_analyses = "nca_analyses",  # NCA analyses
     tab_options = "list"
   ),
-  prototype = prototype(nca_analyses=new("nca_analyses"))
+  prototype = prototype(nca_analyses=new("nca_analyses"), title=NA_character_, subtitle=NA_character_)
 )
 
 #' 
-#' NCA metrics table.
+#' NCA metrics table (deprecated).
 #' 
-#' @param json path to JSON table file or JSON content in string form
+#' @param title table title, optional character value
+#' @param subtitle table subtitle, optional character value
 #' @param tab_options list of options to pass to gt::tab_options
+#' @param json path to JSON table file or JSON content in string form
 #' @export
-NCAMetricsTable <- function(json=NULL, tab_options=list()) {
-  table <- new("nca_metrics_table", tab_options=tab_options)
-  if (!is.null(json)) {
-    table <- loadFromJSON(object=table, json=json)
+NCAMetricsTable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=NULL) {
+  .Deprecated("NCATable")
+  return(NCATable(title=title, subtitle=subtitle, tab_options=tab_options, json=json))
+}
+
+#' 
+#' NCA table.
+#' 
+#' @param title table title, optional character value
+#' @param subtitle table subtitle, optional character value
+#' @param tab_options list of options to pass to gt::tab_options
+#' @param json path to JSON table file or JSON content in string form
+#' @export
+NCATable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=NULL) {
+  if (is.null(json)) {
+    if (is.null(title)) {
+      title = NA_character_
+    }
+    if (is.null(subtitle)) {
+      subtitle = NA_character_
+    }
+    table <- new("nca_metrics_table", tab_options=tab_options, title=title, subtitle=subtitle)
+  } else {
+    table <- loadFromJSON(object=new("nca_metrics_table"), json=json)
   }
   return(table)
 }
@@ -150,7 +174,7 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
     export(dest=new("gtsummary_type"), init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
   
   gtTable <- gtsummaryTable %>%
-    toGt(subscripts=subscripts, opts=object@tab_options, ...)
+    toGt(subscripts=subscripts, title=object@title, subtitle=object@subtitle, opts=object@tab_options, ...)
 
   return(gtTable)
 })
@@ -159,6 +183,8 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
 #' Gtsummary to Gt.
 #' 
 #' @param x gtsummary table
+#' @param title table title
+#' @param subtitle table subtitle
 #' @param subscripts use subscripts
 #' @param fmt_markdown transform any markdown-formatted text, logical value. Default is FALSE.
 #' @param opts gt tab options
@@ -166,7 +192,7 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
 #' @importFrom gt cells_body fmt_markdown tab_options text_transform
 #' @importFrom stringr str_replace_all
 #' @export
-toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE, opts=list()) {
+toGt <- function(x, title=NULL, subtitle=NULL, opts=list(), subscripts=FALSE, fmt_markdown=FALSE) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
   }
@@ -202,6 +228,10 @@ toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE, opts=list()) {
       gt::tab_options,
       c(list(data = gtTable), opts)
     )
+  }
+  if (!is.null(title) && !is.na(title) && title != "") {
+    gtTable <- gtTable %>%
+      gt::tab_header(title=title, subtitle=subtitle)
   }
 
   return(gtTable)
@@ -280,9 +310,20 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
   json <- json@data
   object@nca_analyses@list <- json$nca_analyses %>%
     purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
+  
+  # Extract possible tab options
   if (!is.null(json$tab_options)) {
     object@tab_options <- json$tab_options
   }
+  
+  # Extract title and subtitle
+  if (!is.null(json$title)) {
+    object@title <- json$title
+  }
+  if (!is.null(json$subtitle)) {
+    object@subtitle <- json$subtitle
+  }
+  
   return(object)
 })
 

@@ -71,7 +71,7 @@ These 2 metrics may be imported into a metrics table object, as follows.
 Use the `calculate` method to calculate the metrics in the table.
 
 ``` r
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
 ```
@@ -178,7 +178,7 @@ day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata
 day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>% 
   add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(c(day1, day7)) %>%
   calculate(campsis_)
 
@@ -300,7 +300,7 @@ N = 103</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 nca <- NCAAnalysis(variable="Y") %>%
   add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
 
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis %>% mutate(DOSE=1000, TAU=24))
 
@@ -337,7 +337,7 @@ table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
 nca <- NCAAnalysis(variable="Y") %>%
   add(c(Thalf(window=TimeWindow(7*24, 10*24))))
 
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis)
 
@@ -384,7 +384,7 @@ ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>
   add(AUC(name="AUC3")) %>%
   add(AUC(name="AUC4"))
 
-table <- NCAMetricsTable()  
+table <- NCATable()  
 table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
@@ -446,7 +446,7 @@ ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
 ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
   add(c(Cmax(), Tmax(), custom1, custom2, custom3))
 
-table <- NCAMetricsTable()  
+table <- NCATable()  
 table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
@@ -549,7 +549,7 @@ N = 200</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)")))
 
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(nca) %>%
     calculate(campsis)
   
@@ -604,7 +604,7 @@ ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>
   add(Cmax()) %>%
   add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
 
-table <- NCAMetricsTable()  
+table <- NCATable()  
 table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
@@ -670,7 +670,7 @@ nca <- NCAAnalysis(window=TimeWindow(0, 24), variable="Y") %>%
   add(TimeAboveLimit(limit=10, unit="h", stat_display="{mean}")) %>%
   add(TimeBelowLimit(limit=10, unit="h", stat_display="{mean}"))
 
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis %>% filter(ID %in% (1:10)))
   
@@ -767,7 +767,7 @@ nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %
   add(Ctrough(unit="ng/mL")) %>%
   add(Thalf(unit="h", window=TimeWindow(200, "last"))) # Thalf will be estimated by dosing a linear regression on the range [200, 'last']
   
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(nca) %>%
   calculate(results)
 
@@ -861,7 +861,7 @@ ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156,
   add(Ctrough(unit="ng/mL")) %>%
   add(Thalf(unit="h", window=TimeWindow(200, "last")))
 
-table <- NCAMetricsTable() %>%
+table <- NCATable() %>%
   add(ncaArm1) %>%
   add(ncaArm2) %>%
   calculate(results)
