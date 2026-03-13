@@ -4,31 +4,31 @@
 %   R/nca_metrics_table.R
 \name{calculate}
 \alias{calculate}
-\alias{calculate,nca_metric,data.frame,numeric-method}
-\alias{calculate,theoretical_thalf_metric,data.frame,numeric-method}
-\alias{calculate,nca_analysis,data.frame,numeric-method}
-\alias{calculate,nca_analyses,data.frame,numeric-method}
-\alias{calculate,nca_metrics_table,data.frame,numeric-method}
+\alias{calculate,nca_metric,data.frame,nca_options-method}
+\alias{calculate,theoretical_thalf_metric,data.frame,nca_options-method}
+\alias{calculate,nca_analysis,data.frame,nca_options-method}
+\alias{calculate,nca_analyses,data.frame,nca_options-method}
+\alias{calculate,nca_metrics_table,data.frame,nca_options-method}
 \title{Calculate.}
 \usage{
-calculate(object, x, quantile_type = NULL, ...)
+calculate(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_metric,data.frame,numeric}(object, x, quantile_type = NULL, ...)
+\S4method{calculate}{nca_metric,data.frame,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{theoretical_thalf_metric,data.frame,numeric}(object, x, quantile_type = NULL, ...)
+\S4method{calculate}{theoretical_thalf_metric,data.frame,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_analysis,data.frame,numeric}(object, x, quantile_type = NULL, ...)
+\S4method{calculate}{nca_analysis,data.frame,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_analyses,data.frame,numeric}(object, x, quantile_type = NULL, ...)
+\S4method{calculate}{nca_analyses,data.frame,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_metrics_table,data.frame,numeric}(object, x, quantile_type = NULL, ...)
+\S4method{calculate}{nca_metrics_table,data.frame,nca_options}(object, x, options = NULL, ...)
 }
 \arguments{
 \item{object}{object (PK metric) that needs to be calculated}
 
 \item{x}{input data for the calculation, data frame}
 
-\item{quantile_type}{type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)}
+\item{options}{NCA options}
 
 \item{...}{extra arguments}
 }

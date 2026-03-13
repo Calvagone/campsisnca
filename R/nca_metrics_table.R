@@ -75,9 +75,9 @@ setMethod("add", signature = c("nca_metrics_table", "list"), definition = functi
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "numeric"), definition=function(object, x, quantile_type, ...) {
+setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
   object@nca_analyses <- object@nca_analyses %>%
-    calculate(x=x, quantile_type=quantile_type, ...)
+    calculate(x=x, options=options, ...)
   return(object)  
 })
 

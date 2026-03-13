@@ -41,7 +41,7 @@ test_that("Dynamic computation of quantiles works as expected (type=7)", {
   
   nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
-    campsisnca::calculate(campsis, quantile_type=7)
+    campsisnca::calculate(campsis, NCAOptions(quantile_type=7))
   
   prettyString <- NCATable() %>%
     add(nca) %>%
@@ -52,7 +52,7 @@ test_that("Dynamic computation of quantiles works as expected (type=7)", {
   
   nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
-    campsisnca::calculate(campsis, quantile_type=7)
+    campsisnca::calculate(campsis, NCAOptions(quantile_type=7))
   
   prettyString <- NCATable() %>%
     add(nca) %>%

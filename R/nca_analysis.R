@@ -106,7 +106,7 @@ setMethod("getUnit", signature=c("nca_analysis", "character"), definition=functi
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_analysis", "data.frame", "numeric"), definition=function(object, x, quantile_type, ...) {
+setMethod("calculate", signature=c("nca_analysis", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
   # Effective stratification variables based on strata and x
   object@effective_strat_vars <- getEffectiveStratVars(strata=object@strata, x=x)
   
@@ -132,7 +132,7 @@ setMethod("calculate", signature=c("nca_analysis", "data.frame", "numeric"), def
       .x@window <- object@window
     }
     
-    return(.x %>% calculate(x=x_reduced, quantile_type=quantile_type, strat_vars=object@effective_strat_vars, ...))
+    return(.x %>% calculate(x=x_reduced, options=options, strat_vars=object@effective_strat_vars, ...))
   })
   return(object)    
 })

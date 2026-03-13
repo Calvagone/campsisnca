@@ -162,7 +162,7 @@ setMethod("getDefaultName", signature=c("theoretical_thalf_metric"), definition=
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "numeric"), definition=function(object, x, quantile_type, ...) {
+setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
   subtype <- object@subtype
 
   if (subtype == "1cpt") {
@@ -186,7 +186,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "data.frame", "nu
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- ind
-  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
+  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
   object@summary_pretty <- structuredObj$summary_pretty
   return(object)

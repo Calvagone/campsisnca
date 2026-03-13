@@ -23,7 +23,7 @@ setClass(
   "nca_metric",
   representation(
     variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
-    window = "nca_time_window",    # time range for filtering data
+    window = "nca_time_window",   # time range for filtering data
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
     ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
@@ -71,11 +71,11 @@ setDefaultNameIfNA <- function(object) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metric", "data.frame", "numeric"), definition=function(object, x, quantile_type, ...) {
+setMethod("calculate", signature=c("nca_metric", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- iValues(object=object, x=x, strat_vars=strat_vars)
-  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=quantile_type)
+  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
   object@summary_pretty <- structuredObj$summary_pretty
   return(object)    

@@ -26,18 +26,18 @@ setGeneric("applyTimeWindow", function(x, window, ...) {
 #' 
 #' @param object object (PK metric) that needs to be calculated
 #' @param x input data for the calculation, data frame
-#' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
+#' @param options NCA options
 #' @param ... extra arguments
 #' @return updated object
 #' @export
 #' @rdname calculate
-calculate <- function(object, x, quantile_type, ...) {
+calculate <- function(object, x, options, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("calculate", function(object, x, quantile_type=NULL, ...) {
-  if (is.null(quantile_type)) {
-    quantile_type <- 2
+setGeneric("calculate", function(object, x, options=NULL, ...) {
+  if (is.null(options)) {
+    options <- NCAOptions()
   }
   standardGeneric("calculate")
 })

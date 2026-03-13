@@ -19,8 +19,8 @@ setClass(
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_analyses", "data.frame", "numeric"), definition=function(object, x, quantile_type, ...) {
+setMethod("calculate", signature=c("nca_analyses", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
   object@list <- object@list %>%
-    purrr::map(~.x %>% calculate(x=x, quantile_type=quantile_type, ...))
+    purrr::map(~.x %>% calculate(x=x, options=options, ...))
   return(object)
 })
