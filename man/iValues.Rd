@@ -5,14 +5,16 @@
 \alias{iValues,nca_metric-method}
 \title{Compute the individual values on a simulation output.}
 \usage{
-iValues(object, x, strat_vars, ...)
+iValues(object, x, options, strat_vars, ...)
 
-\S4method{iValues}{nca_metric}(object, x, strat_vars, ...)
+\S4method{iValues}{nca_metric}(object, x, options, strat_vars, ...)
 }
 \arguments{
 \item{object}{PK metric}
 
 \item{x}{input data for the calculation, data frame}
+
+\item{options}{NCA options}
 
 \item{strat_vars}{stratification variable names}
 

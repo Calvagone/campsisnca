@@ -74,7 +74,7 @@ setDefaultNameIfNA <- function(object) {
 setMethod("calculate", signature=c("nca_metric", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
-  object@individual <- iValues(object=object, x=x, strat_vars=strat_vars)
+  object@individual <- iValues(object=object, x=x, options=options, strat_vars=strat_vars)
   structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
   object@summary_pretty <- structuredObj$summary_pretty
@@ -184,7 +184,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 #' @importFrom dplyr group_by summarise transmute ungroup
 #' @importFrom tibble tibble
 #' @importFrom purrr map_df
-setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, strat_vars, ...) {
+setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, options, strat_vars, ...) {
   variable <- object@variable
   if (length(variable)==0) {
     stop(sprintf("No variable provided for metric '%s'", x %>% getName()))
@@ -192,7 +192,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, s
   x <- x %>% 
     standardise(variable=variable, strat_vars=strat_vars)
   x <- x %>%
-    applyTimeWindow(object@window)
+    applyTimeWindow(window=object@window, data_time_unit=options@data_time_unit)
 
   if (object@ivalue_tibble) {
     retValue <- x %>%

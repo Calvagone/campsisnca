@@ -221,12 +221,12 @@ getCategory <- function(.x, .y) {
 # getCategory <- ~case_when(Cmax < 10 ~ "(1) < 10 ng/mL", Cmax >= 10 & Cmax <= 15 ~ "(2) 10-15 ng/mL", Cmax > 15 ~ "(3) > 15 ng/mL")
 
   # Day 1
-ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 1, time_unit="day"), variable="Y") %>%
   add(Cmax(unit="ng/mL")) %>%
   add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
   
 # Day 7 
-ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(6, 7, time_unit="day"), variable="Y") %>%
   add(Cmax()) %>%
   add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
 

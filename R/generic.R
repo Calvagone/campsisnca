@@ -6,15 +6,16 @@
 #' 
 #' @param x input data for the calculation, data frame
 #' @param window time window
+#' @param data_time_unit time unit of TIME column in data (x argument)
 #' @param ... extra arguments
 #' @return updated object
 #' @export
 #' @rdname applyTimeWindow
-applyTimeWindow <- function(x, window, ...) {
+applyTimeWindow <- function(x, window, data_time_unit, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("applyTimeWindow", function(x, window, ...) {
+setGeneric("applyTimeWindow", function(x, window, data_time_unit, ...) {
   standardGeneric("applyTimeWindow")
 })
 
@@ -93,16 +94,17 @@ setGeneric("iValueTbl", function(object, data, ...) {
 #' 
 #' @param object PK metric
 #' @param x input data for the calculation, data frame
+#' @param options NCA options
 #' @param strat_vars stratification variable names
 #' @param ... extra arguments
 #' @return individual values
 #' @export
 #' @rdname iValues
-iValues <- function(object, x, strat_vars, ...) {
+iValues <- function(object, x, options, strat_vars, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("iValues", function(object, x, strat_vars, ...) {
+setGeneric("iValues", function(object, x, options, strat_vars, ...) {
   standardGeneric("iValues")
 })
 

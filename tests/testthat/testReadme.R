@@ -260,11 +260,11 @@ test_that("Stats on categorical data with more than 2 levels (example 8)", {
   }
 
   # Day 1
-  ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+  ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 1, time_unit="day"), variable="Y") %>%
     add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE)))
 
   # Day 7
-  ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+  ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(6, 7, time_unit="day"), variable="Y") %>%
     add(c(Cmax(), CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE)))
 
   table <- NCATable()
