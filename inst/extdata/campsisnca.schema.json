@@ -23,9 +23,13 @@
           "type": "string",
           "description": "Subtitle of this table (optional)."
         },
+        "nca_options": {
+          "$ref": "#/$defs/nca_options",
+          "description": "NCA options that will be passed to calculate when NCA metrics are computed."
+        },
         "tab_options": {
           "$ref": "#/$defs/gt_tab_options",
-          "description": "Table options that will be passed to gt when the table is rendered."
+          "description": "(Gt)-table options that will be passed to gt when the table is rendered."
         }
       },
       "required": [
@@ -576,6 +580,26 @@
           "null"
         ]
       }
+    },
+    "nca_options": {
+      "type": "object",
+      "description": "Options controlling NCA calculations.",
+      "properties": {
+        "quantile_type": {
+          "type": "integer",
+          "description": "Type of quantile algorithm used for quantile computation."
+        },
+        "data_time_unit": {
+          "$ref": "#/$defs/time_unit",
+          "description": "Unit of time used in the simulated data."
+        },
+        "table_time_unit": {
+          "$ref": "#/$defs/time_unit",
+          "description": "Unit of time to use when representing the metrics in the table (AUC, Time above/below, etc)."
+        }
+      },
+      "required": [
+      ]
     },
     "time_unit": {
       "type": "string",

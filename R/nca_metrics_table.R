@@ -12,6 +12,7 @@ setClass(
     title = "character",
     subtitle = "character",
     nca_analyses = "nca_analyses",  # NCA analyses
+    nca_options = "list",
     tab_options = "list"
   ),
   prototype = prototype(nca_analyses=new("nca_analyses"), title=NA_character_, subtitle=NA_character_)
