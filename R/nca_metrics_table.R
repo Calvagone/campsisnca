@@ -9,14 +9,20 @@
 setClass(
   "nca_metrics_table",
   representation(
+    nca_analyses = "nca_analyses",  # NCA analyses
     title = "character",
     subtitle = "character",
-    nca_analyses = "nca_analyses",  # NCA analyses
+    combine_with = "character",
+    show_all_levels = "logical",
     nca_options = "nca_options",
     tab_options = "list"
   ),
-  prototype = prototype(nca_analyses=new("nca_analyses"), title=NA_character_,
-                        subtitle=NA_character_, nca_options=NCAOptions(),
+  prototype = prototype(nca_analyses=new("nca_analyses"),
+                        title=NA_character_,
+                        subtitle=NA_character_,
+                        combine_with="tbl_stack",
+                        show_all_levels=FALSE,
+                        nca_options=NCAOptions(),
                         tab_options=list())
 )
 
@@ -25,14 +31,17 @@ setClass(
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
+#' @param combine_with either 'tbl_stack' or 'tbl_merge'
+#' @param show_all_levels show all dichotomous levels in table
 #' @param nca_options NCA options, see ?NCAOptions
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
-NCAMetricsTable <- function(title=NULL, subtitle=NULL, nca_options=NCAOptions(), tab_options=list(), json=NULL) {
+NCAMetricsTable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack", show_all_levels=FALSE, nca_options=NCAOptions(), tab_options=list(), json=NULL) {
   .Deprecated("NCATable")
-  return(NCATable(title=title, subtitle=subtitle, nca_options=nca_options,
-                  tab_options=tab_options, json=json))
+  return(NCATable(title=title, subtitle=subtitle,
+                  combine_with=combine_with, show_all_levels=show_all_levels,
+                  nca_options=nca_options, tab_options=tab_options, json=json))
 }
 
 #' 
@@ -40,11 +49,13 @@ NCAMetricsTable <- function(title=NULL, subtitle=NULL, nca_options=NCAOptions(),
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
+#' @param combine_with either 'tbl_stack' or 'tbl_merge'
+#' @param show_all_levels show all dichotomous levels in table
 #' @param nca_options NCA options, see ?NCAOptions
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
-NCATable <- function(title=NULL, subtitle=NULL, nca_options=NCAOptions(), tab_options=list(), json=NULL) {
+NCATable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack", show_all_levels=FALSE, nca_options=NCAOptions(), tab_options=list(), json=NULL) {
   if (is.null(json)) {
     if (is.null(title)) {
       title = NA_character_
@@ -52,8 +63,9 @@ NCATable <- function(title=NULL, subtitle=NULL, nca_options=NCAOptions(), tab_op
     if (is.null(subtitle)) {
       subtitle = NA_character_
     }
-    table <- new("nca_metrics_table", nca_options=nca_options, tab_options=tab_options,
-                 title=title, subtitle=subtitle)
+    table <- new("nca_metrics_table", title=title, subtitle=subtitle,
+                 combine_with=combine_with, show_all_levels=show_all_levels,
+                 nca_options=nca_options, tab_options=tab_options)
   } else {
     if (is.list(json)) {
       json <- JSONElement(json)
@@ -343,6 +355,14 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
   }
   if (!is.null(json$subtitle)) {
     object@subtitle <- json$subtitle
+  }
+  
+  # Extract combine_with and show_all_levels
+  if (!is.null(json$combine_with)) {
+    object@combine_with <- json$combine_with
+  }
+  if (!is.null(json$show_all_levels)) {
+    object@show_all_levels <- json$show_all_levels
   }
   
   return(object)

@@ -23,6 +23,18 @@
           "type": "string",
           "description": "Subtitle of this table (optional)."
         },
+        "combine_with": {
+          "type": "string",
+          "enum": [
+            "tbl_stack",
+            "tbl_merge"
+          ],
+          "description": "This field will inform gtsummary when merging the tables from different analyses."
+        },
+        "show_all_levels": {
+          "type": "boolean",
+          "description": "This field will inform gtsummary if all dichotomous levels must be shown in the table (e.g. for a true/false binary variable, only true is shown)"
+        },
         "nca_options": {
           "$ref": "#/$defs/nca_options",
           "description": "NCA options that will be passed to calculate when NCA metrics are computed."

@@ -132,3 +132,17 @@ test_that("Import NCA table with proper time units", {
   
   expect_equal(imported_table, expected_table)
 })
+
+test_that("Import NCA table with 'combine_with' and 'show_all_levels' fields set", {
+  
+  # Import NCA configuration from JSON
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_7.json"))
+  
+  analysis <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+    add(AUC())
+  
+  expected_table <- NCATable(combine_with="tbl_merge", show_all_levels=TRUE) %>%
+    add(analysis)
+  
+  expect_equal(imported_table, expected_table)
+})

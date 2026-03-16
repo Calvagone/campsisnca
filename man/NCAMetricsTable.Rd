@@ -7,6 +7,8 @@
 NCAMetricsTable(
   title = NULL,
   subtitle = NULL,
+  combine_with = "tbl_stack",
+  show_all_levels = FALSE,
   nca_options = NCAOptions(),
   tab_options = list(),
   json = NULL
@@ -16,6 +18,10 @@ NCAMetricsTable(
 \item{title}{table title, optional character value}
 
 \item{subtitle}{table subtitle, optional character value}
+
+\item{combine_with}{either 'tbl_stack' or 'tbl_merge'}
+
+\item{show_all_levels}{show all dichotomous levels in table}
 
 \item{nca_options}{NCA options, see ?NCAOptions}
 

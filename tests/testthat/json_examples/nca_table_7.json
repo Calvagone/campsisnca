@@ -1,0 +1,19 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Day 1",
+      "window": {
+        "start": 0,
+        "end": 24
+      },
+      "variable": "Y",
+      "metrics": [
+        {
+          "type": "auc_metric"
+        }
+      ]
+    }
+  ],
+  "combine_with" : "tbl_merge",
+  "show_all_levels" : true
+}
