@@ -4,12 +4,18 @@
 \alias{NCAOptions}
 \title{NCA options used for calculation of metrics.}
 \usage{
-NCAOptions(quantile_type = 2L, data_time_unit = "hour")
+NCAOptions(
+  quantile_type = 2L,
+  data_time_unit = "hour",
+  table_time_unit = "hour"
+)
 }
 \arguments{
 \item{quantile_type}{type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)}
 
 \item{data_time_unit}{time unit of the data given to 'calculate'}
+
+\item{table_time_unit}{time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)}
 }
 \description{
 NCA options used for calculation of metrics.

@@ -189,10 +189,16 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, o
   if (length(variable)==0) {
     stop(sprintf("No variable provided for metric '%s'", x %>% getName()))
   }
+  # Standardise data frame
   x <- x %>% 
     standardise(variable=variable, strat_vars=strat_vars)
+  
+  # Apply time window
   x <- x %>%
     applyTimeWindow(window=object@window, data_time_unit=options@data_time_unit)
+  
+  # Convert to requested time unit
+  x$TIME <- convertTime(x$TIME, from=options@data_time_unit, to=options@table_time_unit)
 
   if (object@ivalue_tibble) {
     retValue <- x %>%

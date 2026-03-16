@@ -38,7 +38,7 @@ calculate <- function(object, x, options, ...) {
 
 setGeneric("calculate", function(object, x, options=NULL, ...) {
   if (is.null(options)) {
-    options <- NCAOptions()
+    options <- UndefinedNCAOptions()
   }
   standardGeneric("calculate")
 })

@@ -7,6 +7,7 @@
 NCAMetricsTable(
   title = NULL,
   subtitle = NULL,
+  nca_options = NCAOptions(),
   tab_options = list(),
   json = NULL
 )
@@ -15,6 +16,8 @@ NCAMetricsTable(
 \item{title}{table title, optional character value}
 
 \item{subtitle}{table subtitle, optional character value}
+
+\item{nca_options}{NCA options, see ?NCAOptions}
 
 \item{tab_options}{list of options to pass to gt::tab_options}
 

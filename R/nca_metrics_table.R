@@ -12,10 +12,12 @@ setClass(
     title = "character",
     subtitle = "character",
     nca_analyses = "nca_analyses",  # NCA analyses
-    nca_options = "list",
+    nca_options = "nca_options",
     tab_options = "list"
   ),
-  prototype = prototype(nca_analyses=new("nca_analyses"), title=NA_character_, subtitle=NA_character_)
+  prototype = prototype(nca_analyses=new("nca_analyses"), title=NA_character_,
+                        subtitle=NA_character_, nca_options=NCAOptions(),
+                        tab_options=list())
 )
 
 #' 
@@ -23,12 +25,14 @@ setClass(
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
+#' @param nca_options NCA options, see ?NCAOptions
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
-NCAMetricsTable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=NULL) {
+NCAMetricsTable <- function(title=NULL, subtitle=NULL, nca_options=NCAOptions(), tab_options=list(), json=NULL) {
   .Deprecated("NCATable")
-  return(NCATable(title=title, subtitle=subtitle, tab_options=tab_options, json=json))
+  return(NCATable(title=title, subtitle=subtitle, nca_options=nca_options,
+                  tab_options=tab_options, json=json))
 }
 
 #' 
@@ -36,10 +40,11 @@ NCAMetricsTable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
+#' @param nca_options NCA options, see ?NCAOptions
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
-NCATable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=NULL) {
+NCATable <- function(title=NULL, subtitle=NULL, nca_options=NCAOptions(), tab_options=list(), json=NULL) {
   if (is.null(json)) {
     if (is.null(title)) {
       title = NA_character_
@@ -47,7 +52,8 @@ NCATable <- function(title=NULL, subtitle=NULL, tab_options=list(), json=NULL) {
     if (is.null(subtitle)) {
       subtitle = NA_character_
     }
-    table <- new("nca_metrics_table", tab_options=tab_options, title=title, subtitle=subtitle)
+    table <- new("nca_metrics_table", nca_options=nca_options, tab_options=tab_options,
+                 title=title, subtitle=subtitle)
   } else {
     if (is.list(json)) {
       json <- JSONElement(json)
@@ -77,8 +83,14 @@ setMethod("add", signature = c("nca_metrics_table", "list"), definition = functi
 
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
+  if (is(options, "undefined_nca_options")) {
+    options_ <- object@nca_options # Use embedded NCA options
+  } else {
+    options_ <- options # Use external NCA options
+  }
+  
   object@nca_analyses <- object@nca_analyses %>%
-    calculate(x=x, options=options, ...)
+    calculate(x=x, options=options_, ...)
   return(object)  
 })
 
@@ -318,6 +330,11 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
   # Extract possible tab options
   if (!is.null(json$tab_options)) {
     object@tab_options <- json$tab_options
+  }
+  
+  # Extract possible NCA options
+  if (!is.null(json$nca_options)) {
+    object@nca_options <- loadFromJSON(NCAOptions(), JSONElement(json$nca_options))
   }
   
   # Extract title and subtitle

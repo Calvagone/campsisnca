@@ -194,3 +194,22 @@ test_that("Method statDisplayString works as expected on categorical data when d
   # Extra test, only stat 'p' was computed
   expect_equal(unique(custom@summary$stat), "p")
 })
+
+test_that("Time unit of AUC can be customised", {
+  
+  nca <- NCAAnalysis(variable="Y") %>%
+    add(AUC(stat_display="{median}", digits=1))
+  
+  median_hour <- NCATable() %>%
+    add(nca) %>%
+    campsisnca::calculate(campsis) %>%
+    export(dest="dataframe", type="summary_pretty")
+  
+  median_day <- NCATable(nca_options=NCAOptions(table_time_unit="day")) %>%
+    add(nca) %>%
+    campsisnca::calculate(campsis) %>%
+    export(dest="dataframe", type="summary_pretty")
+  
+  expect_equal(median_hour$summary_stats, "921.5")
+  expect_equal(median_day$summary_stats, "38.4")
+})

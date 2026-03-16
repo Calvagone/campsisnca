@@ -1,0 +1,21 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Day 1",
+      "window": {
+        "start": 0,
+        "end": 24
+      },
+      "variable": "Y",
+      "metrics": [
+        {
+          "type": "auc_metric"
+        }
+      ]
+    }
+  ],
+  "nca_options" : {
+    "data_time_unit": "hour",
+    "table_time_unit": "day"
+  }
+}

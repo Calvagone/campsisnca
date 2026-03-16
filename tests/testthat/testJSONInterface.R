@@ -118,3 +118,17 @@ test_that("Import NCA table 5 (default analysis, Cmax with rounding options)", {
   expect_equal(imported_table, expected_table)
   
 })
+
+test_that("Import NCA table with proper time units", {
+  
+  # Import NCA configuration from JSON
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_6.json"))
+  
+  analysis <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+    add(AUC())
+  
+  expected_table <- NCATable(nca_options=NCAOptions(data_time_unit="hour", table_time_unit="day")) %>%
+    add(analysis)
+  
+  expect_equal(imported_table, expected_table)
+})
