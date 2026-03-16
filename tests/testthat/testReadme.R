@@ -51,7 +51,7 @@ test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {
   outputRegressionTest(data=summary_pretty, file=getRefFile("example1_summary_pretty.csv"))
   outputRegressionTest(data=individual, file=getRefFile("example1_individual.csv"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   
   individual <- table %>%
     export(dest="dataframe", type="individual_wide") %>%
@@ -86,7 +86,7 @@ test_that("PK metrics at Day 1 and Day 7 for different body weight ranges (examp
   outputRegressionTest(data=summary %>% dplyr::arrange(Scenario), file=getRefFile("example2_summary.csv"))
   outputRegressionTest(data=individual, file=getRefFile("example2_individual.csv"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example2.html"))
 })
 
@@ -110,7 +110,7 @@ test_that("campsisnca::calculate 2-compartment half-life metrics (example 3) can
   outputRegressionTest(data=summary, file=getRefFile("example3_summary.csv"))
   outputRegressionTest(data=individual, file=getRefFile("example3_individual.csv"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example3.html"))
 })
 
@@ -134,7 +134,7 @@ test_that("Compute terminal half-live based on data (example 4) can be reproduce
   outputRegressionTest(data=summary, file=getRefFile("example4_summary.csv"))
   outputRegressionTest(data=individual, file=getRefFile("example4_individual.csv"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example4.html"))
 })
 
@@ -183,7 +183,7 @@ test_that("Round your PK metrics (example 5)", {
   expect_equal(auc3, "130 (100–170)") # 2 first significant digits
   expect_equal(auc4, "135 (102–168)") # Specific functions, see above
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example5.html"))
 })
 
@@ -216,10 +216,11 @@ test_that("Export custom metrics (example 6)", {
   outputRegressionTest(data=summary, file=getRefFile("example6_summary.csv"))
   outputRegressionTest(data=individual, file=getRefFile("example6_individual.csv"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example6.html"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE)
+  table@show_all_levels <- TRUE
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example6_all_levels.html"))
 })
 
@@ -243,7 +244,7 @@ test_that("Geometric Mean / Geometric CV (example 7)", {
   outputRegressionTest(data=summary, file=getRefFile("example7_summary.csv"))
   outputRegressionTest(data=individual, file=getRefFile("example7_individual.csv"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example7.html"))
 })
 
@@ -283,39 +284,40 @@ test_that("Stats on categorical data with more than 2 levels (example 8)", {
   outputRegressionTest(data=individual %>% rename(Categories=`C_{max} categories`), file=getRefFile("example8_individual.csv"))
 
   # Because there are 3 levels (and not 2), both table below are exactly similar
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example8.html"))
 
-  gttable <- table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE)
+  table@show_all_levels <- TRUE
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example8_all_levels.html"))
 
 })
 
 test_that("Summary statistics across simulation arms and scenarios (example 10)", {
-  
+
   arm1 <- Arm(subjects=24, label="1g QD") %>%
     add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
     add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
-  
+
   arm2 <- Arm(subjects=24, label="0.5g BID") %>%
     add(Bolus(time=0, amount=500, compartment="ABS", ii=12, addl=13)) %>%
     add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
-  
+
   dataset <- Dataset() %>%
     add(c(arm1, arm2))
-  
+
   scenario1 <- Scenario(name="Base scenario", model=~.x, dataset=~.x)
   scenario2 <- Scenario(name="Lower clearance", model=~.x %>%
                           replace(Theta(name="CL", value=2)), dataset=~.x)
   scenarios <- Scenarios() %>% add(c(scenario1, scenario2))
   results <- simulate(model=model_suite$pk$`2cpt_fo`, dataset=dataset, seed=1, dest="mrgsolve", scenarios=scenarios)
-  
+
   shadedPlot(results, "CONC", colour="ARM", strat_extra="SCENARIO") +
     ggplot2::facet_wrap(~SCENARIO) +
     ggplot2::xlab("Time (h)") +
     ggplot2::ylab("Concentrations (ng/mL)") +
     ggplot2::labs(colour="Arm", fill="Arm")
-  
+
   nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
@@ -323,22 +325,22 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
-  
+
   table <- NCATable() %>%
     add(nca) %>%
     campsisnca::calculate(results)
-  
+
   summary <- table %>%
     export(dest="dataframe")
-  
+
   individual <- table %>%
     export(dest="dataframe", type="summary_pretty")
-  
+
   outputRegressionTest(data=summary, file=getRefFile("example10a_summary.csv"))
-  
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example10a.html"))
-  
+
   # Alternatively
   ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168),
                          variable="CONC", strata=c(ARM="1g QD", SCENARIO="all")) %>%
@@ -348,7 +350,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
-  
+
   ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168),
                          variable="CONC", strata=c(ARM="0.5g BID", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
@@ -357,17 +359,17 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
-  
+
   table <- NCATable() %>%
     add(ncaArm1) %>%
     add(ncaArm2) %>%
     campsisnca::calculate(results)
-  
+
   summary <- table %>%
     export(dest="dataframe")
-  
+
   outputRegressionTest(data=summary, file=getRefFile("example10b_summary.csv"))
-  
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("readme_example10b.html"))
 })

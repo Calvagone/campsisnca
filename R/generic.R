@@ -116,32 +116,16 @@ setGeneric("iValues", function(object, x, options, strat_vars, ...) {
 #' 
 #' @param object table object
 #' @param init generate initialization code to generate the individuals, default is TRUE
-#' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
-#' @param all_dichotomous_levels show all dichotomous levels (0 and 1) when data is dichotomous, default is FALSE
-#' @param combine_with either 'tbl_stack' or 'tbl_merge'
-#' @param header_label header label name
 #' @param ... extra arguments
 #' @export
 #' @rdname generateTableCode
-generateTableCode <- function(object, init, subscripts, all_dichotomous_levels, combine_with, header_label,  ...) {
+generateTableCode <- function(object, init, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generateTableCode", function(object, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
+setGeneric("generateTableCode", function(object, init=NULL, ...) {
   if (is.null(init)) {
     init <- TRUE
-  }
-  if (is.null(subscripts)) {
-    subscripts <- FALSE
-  }
-  if (is.null(all_dichotomous_levels)) {
-    all_dichotomous_levels <- FALSE
-  }
-  if (is.null(combine_with)) {
-    combine_with <- "tbl_stack"
-  }
-  if (is.null(header_label)) {
-    header_label <- "Metric"
   }
   standardGeneric("generateTableCode")
 })

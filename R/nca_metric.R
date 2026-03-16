@@ -198,7 +198,7 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, o
     applyTimeWindow(window=object@window, data_time_unit=options@data_time_unit)
   
   # Convert to requested time unit
-  x$TIME <- convertTime(x$TIME, from=options@data_time_unit, to=options@table_time_unit)
+  x$TIME <- campsis::convertTime(x$TIME, from=options@data_time_unit, to=options@table_time_unit)
 
   if (object@ivalue_tibble) {
     retValue <- x %>%

@@ -25,14 +25,14 @@ test_that("Dataset 1 - day 1 & day 7", {
   
   expect_equal(nca_d7@metrics %>% getNames(), c("AUC", "Cmax", "tmax", "Ctrough"))
   
-  table <- NCATable()  
+  table <- NCATable(subscripts=TRUE)  
   table <- table %>% add(c(nca_d1, nca_d7))
   
   # Export to dataframe
   df <- table %>% export(dest="dataframe")
   
   # Export to HTML table
-  gtTable <- table %>% export(dest="gt", subscripts=TRUE)
+  gtTable <- table %>% export(dest="gt")
   gtTable
 })
 

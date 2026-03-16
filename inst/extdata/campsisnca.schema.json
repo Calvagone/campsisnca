@@ -35,6 +35,10 @@
           "type": "boolean",
           "description": "This field will inform gtsummary if all dichotomous levels must be shown in the table (e.g. for a true/false binary variable, only true is shown)"
         },
+        "header_label": {
+          "type": "string",
+          "description": "The header label to use for the metrics. Default will be 'Metric'."
+        },
         "nca_options": {
           "$ref": "#/$defs/nca_options",
           "description": "NCA options that will be passed to calculate when NCA metrics are computed."

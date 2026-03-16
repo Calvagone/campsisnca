@@ -9,6 +9,8 @@ NCATable(
   subtitle = NULL,
   combine_with = "tbl_stack",
   show_all_levels = FALSE,
+  header_label = "Metric",
+  subscripts = TRUE,
   nca_options = NCAOptions(),
   tab_options = list(),
   json = NULL
@@ -22,6 +24,10 @@ NCATable(
 \item{combine_with}{either 'tbl_stack' or 'tbl_merge'}
 
 \item{show_all_levels}{show all dichotomous levels in table}
+
+\item{header_label}{'Metric' by default}
+
+\item{subscripts}{use LaTeX subcripts/superscripts notation when writing labels}
 
 \item{nca_options}{NCA options, see ?NCAOptions}
 

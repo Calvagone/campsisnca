@@ -22,7 +22,7 @@ test_that("Column names can be non-standard", {
     add(c(AUC(unit="ng/mL*h", name="Area Under Curve"), Cavg(unit="ng/mL*h"))) %>%
     campsisnca::calculate(campsis)
   
-  table <- NCATable()
+  table <- NCATable(subscripts=TRUE)
   table <- table %>%
     add(nca)
   
@@ -34,7 +34,7 @@ test_that("Column names can be non-standard", {
   
   expect_true(all(c("Area Under Curve", "Cavg") %in% summary$metric))
   
-  gttable <- table %>% export(dest="gt", subscripts=TRUE)
+  gttable <- table %>% export(dest="gt")
   gtTableRegressionTest(gttable, getRefFile("non_standard_column_name.html"))
   
 })
@@ -45,7 +45,7 @@ test_that("Statistics can contain line breaks", {
     add(c(AUC(stat_display="{geomean}<BR>({geocv}%)"), Cavg(stat_display="{geomean}<BR>({geocv}%)"))) %>%
     campsisnca::calculate(campsis)
   
-  table <- NCATable()
+  table <- NCATable(subscripts=TRUE)
   table <- table %>%
     add(nca)
   
@@ -55,7 +55,7 @@ test_that("Statistics can contain line breaks", {
   expect_equal(summary$metric, c("AUC", "Cavg"))
   expect_equal(summary$summary_stats, c("909<BR>(35.2%)", "3.79<BR>(35.2%)")) # No conversion yet at this stage
   
-  gttable <- table %>% export(dest="gt", subscripts=TRUE, fmt_markdown=TRUE)
+  gttable <- table %>% export(dest="gt", fmt_markdown=TRUE)
   gtTableRegressionTest(gttable, getRefFile("linebreaks_in_stats.html"))
   
 })

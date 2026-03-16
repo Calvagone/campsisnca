@@ -71,7 +71,7 @@ When `type` is not specified, default value is `summary`. Argument `type` can al
 2. To an HTML table using `gt`:
 
 ```{r, message=FALSE}
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 Please note the individual metrics can also be exported to  a dataframe using the `export` function as follows:
@@ -97,12 +97,16 @@ table <- NCATable() %>%
   add(c(day1, day7)) %>%
   calculate(campsis_)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ```{r, message=FALSE}
 # Alternatively, first stratification variable can be seen in columns (use of 'tbl_merge' within gtsummary)
-table %>% export(dest="gt", subscripts=TRUE, combine_with="tbl_merge") %>% as_raw_html()
+table <- NCATable(combine_with="tbl_merge") %>%
+  add(c(day1, day7)) %>%
+  calculate(campsis_)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 3: Calculate 2-compartment half-life metrics
@@ -115,7 +119,7 @@ table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis %>% mutate(DOSE=1000, TAU=24))
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 4: Compute terminal half-live based on data
@@ -128,7 +132,7 @@ table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 5: Round your PK metrics
@@ -156,7 +160,7 @@ table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 6: Export custom metrics (including categorical data)
@@ -185,10 +189,15 @@ table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 
 # Alternatively, all dichotomous levels can be shown as well:
-table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE) %>% as_raw_html()
+table <- NCATable(show_all_levels=TRUE)  
+table <- table %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 7: Geometric mean / Geometric CV
@@ -201,7 +210,7 @@ table <- NCATable() %>%
   add(nca) %>%
     calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 8: Statistics on categorical data with more than 2 levels
@@ -235,7 +244,7 @@ table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 9: Time above or below a certain threshold
@@ -266,7 +275,7 @@ table %>% export(dest="dataframe", type="individual_wide")
 Summary statistics can also be exported:
 
 ```{r, message=FALSE}
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 10: Summary statistics across arms and scenarios
@@ -314,7 +323,7 @@ table <- NCATable() %>%
   add(nca) %>%
   calculate(results)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 In the previous example, statistics are summarized on Day 7. In you wish specifics statistics for each one of your arms, you could also proceed sightly differently by creating 2 analyses (1 for each strata) and refer to specific arms by overriding the default strata.
@@ -343,7 +352,7 @@ table <- NCATable() %>%
   add(ncaArm2) %>%
   calculate(results)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 

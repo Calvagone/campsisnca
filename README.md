@@ -107,7 +107,7 @@ case, summary statistics are exported according to the arguments
 2.  To an HTML table using `gt`:
 
 ``` r
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="qwbrdgyltf" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -182,7 +182,7 @@ table <- NCATable() %>%
   add(c(day1, day7)) %>%
   calculate(campsis_)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="evmkmqojva" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -238,7 +238,11 @@ N = 103</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 
 ``` r
 # Alternatively, first stratification variable can be seen in columns (use of 'tbl_merge' within gtsummary)
-table %>% export(dest="gt", subscripts=TRUE, combine_with="tbl_merge") %>% as_raw_html()
+table <- NCATable(combine_with="tbl_merge") %>%
+  add(c(day1, day7)) %>%
+  calculate(campsis_)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="idhhwqblsr" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -304,7 +308,7 @@ table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis %>% mutate(DOSE=1000, TAU=24))
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="wknplljcpa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -341,7 +345,7 @@ table <- NCATable() %>%
   add(nca) %>%
   calculate(campsis)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="aslhxkixpj" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -389,7 +393,7 @@ table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="oiwqwaatsa" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -451,7 +455,7 @@ table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="yrpzfheaex" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -492,7 +496,12 @@ N = 200</span><span class="gt_footnote_marks" style="font-size: 75%; vertical-al
 
 ``` r
 # Alternatively, all dichotomous levels can be shown as well:
-table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE) %>% as_raw_html()
+table <- NCATable(show_all_levels=TRUE)  
+table <- table %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="sskhejkghe" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -553,7 +562,7 @@ table <- NCATable() %>%
   add(nca) %>%
     calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="akknwinusx" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -609,7 +618,7 @@ table <- table %>%
   add(c(ncaD1, ncaD7)) %>%
   calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="vhcyznpguw" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -694,7 +703,7 @@ table %>% export(dest="dataframe", type="individual_wide")
 Summary statistics can also be exported:
 
 ``` r
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="jzkjouvjgz" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -771,7 +780,7 @@ table <- NCATable() %>%
   add(nca) %>%
   calculate(results)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="uoffhqqlir" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
@@ -866,7 +875,7 @@ table <- NCATable() %>%
   add(ncaArm2) %>%
   calculate(results)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 <div id="qlyrywtadv" style="padding-left:0px;padding-right:0px;padding-top:10px;padding-bottom:10px;overflow-x:auto;overflow-y:auto;width:auto;height:auto;">
