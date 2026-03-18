@@ -1,6 +1,7 @@
 # campsisnca 1.6.0
 
-* JSON-based interface to import NCA configuration #74
+* Implementation of a JSON-based interface #74
+* Campsisnca refactoring (improved design) #75
 
 # campsisnca 1.5.2
 
