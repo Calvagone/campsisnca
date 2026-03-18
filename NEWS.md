@@ -2,6 +2,7 @@
 
 * Implementation of a JSON-based interface #74
 * Campsisnca refactoring (improved design) #75
+* Check arguments of timerange function #78
 
 # campsisnca 1.5.2
 
