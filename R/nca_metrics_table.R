@@ -12,6 +12,7 @@ setClass(
     nca_analyses = "nca_analyses",  # NCA analyses
     title = "character",
     subtitle = "character",
+    swap_strat = "logical",
     combine_with = "character",
     show_all_levels = "logical",
     header_label = "character",
@@ -22,6 +23,7 @@ setClass(
   prototype = prototype(nca_analyses=new("nca_analyses"),
                         title=NA_character_,
                         subtitle=NA_character_,
+                        swap_strat=FALSE,
                         combine_with="tbl_stack",
                         show_all_levels=FALSE,
                         header_label="Metric",
@@ -35,6 +37,7 @@ setClass(
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
+#' @param swap_strat swap stratification variables in table (only useful when 2 stratification variables are given)
 #' @param combine_with either 'tbl_stack' or 'tbl_merge'
 #' @param show_all_levels show all dichotomous levels in table
 #' @param header_label 'Metric' by default
@@ -43,12 +46,12 @@ setClass(
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
-NCAMetricsTable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack", show_all_levels=FALSE,
+NCAMetricsTable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="tbl_stack", show_all_levels=FALSE,
                             header_label="Metric", subscripts=TRUE,
                             nca_options=NCAOptions(), tab_options=list(), json=NULL) {
   .Deprecated("NCATable")
   return(NCATable(title=title, subtitle=subtitle,
-                  combine_with=combine_with, show_all_levels=show_all_levels,
+                  swap_strat=swap_strat, combine_with=combine_with, show_all_levels=show_all_levels,
                   header_label=header_label, subscripts=subscripts,
                   nca_options=nca_options, tab_options=tab_options, json=json))
 }
@@ -58,6 +61,7 @@ NCAMetricsTable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack",
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
+#' @param swap_strat swap stratification variables in table (only useful when 2 stratification variables are given)
 #' @param combine_with either 'tbl_stack' or 'tbl_merge'
 #' @param show_all_levels show all dichotomous levels in table
 #' @param header_label 'Metric' by default
@@ -66,7 +70,7 @@ NCAMetricsTable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack",
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
-NCATable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack", show_all_levels=FALSE,
+NCATable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="tbl_stack", show_all_levels=FALSE,
                      header_label="Metric", subscripts=TRUE,
                      nca_options=NCAOptions(), tab_options=list(), json=NULL) {
   if (is.null(json)) {
@@ -77,7 +81,7 @@ NCATable <- function(title=NULL, subtitle=NULL, combine_with="tbl_stack", show_a
       subtitle = NA_character_
     }
     table <- new("nca_metrics_table", title=title, subtitle=subtitle,
-                 combine_with=combine_with, show_all_levels=show_all_levels,
+                 swap_strat=swap_strat, combine_with=combine_with, show_all_levels=show_all_levels,
                  header_label=header_label, subscripts=subscripts,
                  nca_options=nca_options, tab_options=tab_options)
   } else {
@@ -296,7 +300,9 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"),
   }
  
   stratVariables <- object %>% getStrata(keep_single=FALSE)
-  
+  if (object@swap_strat) {
+    stratVariables <- rev(stratVariables)
+  }
   stats <- getStatisticsCode(object)
   type <- getVariableTypeCode(object, all_dichotomous_levels=object@show_all_levels)
   labels <- getLabelsCode(object, subscripts=object@subscripts)
@@ -371,7 +377,7 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
     object@subtitle <- json$subtitle
   }
   
-  # Extract combine_with, show_all_levels, header_label and subscripts
+  # Extract extra fields
   if (!is.null(json$combine_with)) {
     object@combine_with <- json$combine_with
   }
@@ -383,6 +389,9 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
   }
   if (!is.null(json$subscripts)) {
     object@subscripts <- json$subscripts
+  }
+  if (!is.null(json$swap_strat)) {
+    object@swap_strat <- json$swap_strat
   }
   
   return(object)

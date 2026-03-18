@@ -7,6 +7,7 @@
 NCAMetricsTable(
   title = NULL,
   subtitle = NULL,
+  swap_strat = FALSE,
   combine_with = "tbl_stack",
   show_all_levels = FALSE,
   header_label = "Metric",
@@ -20,6 +21,8 @@ NCAMetricsTable(
 \item{title}{table title, optional character value}
 
 \item{subtitle}{table subtitle, optional character value}
+
+\item{swap_strat}{swap stratification variables in table (only useful when 2 stratification variables are given)}
 
 \item{combine_with}{either 'tbl_stack' or 'tbl_merge'}
 

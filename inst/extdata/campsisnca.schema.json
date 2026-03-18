@@ -23,13 +23,17 @@
           "type": "string",
           "description": "Subtitle of this table (optional)."
         },
+        "swap_strat": {
+          "type": "boolean",
+          "description": "Swap stratification variables in table (only useful when 2 stratification variables are given in the analyses)"
+        },
         "combine_with": {
           "type": "string",
           "enum": [
             "tbl_stack",
             "tbl_merge"
           ],
-          "description": "This field will inform gtsummary when merging the tables from different analyses."
+          "description": "This field will inform gtsummary on how to merge tables from different analyses."
         },
         "show_all_levels": {
           "type": "boolean",
