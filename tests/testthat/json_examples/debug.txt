@@ -1,0 +1,113 @@
+An object of class "nca_metrics_table"
+Slot "nca_analyses":
+An object of class "nca_analyses"
+Slot "list":
+[[1]]
+An object of class "nca_analysis"
+Slot "name":
+[1] "Default"
+
+Slot "window":
+An object of class "nca_time_window"
+Slot "start":
+[1] 0
+
+Slot "end":
+[1] Inf
+
+Slot "time_unit":
+[1] "hour"
+
+Slot "exclude_start":
+[1] FALSE
+
+Slot "exclude_end":
+[1] FALSE
+
+
+Slot "variable":
+[1] "CONC"
+
+Slot "metrics":
+An object of class "nca_metrics"
+Slot "list":
+[[1]]
+An object of class "custom_metric"
+Slot "custom_function":
+[1] "rlang::as_function(~iValue(AUC(),.x,.y) > 100)"
+
+Slot "variable":
+[1] NA
+
+Slot "window":
+An object of class "undefined_nca_time_window"
+Slot "start":
+[1] 0
+
+Slot "end":
+[1] Inf
+
+Slot "time_unit":
+[1] "hour"
+
+Slot "exclude_start":
+[1] FALSE
+
+Slot "exclude_end":
+[1] FALSE
+
+
+Slot "name":
+[1] "Custom"
+
+Slot "unit":
+[1] NA
+
+Slot "ivalue_tibble":
+[1] FALSE
+
+Slot "categorical":
+[1] TRUE
+
+Slot "stat_display":
+[1] "{p}%"
+
+Slot "digits":
+character(0)
+
+Slot "concentration":
+[1] NA
+
+Slot "individual":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+Slot "summary_pretty":
+tableau de données (data frame) avec 0 colonnes et 0 ligne
+
+
+
+Slot "type":
+[1] "nca_metric"
+
+
+Slot "strata":
+SCENARIO      ARM 
+   "all"    "all" 
+
+Slot "effective_strat_vars":
+character(0)
+
+
+
+Slot "type":
+[1] "nca_analysis"
+
+
+Slot "list":
+list()
+
+Slot "type":
+character(0)

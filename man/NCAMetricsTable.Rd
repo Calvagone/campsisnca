@@ -2,10 +2,42 @@
 % Please edit documentation in R/nca_metrics_table.R
 \name{NCAMetricsTable}
 \alias{NCAMetricsTable}
-\title{NCA metrics table.}
+\title{NCA metrics table (deprecated).}
 \usage{
-NCAMetricsTable()
+NCAMetricsTable(
+  title = NULL,
+  subtitle = NULL,
+  swap_strat = FALSE,
+  combine_with = "tbl_stack",
+  show_all_levels = FALSE,
+  header_label = "Metric",
+  subscripts = TRUE,
+  nca_options = NCAOptions(),
+  tab_options = list(),
+  json = NULL
+)
+}
+\arguments{
+\item{title}{table title, optional character value}
+
+\item{subtitle}{table subtitle, optional character value}
+
+\item{swap_strat}{swap stratification variables in table (only useful when 2 stratification variables are given)}
+
+\item{combine_with}{either 'tbl_stack' or 'tbl_merge'}
+
+\item{show_all_levels}{show all dichotomous levels in table}
+
+\item{header_label}{'Metric' by default}
+
+\item{subscripts}{use LaTeX subcripts/superscripts notation when writing labels}
+
+\item{nca_options}{NCA options, see ?NCAOptions}
+
+\item{tab_options}{list of options to pass to gt::tab_options}
+
+\item{json}{path to JSON table file or JSON content in string form}
 }
 \description{
-NCA metrics table.
+NCA metrics table (deprecated).
 }

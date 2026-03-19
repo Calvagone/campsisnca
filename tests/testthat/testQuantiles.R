@@ -14,22 +14,22 @@ campsis <- generateTestData()
 
 test_that("Dynamic computation of quantiles works as expected (type=2)", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats
   
   expect_equal(prettyString, "511.5-1493.1")
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
-    campsisnca::calculate()
+    campsisnca::calculate(campsis)
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats
@@ -39,22 +39,22 @@ test_that("Dynamic computation of quantiles works as expected (type=2)", {
 
 test_that("Dynamic computation of quantiles works as expected (type=7)", {
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p5}-{p95}", digits=1))) %>%
-    campsisnca::calculate(quantile_type=7)
+    campsisnca::calculate(campsis, NCAOptions(quantile_type=7))
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats
   
   expect_equal(prettyString, "516.1-1490.7")
   
-  nca <- NCAMetrics(x=campsis, variable="Y") %>%
+  nca <- NCAAnalysis(variable="Y") %>%
     add(c(AUC(unit="ng/mL*h", stat_display="{p2.5}-{p97.5}", digits=1))) %>%
-    campsisnca::calculate(quantile_type=7)
+    campsisnca::calculate(campsis, NCAOptions(quantile_type=7))
   
-  prettyString <- NCAMetricsTable() %>%
+  prettyString <- NCATable() %>%
     add(nca) %>%
     export(dest="dataframe", type="summary_pretty") %>%
     .$summary_stats

@@ -24,11 +24,22 @@ setClass(
 #' 
 #' @inheritParams metricsParams
 #' @export
-Thalf <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="thalf_metric", def_name="thalf")
-  return(metric)
+Thalf <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="thalf_metric")
+  return(setDefaultNameIfNA(metric))
 }
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("thalf_metric"), definition=function(object, ...) {
+  return("thalf") 
+})
+
 
 #_______________________________________________________________________________
 #----                            iValue                                     ----
@@ -48,5 +59,13 @@ setMethod("iValue", signature=c("thalf_metric", "numeric", "numeric"), definitio
 #' @rdname getLaTeXName
 setMethod("getLaTeXName", signature=c("thalf_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "half", "\U00BD"))
+})
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("thalf_metric", "json_element"), definition=function(object, json) {
+  return(loadMetricFromJSON(object=object, json=json))
 })
 

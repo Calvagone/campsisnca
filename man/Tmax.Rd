@@ -5,8 +5,9 @@
 \title{Tmax.}
 \usage{
 Tmax(
-  x = NULL,
   variable = NULL,
+  window = NULL,
+  rebase = TRUE,
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -14,9 +15,11 @@ Tmax(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
+
+\item{rebase}{rebase time according to start time of window}
 
 \item{name}{custom metric name (will be exported into table headers)}
 

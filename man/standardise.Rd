@@ -2,17 +2,19 @@
 % Please edit documentation in R/nca_metric_utils.R
 \name{standardise}
 \alias{standardise}
-\title{Standardise CAMPSIS/NONMEM dataframe for NCA analysis.
+\title{Standardise Campsis/NONMEM dataframe for NCA analysis.
 Additional checks will also be performed.}
 \usage{
-standardise(x, variable)
+standardise(x, variable, strat_vars)
 }
 \arguments{
-\item{x}{CAMPSIS/NONMEM dataframe}
+\item{x}{Campsis/NONMEM dataframe}
 
 \item{variable}{dependent variable}
+
+\item{strat_vars}{stratification variables in x (e.g. 'SCENARIO')}
 }
 \description{
-Standardise CAMPSIS/NONMEM dataframe for NCA analysis.
+Standardise Campsis/NONMEM dataframe for NCA analysis.
 Additional checks will also be performed.
 }

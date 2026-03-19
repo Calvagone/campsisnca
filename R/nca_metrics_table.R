@@ -9,25 +9,127 @@
 setClass(
   "nca_metrics_table",
   representation(
+    nca_analyses = "nca_analyses",  # NCA analyses
+    title = "character",
+    subtitle = "character",
+    swap_strat = "logical",
+    combine_with = "character",
+    show_all_levels = "logical",
+    header_label = "character",
+    subscripts = "logical",
+    nca_options = "nca_options",
+    tab_options = "list"
   ),
-  contains="pmx_list",
-  prototype = prototype(type="nca_metrics")
+  prototype = prototype(nca_analyses=new("nca_analyses"),
+                        title=NA_character_,
+                        subtitle=NA_character_,
+                        swap_strat=FALSE,
+                        combine_with="tbl_stack",
+                        show_all_levels=FALSE,
+                        header_label="Metric",
+                        subscripts=TRUE,
+                        nca_options=NCAOptions(),
+                        tab_options=list())
 )
 
 #' 
-#' NCA metrics table.
+#' NCA metrics table (deprecated).
 #' 
+#' @param title table title, optional character value
+#' @param subtitle table subtitle, optional character value
+#' @param swap_strat swap stratification variables in table (only useful when 2 stratification variables are given)
+#' @param combine_with either 'tbl_stack' or 'tbl_merge'
+#' @param show_all_levels show all dichotomous levels in table
+#' @param header_label 'Metric' by default
+#' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
+#' @param nca_options NCA options, see ?NCAOptions
+#' @param tab_options list of options to pass to gt::tab_options
+#' @param json path to JSON table file or JSON content in string form
 #' @export
-NCAMetricsTable <- function() {
-  return(new("nca_metrics_table"))
+NCAMetricsTable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="tbl_stack", show_all_levels=FALSE,
+                            header_label="Metric", subscripts=TRUE,
+                            nca_options=NCAOptions(), tab_options=list(), json=NULL) {
+  .Deprecated("NCATable")
+  return(NCATable(title=title, subtitle=subtitle,
+                  swap_strat=swap_strat, combine_with=combine_with, show_all_levels=show_all_levels,
+                  header_label=header_label, subscripts=subscripts,
+                  nca_options=nca_options, tab_options=tab_options, json=json))
 }
+
+#' 
+#' NCA table.
+#' 
+#' @param title table title, optional character value
+#' @param subtitle table subtitle, optional character value
+#' @param swap_strat swap stratification variables in table (only useful when 2 stratification variables are given)
+#' @param combine_with either 'tbl_stack' or 'tbl_merge'
+#' @param show_all_levels show all dichotomous levels in table
+#' @param header_label 'Metric' by default
+#' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
+#' @param nca_options NCA options, see ?NCAOptions
+#' @param tab_options list of options to pass to gt::tab_options
+#' @param json path to JSON table file or JSON content in string form
+#' @export
+NCATable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="tbl_stack", show_all_levels=FALSE,
+                     header_label="Metric", subscripts=TRUE,
+                     nca_options=NCAOptions(), tab_options=list(), json=NULL) {
+  if (is.null(json)) {
+    if (is.null(title)) {
+      title = NA_character_
+    }
+    if (is.null(subtitle)) {
+      subtitle = NA_character_
+    }
+    table <- new("nca_metrics_table", title=title, subtitle=subtitle,
+                 swap_strat=swap_strat, combine_with=combine_with, show_all_levels=show_all_levels,
+                 header_label=header_label, subscripts=subscripts,
+                 nca_options=nca_options, tab_options=tab_options)
+  } else {
+    if (is.list(json)) {
+      json <- JSONElement(json)
+    }
+    table <- loadFromJSON(object=new("nca_metrics_table"), json=json)
+  }
+  return(table)
+}
+
+#_______________________________________________________________________________
+#----                           add                                   ----
+#_______________________________________________________________________________
+
+setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition = function(object, x) {
+  object@nca_analyses <- object@nca_analyses %>% add(x)
+  return(object)
+})
+
+setMethod("add", signature = c("nca_metrics_table", "list"), definition = function(object, x) {
+  object@nca_analyses <- object@nca_analyses %>% add(x)
+  return(object)
+})
+
+#_______________________________________________________________________________
+#----                            calculate                                  ----
+#_______________________________________________________________________________
+
+#' @rdname calculate
+setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
+  if (is(options, "undefined_nca_options")) {
+    options_ <- object@nca_options # Use embedded NCA options
+  } else {
+    options_ <- options # Use external NCA options
+  }
+  
+  object@nca_analyses <- object@nca_analyses %>%
+    calculate(x=x, options=options_, ...)
+  return(object)  
+})
 
 #_______________________________________________________________________________
 #----                                export                                 ----
 #_______________________________________________________________________________
 
 setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
-  if (object %>% length() == 0) {
+  if (object@nca_analyses %>% length() == 0) {
     stop("No metrics to export")
   }
   if (dest=="dataframe") {
@@ -46,8 +148,9 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 #' @importFrom tidyr pivot_wider
 setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
-  retValue <- object@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, ...))
-  
+  analysis_strat <- length(object@nca_analyses) > 1
+  retValue <- object@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, analysis_strat=analysis_strat, ...))
+
   # Apply transformation is wide format is requested
   if (type == "individual_wide") {
     allMetrics <- unique(retValue$metric)
@@ -79,7 +182,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
         dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
     }
 
-    by <- c("id", names(object@list[[1]]@scenario))
+    by <- c("id", object %>% getStrata(keep_single=FALSE))
     retValue <- continuousData %>%
       dplyr::full_join(categoricalData, by=by) %>%
       dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
@@ -96,12 +199,15 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
 
 #' @inheritParams generateTableCode
 setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
-          definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
-  code <- object %>% generateTableCode(init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
+          definition=function(object, dest, init=NULL, ...) {
+  code <- object %>% generateTableCode(init=init, ...)
   table <- object # Table variable needs to be there!
+  #cat(code)
+  # browser()
   retValue <- tryCatch(
     expr=eval(expr=parse(text=code)),
     error=function(cond) {
+      print(cond)
       return(sprintf("Failed to create gtsummary table: %s", cond$message))
     })
   return(retValue)
@@ -109,12 +215,12 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
 
 #' @inheritParams generateTableCode
 setMethod("export", signature=c("nca_metrics_table", "gt_type"),
-          definition=function(object, dest, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
+          definition=function(object, dest, init=NULL, ...) {
   gtsummaryTable <- object %>%
-    export(dest=new("gtsummary_type"), init=init, subscripts=subscripts, all_dichotomous_levels=all_dichotomous_levels, combine_with=combine_with, header_label=header_label, ...)
+    export(dest=new("gtsummary_type"), init=init, ...)
   
   gtTable <- gtsummaryTable %>%
-    toGt(subscripts=subscripts, ...)
+    toGt(subscripts=object@subscripts, title=object@title, subtitle=object@subtitle, opts=object@tab_options, ...)
 
   return(gtTable)
 })
@@ -123,13 +229,16 @@ setMethod("export", signature=c("nca_metrics_table", "gt_type"),
 #' Gtsummary to Gt.
 #' 
 #' @param x gtsummary table
+#' @param title table title
+#' @param subtitle table subtitle
 #' @param subscripts use subscripts
 #' @param fmt_markdown transform any markdown-formatted text, logical value. Default is FALSE.
+#' @param opts gt tab options
 #' @importFrom gtsummary as_gt
-#' @importFrom gt cells_body fmt_markdown text_transform
+#' @importFrom gt cells_body fmt_markdown tab_options text_transform
 #' @importFrom stringr str_replace_all
 #' @export
-toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE) {
+toGt <- function(x, title=NULL, subtitle=NULL, opts=list(), subscripts=FALSE, fmt_markdown=FALSE) {
   if (is.null(subscripts)) {
     subscripts <- FALSE
   }
@@ -153,10 +262,24 @@ toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE) {
         }
       )
   }
+  
   if (fmt_markdown) {
     gtTable <- gtTable %>%
       gt::fmt_markdown()
   }
+  
+  if (length(opts) > 0) {
+    print(opts)
+    gtTable <- do.call(
+      gt::tab_options,
+      c(list(data = gtTable), opts)
+    )
+  }
+  if (!is.null(title) && !is.na(title) && title != "") {
+    gtTable <- gtTable %>%
+      gt::tab_header(title=title, subtitle=subtitle)
+  }
+
   return(gtTable)
 }
 
@@ -165,8 +288,8 @@ toGt <- function(x, subscripts=FALSE, fmt_markdown=FALSE) {
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logical", "logical", "character", "character"),
-          definition=function(object, init, subscripts, all_dichotomous_levels, combine_with, header_label, ...) {
+setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"),
+          definition=function(object, init, ...) {
   
   if (init) {
     initCode <- "individual <- table" %>%
@@ -175,19 +298,20 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
   } else {
     initCode <- NULL
   }
-            
-  scenarios <- object %>% getScenarios()
-  stratVariables <- unique(scenarios$name)
-  
+ 
+  stratVariables <- object %>% getStrata(keep_single=FALSE)
+  if (object@swap_strat) {
+    stratVariables <- rev(stratVariables)
+  }
   stats <- getStatisticsCode(object)
-  type <- getVariableTypeCode(object, all_dichotomous_levels=all_dichotomous_levels)
-  labels <- getLabelsCode(object, subscripts=subscripts)
+  type <- getVariableTypeCode(object, all_dichotomous_levels=object@show_all_levels)
+  labels <- getLabelsCode(object, subscripts=object@subscripts)
   digits <- getDigitsCode(object)
   
   if (length(stratVariables) <= 2) {
     body <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables,
                                 stats=stats, type=type, labels=labels, digits=digits,
-                                combine_with=combine_with, header_label=header_label)
+                                combine_with=object@combine_with, header_label=object@header_label)
   } else {
     stop("Too many stratification variables")
   }
@@ -196,13 +320,22 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical", "logi
 })
 
 #_______________________________________________________________________________
-#----                           getScenarios                                ----
+#----                             getStrata                                 ----
 #_______________________________________________________________________________
 
-#' @rdname getScenarios
-setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  retValue <- object@list %>% purrr::map_df(~tibble::enframe(.x@scenario))
-  return(retValue)
+#' @rdname getStrata
+setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=function(object, keep_single, ...) {
+  retValue <- NULL
+  
+  if (length(object@nca_analyses) > 1) {
+    retValue <- "analysis"
+  }
+  
+  strat_vars <- object@nca_analyses@list %>%
+    purrr::map(~.x@effective_strat_vars) %>%
+    purrr::flatten_chr()
+  
+  return(c(retValue, unique(strat_vars)))
 })
 
 #_______________________________________________________________________________
@@ -211,20 +344,61 @@ setMethod("getScenarios", signature=c("nca_metrics_table"), definition=function(
 
 #' @rdname getUnit
 setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
-  if (object %>% length()==0) {
+  if (object@nca_analyses %>% length()==0) {
     stop("No metrics in table at this stage")
   }
-  return(object@list[[1]] %>% getUnit(metric=metric, ...))
+  return(object@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
 })
 
 #_______________________________________________________________________________
-#----                       reduceTo2Dimensions                             ----
+#----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-#' @rdname reduceTo2Dimensions
-setMethod("reduceTo2Dimensions", signature=c("nca_metrics_table"), definition=function(object, ...) {
-  object@list <- object@list %>%
-    purrr::map(~reduceTo2Dimensions(.x, ...))
+setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), definition=function(object, json) {
+  json <- json@data
+  object@nca_analyses@list <- json$nca_analyses %>%
+    purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
+  
+  # Extract possible tab options
+  if (!is.null(json$tab_options)) {
+    object@tab_options <- json$tab_options
+  }
+  
+  # Extract possible NCA options
+  if (!is.null(json$nca_options)) {
+    object@nca_options <- loadFromJSON(NCAOptions(), JSONElement(json$nca_options))
+  }
+  
+  # Extract title and subtitle
+  if (!is.null(json$title)) {
+    object@title <- json$title
+  }
+  if (!is.null(json$subtitle)) {
+    object@subtitle <- json$subtitle
+  }
+  
+  # Extract extra fields
+  if (!is.null(json$combine_with)) {
+    object@combine_with <- json$combine_with
+  }
+  if (!is.null(json$show_all_levels)) {
+    object@show_all_levels <- json$show_all_levels
+  }
+  if (!is.null(json$header_label)) {
+    object@header_label <- json$header_label
+  }
+  if (!is.null(json$subscripts)) {
+    object@subscripts <- json$subscripts
+  }
+  if (!is.null(json$swap_strat)) {
+    object@swap_strat <- json$swap_strat
+  }
   
   return(object)
 })
+
+setMethod("loadFromJSON", signature=c("nca_metrics_table", "character"), definition=function(object, json) {
+  schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
+  return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
+})
+

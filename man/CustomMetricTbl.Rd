@@ -5,7 +5,7 @@
 \title{Custom metric (input data as tibble).}
 \usage{
 CustomMetricTbl(
-  x = NULL,
+  window = NULL,
   fun,
   name = NULL,
   unit = NULL,
@@ -15,7 +15,7 @@ CustomMetricTbl(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
+\item{window}{time window on which this metric should be computed}
 
 \item{fun}{any custom function with exactly 1 argument: data}
 

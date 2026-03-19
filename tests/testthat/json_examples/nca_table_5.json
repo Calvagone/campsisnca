@@ -1,0 +1,45 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Default",
+      "window": {
+        "start": 0.0,
+        "end": "last",
+        "time_unit": "hour",
+        "exclude_start": false,
+        "exclude_end": false
+      },
+      "variable": "CONC",
+      "metrics": [
+        {
+          "type": "cmax_metric",
+          "name": "Cmax 1",
+          "stat_display": "{median} ({p5}–{p95})",
+          "rounding": {
+            "digits": 3,
+            "mode": "significant"
+          }
+        },
+        {
+          "type": "cmax_metric",
+          "name": "Cmax 2",
+          "stat_display": "{median} ({p5}–{p95})",
+          "rounding": {
+            "digits": 1,
+            "mode": "decimals"
+          }
+        }
+      ],
+      "strata": {
+        "SCENARIO": "all",
+        "ARM": "all"
+      }
+    }
+  ],
+  "title": "Table 5 title",
+  "subtitle": "Table 5 subtitle",
+  "tab_options": {
+    "table.font.size": "14px"
+  }
+}
+

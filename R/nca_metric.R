@@ -3,32 +3,9 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "name", "unit", "ivalue_tibble", "stat_display")))
+  return(expectOneForAll(object, c("variable", "window", "name", "unit", "ivalue_tibble",
+                                   "stat_display", "categorical", "concentration")))
 }
-
-#' 
-#' NCA metric class. See this class as an interface.
-#' 
-#' @export
-setClass(
-  "nca_metric",
-  representation(
-    x = "data.frame",             # specific dataframe
-    variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
-    individual = "data.frame",    # individual results
-    summary = "data.frame",       # summary results
-    name = "character",           # metric name (exported into header)
-    unit = "character",           # metric unit (exported into header)
-    ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
-    stat_display = "character",   # statistics display (see package gtsummary)
-    categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
-    digits = "character",         # rounding digits definitions for gtsummary
-    concentration = "logical"     # concentration-related metric, NA by default
-  ),
-  contains="pmx_element",
-  prototype=prototype(ivalue_tibble=FALSE, categorical=FALSE, concentration=as.logical(NA)),
-  validity=validateMetric
-)
 
 getStatDisplayDefault <- function(categorical=FALSE) {
   if (categorical) {
@@ -38,27 +15,69 @@ getStatDisplayDefault <- function(categorical=FALSE) {
   }
 }
 
-ncaConstructor <- function(x, variable, name, unit, stat_display, digits, metric_name, def_name) {
-  x <- processDataframe(x)
+#' 
+#' NCA metric class. See this class as abstract class.
+#' 
+#' @export
+setClass(
+  "nca_metric",
+  representation(
+    variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
+    window = "nca_time_window",   # time range for filtering data
+    name = "character",           # metric name (exported into header)
+    unit = "character",           # metric unit (exported into header)
+    ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
+    categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
+    stat_display = "character",   # statistics display (see package gtsummary)
+    digits = "character",         # rounding digits definitions for gtsummary
+    concentration = "logical",    # concentration-related metric, NA by default
+    individual = "data.frame",    # transient individual results
+    summary = "data.frame",       # transient summary results
+    summary_pretty = "data.frame" # transient summary_pretty results (statistics are glued)
+  ),
+  contains="pmx_element",
+  prototype=prototype(variable=as.character(NA), window=UndefinedTimeWindow(), name=as.character(NA), unit=as.character(NA),
+                      ivalue_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
+                      digits=character(0), concentration=as.logical(NA)),
+  validity=validateMetric
+)
+
+ncaConstructor <- function(variable, window, name, unit, stat_display, digits, metric_name) {
+  if (is.null(name)) {
+    name <- as.character(NA)
+  }
+  if (is.null(window)) {
+    window <- UndefinedTimeWindow()
+  }
   variable <- processVariable(variable)
-  name <- if (is.null(name)) def_name else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)
   if (is.null(stat_display)) {
     stat_display <- getStatDisplayDefault(categorical=FALSE) # Continuous by default
   }
-  metric <- new(metric_name, x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits)
+  metric <- new(metric_name, variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits)
   return(metric)
 }
+
+setDefaultNameIfNA <- function(object) {
+  if (is.na(object@name)) {
+    object@name <- object %>% getDefaultName()
+  }
+  return(object)
+} 
 
 #_______________________________________________________________________________
 #----                            calculate                                  ----
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metric", "numeric"), definition=function(object, quantile_type, ...) {
-  object@individual <- iValues(object=object)
-  object@summary <- computeNCAMetricSummary(object=object, quantile_type=quantile_type)
+setMethod("calculate", signature=c("nca_metric", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
+  args <- list(...)
+  strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
+  object@individual <- iValues(object=object, x=x, options=options, strat_vars=strat_vars)
+  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
+  object@summary <- structuredObj$summary
+  object@summary_pretty <- structuredObj$summary_pretty
   return(object)    
 })
 
@@ -79,6 +98,15 @@ subscriptOccurrence <- function(x, occurrence, replacement=NULL) {
 #' @rdname getLaTeXName
 setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
   return(x %>% getName())
+})
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("nca_metric"), definition=function(object, ...) {
+  return("Unknown metric name") 
 })
 
 #_______________________________________________________________________________
@@ -117,22 +145,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
         tidyr::pivot_wider(names_from=stat, values_from=value)
 
     } else if (type == "summary_pretty") {
-      display <- object %>% statDisplayString()
-      retValue <- retValue %>%
-        dplyr::select(-dplyr::all_of(c("value", "stat")))
-      
-      if (object@categorical) {
-        retValue <- retValue %>%
-          dplyr::select(-dplyr::all_of(c("category")))
-      }
-      
-      retValue <- retValue %>%
-        dplyr::distinct()
-      
-      assertthat::assert_that(nrow(retValue)==1, msg="There must be exactly 1 row here")
-      
-      retValue <- retValue %>%
-        dplyr::mutate("summary_stats"=display)
+      retValue <- tibble::tibble(metric=object %>% getName(), object@summary_pretty)
     }
   
   } else if (type == "individual" || type == "individual_wide") {
@@ -171,33 +184,69 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 #' @importFrom dplyr group_by summarise transmute ungroup
 #' @importFrom tibble tibble
 #' @importFrom purrr map_df
-setMethod("iValues", signature=c("nca_metric"), definition=function(object, ...) {
-  x <- object@x
+setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, options, strat_vars, ...) {
   variable <- object@variable
+  if (length(variable)==0) {
+    stop(sprintf("No variable provided for metric '%s'", x %>% getName()))
+  }
+  # Standardise data frame
   x <- x %>% 
-    standardise(variable)
+    standardise(variable=variable, strat_vars=strat_vars)
+  
+  # Apply time window
+  x <- x %>%
+    applyTimeWindow(window=object@window, data_time_unit=options@data_time_unit)
+  
+  # Convert to requested time unit
+  x$TIME <- campsis::convertTime(x$TIME, from=options@data_time_unit, to=options@table_time_unit)
 
   if (object@ivalue_tibble) {
-    # Use group_split and map_df, this way data is a real tibble
-    # Otherwise using group_by, .data is a pronoun
     retValue <- x %>%
-      dplyr::ungroup() %>%
-      dplyr::group_split(ID) %>%
-      purrr::map_df(.f=function(data) {
-        id <- unique(data$ID)
-        ivalue <- object %>% iValueTbl(data=data)
-        return(tibble::tibble(id=id, value=ivalue))
-      })
+      dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
+      dplyr::group_modify(~ {
+        ivalue <- object %>% iValueTbl(data=.x)
+        tibble::tibble(value=ivalue)
+      }) %>%
+      dplyr::ungroup()
   } else {
     retValue <- x %>%
-      dplyr::group_by(ID) %>%
-      dplyr::summarise(ivalue=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
-      dplyr::ungroup() %>%
-      dplyr::transmute(id=ID, value=ivalue)
+      dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
+      dplyr::summarise(value=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
+      dplyr::ungroup()
   }
+  
+  # Stratification variables back to character vectors
+  retValue <- retValue %>%
+    dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), as.character))
 
-  return(retValue)  
+  return(retValue %>% dplyr::rename(id=ID))  
 })
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+loadMetricFromJSON <- function(object, json) {
+  if (!is.null(json@data$window)) {
+    # Assign type to window element
+    json@data$window$type <- "nca_time_window"
+  }
+  if (!is.null(json@data$rounding)) {
+    digits <- json@data$rounding$digits
+    mode <- json@data$rounding$mode
+    if (mode == "significant") {
+      json@data$digits <- sprintf("rlang::as_function(~style_sigfig(.x, %s))", as.character(digits))
+    } else if (mode == "decimals") {
+      json@data$digits <- sprintf("%s", as.character(digits))
+    } else {
+      stop("Rounding mode must 'significant' or 'decimals'")
+    }
+    json@data$rounding <- NULL
+  }
+  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  return(setDefaultNameIfNA(object))
+}
+
 
 #_______________________________________________________________________________
 #----                         statDisplayString                             ----
@@ -211,9 +260,13 @@ getDiscreteCategories <- function(object) {
 
 #' @rdname statDisplayString
 setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
-  if (nrow(object@summary) > 0) {
-    attr <- attributes(object@summary)
-    return(attr$comment)
+  if (nrow(object@summary_pretty) > 0) {
+    if ("category" %in% colnames(object@summary_pretty)) {
+      temp <- object@summary_pretty %>% dplyr::mutate(summary_stats_final=paste0(category, ": ", summary_stats))
+      return(as.character(temp$summary_stats_final))
+    } else {
+      return(as.character(object@summary_pretty$summary_stats))
+    }
   } else {
     stop("Summary does not exist yet and must be calculated first")
   }

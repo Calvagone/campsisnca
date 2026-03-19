@@ -3,7 +3,9 @@
 \name{statDisplayString}
 \alias{statDisplayString}
 \alias{statDisplayString,nca_metric-method}
-\title{Return the evaluated statistics display string.}
+\title{Return the evaluated statistics display string. This method was kept for
+backward compatibility in the tests. It is recommended to call `export(dest="dataframe", type="summary_pretty")`
+on the NCA table instead.}
 \usage{
 statDisplayString(object, ...)
 
@@ -18,5 +20,7 @@ statDisplayString(object, ...)
 a string, e.g. 100 [45-143]
 }
 \description{
-Return the evaluated statistics display string.
+Return the evaluated statistics display string. This method was kept for
+backward compatibility in the tests. It is recommended to call `export(dest="dataframe", type="summary_pretty")`
+on the NCA table instead.
 }

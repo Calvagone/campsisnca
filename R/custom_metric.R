@@ -26,9 +26,9 @@ setClass(
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 2 arguments: time and value
 #' @export
-CustomMetric <- function(x=NULL, variable=NULL, fun, name=NULL, unit=NULL,
+CustomMetric <- function(variable=NULL, window=NULL, fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
-  metric <- CustomMetricTbl(x=x, fun=fun, name=name, unit=unit,
+  metric <- CustomMetricTbl(window=window, fun=fun, name=name, unit=unit,
                             categorical=categorical, stat_display=stat_display, digits=digits)
   metric@variable <- processVariable(variable)
   metric@ivalue_tibble <- FALSE
@@ -46,14 +46,16 @@ CustomMetric <- function(x=NULL, variable=NULL, fun, name=NULL, unit=NULL,
 #' @inheritParams metricsParams
 #' @param fun any custom function with exactly 1 argument: data
 #' @export
-CustomMetricTbl <- function(x=NULL, fun, name=NULL, unit=NULL,
+CustomMetricTbl <- function(window=NULL, fun, name=NULL, unit=NULL,
                          categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
-  x <- processDataframe(x)
   name <- if (is.null(name)) "Custom" else name
   unit <- processUnit(unit)
   digits <- deparseDigits(digits)
   fun <- deparseCustomFun(fun)
-  return(new("custom_metric", x=x, variable=as.character(NA), name=name, unit=unit, custom_function=fun,
+  if (is.null(window)) {
+    window <- UndefinedTimeWindow()
+  }
+  return(new("custom_metric", variable=as.character(NA), window=window, name=name, unit=unit, custom_function=fun,
              categorical=categorical, stat_display=stat_display, digits=digits, ivalue_tibble=TRUE))
 }
 
@@ -78,7 +80,7 @@ setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definiti
 })
 
 
-#' @importFrom rlang is_function is_lambda
+#' @importFrom rlang is_function is_formula
 deparseCustomFun <- function(fun) {
   if (rlang::is_function(fun)) {
     retValue <- deparse1Line(fun)
@@ -91,6 +93,33 @@ deparseCustomFun <- function(fun) {
   }
   return(retValue)
 }
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("custom_metric", "json_element"), definition=function(object, json) {
+  type <- json@data$input_type
+  if (type == "vector") {
+    object@ivalue_tibble <- FALSE
+  } else if (type == "tibble") {
+    object@ivalue_tibble <- TRUE
+  } else {
+    stop("input_type must be either 'vector' or 'tibble'")
+  }
+  json@data$input_type <- NULL
+  
+  metric <- loadMetricFromJSON(object=object, json=json)
+  
+  # Process fun
+  metric@custom_function <- sprintf("rlang::as_function(%s)", metric@custom_function)
+  
+  # Auto-replace known NCA metrics
+  metric <- metric %>%
+    replaceAll(pattern=NCAMetrics(), replacement="auto")
+  
+  return(metric)
+})
 
 #_______________________________________________________________________________
 #----                             replaceAll                                ----
@@ -106,7 +135,6 @@ setMethod("replaceAll", signature=c("custom_metric", "nca_metrics", "character")
   object <- object %>%
     replaceAll(pattern=AUC(), replacement=replacement, fun_name="AUC") %>%
     replaceAll(pattern=CAt(), replacement=replacement, fun_name="CAt") %>%
-    replaceAll(pattern=Clast(), replacement=replacement, fun_name="Clast") %>%
     replaceAll(pattern=Ctrough(), replacement=replacement, fun_name="Ctrough") %>%
     replaceAll(pattern=ValueAt(), replacement=replacement, fun_name="ValueAt") %>%
     replaceAll(pattern=Last(), replacement=replacement, fun_name="Last") %>%

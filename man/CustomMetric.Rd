@@ -5,8 +5,8 @@
 \title{Custom metric (input data as time and value vectors).}
 \usage{
 CustomMetric(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   fun,
   name = NULL,
   unit = NULL,
@@ -16,9 +16,9 @@ CustomMetric(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{fun}{any custom function with exactly 2 arguments: time and value}
 

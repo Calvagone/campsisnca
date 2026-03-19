@@ -17,7 +17,7 @@ test_that("AUC infinite (single dose)", {
   results <- model %>% simulate(dataset=dataset, dest="rxode2", seed=1, outvars=c("CP", required))
   spaghettiPlot(results, "CP")
   
-  auc <- AUC(results, "CP", method=1) %>% campsisnca::calculate()
+  auc <- AUC("CP", method=1) %>% campsisnca::calculate(results)
   auc@individual$value
   met <- metrics.2cpt(results %>% mutate(DOSE=amount, TAU=24))
   met$AUC # = DOSE / CL

@@ -37,25 +37,25 @@ campsis <- generateTestData()
 campsis
 ```
 
-Let's calculate PK metrics at Day 1 and Day 7 as follows:
+Let's define our PK metrics at Day 1 and Day 7 as follows:
 
 ```{r, message=FALSE}
 # Day 1
-ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-  calculate()
-
+ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
+  
 # Day 7 
-ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-  add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-  calculate()
+ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+  add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 ```
 
-These 2 metrics may be imported into a metrics table object, as follows:
+These 2 metrics may be imported into a metrics table object, as follows.
+Use the `calculate` method to calculate the metrics in the table.
 
 ```{r, message=FALSE}
-table <- NCAMetricsTable() %>%
-  add(c(ncaD1, ncaD7))
+table <- NCATable() %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
 ```
 
 This table can be exported:
@@ -71,7 +71,7 @@ When `type` is not specified, default value is `summary`. Argument `type` can al
 2. To an HTML table using `gt`:
 
 ```{r, message=FALSE}
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 Please note the individual metrics can also be exported to  a dataframe using the `export` function as follows:
@@ -84,189 +84,190 @@ table %>% export(dest="dataframe", type="individual_wide")
 
 ```{r, message=FALSE}
 library(dplyr)
-campsis_bw_50_75 <- campsis %>% filter(BW > 50 & BW < 75)
-campsis_bw_75_100 <- campsis %>% filter(BW >= 75 & BW < 100)
+campsis_ <- campsis %>%
+    mutate(Scenario=ifelse(BW >= 75, ">=75kg patients", "<75kg patients")) 
+  
+day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(Scenario="all")) %>% 
+  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL")))
 
-scenarioD1_a <- c(day="Day 1", bw_range="BW range: 50-75")
-ncaD1_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_a) %>% 
-  add(c(AUC(unit="ng/mL*h"), Cmax(unit="ng/mL"), Tmax(unit="h"), Ctrough(unit="ng/mL"))) %>%
-  calculate()
+day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(Scenario="all")) %>% 
+  add(c(AUC(), Cmax(), Tmax(), Ctrough()))
 
-scenarioD7_a <- c(day="Day 7", bw_range="BW range: 50-75")
-ncaD7_a <- NCAMetrics(x=campsis_bw_50_75 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_a) %>%
-  add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-  calculate()
+table <- NCATable() %>%
+  add(c(day1, day7)) %>%
+  calculate(campsis_)
 
-scenarioD1_b <- c(day="Day 1", bw_range="BW range: 75-100")
-ncaD1_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(0, 24), variable="Y", scenario=scenarioD1_b) %>%
-  add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-  calculate()
-
-scenarioD7_b <- c(day="Day 7", bw_range="BW range: 75-100")
-ncaD7_b <- NCAMetrics(x=campsis_bw_75_100 %>% timerange(144, 168, rebase=T), variable="Y", scenario=scenarioD7_b) %>%
-  add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
-  calculate()
-
-table <- NCAMetricsTable() %>%
-  add(c(ncaD1_a, ncaD7_a, ncaD1_b, ncaD7_b))
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ```{r, message=FALSE}
 # Alternatively, first stratification variable can be seen in columns (use of 'tbl_merge' within gtsummary)
-table %>% export(dest="gt", subscripts=TRUE, combine_with="tbl_merge") %>% as_raw_html()
+table <- NCATable(combine_with="tbl_merge") %>%
+  add(c(day1, day7)) %>%
+  calculate(campsis_)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 3: Calculate 2-compartment half-life metrics
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis %>% mutate(DOSE=1000, TAU=24), variable="Y") %>%
-  add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z())) %>%
-  calculate()
+nca <- NCAAnalysis(variable="Y") %>%
+  add(c(Thalf.2cpt.dist(), Thalf.2cpt.eff(), Thalf.2cpt.z()))
 
-table <- NCAMetricsTable() %>%
-  add(nca)
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table <- NCATable() %>%
+  add(nca) %>%
+  calculate(campsis %>% mutate(DOSE=1000, TAU=24))
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 4: Compute terminal half-live based on data
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis, variable="Y") %>%
-  add(c(Thalf(x=campsis %>% timerange(7*24, 10*24)))) %>%
-  calculate()
+nca <- NCAAnalysis(variable="Y") %>%
+  add(c(Thalf(window=TimeWindow(7*24, 10*24))))
 
-table <- NCAMetricsTable() %>%
-  add(nca)
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table <- NCATable() %>%
+  add(nca) %>%
+  calculate(campsis)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 5: Round your PK metrics
 
 ```{r, message=FALSE}
 # Day 1
-ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
+ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
   add(AUC(digits=~style_sigfig(.x, 2), name="AUC1")) %>% # At least 2 significant figures (default in gtsummary)
-  add(AUC(digits=c(1,2,2), name="AUC2")) %>%             # Respectively 1/2/2 digit(s) after comma for med, p5 and p95
-  add(AUC(digits=~signif(.x, 2), name="AUC3")) %>%       # 2 significant digits only
-  add(AUC(digits=list(~plyr::round_any(.x, 5),
+  add(AUC(digits=c(1,2,2), name="AUC2")) %>% # Respectively 1/2/2 digit(s) after decimal for med, p5 and p95
+  add(AUC(digits=~signif(.x, 2), name="AUC3")) %>% # 2 significant digits only
+  add(AUC(digits=list(~round(.x/5)*5,
                       ~round(.x, 1) ,
-                      ~style_number(.x)), name="AUC4")) %>% # 1 specific function for med, p5 and p95
-  campsisnca::calculate()
+                      ~style_number(.x)),
+          name="AUC4")) # 1 specific function for med, p5 and p95
 
 # Day 7 
-ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
+ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
   add(AUC(name="AUC1")) %>%
   add(AUC(name="AUC2")) %>%
   add(AUC(name="AUC3")) %>%
-  add(AUC(name="AUC4")) %>%
-  campsisnca::calculate()
+  add(AUC(name="AUC4"))
 
-table <- NCAMetricsTable() %>%
-  add(c(ncaD1, ncaD7))
+table <- NCATable()  
+table <- table %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 6: Export custom metrics (including categorical data)
 
 ```{r, message=FALSE}
 # Compute Cmax yourself using campsisnca
-custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="Cmax custom", unit="ng/mL")
+custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="C_{max} custom", unit="ng/mL")
 
 # Check if Cmax if higher than 12 ng/mL
-custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="Cmax > 12", unit="%", categorical=TRUE)
+custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="C_{max} > 12", unit="%", categorical=TRUE)
 
 # Shortcut notation is also accepted
-custom3 <- CustomMetric(fun=~Cmax > 13, name="Cmax > 13", unit="%", categorical=TRUE)
+custom3 <- CustomMetric(fun=~Cmax > 13, name="C_{max}> 13", unit="%", categorical=TRUE)
 
 
 # Day 1
-ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-  add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2, custom3)) %>%
-  campsisnca::calculate()
+ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
+  add(c(Cmax(unit="ng/mL"), Tmax(unit="h"), custom1, custom2, custom3))
 
 # Day 7 
-ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-  add(c(Cmax(), Tmax(), custom1, custom2, custom3)) %>%
-  campsisnca::calculate()
+ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
+  add(c(Cmax(), Tmax(), custom1, custom2, custom3))
 
-table <- NCAMetricsTable() %>%
-  add(c(ncaD1, ncaD7))
+table <- NCATable()  
+table <- table %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
 
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 
 # Alternatively, all dichotomous levels can be shown as well:
-table %>% export(dest="gt", subscripts=TRUE, all_dichotomous_levels=TRUE) %>% as_raw_html()
+table <- NCATable(show_all_levels=TRUE)  
+table <- table %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
+
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 7: Geometric mean / Geometric CV
 
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=campsis, variable="Y") %>%
-  add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)"))) %>%
-  calculate()
+nca <- NCAAnalysis(variable="Y") %>%
+    add(c(AUC(unit="ng/mL*h", stat_display="{geomean} ({geocv}%)"), Cavg(unit="ng/mL", stat_display="{geomean} ({geocv}%)")))
 
-table <- NCAMetricsTable() %>%
-  add(nca)
+table <- NCATable() %>%
+  add(nca) %>%
+    calculate(campsis)
   
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 8: Statistics on categorical data with more than 2 levels
 
 ```{r, message=FALSE}
-  getCategory <- function(.x, .y) {
-    values <- Cmax() %>% iValue(.x, .y)
-    retValue <- dplyr::case_when(
-      values < 10 ~ "(1) < 10 ng/mL",
-      values >= 10 & values <= 15 ~ "(2) 10-15 ng/mL",
-      values > 15 ~ "(3) > 15 ng/mL",
-    )
-    return(retValue)
-  }
+getCategory <- function(.x, .y) {
+  values <- Cmax() %>% iValue(.x, .y)
+  retValue <- dplyr::case_when(
+    values < 10 ~ "(1) < 10 ng/mL",
+    values >= 10 & values <= 15 ~ "(2) 10-15 ng/mL",
+    values > 15 ~ "(3) > 15 ng/mL",
+  )
+  return(retValue)
+}
 
-  # Or equivalently, the 1-line purrr-style lambda expression
-  # getCategory <- ~case_when(Cmax < 10 ~ "(1) < 10 ng/mL", Cmax >= 10 & Cmax <= 15 ~ "(2) 10-15 ng/mL", Cmax > 15 ~ "(3) > 15 ng/mL")
+# Or equivalently, the 1-line purrr-style lambda expression
+# getCategory <- ~case_when(Cmax < 10 ~ "(1) < 10 ng/mL", Cmax >= 10 & Cmax <= 15 ~ "(2) 10-15 ng/mL", Cmax > 15 ~ "(3) > 15 ng/mL")
 
   # Day 1
-  ncaD1 <- NCAMetrics(x=campsis %>% timerange(0, 24), variable="Y", scenario=c(day="Day 1")) %>%
-    add(c(Cmax(unit="ng/mL"), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
-    campsisnca::calculate()
+ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 1, time_unit="day"), variable="Y") %>%
+  add(Cmax(unit="ng/mL")) %>%
+  add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
   
-  # Day 7 
-  ncaD7 <- NCAMetrics(x=campsis %>% timerange(144, 168, rebase=TRUE), variable="Y", scenario=c(day="Day 7")) %>%
-    add(c(Cmax(), CustomMetric(fun=getCategory, name="Cmax categories", unit="%", categorical=TRUE))) %>%
-    campsisnca::calculate()
+# Day 7 
+ncaD7 <- NCAAnalysis(name="Day 7", window=TimeWindow(6, 7, time_unit="day"), variable="Y") %>%
+  add(Cmax()) %>%
+  add(CustomMetric(fun=getCategory, name="C_{max} categories", unit="%", categorical=TRUE))
+
+table <- NCATable()  
+table <- table %>%
+  add(c(ncaD1, ncaD7)) %>%
+  calculate(campsis)
   
-  table <- NCAMetricsTable()  
-  table <- table %>%
-    add(c(ncaD1, ncaD7))
-  
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
 
 ### Example 9: Time above or below a certain threshold
 
 In the example below, we look at the individual time above (or below) 10 ng/mL at Day 1 for the 10 first subjects.
 
-```{r, message=FALSE}
+```{r, example9-plot, fig.width=10, fig.height=6, message=FALSE}
 day1 <- campsis %>%
   timerange(0, 24) %>%
-  dplyr::filter(ID %in% (1:10))
+  filter(ID %in% (1:10))
 
 campsis::spaghettiPlot(day1 , "Y") +
   ggplot2::geom_hline(yintercept=10, linetype="dashed", color="red")
 ```
 ```{r, message=FALSE}
-nca <- NCAMetrics(x=day1, variable="Y") %>%
-  add(c(Cmax(unit="ng/mL*h", stat_display="{mean}"),
-        TimeAboveLimit(limit=10, unit="h", stat_display="{mean}"),
-        TimeBelowLimit(limit=10, unit="h", stat_display="{mean}"))) %>%
-  calculate()
+nca <- NCAAnalysis(window=TimeWindow(0, 24), variable="Y") %>%
+  add(Cmax(unit="ng/mL*h", stat_display="{mean}")) %>%
+  add(TimeAboveLimit(limit=10, unit="h", stat_display="{mean}")) %>%
+  add(TimeBelowLimit(limit=10, unit="h", stat_display="{mean}"))
 
-table <- NCAMetricsTable() %>%
-  add(nca)
+table <- NCATable() %>%
+  add(nca) %>%
+  calculate(campsis %>% filter(ID %in% (1:10)))
   
 table %>% export(dest="dataframe", type="individual_wide")
 ```
@@ -274,5 +275,84 @@ table %>% export(dest="dataframe", type="individual_wide")
 Summary statistics can also be exported:
 
 ```{r, message=FALSE}
-table %>% export(dest="gt", subscripts=TRUE) %>% as_raw_html()
+table %>% export(dest="gt") %>% as_raw_html()
 ```
+
+### Example 10: Summary statistics across arms and scenarios
+
+Let's generate some fictitious results where two treatment arms are simulated (`1g QD` and `2g QD`) and where scenarios are included too (`Base scenario` and `Lower clearance`).
+
+```{r, example10-plot, fig.width=10, fig.height=6, message=FALSE}
+library(campsis)
+arm1 <- Arm(subjects=24, label="1g QD") %>%
+  add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
+  add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
+
+arm2 <- Arm(subjects=24, label="0.5g BID") %>%
+  add(Bolus(time=0, amount=500, compartment="ABS", ii=12, addl=13)) %>%
+  add(Observations(seq(0,14*24,by=0.1))) # 2-weeks observations
+
+dataset <- Dataset() %>%
+  add(c(arm1, arm2))
+
+scenario1 <- Scenario(name="Base scenario", model=~.x, dataset=~.x)
+scenario2 <- Scenario(name="Lower clearance", model=~.x %>%
+                        replace(Theta(name="CL", value=2)), dataset=~.x)
+scenarios <- Scenarios() %>% add(c(scenario1, scenario2))
+results <- simulate(model=model_suite$pk$`2cpt_fo`, dataset=dataset, seed=1, dest="mrgsolve", scenarios=scenarios)
+
+shadedPlot(results, "CONC", colour="ARM", strat_extra="SCENARIO") +
+  ggplot2::facet_wrap(~SCENARIO) +
+  ggplot2::xlab("Time (h)") +
+  ggplot2::ylab("Concentrations (ng/mL)") +
+  ggplot2::labs(colour="Arm", fill="Arm")
+```
+
+NCA summary statistics are automatically calculated across all strata levels in ARM and SCENARIO.
+
+```{r, message=FALSE}
+nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
+  add(AUC(unit="ng/mL*h")) %>%
+  add(Cmax(unit="ng/mL")) %>%
+  add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+  add(Tmax(unit="h", digits=2)) %>%
+  add(Ctrough(unit="ng/mL")) %>%
+  add(Thalf(unit="h", window=TimeWindow(200, "last"))) # Thalf will be estimated by dosing a linear regression on the range [200, 'last']
+  
+table <- NCATable() %>%
+  add(nca) %>%
+  calculate(results)
+
+table %>% export(dest="gt") %>% as_raw_html()
+```
+
+In the previous example, statistics are summarized on Day 7. In you wish specifics statistics for each one of your arms, you could also proceed sightly differently by creating 2 analyses (1 for each strata) and refer to specific arms by overriding the default strata.
+
+```{r, message=FALSE}
+ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 168),
+                       variable="CONC", strata=c(ARM="1g QD", SCENARIO="all")) %>%
+    add(AUC(unit="ng/mL*h")) %>%
+    add(Cmax(unit="ng/mL")) %>%
+    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(Tmax(unit="h", digits=2)) %>%
+    add(Ctrough(unit="ng/mL")) %>%
+    add(Thalf(unit="h", window=TimeWindow(200, "last")))
+  
+ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156, 168),
+                       variable="CONC", strata=c(ARM="0.5g BID", SCENARIO="all")) %>%
+  add(AUC(unit="ng/mL*h")) %>%
+  add(Cmax(unit="ng/mL")) %>%
+  add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+  add(Tmax(unit="h", digits=2)) %>%
+  add(Ctrough(unit="ng/mL")) %>%
+  add(Thalf(unit="h", window=TimeWindow(200, "last")))
+
+table <- NCATable() %>%
+  add(ncaArm1) %>%
+  add(ncaArm2) %>%
+  calculate(results)
+
+table %>% export(dest="gt") %>% as_raw_html()
+```
+
+

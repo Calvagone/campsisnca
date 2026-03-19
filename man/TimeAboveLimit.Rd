@@ -5,8 +5,8 @@
 \title{Time above a certain limit.}
 \usage{
 TimeAboveLimit(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   limit = NULL,
   strictly = FALSE,
   name = NULL,
@@ -16,9 +16,9 @@ TimeAboveLimit(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{limit}{the limit to compare the variable against}
 

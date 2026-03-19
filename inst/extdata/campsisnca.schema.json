@@ -1,0 +1,659 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://calvagone.github.io/campsis.doc/schema/1.0/campsisnca.schema.json",
+  "$comment": "Campsisnca JSON Schema v1.0 © 2025 [Nicolas Luyckx / Calvagone]. Licensed under CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). You are free to share and adapt this schema with attribution.",
+  "title": "Campsisnca JSON Schema",
+  "$ref": "#/$defs/nca_table",
+  "$defs": {
+    "nca_table": {
+      "type": "object",
+      "properties": {
+        "nca_analyses": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/nca_analysis"
+          },
+          "description": "List of NCA analyses. For example, one analysis could focus on NCA metrics from day 1, and another on those from day 7."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of this table (optional)."
+        },
+        "subtitle": {
+          "type": "string",
+          "description": "Subtitle of this table (optional)."
+        },
+        "swap_strat": {
+          "type": "boolean",
+          "description": "Swap stratification variables in table (only useful when 2 stratification variables are given in the analyses)"
+        },
+        "combine_with": {
+          "type": "string",
+          "enum": [
+            "tbl_stack",
+            "tbl_merge"
+          ],
+          "description": "This field will inform gtsummary on how to merge tables from different analyses."
+        },
+        "show_all_levels": {
+          "type": "boolean",
+          "description": "This field will inform gtsummary if all dichotomous levels must be shown in the table (e.g. for a true/false binary variable, only true is shown)"
+        },
+        "header_label": {
+          "type": "string",
+          "description": "The header label to use for the metrics. Default will be 'Metric'."
+        },
+        "nca_options": {
+          "$ref": "#/$defs/nca_options",
+          "description": "NCA options that will be passed to calculate when NCA metrics are computed."
+        },
+        "tab_options": {
+          "$ref": "#/$defs/gt_tab_options",
+          "description": "(Gt)-table options that will be passed to gt when the table is rendered."
+        }
+      },
+      "required": [
+        "nca_analyses"
+      ]
+    },
+    "nca_analysis": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of this analysis. This name will appear in the table. All names must be unique."
+        },
+        "window": {
+          "$ref": "#/$defs/nca_time_window",
+          "description": "Default time window for this analysis. If not specified, default time range is from 0 to 'last'."
+        },
+        "variable": {
+          "type": "string",
+          "description": "Default output variable for this analysis. If not specified, the variable name MUST be specified in each metric."
+        },
+        "metrics": {
+          "type": "array",
+          "items": {
+            "oneOf": [
+              {
+                "$ref": "#/$defs/auc_metric"
+              },
+              {
+                "$ref": "#/$defs/max_metric"
+              },
+              {
+                "$ref": "#/$defs/cmax_metric"
+              },
+              {
+                "$ref": "#/$defs/min_metric"
+              },
+              {
+                "$ref": "#/$defs/cmin_metric"
+              },
+              {
+                "$ref": "#/$defs/avg_metric"
+              },
+              {
+                "$ref": "#/$defs/cavg_metric"
+              },
+              {
+                "$ref": "#/$defs/last_metric"
+              },
+              {
+                "$ref": "#/$defs/ctrough_metric"
+              },
+              {
+                "$ref": "#/$defs/tmin_metric"
+              },
+              {
+                "$ref": "#/$defs/tmax_metric"
+              },
+              {
+                "$ref": "#/$defs/time_above_limit_metric"
+              },
+              {
+                "$ref": "#/$defs/time_below_limit_metric"
+              },
+              {
+                "$ref": "#/$defs/thalf_metric"
+              },
+              {
+                "$ref": "#/$defs/custom_metric"
+              }
+            ]
+          }
+        },
+        "strata": {
+          "$ref": "#/$defs/nca_strata",
+          "description": "Named strata filters used to subset the dataset. See nca_strata definition."
+        }
+      },
+      "required": [
+        "name",
+        "metrics"
+      ],
+      "description": "Definition of a analysis."
+    },
+    "nca_metric": {
+      "title": "Base NCA Metric",
+      "type": "object",
+      "properties": {
+        "type": {
+          "type": "string"
+        },
+        "variable": {
+          "type": "string",
+          "description": "Output variable on which the metric must be computed."
+        },
+        "window": {
+          "$ref": "#/$defs/nca_time_window",
+          "description": "Specific time window to use for this metric (e.g. if time window from the analysis needs to be overridden)"
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the metric. This name can include grouping variables. E.g. '<METRIC> <PERIOD>'"
+        },
+        "unit": {
+          "type": "string",
+          "description": "Informative unit string for this metric."
+        },
+        "stat_display": {
+          "type": "string",
+          "description": "Statistic display. E.g. '{median} ({p5}–{p95})'."
+        },
+        "rounding": {
+          "$ref": "#/$defs/rounding_options",
+          "description": "Rounding options. See type 'rounding_options'."
+        }
+      },
+      "required": [
+        "type"
+      ]
+    },
+    "auc_metric": {
+      "title": "AUC Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "auc_metric"
+            },
+            "method": {
+              "$ref": "#/$defs/auc_method",
+              "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_max_metric": {
+      "title": "Abstract Max Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "max_metric": {
+      "title": "Max Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_max_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "max_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "cmax_metric": {
+      "title": "Cmax Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_max_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cmax_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_min_metric": {
+      "title": "Abstract Min Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "min_metric": {
+      "title": "Min Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_min_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "min_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "cmin_metric": {
+      "title": "Cmin Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_min_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cmin_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_avg_metric": {
+      "title": "Abstract Avg Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "avg_metric": {
+      "title": "Avg Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_avg_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "avg_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "cavg_metric": {
+      "title": "Cavg Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_avg_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cavg_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_last_metric": {
+      "title": "Abstract Last Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "ctrough_metric": {
+      "title": "Ctrough Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_last_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "ctrough_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "last_metric": {
+      "title": "Last Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_last_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "last_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "tmin_metric": {
+      "title": "Tmin Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "tmin_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "tmax_metric": {
+      "title": "Tmax Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "tmax_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "abstract_time_above_or_below_limit_metric": {
+      "title": "Abstract Time Above or Below Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "limit": {
+              "type": "number",
+              "description": "Horizontal limit or threshold."
+            },
+            "strictly": {
+              "type": "boolean",
+              "description": "Whether the variable must be strictly above or below the limit. Default is false."
+            }
+          },
+          "required": [
+            "limit"
+          ]
+        }
+      ]
+    },
+    "time_above_limit_metric": {
+      "title": "Time Above Limit Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_time_above_or_below_limit_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "time_above_limit_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "time_below_limit_metric": {
+      "title": "Time Below Limit Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/abstract_time_above_or_below_limit_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "time_below_limit_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "thalf_metric": {
+      "title": "Thalf Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "thalf_metric"
+            }
+          },
+          "required": [
+          ]
+        }
+      ]
+    },
+    "custom_metric": {
+      "title": "Custom Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "custom_metric"
+            },
+            "categorical": {
+              "type": "boolean",
+              "description": "Whether the custom function returns a boolean or string (categorical) or returns a continuous value (not categorical)."
+            },
+            "custom_function": {
+              "type": "string",
+              "description": "e.g. ~(AUC() %>% iValue(.x, .y)) > 100 or simply ~AUC > 100. See documentation on campsisnca repository."
+            },
+            "input_type": {
+              "$ref": "#/$defs/custom_function_input_type",
+              "description": "Either 'tibble' (the whole simulated output is given) or 'vector' (first vector .x is the TIME vector, second vector .y is the VALUE vector)."
+            }
+          },
+          "required": [
+            "categorical",
+            "custom_function",
+            "input_type"
+          ]
+        }
+      ]
+    },
+    "auc_method": {
+      "type": "string",
+      "enum": [
+        "linlin",
+        "linlog",
+        "tmax_linlog"
+      ],
+      "description": "Method used to compute AUC"
+    },
+    "nca_time_window": {
+      "title": "NCA Time Window",
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "number",
+          "description": "Start time of the window."
+        },
+        "end": {
+          "oneOf": [
+            {
+              "type": "number"
+            },
+            {
+              "type": "string",
+              "pattern": "^last$"
+            }
+          ],
+          "description": "End time of the window. Use 'last' to refer to the last value of the simulation output."
+        },
+        "time_unit": {
+          "$ref": "#/$defs/time_unit",
+          "description": "Time unit of properties 'start' and 'end'. Default unit is 'hour."
+        },
+        "exclude_start": {
+          "type": "boolean",
+          "description": "Exclude start time. Default is false. If true, the next time point shall delimit the start of the range."
+        },
+        "exclude_end": {
+          "type": "boolean",
+          "description": "Exclude end time. Default is false. If true, the previous time point shall delimit the end of the range."
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ]
+    },
+    "rounding_options": {
+      "title": "Rounding Options",
+      "type": "object",
+      "properties": {
+        "digits": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of decimals or significant figures."
+        },
+        "mode": {
+          "$ref": "#/$defs/rounding_mode",
+          "description": "Rounding mode: decimals or significant figures."
+        }
+      },
+      "required": [
+        "digits",
+        "mode"
+      ]
+    },
+    "gt_tab_options": {
+      "type": "object",
+      "description": "Options passed to gt::tab_options()",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ]
+      }
+    },
+    "nca_options": {
+      "type": "object",
+      "description": "Options controlling NCA calculations.",
+      "properties": {
+        "quantile_type": {
+          "type": "integer",
+          "description": "Type of quantile algorithm used for quantile computation."
+        },
+        "data_time_unit": {
+          "$ref": "#/$defs/time_unit",
+          "description": "Unit of time used in the simulated data."
+        },
+        "table_time_unit": {
+          "$ref": "#/$defs/time_unit",
+          "description": "Unit of time to use when representing the metrics in the table (AUC, Time above/below, etc)."
+        }
+      },
+      "required": [
+      ]
+    },
+    "time_unit": {
+      "type": "string",
+      "enum": [
+        "second",
+        "minute",
+        "hour",
+        "day",
+        "week",
+        "month",
+        "year"
+      ]
+    },
+    "rounding_mode": {
+      "type": "string",
+      "enum": [
+        "decimals",
+        "significant"
+      ]
+    },
+    "custom_function_input_type": {
+      "type": "string",
+      "enum": [
+        "vector",
+        "tibble"
+      ]
+    },
+    "nca_strata": {
+      "type": "object",
+      "description": "Named strata filters used to subset the dataset (e.g., ARM, SCENARIO). Each property name represents a column and its value the level to select.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "minProperties": 1
+    }
+  }
+}

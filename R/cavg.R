@@ -1,10 +1,33 @@
 #_______________________________________________________________________________
-#----                         cavg_metric class                             ----
+#----                       (c)avg_metric class                             ----
 #_______________________________________________________________________________
 
-validateCavgMetric <- function(object) {
+validateAvgMetric <- function(object) {
   return(TRUE)
 }
+
+#' 
+#' Abstract avg metric class.
+#' 
+#' @export
+setClass(
+  "abstract_avg_metric",
+  representation(
+  ),
+  contains="nca_metric",
+  validity=validateAvgMetric
+)
+
+#' 
+#' Avg metric class.
+#' 
+#' @export
+setClass(
+  "avg_metric",
+  representation(
+  ),
+  contains="abstract_avg_metric"
+)
 
 #' 
 #' Cavg metric class.
@@ -14,40 +37,53 @@ setClass(
   "cavg_metric",
   representation(
   ),
-  contains="nca_metric",
-  validity=validateCavgMetric
+  contains="abstract_avg_metric"
 )
-
-#' 
-#' Cavg.
-#' 
-#' @inheritParams metricsParams
-#' @export
-Cavg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="cavg_metric", def_name="Cavg")
-  metric@concentration <- TRUE
-  return(metric)
-}
 
 #' 
 #' Avg.
 #' 
 #' @inheritParams metricsParams
 #' @export
-Avg <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="cavg_metric", def_name="Avg")
-  metric@concentration <- FALSE
-  return(metric)
+Avg <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="avg_metric")
+  return(setDefaultNameIfNA(metric))
 }
+
+#' 
+#' Cavg.
+#' 
+#' @inheritParams metricsParams
+#' @export
+Cavg <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="cavg_metric")
+  return(setDefaultNameIfNA(metric))
+}
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("avg_metric"), definition=function(object, ...) {
+  return("Avg")
+})
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("cavg_metric"), definition=function(object, ...) {
+  return("Cavg")
+})
 
 #_______________________________________________________________________________
 #----                            iValue                                     ----
 #_______________________________________________________________________________
 
 #' @rdname iValue
-setMethod("iValue", signature=c("cavg_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("iValue", signature=c("abstract_avg_metric", "numeric", "numeric"), definition=function(object, time, value) {
   start <- time[1]
   end <- time[length(time)]
   auc <- trap(x=time, y=value, method=1L)
@@ -59,7 +95,14 @@ setMethod("iValue", signature=c("cavg_metric", "numeric", "numeric"), definition
 #_______________________________________________________________________________
 
 #' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("cavg_metric"), definition = function(x) {
+setMethod("getLaTeXName", signature=c("abstract_avg_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "avg"))
 })
 
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("abstract_avg_metric", "json_element"), definition=function(object, json) {
+  return(loadMetricFromJSON(object=object, json=json))
+})

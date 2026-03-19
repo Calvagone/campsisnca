@@ -1,0 +1,29 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Default",
+      "window": {
+        "start": 0.0,
+        "end": "last",
+        "time_unit": "hour",
+        "exclude_start": false,
+        "exclude_end": false
+      },
+      "variable": "CONC",
+      "metrics": [
+        {
+          "type": "custom_metric",
+          "name": "Custom",
+          "stat_display": "{p}%",
+          "categorical": true,
+          "custom_function": "~AUC > 100",
+          "input_type": "vector"
+        }
+      ],
+      "strata": {
+        "SCENARIO": "all",
+        "ARM": "all"
+      }
+    }
+  ]
+}

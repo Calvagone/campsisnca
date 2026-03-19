@@ -1,0 +1,118 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Day 1",
+      "window": {
+        "start": 0,
+        "end": 24
+      },
+      "variable": "Y",
+      "metrics": [
+        {
+          "type": "auc_metric"
+        },
+        {
+          "type": "cmax_metric"
+        },
+        {
+          "type": "cmin_metric"
+        },
+        {
+          "type": "cavg_metric"
+        },
+        {
+          "type": "max_metric"
+        },
+        {
+          "type": "min_metric"
+        },
+        {
+          "type": "avg_metric"
+        },
+        {
+          "type": "last_metric"
+        },
+        {
+          "type": "ctrough_metric"
+        },
+        {
+          "type": "tmin_metric"
+        },
+        {
+          "type": "tmax_metric"
+        },
+        {
+          "type": "time_above_limit_metric",
+          "limit": 10.0
+        },
+        {
+          "type": "time_below_limit_metric",
+          "limit": 10.0
+        },
+        {
+          "type": "thalf_metric"
+        }
+      ],
+      "strata": {
+        "ARM": "Specific arm"
+      }
+    },
+    {
+      "name": "Day 7",
+      "window": {
+        "start": 144,
+        "end": 168
+      },
+      "variable": "Y",
+      "metrics": [
+        {
+          "type": "auc_metric"
+        },
+        {
+          "type": "cmax_metric"
+        },
+        {
+          "type": "cmin_metric"
+        },
+        {
+          "type": "cavg_metric"
+        },
+        {
+          "type": "max_metric"
+        },
+        {
+          "type": "min_metric"
+        },
+        {
+          "type": "avg_metric"
+        },
+        {
+          "type": "last_metric"
+        },
+        {
+          "type": "ctrough_metric"
+        },
+        {
+          "type": "tmin_metric"
+        },
+        {
+          "type": "tmax_metric"
+        },
+        {
+          "type": "time_above_limit_metric",
+          "limit": 20.0
+        },
+        {
+          "type": "time_below_limit_metric",
+          "limit": 20.0
+        },
+        {
+          "type": "thalf_metric"
+        }
+      ],
+      "strata": {
+        "ARM": "Specific arm"
+      }
+    }
+  ]
+}

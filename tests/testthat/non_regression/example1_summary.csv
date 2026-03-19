@@ -1,4 +1,4 @@
-"metric","stat","value","day"
+"metric","stat","value","analysis"
 "AUC","median",134.02,"Day 1"
 "AUC","p5",102.03,"Day 1"
 "AUC","p95",167.51,"Day 1"

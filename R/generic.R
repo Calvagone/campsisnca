@@ -1,3 +1,23 @@
+#_______________________________________________________________________________
+#----                           applyTimeWindow                             ----
+#_______________________________________________________________________________
+
+#' Apply time window.
+#' 
+#' @param x input data for the calculation, data frame
+#' @param window time window
+#' @param data_time_unit time unit of TIME column in data (x argument)
+#' @param ... extra arguments
+#' @return updated object
+#' @export
+#' @rdname applyTimeWindow
+applyTimeWindow <- function(x, window, data_time_unit, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("applyTimeWindow", function(x, window, data_time_unit, ...) {
+  standardGeneric("applyTimeWindow")
+})
 
 #_______________________________________________________________________________
 #----                             calculate                                 ----
@@ -6,18 +26,19 @@
 #' Calculate.
 #' 
 #' @param object object (PK metric) that needs to be calculated
-#' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
+#' @param x input data for the calculation, data frame
+#' @param options NCA options
 #' @param ... extra arguments
 #' @return updated object
 #' @export
 #' @rdname calculate
-calculate <- function(object, quantile_type, ...) {
+calculate <- function(object, x, options, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("calculate", function(object, quantile_type=NULL, ...) {
-  if (is.null(quantile_type)) {
-    quantile_type <- 2
+setGeneric("calculate", function(object, x, options=NULL, ...) {
+  if (is.null(options)) {
+    options <- UndefinedNCAOptions()
   }
   standardGeneric("calculate")
 })
@@ -32,15 +53,14 @@ setGeneric("calculate", function(object, quantile_type=NULL, ...) {
 #' @param object PK metric
 #' @param time time vector, numeric
 #' @param value value vector, numeric
-#' @param ... extra arguments
 #' @return individual value
 #' @export
 #' @rdname iValue
-iValue <- function(object, time, value, ...) {
+iValue <- function(object, time, value) {
   stop("No default function is provided")
 }
 
-setGeneric("iValue", function(object, time, value, ...) {
+setGeneric("iValue", function(object, time, value=NULL) {
   assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
   assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
   standardGeneric("iValue")
@@ -70,18 +90,21 @@ setGeneric("iValueTbl", function(object, data, ...) {
 #----                             iValues                                   ----
 #_______________________________________________________________________________
 
-#' Compute the individual values of a population.
+#' Compute the individual values on a simulation output.
 #' 
 #' @param object PK metric
+#' @param x input data for the calculation, data frame
+#' @param options NCA options
+#' @param strat_vars stratification variable names
 #' @param ... extra arguments
 #' @return individual values
 #' @export
 #' @rdname iValues
-iValues <- function(object, ...) {
+iValues <- function(object, x, options, strat_vars, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("iValues", function(object, ...) {
+setGeneric("iValues", function(object, x, options, strat_vars, ...) {
   standardGeneric("iValues")
 })
 
@@ -93,32 +116,16 @@ setGeneric("iValues", function(object, ...) {
 #' 
 #' @param object table object
 #' @param init generate initialization code to generate the individuals, default is TRUE
-#' @param subscripts use LaTeX subcripts/superscripts notation when writing labels
-#' @param all_dichotomous_levels show all dichotomous levels (0 and 1) when data is dichotomous, default is FALSE
-#' @param combine_with either 'tbl_stack' or 'tbl_merge'
-#' @param header_label header label name
 #' @param ... extra arguments
 #' @export
 #' @rdname generateTableCode
-generateTableCode <- function(object, init, subscripts, all_dichotomous_levels, combine_with, header_label,  ...) {
+generateTableCode <- function(object, init, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generateTableCode", function(object, init=NULL, subscripts=NULL, all_dichotomous_levels=NULL, combine_with=NULL, header_label=NULL, ...) {
+setGeneric("generateTableCode", function(object, init=NULL, ...) {
   if (is.null(init)) {
     init <- TRUE
-  }
-  if (is.null(subscripts)) {
-    subscripts <- FALSE
-  }
-  if (is.null(all_dichotomous_levels)) {
-    all_dichotomous_levels <- FALSE
-  }
-  if (is.null(combine_with)) {
-    combine_with <- "tbl_stack"
-  }
-  if (is.null(header_label)) {
-    header_label <- "Metric"
   }
   standardGeneric("generateTableCode")
 })
@@ -145,19 +152,23 @@ setGeneric("getLaTeXName", function(x, ...) {
 #----                           getScenarios                                ----
 #_______________________________________________________________________________
 
-#' Get all scenarios that were added to the table object.
+#' Get all stratas.
 #' 
 #' @param object table object
+#' @param keep_single keep single stratification values, logical (default TRUE)
 #' @param ... extra arguments
-#' @return a dataframe with 2 columns name (stratification variable) and value (all level values)
+#' @return list of stratification variable names
 #' @export
-#' @rdname getScenarios
-getScenarios <- function(object, ...) {
+#' @rdname getStrata
+getStrata <- function(object, keep_single, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("getScenarios", function(object, ...) {
-  standardGeneric("getScenarios")
+setGeneric("getStrata", function(object, keep_single=NULL, ...) {
+  if (is.null(keep_single)) {
+    keep_single <- TRUE
+  }
+  standardGeneric("getStrata")
 })
 
 #_______________________________________________________________________________
@@ -180,11 +191,31 @@ setGeneric("getUnit", function(object, metric, ...) {
 })
 
 #_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' Get default name.
+#' 
+#' @param object get default name of this object
+#' @param ... optional extra arguments
+#' @export
+#' @rdname getDefaultName
+getDefaultName <- function(object, ...) {
+  stop("No default function is provided")
+}
+
+setGeneric("getDefaultName", function(object, ...) {
+  standardGeneric("getDefaultName")
+})
+
+#_______________________________________________________________________________
 #----                         statDisplayString                             ----
 #_______________________________________________________________________________
 
-#' Return the evaluated statistics display string.
-#' 
+#' Return the evaluated statistics display string. This method was kept for
+#' backward compatibility in the tests. It is recommended to call `export(dest="dataframe", type="summary_pretty")`
+#' on the NCA table instead.
+#'
 #' @param object PK metric
 #' @param ... extra arguments
 #' @return a string, e.g. 100 [45-143]
@@ -196,23 +227,4 @@ statDisplayString <- function(object, ...) {
 
 setGeneric("statDisplayString", function(object, ...) {
   standardGeneric("statDisplayString")
-})
-
-#_______________________________________________________________________________
-#----                       reduceTo2Dimensions                             ----
-#_______________________________________________________________________________
-
-#' Reduce table to 2 dimensions.
-#' 
-#' @param object generic object
-#' @param ... extra arguments
-#' @return same object/table with max 2 dimensions (useful before export)
-#' @export
-#' @rdname reduceTo2Dimensions
-reduceTo2Dimensions <- function(object, ...) {
-  stop("No default function is provided")
-}
-
-setGeneric("reduceTo2Dimensions", function(object, ...) {
-  standardGeneric("reduceTo2Dimensions")
 })

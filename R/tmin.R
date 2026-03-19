@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateTminMetric <- function(object) {
-  return(TRUE)
+  return(expectOne(object, "rebase"))
 }
 
 #' 
@@ -13,8 +13,10 @@ validateTminMetric <- function(object) {
 setClass(
   "tmin_metric",
   representation(
+    rebase="logical"
   ),
   contains="nca_metric",
+  prototype=prototype(rebase=TRUE),
   validity=validateTminMetric
 )
 
@@ -22,12 +24,24 @@ setClass(
 #' Tmin.
 #' 
 #' @inheritParams metricsParams
+#' @param rebase rebase time according to start time of window
 #' @export
-Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(x=x, variable=variable, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="tmin_metric", def_name="tmin")
-  return(metric)
+Tmin <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+                           stat_display=stat_display, digits=digits,
+                           metric_name="tmin_metric")
+  metric@rebase <- rebase
+  return(setDefaultNameIfNA(metric))
 }
+
+#_______________________________________________________________________________
+#----                           getDefaultName                              ----
+#_______________________________________________________________________________
+
+#' @rdname getDefaultName
+setMethod("getDefaultName", signature=c("tmin_metric"), definition=function(object, ...) {
+  return("tmin") 
+})
 
 #_______________________________________________________________________________
 #----                            iValue                                     ----
@@ -35,7 +49,11 @@ Tmin <- function(x=NULL, variable=NULL, name=NULL, unit=NULL, stat_display=NULL,
 
 #' @rdname iValue
 setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  return(time[which.min(value)])    
+  retValue <- time[which.min(value)]
+  if (object@rebase) {
+    retValue <- retValue - object@window@start
+  }
+  return(retValue)    
 })
 
 #_______________________________________________________________________________
@@ -46,3 +64,12 @@ setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition
 setMethod("getLaTeXName", signature=c("tmin_metric"), definition = function(x) {
   return(subscriptOccurrence(x %>% getName(), "min"))
 })
+
+#_______________________________________________________________________________
+#----                           loadFromJSON                                ----
+#_______________________________________________________________________________
+
+setMethod("loadFromJSON", signature=c("tmin_metric", "json_element"), definition=function(object, json) {
+  return(loadMetricFromJSON(object=object, json=json))
+})
+

@@ -4,10 +4,12 @@
 \alias{computeNCAMetricSummary}
 \title{Compute NCA metric summary.}
 \usage{
-computeNCAMetricSummary(object, quantile_type)
+computeNCAMetricSummary(object, strat_vars, quantile_type)
 }
 \arguments{
 \item{object}{NCA metric}
+
+\item{strat_vars}{stratification variable names in data}
 
 \item{quantile_type}{type of quantile}
 }

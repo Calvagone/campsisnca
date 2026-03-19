@@ -5,8 +5,8 @@
 \title{AUC.}
 \usage{
 AUC(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   method = 1,
   name = NULL,
   unit = NULL,
@@ -15,9 +15,9 @@ AUC(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{method}{method:
 * 1: linear up - linear down

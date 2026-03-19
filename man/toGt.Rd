@@ -4,10 +4,23 @@
 \alias{toGt}
 \title{Gtsummary to Gt.}
 \usage{
-toGt(x, subscripts = FALSE, fmt_markdown = FALSE)
+toGt(
+  x,
+  title = NULL,
+  subtitle = NULL,
+  opts = list(),
+  subscripts = FALSE,
+  fmt_markdown = FALSE
+)
 }
 \arguments{
 \item{x}{gtsummary table}
+
+\item{title}{table title}
+
+\item{subtitle}{table subtitle}
+
+\item{opts}{gt tab options}
 
 \item{subscripts}{use subscripts}
 

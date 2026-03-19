@@ -2,11 +2,11 @@
 % Please edit documentation in R/cmin.R
 \name{Cmin}
 \alias{Cmin}
-\title{Cmin.}
+\title{Cmin}
 \usage{
 Cmin(
-  x = NULL,
   variable = NULL,
+  window = NULL,
   name = NULL,
   unit = NULL,
   stat_display = NULL,
@@ -14,9 +14,9 @@ Cmin(
 )
 }
 \arguments{
-\item{x}{Campsis/NONMEM dataframe}
-
 \item{variable}{dependent variable}
+
+\item{window}{time window on which this metric should be computed}
 
 \item{name}{custom metric name (will be exported into table headers)}
 
@@ -27,5 +27,5 @@ Cmin(
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
 \description{
-Cmin.
+Cmin
 }
