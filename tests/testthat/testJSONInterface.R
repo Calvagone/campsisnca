@@ -146,3 +146,21 @@ test_that("Import NCA table with 'combine_with' and 'show_all_levels' fields set
   
   expect_equal(imported_table, expected_table)
 })
+
+test_that("Import NCA table with proper time units (test issue #80)", {
+  
+  # Import NCA configuration from JSON
+  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_8.json"))
+  
+  day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 1, "day"), variable="CONC") %>%
+    add(c(Cmax(unit="ng/mL"), Tmax(unit="min")))
+  
+  day7 <- NCAAnalysis(name="Day 7", window=TimeWindow(6, 7, "day"), variable="CONC") %>%
+    add(c(Cmax(unit="ng/mL"), Tmax(unit="min")))
+  
+  expected_table <- NCATable(nca_options=NCAOptions(data_time_unit="hour", table_time_unit="minute")) %>%
+    add(day1) %>%
+    add(day7)
+  
+  expect_equal(imported_table, expected_table)
+})
