@@ -1,3 +1,7 @@
+# campsisnca 1.6.1
+
+* Tmax and Tmin: rebase not supporting time unit #80
+
 # campsisnca 1.6.0
 
 * Implementation of a JSON-based interface #74
