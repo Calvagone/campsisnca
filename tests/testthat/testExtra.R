@@ -197,6 +197,7 @@ test_that("Method statDisplayString works as expected on categorical data when d
 
 test_that("Time unit of AUC can be customised", {
   
+  # First example with AUC
   nca <- NCAAnalysis(variable="Y") %>%
     add(AUC(stat_display="{median}", digits=1))
   
@@ -212,4 +213,31 @@ test_that("Time unit of AUC can be customised", {
   
   expect_equal(median_hour$summary_stats, "921.5")
   expect_equal(median_day$summary_stats, "38.4")
+  
+  # Second example with real simulated data
+  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_8.json"))
+  
+})
+
+test_that("Time unit of tmax and tmin can be customised as well", {
+  
+  # Second example with real simulated data
+  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_8.json"))
+  
+  model <- model_suite$pk$`2cpt_fo`
+  
+  dataset <- Dataset(100) %>%
+    add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
+    add(Observations(times=TimeSequence(0, 24, 0.1), rep=DosingSchedule()))
+  
+  x <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1)
+  spaghettiPlot(x, "CONC")
+  
+  stats <- table %>%
+    campsisnca::calculate(x=x) %>%
+    export(dest="dataframe", type="summary_pretty")
+  
+  expect_equal(stats$metric, c("Cmax", "tmax", "Cmax", "tmax"))
+  expect_equal(stats$analysis, c("Day 1", "Day 1", "Day 7", "Day 7"))
+  expect_equal(stats$summary_stats, c("24.7 (17.9–35.1)", "48.0 (30.0–78.0)", "31.3 (23.0–40.3)", "48.0 (30.0–72.0)"))
 })

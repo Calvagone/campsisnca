@@ -1,0 +1,50 @@
+{
+      "nca_analyses": [
+        {
+          "name": "Day 1",
+          "window": {
+            "start": 0.0,
+            "end": 1.0,
+            "time_unit": "day"
+          },
+          "variable": "CONC",
+          "metrics": [
+            {
+              "type": "cmax_metric",
+              "unit": "ng/mL",
+              "stat_display": "{median} ({p5}–{p95})"
+            },
+            {
+              "type": "tmax_metric",
+              "unit": "min",
+              "stat_display": "{median} ({p5}–{p95})"
+            }
+          ]
+        },
+        {
+          "name": "Day 7",
+          "window": {
+            "start": 6.0,
+            "end": 7.0,
+            "time_unit": "day"
+          },
+          "variable": "CONC",
+          "metrics": [
+            {
+              "type": "cmax_metric",
+              "unit": "ng/mL",
+              "stat_display": "{median} ({p5}–{p95})"
+            },
+            {
+              "type": "tmax_metric",
+              "unit": "min",
+              "stat_display": "{median} ({p5}–{p95})"
+            }
+          ]
+        }
+      ],
+      "nca_options": {
+        "data_time_unit": "hour",
+        "table_time_unit": "minute"
+      }
+    }
