@@ -112,7 +112,7 @@ setMethod("add", signature = c("nca_metrics_table", "list"), definition = functi
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metrics_table", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
+setMethod("calculate", signature=c("nca_metrics_table", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
   if (is(options, "undefined_nca_options")) {
     options_ <- object@nca_options # Use embedded NCA options
   } else {

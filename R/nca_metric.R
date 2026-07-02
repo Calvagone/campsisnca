@@ -71,7 +71,7 @@ setDefaultNameIfNA <- function(object) {
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metric", "data.frame", "nca_options"), definition=function(object, x, options, ...) {
+setMethod("calculate", signature=c("nca_metric", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- iValues(object=object, x=x, options=options, strat_vars=strat_vars)
