@@ -11,6 +11,9 @@
 #' @keywords internal
 #' 
 openJSON <- function(json, schema=NULL) {
+  if (is.list(json)) {
+    return(JSONElement(json)) # Don't go further if data is already parsed
+  }
   assertthat::assert_that(length(json)==1, msg="Argument json must be a path or the JSON string")
   
   if (grepl(pattern="\\s*\\[", x=json)) {
