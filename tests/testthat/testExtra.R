@@ -244,7 +244,6 @@ test_that("Time unit of tmax and tmin can be customised as well", {
 
 test_that("Method NCATableOutfun can be used in campsisnca", {
   
-  # Second example with real simulated data
   table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_9.json"))
   subjects <- 100
   model <- model_suite$pk$`2cpt_fo`
@@ -256,8 +255,17 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
   outfun <- NCATableOutfun(table=table, export_type="individual")
   
   stats <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun)
-  
+  expect_true("individual_campsisnca_tbl" %in% class(stats))
   expect_equal(colnames(stats), c("metric", "id", "value", "discrete_value"))
   expect_equal(stats$metric, c(rep("Cmax", subjects), rep("AUC", subjects)))
   expect_equal(stats$id, c(1:subjects, 1:subjects))
+  
+
+  stats <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun, replicates=5)
+  expect_equal(unique(stats$replicate), 1:5)
+  expect_true("individual_campsisnca_tbl" %in% class(stats))
+  stats_rep1 <- stats %>% dplyr::filter(replicate==1)
+  expect_equal(colnames(stats_rep1), c("replicate", "metric", "id", "value", "discrete_value"))
+  expect_equal(stats_rep1$metric, c(rep("Cmax", subjects), rep("AUC", subjects)))
+  expect_equal(stats_rep1$id, c(1:subjects, 1:subjects))
 })
