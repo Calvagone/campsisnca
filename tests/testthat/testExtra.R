@@ -16,6 +16,28 @@ getRefFile <- function(filename) {
   return(file.path(testFolder, "non_regression", filename))
 }
 
+#' @importFrom tidyr pivot_longer
+#' @importFrom dplyr all_of
+nca_pivot_longer <- function(x, cols) {
+  x <- x |>
+      tidyr::pivot_longer(
+        cols = dplyr::all_of(cols),
+        names_to = "metric",
+        values_to = "value"
+      )
+  return(x)
+}
+
+#' @importFrom tidyr pivot_wider
+nca_pivot_wider <- function(x) {
+  x <- x |>
+    tidyr::pivot_wider(
+      names_from = "metric",
+      values_from = "value"
+    )
+  return(x)
+}
+
 test_that("Column names can be non-standard", {
   
   nca <- NCAAnalysis(variable="Y") %>%
@@ -268,4 +290,53 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
   expect_equal(colnames(stats_rep1), c("replicate", "metric", "id", "value", "discrete_value"))
   expect_equal(stats_rep1$metric, c(rep("Cmax", subjects), rep("AUC", subjects)))
   expect_equal(stats_rep1$id, c(1:subjects, 1:subjects))
+
+  outfun <- NCATableOutfun(table=table, export_type="individual")
+  ind <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun, replicates=5)
+
+  # Re-use Campsis machinery
+  variables <- unique(ind$metric)
+  ind_wide <- ind %>%
+    dplyr::select(-"discrete_value") %>%
+    nca_pivot_wider()
+
+  stat_display <- "{median} ({p5}–{p95})"
+  brace_values <- extractBraceValues(stat_display)
+
+  outfun <- StatsOutfun(variable=variables, stats=brace_values, strata=c(replicate="all"))
+  rep_results <- apply_outfun(x=ind_wide %>% dplyr::mutate(TIME=NA), outfun=outfun) %>%
+    dplyr::select(-"TIME") %>%
+    dplyr::rename(metric=variable, stat=metric)
+
+  rep_results_wider <- rep_results %>%
+    tidyr::pivot_wider(names_from=c("metric", "stat"), values_from=c("value"), names_glue="{metric} ({stat})") %>%
+       select(-replicate)
+
+  gttable <- rep_results_wider %>%
+  tbl_summary(
+    by=NULL,
+    statistic=list(
+      all_continuous() ~ stat_display,
+      all_categorical() ~ stat_display
+    ),
+    type=list(
+      all_continuous() ~ "continuous2",
+      all_categorical() ~ "continuous2"
+    ),
+    label=list(
+      
+    ),
+    digits=list(
+      all_continuous() ~ list(rlang::as_function(~style_sigfig(.x, 3))),
+      all_categorical() ~ list(rlang::as_function(~style_sigfig(.x, 3)))
+    )
+  ) %>%
+  modify_header(all_stat_cols() ~ "**{level}**", label="**Metric**") %>%
+  modify_footnote(all_stat_cols() ~ "N<sub>rep</sub> = {n}")
+
+  gttable %>% toGt(subscripts=TRUE)
+
+
+
+
 })
