@@ -1,0 +1,31 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Default",
+      "window": {
+        "start": 6.0,
+        "end": 7.0,
+        "time_unit": "day"
+      },
+      "variable": "CONC",
+      "metrics": [
+        {
+          "type": "cmax_metric",
+          "stat_display": "{geomean} ({geocv}%)"
+        },
+        {
+          "type": "auc_metric",
+          "stat_display": "{geomean} ({geocv}%)",
+          "method": "linlin"
+        }
+      ]
+    }
+  ],
+  "nca_options": {
+    "data_time_unit": "hour",
+    "table_time_unit": "hour"
+  },
+  "tab_options": {
+    "table.font.size": "18px"
+  }
+}

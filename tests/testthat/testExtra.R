@@ -241,3 +241,23 @@ test_that("Time unit of tmax and tmin can be customised as well", {
   expect_equal(stats$analysis, c("Day 1", "Day 1", "Day 7", "Day 7"))
   expect_equal(stats$summary_stats, c("24.7 (17.9–35.1)", "48.0 (30.0–78.0)", "31.3 (23.0–40.3)", "48.0 (30.0–72.0)"))
 })
+
+test_that("Method NCATableOutfun can be used in campsisnca", {
+  
+  # Second example with real simulated data
+  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_9.json"))
+  subjects <- 100
+  model <- model_suite$pk$`2cpt_fo`
+  
+  dataset <- Dataset(100) %>%
+    add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
+    add(Observations(times=TimeSequence(0, 24, 0.1), rep=DosingSchedule()))
+
+  outfun <- NCATableOutfun(table=table, export_type="individual")
+  
+  stats <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun)
+  
+  expect_equal(colnames(stats), c("metric", "id", "value", "discrete_value"))
+  expect_equal(stats$metric, c(rep("Cmax", subjects), rep("AUC", subjects)))
+  expect_equal(stats$id, c(1:subjects, 1:subjects))
+})
