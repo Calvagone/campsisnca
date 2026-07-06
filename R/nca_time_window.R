@@ -75,7 +75,7 @@ UndefinedTimeWindow <- function() {
 
 #' @rdname applyTimeWindow
 setMethod(
-  "applyTimeWindow", signature=c("data.frame", "nca_time_window", "character"), definition=function(x, window, data_time_unit) {
+  "applyTimeWindow", signature=c("campsis_output", "nca_time_window", "character"), definition=function(x, window, data_time_unit) {
     return(
       timerange(
         x=x,
@@ -87,19 +87,6 @@ setMethod(
     )
   }
 )
-
-#' @rdname applyTimeWindow
-setMethod("applyTimeWindow", signature=c("tbl_df", "nca_time_window", "character"), definition=function(x, window, data_time_unit) {
-  return(
-    timerange(
-      x=x,
-      min=campsis::convertTime(window@start, from=window@time_unit, to=data_time_unit),
-      max=campsis::convertTime(window@end, from=window@time_unit, to=data_time_unit),
-      exclmin=window@exclude_start,
-      exclmax=window@exclude_end
-    )
-  )
-})
 
 #_______________________________________________________________________________
 #----                           loadFromJSON                                ----

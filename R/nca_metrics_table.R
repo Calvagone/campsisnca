@@ -85,9 +85,6 @@ NCATable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="
                  header_label=header_label, subscripts=subscripts,
                  nca_options=nca_options, tab_options=tab_options)
   } else {
-    if (is.list(json)) {
-      json <- JSONElement(json)
-    }
     table <- loadFromJSON(object=new("nca_metrics_table"), json=json)
   }
   return(table)
@@ -402,3 +399,7 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "character"), definit
   return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
 })
 
+setMethod("loadFromJSON", signature=c("nca_metrics_table", "list"), definition=function(object, json) {
+  schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
+  return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
+})

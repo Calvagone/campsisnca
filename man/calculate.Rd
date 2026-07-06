@@ -6,8 +6,8 @@
 \alias{calculate}
 \alias{calculate,nca_metric,campsis_output,nca_options-method}
 \alias{calculate,theoretical_thalf_metric,campsis_output,nca_options-method}
-\alias{calculate,nca_analysis,data.frame,nca_options-method}
-\alias{calculate,nca_analyses,data.frame,nca_options-method}
+\alias{calculate,nca_analysis,campsis_output,nca_options-method}
+\alias{calculate,nca_analyses,campsis_output,nca_options-method}
 \alias{calculate,nca_metrics_table,campsis_output,nca_options-method}
 \title{Calculate.}
 \usage{
@@ -17,9 +17,9 @@ calculate(object, x, options = NULL, ...)
 
 \S4method{calculate}{theoretical_thalf_metric,campsis_output,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_analysis,data.frame,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_analysis,campsis_output,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_analyses,data.frame,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_analyses,campsis_output,nca_options}(object, x, options = NULL, ...)
 
 \S4method{calculate}{nca_metrics_table,campsis_output,nca_options}(object, x, options = NULL, ...)
 }
