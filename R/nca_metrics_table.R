@@ -421,13 +421,23 @@ nca_pivot_longer <- function(x, cols) {
 }
 
 #' @importFrom tidyr pivot_wider
+#' @importFrom dplyr mutate select coalesce
+#' @importFrom readr type_convert
 nca_pivot_wider <- function(x) {
-  x <- x |>
+  x |>
+    # Combine into a single column (converting numeric to character temporarily)
+    dplyr::mutate(
+      final_value = dplyr::coalesce(discrete_value, as.character(value))
+    ) |>
+    # Drop the old unpivoted columns
+    dplyr::select(-value, -discrete_value) |>
+    # Pivot wider using the single combined column
     tidyr::pivot_wider(
       names_from = "metric",
-      values_from = "value"
-    )
-  return(x)
+      values_from = "final_value"
+    ) |>
+    # Automatically convert continuous columns back to numeric
+    readr::type_convert(guess_integer = TRUE)
 }
 
 #' Does the data contain more than one replicate?
@@ -473,7 +483,6 @@ setMethod(
     # Re-use Campsis machinery
     variables <- unique(x$metric)
     x_wide <- x %>%
-      dplyr::select(-"discrete_value") %>%
       nca_pivot_wider()
 
     stat_display <- options@rep_stat_display

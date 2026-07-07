@@ -271,7 +271,8 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
 
 test_that("Method summarise_replicates can be used to summarise Campsisnca output across replicates", {
   
-  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_9.json"))
+  # Same as NCA table 9 but with a categorical metric added
+  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_10.json"))
   subjects <- 100
   model <- model_suite$pk$`2cpt_fo`
   

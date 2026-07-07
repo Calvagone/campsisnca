@@ -1,0 +1,40 @@
+{
+  "nca_analyses": [
+    {
+      "name": "Default",
+      "window": {
+        "start": 6.0,
+        "end": 7.0,
+        "time_unit": "day"
+      },
+      "variable": "CONC",
+      "metrics": [
+        {
+          "type": "cmax_metric",
+          "stat_display": "{geomean} ({geocv}%)"
+        },
+        {
+          "type": "auc_metric",
+          "stat_display": "{geomean} ({geocv}%)",
+          "method": "linlin"
+        },
+        {
+          "type": "custom_metric",
+          "name": "AUC > 300",
+          "unit": "%",
+          "stat_display": "{n} / {N} ({p}%)",
+          "categorical": true,
+          "custom_function": "~AUC > 300",
+          "input_type": "vector"
+        }
+      ]
+    }
+  ],
+  "nca_options": {
+    "data_time_unit": "hour",
+    "table_time_unit": "hour"
+  },
+  "tab_options": {
+    "table.font.size": "18px"
+  }
+}
