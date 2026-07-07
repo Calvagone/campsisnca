@@ -40,7 +40,9 @@ Imports:
     jsonvalidate,
     kableExtra,
     magrittr,
+    methods,
     purrr,
+    readr,
     rlang,
     stringr,
     tibble,
@@ -48,7 +50,6 @@ Imports:
 Suggests: 
     devtools,
     ggplot2,
-    knitr,
     mrgsolve,
     ncappc,
     pkgdown,
@@ -56,8 +57,6 @@ Suggests:
     roxygen2,
     rxode2,
     testthat
-VignetteBuilder: 
-    knitr
 Encoding: UTF-8
 Language: en-US
 LazyData: true
