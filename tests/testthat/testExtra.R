@@ -267,36 +267,25 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
   expect_equal(colnames(stats_rep1), c("replicate", "metric", "id", "value", "discrete_value"))
   expect_equal(stats_rep1$metric, c(rep("Cmax", subjects), rep("AUC", subjects)))
   expect_equal(stats_rep1$id, c(1:subjects, 1:subjects))
+})
+
+test_that("Method summarise_replicates can be used to summarise Campsisnca output across replicates", {
+  
+  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_9.json"))
+  subjects <- 100
+  model <- model_suite$pk$`2cpt_fo`
+  
+  dataset <- Dataset(100) %>%
+    add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
+    add(Observations(times=TimeSequence(0, 24, 0.1), rep=DosingSchedule()))
+
+  outfun <- NCATableOutfun(table=table, export_type="individual")
+  
+  x <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun, replicates=5)
 
   summary <- table %>%
     summarise_replicates(x=stats)
 
-
-  gttable <- rep_results_wider %>%
-  tbl_summary(
-    by=NULL,
-    statistic=list(
-      all_continuous() ~ stat_display,
-      all_categorical() ~ stat_display
-    ),
-    type=list(
-      all_continuous() ~ "continuous2",
-      all_categorical() ~ "continuous2"
-    ),
-    label=list(
-      
-    ),
-    digits=list(
-      all_continuous() ~ list(rlang::as_function(~style_sigfig(.x, 3))),
-      all_categorical() ~ list(rlang::as_function(~style_sigfig(.x, 3)))
-    )
-  ) %>%
-  modify_header(all_stat_cols() ~ "**{level}**", label="**Metric**") %>%
-  modify_footnote(all_stat_cols() ~ "N<sub>rep</sub> = {n}")
-
-  gttable %>% toGt(subscripts=TRUE)
-
-
-
-
+  gttable <- table %>%
+    summarise_replicates(x=stats, dest="gt")
 })

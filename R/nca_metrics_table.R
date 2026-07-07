@@ -431,31 +431,89 @@ nca_pivot_wider <- function(x) {
 }
 
 #' @rdname summarise_replicates
-setMethod("summarise_replicates", signature=c("nca_metrics_table", "campsisnca_output", "nca_options"), definition=function(object, x, options, ...) {
-  if (is(options, "undefined_nca_options")) {
-    options_ <- object@nca_options # Use embedded NCA options
-  } else {
-    options_ <- options # Use external NCA options
+setMethod(
+  "summarise_replicates",
+  signature = c("nca_metrics_table", "campsisnca_output", "nca_options"),
+  definition = function(object, x, options, dest = "dataframe", ...) {
+    if (is(options, "undefined_nca_options")) {
+      options_ <- object@nca_options # Use embedded NCA options
+    } else {
+      options_ <- options # Use external NCA options
+    }
+
+    # Re-use Campsis machinery
+    variables <- unique(x$metric)
+    x_wide <- x %>%
+      dplyr::select(-"discrete_value") %>%
+      nca_pivot_wider()
+
+    stat_display <- options@rep_stat_display
+    brace_values <- extractBraceValues(stat_display)
+
+    outfun <- StatsOutfun(
+      variable = variables,
+      stats = brace_values,
+      strata = c(replicate = "all")
+    )
+
+    rep_results <- apply_outfun(
+      x = x_wide %>% dplyr::mutate(TIME = NA),
+      outfun = outfun
+    ) %>%
+      dplyr::select(-"TIME") %>%
+      dplyr::rename(metric = variable, stat = metric)
+
+    if (dest == "dataframe") {
+      return(rep_results)
+    }
+
+    if (dest %in% c("gt", "gtsummary")) {
+      rep_results_wider <- rep_results %>%
+        tidyr::pivot_wider(
+          names_from = c("metric", "stat"),
+          values_from = c("value"),
+          names_glue = "{metric} ({stat})"
+        ) %>%
+        select(-replicate)
+
+      gtsummary_table <- gtsummary::tbl_summary(
+        data = rep_results_wider,
+        by = NULL,
+        statistic = list(
+          gtsummary::all_continuous() ~ stat_display,
+          gtsummary::all_categorical() ~ stat_display
+        ),
+        type = list(
+          gtsummary::all_continuous() ~ "continuous2",
+          gtsummary::all_categorical() ~ "continuous2"
+        ),
+        label = list(),
+        digits = list(
+          gtsummary::all_continuous() ~ list(rlang::as_function(
+            ~ style_sigfig(.x, 3)
+          )),
+          gtsummary::all_categorical() ~ list(rlang::as_function(
+            ~ style_sigfig(.x, 3)
+          ))
+        )
+      ) %>%
+        gtsummary::modify_header(
+          gtsummary::all_stat_cols() ~ "**{level}**",
+          label = "**Metric**"
+        ) %>%
+        gtsummary::modify_footnote(
+          gtsummary::all_stat_cols() ~ "N<sub>rep</sub> = {n}"
+        )
+
+      if (dest == "gtsummary") {
+        return(gtsummary_table)
+      }
+      if (dest == "gt") {
+        gt_table <- gtsummary_table %>% toGt(subscripts = TRUE)
+        return(gt_table)
+      }
+    } else {
+      stop("Unsupported destination for summarise_replicates")
+    }
   }
-
-  # Re-use Campsis machinery
-  variables <- unique(x$metric)
-  x_wide <- x %>%
-    dplyr::select(-"discrete_value") %>%
-    nca_pivot_wider()
-
-  stat_display <- options@rep_stat_display
-  brace_values <- extractBraceValues(stat_display)
-
-  outfun <- StatsOutfun(variable=variables, stats=brace_values, strata=c(replicate="all"))
-
-  rep_results <- apply_outfun(x=x_wide %>% dplyr::mutate(TIME=NA), outfun=outfun) %>%
-    dplyr::select(-"TIME") %>%
-    dplyr::rename(metric=variable, stat=metric)
-
-  # rep_results_wider <- rep_results %>%
-  #   tidyr::pivot_wider(names_from=c("metric", "stat"), values_from=c("value"), names_glue="{metric} ({stat})") %>%
-  #      select(-replicate)
-  
-  return(rep_results)  
-})
+)

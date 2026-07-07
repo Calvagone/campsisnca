@@ -31,4 +31,4 @@ openJSON <- function(json, schema=NULL) {
   json_ <- jsonlite::parse_json(rawJson, simplifyVector=FALSE)
   
   return(JSONElement(json_))
-} 
+}

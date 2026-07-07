@@ -254,7 +254,7 @@ setGeneric("statDisplayString", function(object, ...) {
 #' @param object object (NCA table) which contains the table structure
 #' @param x input data for the calculation, data frame of class 'individual_campsisnca_tbl' or 'individual_wide_campsisnca_tbl'
 #' @param options NCA options
-#' @param ... extra arguments
+#' @param ... extra arguments like 'dest' which can take the following values: "dataframe", "gtsummary" or "gt"
 #' @return updated object
 #' @export
 #' @rdname summarise_replicates
