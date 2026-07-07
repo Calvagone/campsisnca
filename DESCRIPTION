@@ -72,6 +72,7 @@ Collate:
     'stat_formula.R'
     'export_type.R'
     'generic.R'
+    'stat_utils.R'
     'export_utils.R'
     'nca_options.R'
     'nca_time_window.R'

@@ -24,7 +24,7 @@ calculate(object, x, options = NULL, ...)
 \S4method{calculate}{nca_metrics_table,campsis_output,nca_options}(object, x, options = NULL, ...)
 }
 \arguments{
-\item{object}{object (PK metric) that needs to be calculated}
+\item{object}{object (NCA table, NCA analyses, NCA analysis, PK metric) where calculation is applied}
 
 \item{x}{input data for the calculation, data frame}
 

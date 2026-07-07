@@ -59,3 +59,16 @@ setOldClass(c("individual_wide_campsisnca_tbl", "campsisnca_tbl", "campsis_tbl",
 #' @importClassesFrom campsis campsis_tbl std_campsis_tbl
 #' @export
 setClassUnion("campsis_output", c("data.frame", "tbl_df", "campsis_tbl", "std_campsis_tbl"))
+
+#' The Campsisnca Output Class Union
+#'
+#' @description A class union containing standard data frames, tibbles, 
+#' and Campsisnca-specific table objects.
+#'
+#' @name campsisnca_output-class
+#' @aliases campsisnca_output
+#' @docType class
+#' @import tibble
+#' @export
+setClassUnion("campsisnca_output", c("data.frame", "tbl_df", "campsisnca_tbl", "individual_campsisnca_tbl", "individual_wide_campsisnca_tbl",
+ "summary_campsisnca_tbl", "summary_wide_campsisnca_tbl", "summary_pretty_campsisnca_tbl"))

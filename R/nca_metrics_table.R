@@ -403,3 +403,59 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "list"), definition=f
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
   return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
 })
+
+#_______________________________________________________________________________
+#----                        summarise_replicates                           ----
+#_______________________________________________________________________________
+
+#' @importFrom tidyr pivot_longer
+#' @importFrom dplyr all_of
+nca_pivot_longer <- function(x, cols) {
+  x <- x |>
+      tidyr::pivot_longer(
+        cols = dplyr::all_of(cols),
+        names_to = "metric",
+        values_to = "value"
+      )
+  return(x)
+}
+
+#' @importFrom tidyr pivot_wider
+nca_pivot_wider <- function(x) {
+  x <- x |>
+    tidyr::pivot_wider(
+      names_from = "metric",
+      values_from = "value"
+    )
+  return(x)
+}
+
+#' @rdname summarise_replicates
+setMethod("summarise_replicates", signature=c("nca_metrics_table", "campsisnca_output", "nca_options"), definition=function(object, x, options, ...) {
+  if (is(options, "undefined_nca_options")) {
+    options_ <- object@nca_options # Use embedded NCA options
+  } else {
+    options_ <- options # Use external NCA options
+  }
+
+  # Re-use Campsis machinery
+  variables <- unique(x$metric)
+  x_wide <- x %>%
+    dplyr::select(-"discrete_value") %>%
+    nca_pivot_wider()
+
+  stat_display <- options@rep_stat_display
+  brace_values <- extractBraceValues(stat_display)
+
+  outfun <- StatsOutfun(variable=variables, stats=brace_values, strata=c(replicate="all"))
+
+  rep_results <- apply_outfun(x=x_wide %>% dplyr::mutate(TIME=NA), outfun=outfun) %>%
+    dplyr::select(-"TIME") %>%
+    dplyr::rename(metric=variable, stat=metric)
+
+  # rep_results_wider <- rep_results %>%
+  #   tidyr::pivot_wider(names_from=c("metric", "stat"), values_from=c("value"), names_glue="{metric} ({stat})") %>%
+  #      select(-replicate)
+  
+  return(rep_results)  
+})

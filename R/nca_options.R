@@ -7,9 +7,11 @@ setClass(
   representation(
     quantile_type = "integer",
     data_time_unit = "character",
-    table_time_unit = "character"
+    table_time_unit = "character",
+    rep_stat_display = "character"
   ),
-  prototype=prototype(quantile_type=2L, data_time_unit="hour", table_time_unit="hour"),
+  prototype=prototype(quantile_type=2L, data_time_unit="hour", table_time_unit="hour",
+   rep_stat_display=getStatDisplayDefault()),
 )
 
 #' 

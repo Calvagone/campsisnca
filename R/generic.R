@@ -41,7 +41,7 @@ setGeneric("applyTimeWindow", function(x, window, data_time_unit, ...) {
 
 #' Calculate.
 #' 
-#' @param object object (PK metric) that needs to be calculated
+#' @param object object (NCA table, NCA analyses, NCA analysis, PK metric) where calculation is applied
 #' @param x input data for the calculation, data frame
 #' @param options NCA options
 #' @param ... extra arguments
@@ -243,4 +243,28 @@ statDisplayString <- function(object, ...) {
 
 setGeneric("statDisplayString", function(object, ...) {
   standardGeneric("statDisplayString")
+})
+
+#_______________________________________________________________________________
+#----                        summarise_replicates                           ----
+#_______________________________________________________________________________
+
+#' Summarise replicates.
+#' 
+#' @param object object (NCA table) which contains the table structure
+#' @param x input data for the calculation, data frame of class 'individual_campsisnca_tbl' or 'individual_wide_campsisnca_tbl'
+#' @param options NCA options
+#' @param ... extra arguments
+#' @return updated object
+#' @export
+#' @rdname summarise_replicates
+summarise_replicates <- function(object, x, options, ...) {
+  no_default_function_provided_debug(mget(names(formals()), envir = environment()), "summarise_replicates")
+}
+
+setGeneric("summarise_replicates", function(object, x, options=NULL, ...) {
+  if (is.null(options)) {
+    options <- UndefinedNCAOptions()
+  }
+  standardGeneric("summarise_replicates")
 })
