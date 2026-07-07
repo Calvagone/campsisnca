@@ -270,12 +270,13 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
 })
 
 test_that("Method summarise_replicates can be used to summarise Campsisnca output across replicates", {
-  
   # Same as NCA table 9 but with a categorical metric added
-  table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_10.json"))
+  table <- NCATable(
+    json = file.path(testFolder, "json_examples", "nca_table_10.json")
+  )
   subjects <- 100
   model <- model_suite$pk$`2cpt_fo`
-  
+
   dataset <- Dataset(100) %>%
     add(Bolus(time=0, amount=1000, compartment="ABS", ii=24, addl=6)) %>%
     add(Observations(times=TimeSequence(0, 24, 0.1), rep=DosingSchedule()))
@@ -285,14 +286,26 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
     add(Scenario(name="Lower CL") %>%
       add(ReplaceAction(Theta(name="CL", value=1.5))))
 
-  outfun <- NCATableOutfun(table=table, export_type="summary")
-  
+  outfun <- NCATableOutfun(table = table, export_type = "summary")
+
   x <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun, scenarios=scenarios, replicates=5)
 
   summary <- table %>%
-    summarise_replicates(x=x)
-  # expect_equal(colnames(summary), c("replicate", "SCENARIO", "metric", "stat", "value"))
+    summarise_replicates(x = x)
+  expect_equal(
+    colnames(summary),
+    c(
+      "SCENARIO",
+      "Cmax (geomean)",
+      "Cmax (geocv)",
+      "AUC (geomean)",
+      "AUC (geocv)",
+      "AUC > 300 (n_TRUE)",
+      "AUC > 300 (N_TRUE)",
+      "AUC > 300 (p_TRUE)"
+    )
+  )
 
   gttable <- table %>%
-    summarise_replicates(x=x, dest="gt")
+    summarise_replicates(x = x, dest = "gt")
 })

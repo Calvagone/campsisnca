@@ -42,7 +42,6 @@ Imports:
     magrittr,
     methods,
     purrr,
-    readr,
     rlang,
     stringr,
     tibble,
