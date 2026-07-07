@@ -430,6 +430,16 @@ nca_pivot_wider <- function(x) {
   return(x)
 }
 
+#' Does the data contain more than one replicate?
+#' 
+#' @return \code{TRUE} if the data contains a \code{replicate} column with more than one distinct value, \code{FALSE} otherwise
+#' @param x a data frame (typically \code{std_campsis_tbl})
+#' @importFrom dplyr n_distinct
+#' @keywords internal
+.is_replicated <- function(x) {
+  return("replicate" %in% colnames(x) && dplyr::n_distinct(x$replicate) > 1)
+}
+
 #' @rdname summarise_replicates
 setMethod(
   "summarise_replicates",
@@ -439,6 +449,25 @@ setMethod(
       options_ <- object@nca_options # Use embedded NCA options
     } else {
       options_ <- options # Use external NCA options
+    }
+
+    # Check data frame class
+    if (!is(x, "individual_campsisnca_tbl")) {
+      stop("x must be of class 'individual_campsisnca_tbl' for now")
+    }
+
+    # Check if the data contains replicates
+    if (!.is_replicated(x)) {
+      stop("x must contain a 'replicate' column with more than one distinct value")
+    }
+
+    # Detect stratification variables
+    all_cols <- colnames(x)
+    strata_vars <- all_cols[!all_cols %in% c("replicate", "metric", "id", "value", "discrete_value")]
+    strata <- NULL
+    if (length(strata_vars) > 0) {
+      strata <- rep("all", length(strata_vars))
+      names(strata) <- strata_vars
     }
 
     # Re-use Campsis machinery
@@ -453,7 +482,7 @@ setMethod(
     outfun <- StatsOutfun(
       variable = variables,
       stats = brace_values,
-      strata = c(replicate = "all")
+      strata = c(replicate = "all") %>% append(strata)
     )
 
     rep_results <- apply_outfun(
@@ -478,7 +507,7 @@ setMethod(
 
       gtsummary_table <- gtsummary::tbl_summary(
         data = rep_results_wider,
-        by = NULL,
+        by = strata_vars,
         statistic = list(
           gtsummary::all_continuous() ~ stat_display,
           gtsummary::all_categorical() ~ stat_display
