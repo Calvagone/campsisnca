@@ -450,6 +450,12 @@ nca_pivot_wider <- function(x) {
   return("replicate" %in% colnames(x) && dplyr::n_distinct(x$replicate) > 1)
 }
 
+#' @param dest destination for the summarised table, either "dataframe", "gtsummary" or "gt"
+#' @importFrom dplyr across filter if_any if_else matches mutate select transmute
+#' @importFrom gtsummary all_categorical all_continuous all_stat_cols modify_footnote modify_header tbl_summary
+#' @importFrom rlang as_function
+#' @importFrom tibble add_column
+#' @importFrom tidyr pivot_wider
 #' @rdname summarise_replicates
 setMethod(
   "summarise_replicates",
@@ -462,8 +468,8 @@ setMethod(
     }
 
     # Check data frame class
-    if (!is(x, "individual_campsisnca_tbl")) {
-      stop("x must be of class 'individual_campsisnca_tbl' for now")
+    if (!is(x, "summary_campsisnca_tbl")) {
+      stop("x must be of class 'summary_campsisnca_tbl' for now")
     }
 
     # Check if the data contains replicates
@@ -473,53 +479,44 @@ setMethod(
 
     # Detect stratification variables
     all_cols <- colnames(x)
-    strata_vars <- all_cols[!all_cols %in% c("replicate", "metric", "id", "value", "discrete_value")]
-    strata <- NULL
-    if (length(strata_vars) > 0) {
-      strata <- rep("all", length(strata_vars))
-      names(strata) <- strata_vars
-    }
+    strata_vars <- all_cols[!all_cols %in% c("replicate", "metric", "stat", "value", "category")]
 
-    # Re-use Campsis machinery
-    variables <- unique(x$metric)
-    x_wide <- x %>%
-      nca_pivot_wider()
+    categories <- x %>%
+      tibble::add_column(!!!c(category = NA)[!"category" %in% names(.)]) %>%
+      dplyr::filter(!is.na(category)) %>%
+      dplyr::transmute(metric, stat, category) %>%
+      dplyr::distinct()
 
-    stat_display <- options@rep_stat_display
-    brace_values <- extractBraceValues(stat_display)
-
-    outfun <- StatsOutfun(
-      variable = variables,
-      stats = brace_values,
-      strata = c(replicate = "all") %>% append(strata)
-    )
-
-    rep_results <- apply_outfun(
-      x = x_wide %>% dplyr::mutate(TIME = NA),
-      outfun = outfun
-    ) %>%
-      dplyr::select(-"TIME") %>%
-      dplyr::rename(metric = variable, stat = metric)
+    x_wider <- x %>%
+      dplyr::filter(dplyr::if_any(dplyr::matches("category"), ~ is.na(.x) | .x != "FALSE")) %>%
+      discardCategoryColumn() %>%
+      tidyr::pivot_wider(
+        names_from = c("metric", "stat"),
+        values_from = c("value"),
+        names_glue = "{metric} ({stat})"
+      ) %>%
+      dplyr::mutate(dplyr::across(
+        dplyr::any_of(sprintf(
+          "%s (%s_%s)",
+          categories$metric,
+          categories$stat,
+          categories$category
+        )),
+        .fns = ~ dplyr::if_else(is.na(.x), 0, .x)
+      )) %>%
+      dplyr::select(-replicate)
 
     if (dest == "dataframe") {
-      return(rep_results)
+      return(x_wider)
     }
 
     if (dest %in% c("gt", "gtsummary")) {
-      rep_results_wider <- rep_results %>%
-        tidyr::pivot_wider(
-          names_from = c("metric", "stat"),
-          values_from = c("value"),
-          names_glue = "{metric} ({stat})"
-        ) %>%
-        select(-replicate)
-
       gtsummary_table <- gtsummary::tbl_summary(
-        data = rep_results_wider,
+        data = x_wider,
         by = strata_vars,
         statistic = list(
-          gtsummary::all_continuous() ~ stat_display,
-          gtsummary::all_categorical() ~ stat_display
+          gtsummary::all_continuous() ~ options@rep_stat_display,
+          gtsummary::all_categorical() ~ options@rep_stat_display
         ),
         type = list(
           gtsummary::all_continuous() ~ "continuous2",
@@ -528,10 +525,10 @@ setMethod(
         label = list(),
         digits = list(
           gtsummary::all_continuous() ~ list(rlang::as_function(
-            ~ style_sigfig(.x, 3)
+            ~ gtsummary::style_sigfig(.x, 3)
           )),
           gtsummary::all_categorical() ~ list(rlang::as_function(
-            ~ style_sigfig(.x, 3)
+            ~ gtsummary::style_sigfig(.x, 3)
           ))
         )
       ) %>%

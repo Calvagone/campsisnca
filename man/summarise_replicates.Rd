@@ -3,24 +3,33 @@
 \name{summarise_replicates}
 \alias{summarise_replicates}
 \alias{summarise_replicates,nca_metrics_table,campsisnca_output,nca_options-method}
-\title{Summarise replicates.}
+\title{Summarise NCA results obtained across simulation replicates.}
 \usage{
 summarise_replicates(object, x, options = NULL, ...)
 
-\S4method{summarise_replicates}{nca_metrics_table,campsisnca_output,nca_options}(object, x, options = NULL, ...)
+\S4method{summarise_replicates}{nca_metrics_table,campsisnca_output,nca_options}(object, x, options, dest = "dataframe", ...)
 }
 \arguments{
 \item{object}{object (NCA table) which contains the table structure}
 
-\item{x}{input data for the calculation, data frame of class 'individual_campsisnca_tbl' or 'individual_wide_campsisnca_tbl'}
+\item{x}{input data for the calculation, data frame of class 'summary_campsisnca_tbl' containing a 'replicate' column with more than one distinct value}
 
 \item{options}{NCA options}
 
-\item{...}{extra arguments}
+\item{...}{extra arguments like 'dest' which can take the following values: "dataframe", "gtsummary" or "gt"}
+
+\item{dest}{destination for the summarised table, either "dataframe", "gtsummary" or "gt"}
 }
 \value{
-updated object
+a summarised table, whose class depends on the 'dest' argument: a data frame ('dataframe'), a gtsummary table ('gtsummary') or a gt table ('gt')
 }
 \description{
-Summarise replicates.
+Summarise NCA results obtained across simulation replicates.
+}
+\details{
+Summarises a table of NCA metrics computed on several simulation
+replicates (e.g. as produced by \code{\link{calculate}} on a
+\code{summary_campsisnca_tbl}) into a single summary table. Stratification
+variables are automatically detected as the columns of \code{x} other than
+\code{replicate}, \code{metric}, \code{stat}, \code{value} and \code{category}.
 }
