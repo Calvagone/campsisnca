@@ -445,6 +445,11 @@ setMethod(
       stop("x must contain a 'replicate' column with more than one distinct value")
     }
 
+    # Add category if not existing
+    if (!"category" %in% colnames(x)) {
+      x$category <- NA_character_
+    }
+
     # Detect stratification variables
     all_cols <- colnames(x)
     strata_vars <- all_cols[!all_cols %in% c("replicate", "metric", "stat", "value", "category")]
