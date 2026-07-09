@@ -186,8 +186,7 @@
               "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -198,10 +197,8 @@
           "$ref": "#/$defs/nca_metric"
         },
         {
-          "properties": {
-          },
-          "required": [
-          ]
+          "properties": {},
+          "required": []
         }
       ]
     },
@@ -217,8 +214,7 @@
               "const": "max_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -234,8 +230,7 @@
               "const": "cmax_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -246,10 +241,8 @@
           "$ref": "#/$defs/nca_metric"
         },
         {
-          "properties": {
-          },
-          "required": [
-          ]
+          "properties": {},
+          "required": []
         }
       ]
     },
@@ -265,8 +258,7 @@
               "const": "min_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -282,8 +274,7 @@
               "const": "cmin_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -294,10 +285,8 @@
           "$ref": "#/$defs/nca_metric"
         },
         {
-          "properties": {
-          },
-          "required": [
-          ]
+          "properties": {},
+          "required": []
         }
       ]
     },
@@ -313,8 +302,7 @@
               "const": "avg_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -330,8 +318,7 @@
               "const": "cavg_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -342,10 +329,8 @@
           "$ref": "#/$defs/nca_metric"
         },
         {
-          "properties": {
-          },
-          "required": [
-          ]
+          "properties": {},
+          "required": []
         }
       ]
     },
@@ -361,8 +346,7 @@
               "const": "ctrough_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -378,8 +362,7 @@
               "const": "last_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -395,8 +378,7 @@
               "const": "tmin_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -412,8 +394,7 @@
               "const": "tmax_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -452,8 +433,7 @@
               "const": "time_above_limit_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -469,8 +449,7 @@
               "const": "time_below_limit_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -486,8 +465,7 @@
               "const": "thalf_metric"
             }
           },
-          "required": [
-          ]
+          "required": []
         }
       ]
     },
@@ -616,10 +594,20 @@
         "table_time_unit": {
           "$ref": "#/$defs/time_unit",
           "description": "Unit of time to use when representing the metrics in the table (AUC, Time above/below, etc)."
+        },
+        "rep_stat_display": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "Display format for replicate statistics. E.g. '{median} ({p5}–{p95})' or ['{median}', '{p5}', '{p95}']. See documentation on campsisnca repository."
+        },
+        "rep_stat_digits": {
+          "type": "integer",
+          "description": "Number of significant digits to display for replicate statistics."
         }
       },
-      "required": [
-      ]
+      "required": []
     },
     "time_unit": {
       "type": "string",

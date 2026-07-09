@@ -488,8 +488,8 @@ setMethod(
         data = x_wider,
         by = strata_vars,
         statistic = list(
-          gtsummary::all_continuous() ~ options@rep_stat_display,
-          gtsummary::all_categorical() ~ options@rep_stat_display
+          gtsummary::all_continuous() ~ options_@rep_stat_display,
+          gtsummary::all_categorical() ~ options_@rep_stat_display
         ),
         type = list(
           gtsummary::all_continuous() ~ "continuous2",
