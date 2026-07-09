@@ -7,7 +7,9 @@
 NCAOptions(
   quantile_type = 2L,
   data_time_unit = "hour",
-  table_time_unit = "hour"
+  table_time_unit = "hour",
+  rep_stat_display = getStatDisplayDefault(),
+  rep_stat_digits = 3L
 )
 }
 \arguments{
@@ -16,6 +18,10 @@ NCAOptions(
 \item{data_time_unit}{time unit of the data given to 'calculate'}
 
 \item{table_time_unit}{time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)}
+
+\item{rep_stat_display}{display format for replicate statistics, character vector. Default is '{median} ({p5}–{p95})'.}
+
+\item{rep_stat_digits}{number of significant digits to display for replicate statistics, default is 3.}
 }
 \description{
 NCA options used for calculation of metrics.
