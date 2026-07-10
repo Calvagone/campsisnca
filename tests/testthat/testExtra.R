@@ -270,7 +270,7 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
 })
 
 test_that("Method summarise_replicates can be used to summarise Campsisnca output across replicates", {
-  # Same as NCA table 9 but with a categorical metric added
+  # Same as NCA table 9 but with a categorical metric added + specific options
   table <- NCATable(
     json = file.path(testFolder, "json_examples", "nca_table_10.json")
   )
@@ -308,4 +308,6 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
 
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
+
+  gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10.html"))
 })

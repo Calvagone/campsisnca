@@ -498,10 +498,10 @@ setMethod(
         label = list(),
         digits = list(
           gtsummary::all_continuous() ~ list(rlang::as_function(
-            ~ gtsummary::style_sigfig(.x, 3)
+            ~ gtsummary::style_sigfig(.x, options_@rep_stat_digits)
           )),
           gtsummary::all_categorical() ~ list(rlang::as_function(
-            ~ gtsummary::style_sigfig(.x, 3)
+            ~ gtsummary::style_sigfig(.x, options_@rep_stat_digits)
           ))
         )
       ) %>%
