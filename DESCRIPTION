@@ -94,6 +94,7 @@ Collate:
     'thalf.R'
     'theoretical_thalf.R'
     'time_above_below.R'
+    'change_from_baseline.R'
     'custom_metric.R'
     'nca_analysis.R'
     'nca_analyses.R'
