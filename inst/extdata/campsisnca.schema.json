@@ -486,7 +486,7 @@
             },
             "custom_function": {
               "type": "string",
-              "description": "e.g. ~(AUC() %>% iValue(.x, .y)) > 100 or simply ~AUC > 100. See documentation on campsisnca repository."
+              "description": "e.g. ~(AUC() %>% i_value(.x, .y)) > 100 or simply ~AUC > 100. See documentation on campsisnca repository."
             },
             "input_type": {
               "$ref": "#/$defs/custom_function_input_type",

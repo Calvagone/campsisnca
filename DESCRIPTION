@@ -39,6 +39,7 @@ Imports:
     jsonlite,
     jsonvalidate,
     kableExtra,
+    lifecycle,
     magrittr,
     methods,
     purrr,
@@ -98,5 +99,6 @@ Collate:
     'nca_analyses.R'
     'nca_metrics_table.R'
     'json_interface.R'
+    'deprecated_methods.R'
 Remotes:
     Calvagone/campsis@develop

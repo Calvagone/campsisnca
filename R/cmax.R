@@ -79,11 +79,11 @@ setMethod("get_default_name", signature=c("cmax_metric"), definition=function(ob
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("abstract_max_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname i_value
+setMethod("i_value", signature=c("abstract_max_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(max(value))    
 })
 

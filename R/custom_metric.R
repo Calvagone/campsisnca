@@ -16,7 +16,7 @@ setClass(
     custom_function="character"
   ),
   contains="nca_metric",
-  prototype=prototype(ivalue_tibble=TRUE),
+  prototype=prototype(i_value_tibble=TRUE),
   validity=validateCustomMetric
 )
 
@@ -31,7 +31,7 @@ CustomMetric <- function(variable=NULL, window=NULL, fun, name=NULL, unit=NULL,
   metric <- CustomMetricTbl(window=window, fun=fun, name=name, unit=unit,
                             categorical=categorical, stat_display=stat_display, digits=digits)
   metric@variable <- processVariable(variable)
-  metric@ivalue_tibble <- FALSE
+  metric@i_value_tibble <- FALSE
   
   # Auto-replace known NCA metrics
   metric <- metric %>%
@@ -56,25 +56,25 @@ CustomMetricTbl <- function(window=NULL, fun, name=NULL, unit=NULL,
     window <- UndefinedTimeWindow()
   }
   return(new("custom_metric", variable=as.character(NA), window=window, name=name, unit=unit, custom_function=fun,
-             categorical=categorical, stat_display=stat_display, digits=digits, ivalue_tibble=TRUE))
+             categorical=categorical, stat_display=stat_display, digits=digits, i_value_tibble=TRUE))
 }
 
 #_______________________________________________________________________________
-#----                            iValueTbl                                  ----
+#----                           i_value_tbl                                 ----
 #_______________________________________________________________________________
 
-#' @rdname iValueTbl
-setMethod("iValueTbl", signature=c("custom_metric", "tbl_df"), definition=function(object, data) {
+#' @rdname i_value_tbl
+setMethod("i_value_tbl", signature=c("custom_metric", "tbl_df"), definition=function(object, data) {
   fun <- eval(expr=parse(text=object@custom_function))
   return(fun(data))    
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("custom_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname i_value
+setMethod("i_value", signature=c("custom_metric", "numeric", "numeric"), definition=function(object, time, value) {
   fun <- eval(expr=parse(text=object@custom_function))
   return(fun(time, value))    
 })
@@ -101,9 +101,9 @@ deparseCustomFun <- function(fun) {
 setMethod("loadFromJSON", signature=c("custom_metric", "json_element"), definition=function(object, json) {
   type <- json@data$input_type
   if (type == "vector") {
-    object@ivalue_tibble <- FALSE
+    object@i_value_tibble <- FALSE
   } else if (type == "tibble") {
-    object@ivalue_tibble <- TRUE
+    object@i_value_tibble <- TRUE
   } else {
     stop("input_type must be either 'vector' or 'tibble'")
   }
@@ -153,7 +153,7 @@ setMethod("replaceAll", signature=c("custom_metric", "nca_metrics", "character")
 setMethod("replaceAll", signature=c("custom_metric", "nca_metric", "character"), definition=function(object, pattern, replacement, fun_name=NULL, ...) {
   # Replace all only available for non-tibble custom function
   # In custom function tibble, variable of interest is unknown...
-  if (object@ivalue_tibble) {
+  if (object@i_value_tibble) {
     return(object)
   }
   if (is.null(fun_name)) {
@@ -162,6 +162,6 @@ setMethod("replaceAll", signature=c("custom_metric", "nca_metric", "character"),
     name <- fun_name
   }
   object <- object %>%
-    replaceAll(pattern=name, replacement=sprintf("iValue(%s(),.x,.y)", name))
+    replaceAll(pattern=name, replacement=sprintf("i_value(%s(),.x,.y)", name))
   return(object)
 })

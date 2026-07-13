@@ -48,11 +48,11 @@ setMethod("get_default_name", signature=c("auc_metric"), definition=function(obj
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname i_value
+setMethod("i_value", signature=c("auc_metric", "numeric", "numeric"), definition=function(object, time, value) {
   return(trap(x=time, y=value, method=object@method))    
 })
 

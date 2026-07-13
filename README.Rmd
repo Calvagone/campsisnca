@@ -167,10 +167,10 @@ table %>% export(dest="gt") %>% as_raw_html()
 
 ```{r, message=FALSE}
 # Compute Cmax yourself using campsisnca
-custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="C_{max} custom", unit="ng/mL")
+custom1 <- CustomMetric(fun=~Cmax() %>% i_value(.x, .y), name="C_{max} custom", unit="ng/mL")
 
 # Check if Cmax if higher than 12 ng/mL
-custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="C_{max} > 12", unit="%", categorical=TRUE)
+custom2 <- CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 12, name="C_{max} > 12", unit="%", categorical=TRUE)
 
 # Shortcut notation is also accepted
 custom3 <- CustomMetric(fun=~Cmax > 13, name="C_{max}> 13", unit="%", categorical=TRUE)
@@ -217,7 +217,7 @@ table %>% export(dest="gt") %>% as_raw_html()
 
 ```{r, message=FALSE}
 getCategory <- function(.x, .y) {
-  values <- Cmax() %>% iValue(.x, .y)
+  values <- Cmax() %>% i_value(.x, .y)
   retValue <- dplyr::case_when(
     values < 10 ~ "(1) < 10 ng/mL",
     values >= 10 & values <= 15 ~ "(2) 10-15 ng/mL",
@@ -314,7 +314,7 @@ NCA summary statistics are automatically calculated across all strata levels in 
 nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
   add(AUC(unit="ng/mL*h")) %>%
   add(Cmax(unit="ng/mL")) %>%
-  add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+  add(CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
   add(Tmax(unit="h", digits=2)) %>%
   add(Ctrough(unit="ng/mL")) %>%
   add(Thalf(unit="h", window=TimeWindow(200, "last"))) # Thalf will be estimated by dosing a linear regression on the range [200, 'last']
@@ -333,7 +333,7 @@ ncaArm1 <- NCAAnalysis(name="Last dose in '1g QD' arm", window=TimeWindow(144, 1
                        variable="CONC", strata=c(ARM="1g QD", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
-    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
@@ -342,7 +342,7 @@ ncaArm2 <- NCAAnalysis(name="Last dose in '0.5 BID' arm", window=TimeWindow(156,
                        variable="CONC", strata=c(ARM="0.5g BID", SCENARIO="all")) %>%
   add(AUC(unit="ng/mL*h")) %>%
   add(Cmax(unit="ng/mL")) %>%
-  add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+  add(CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
   add(Tmax(unit="h", digits=2)) %>%
   add(Ctrough(unit="ng/mL")) %>%
   add(Thalf(unit="h", window=TimeWindow(200, "last")))

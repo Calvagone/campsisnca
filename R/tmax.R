@@ -44,11 +44,11 @@ setMethod("get_default_name", signature=c("tmax_metric"), definition=function(ob
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname i_value
+setMethod("i_value", signature=c("tmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
   retValue <- time[which.max(value)]
   if (object@rebase) {
     retValue <- retValue - object@window@start

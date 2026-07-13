@@ -61,7 +61,7 @@ setGeneric("calculate", function(object, x, options=NULL, ...) {
 
 
 #_______________________________________________________________________________
-#----                              iValue                                   ----
+#----                              i_value                                  ----
 #_______________________________________________________________________________
 
 #' Compute the individual value of an individual.
@@ -71,19 +71,19 @@ setGeneric("calculate", function(object, x, options=NULL, ...) {
 #' @param value value vector, numeric
 #' @return individual value
 #' @export
-#' @rdname iValue
-iValue <- function(object, time, value) {
+#' @rdname i_value
+i_value <- function(object, time, value) {
   stop("No default function is provided")
 }
 
-setGeneric("iValue", function(object, time, value=NULL) {
+setGeneric("i_value", function(object, time, value=NULL) {
   assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
   assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
-  standardGeneric("iValue")
+  standardGeneric("i_value")
 })
 
 #_______________________________________________________________________________
-#----                            iValueTbl                                  ----
+#----                           i_value_tbl                                 ----
 #_______________________________________________________________________________
 
 #' Compute the individual value of an individual.
@@ -93,17 +93,17 @@ setGeneric("iValue", function(object, time, value=NULL) {
 #' @param ... extra arguments
 #' @return individual value
 #' @export
-#' @rdname iValueTbl
-iValueTbl <- function(object, data, ...) {
+#' @rdname i_value_tbl
+i_value_tbl <- function(object, data, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("iValueTbl", function(object, data, ...) {
-  standardGeneric("iValueTbl")
+setGeneric("i_value_tbl", function(object, data, ...) {
+  standardGeneric("i_value_tbl")
 })
 
 #_______________________________________________________________________________
-#----                             iValues                                   ----
+#----                             i_values                                  ----
 #_______________________________________________________________________________
 
 #' Compute the individual values on a simulation output.
@@ -115,13 +115,13 @@ setGeneric("iValueTbl", function(object, data, ...) {
 #' @param ... extra arguments
 #' @return individual values
 #' @export
-#' @rdname iValues
-iValues <- function(object, x, options, strat_vars, ...) {
+#' @rdname i_values
+i_values <- function(object, x, options, strat_vars, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("iValues", function(object, x, options, strat_vars, ...) {
-  standardGeneric("iValues")
+setGeneric("i_values", function(object, x, options, strat_vars, ...) {
+  standardGeneric("i_values")
 })
 
 #_______________________________________________________________________________

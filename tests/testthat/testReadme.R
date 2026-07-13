@@ -190,8 +190,8 @@ test_that("Round your PK metrics (example 5)", {
 
 test_that("Export custom metrics (example 6)", {
 
-  custom1 <- CustomMetric(fun=~Cmax() %>% iValue(.x, .y), name="C_{max} custom", unit="ng/mL")
-  custom2 <- CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 12, name="C_{max} > 12", unit="%", categorical=TRUE)
+  custom1 <- CustomMetric(fun=~Cmax() %>% i_value(.x, .y), name="C_{max} custom", unit="ng/mL")
+  custom2 <- CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 12, name="C_{max} > 12", unit="%", categorical=TRUE)
 
   # Day 1
   ncaD1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
@@ -251,7 +251,7 @@ test_that("Geometric Mean / Geometric CV (example 7)", {
 test_that("Stats on categorical data with more than 2 levels (example 8)", {
 
   getCategory <- function(.x, .y) {
-    values <- Cmax() %>% iValue(.x, .y)
+    values <- Cmax() %>% i_value(.x, .y)
     retValue <- dplyr::case_when(
       values < 10 ~ "(1) < 10 ng/mL",
       values >= 10 & values <= 15 ~ "(2) 10-15 ng/mL",
@@ -321,7 +321,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
   nca <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="CONC") %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
-    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
@@ -346,7 +346,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
                          variable="CONC", strata=c(ARM="1g QD", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
-    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))
@@ -355,7 +355,7 @@ test_that("Summary statistics across simulation arms and scenarios (example 10)"
                          variable="CONC", strata=c(ARM="0.5g BID", SCENARIO="all")) %>%
     add(AUC(unit="ng/mL*h")) %>%
     add(Cmax(unit="ng/mL")) %>%
-    add(CustomMetric(fun=~(Cmax() %>% iValue(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
+    add(CustomMetric(fun=~(Cmax() %>% i_value(.x, .y)) > 30, name="C_{max} > 30", unit="%", categorical=TRUE)) %>%
     add(Tmax(unit="h", digits=2)) %>%
     add(Ctrough(unit="ng/mL")) %>%
     add(Thalf(unit="h", window=TimeWindow(200, "last")))

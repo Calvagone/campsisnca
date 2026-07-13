@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateMetric <- function(object) {
-  return(expectOneForAll(object, c("variable", "window", "name", "unit", "ivalue_tibble",
+  return(expectOneForAll(object, c("variable", "window", "name", "unit", "i_value_tibble",
                                    "stat_display", "categorical", "concentration")))
 }
 
@@ -22,11 +22,11 @@ getStatDisplayDefault <- function(categorical=FALSE) {
 setClass(
   "nca_metric",
   representation(
-    variable = "character",       # specific variable, NA if ivalue_tibble=FALSE
+    variable = "character",       # specific variable, NA if i_value_tibble=FALSE
     window = "nca_time_window",   # time range for filtering data
     name = "character",           # metric name (exported into header)
     unit = "character",           # metric unit (exported into header)
-    ivalue_tibble = "logical",    # TRUE, iValue called, FALSE iValueTbl called
+    i_value_tibble = "logical",    # TRUE, i_value called, FALSE i_value_tbl called
     categorical = "logical",      # FALSE (default): continuous data, TRUE: categorical data
     stat_display = "character",   # statistics display (see package gtsummary)
     digits = "character",         # rounding digits definitions for gtsummary
@@ -37,7 +37,7 @@ setClass(
   ),
   contains="pmx_element",
   prototype=prototype(variable=as.character(NA), window=UndefinedTimeWindow(), name=as.character(NA), unit=as.character(NA),
-                      ivalue_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
+                      i_value_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
                       digits=character(0), concentration=as.logical(NA)),
   validity=validateMetric
 )
@@ -74,7 +74,7 @@ setDefaultNameIfNA <- function(object) {
 setMethod("calculate", signature=c("nca_metric", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
-  object@individual <- iValues(object=object, x=x, options=options, strat_vars=strat_vars)
+  object@individual <- i_values(object=object, x=x, options=options, strat_vars=strat_vars)
   structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
   object@summary_pretty <- structuredObj$summary_pretty
@@ -177,14 +177,14 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 })
 
 #_______________________________________________________________________________
-#----                             iValues                                   ----
+#----                             i_values                                  ----
 #_______________________________________________________________________________
 
-#' @rdname iValues
+#' @rdname i_values
 #' @importFrom dplyr group_by summarise transmute ungroup
 #' @importFrom tibble tibble
 #' @importFrom purrr map_df
-setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, options, strat_vars, ...) {
+setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, options, strat_vars, ...) {
   variable <- object@variable
   if (length(variable)==0) {
     stop(sprintf("No variable provided for metric '%s'", x %>% getName()))
@@ -208,18 +208,18 @@ setMethod("iValues", signature=c("nca_metric"), definition=function(object, x, o
   object@window@end <- campsis::convertTime(object@window@end, from=window_time_unit, to=table_time_unit)
   object@window@time_unit <- table_time_unit 
 
-  if (object@ivalue_tibble) {
+  if (object@i_value_tibble) {
     retValue <- x %>%
       dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
       dplyr::group_modify(~ {
-        ivalue <- object %>% iValueTbl(data=.x)
-        tibble::tibble(value=ivalue)
+        i_value <- object %>% i_value_tbl(data=.x)
+        tibble::tibble(value=i_value)
       }) %>%
       dplyr::ungroup()
   } else {
     retValue <- x %>%
       dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
-      dplyr::summarise(value=object %>% iValue(time=.data$TIME, value=.data[[variable]])) %>%
+      dplyr::summarise(value=object %>% i_value(time=.data$TIME, value=.data[[variable]])) %>%
       dplyr::ungroup()
   }
   

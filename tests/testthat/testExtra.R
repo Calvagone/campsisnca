@@ -62,7 +62,7 @@ test_that("Statistics can contain line breaks", {
 test_that("Method stat_display_string on categorical data should work", {
   
   custom1a <- CustomMetric("Y", TimeWindow(0, 24),
-                         fun=~(Cmax() %>% iValue(.x, .y)) > 12.5,
+                         fun=~(Cmax() %>% i_value(.x, .y)) > 12.5,
                          name="Cmax > 12", unit="%", categorical=TRUE)
 
   custom1a <- custom1a %>% campsisnca::calculate(campsis)
@@ -70,7 +70,7 @@ test_that("Method stat_display_string on categorical data should work", {
   
   # Vice-versa
   custom1b <- CustomMetric("Y", TimeWindow(0, 24),
-                         fun=~(Cmax() %>% iValue(.x, .y)) <= 12.5,
+                         fun=~(Cmax() %>% i_value(.x, .y)) <= 12.5,
                          name="Cmax > 12", unit="%", categorical=TRUE)
   
   custom1b <- custom1b %>% campsisnca::calculate(campsis)
@@ -326,4 +326,3 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
   expect_equal(translate_stat_string("{mean} ± {sd}"), "Mean ± SD") 
   expect_equal(translate_stat_string("{mean} ({min}–{max})"), "Mean (Minimum–Maximum)") 
 })
-

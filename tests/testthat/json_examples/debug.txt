@@ -34,7 +34,7 @@ Slot "list":
 [[1]]
 An object of class "custom_metric"
 Slot "custom_function":
-[1] "rlang::as_function(~iValue(AUC(),.x,.y) > 100)"
+[1] "rlang::as_function(~i_value(AUC(),.x,.y) > 100)"
 
 Slot "variable":
 [1] NA
@@ -63,7 +63,7 @@ Slot "name":
 Slot "unit":
 [1] NA
 
-Slot "ivalue_tibble":
+Slot "i_value_tibble":
 [1] FALSE
 
 Slot "categorical":
