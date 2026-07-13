@@ -193,11 +193,11 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "campsis_output",
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          get_latex_name                               ----
 #_______________________________________________________________________________
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("theoretical_thalf_metric"), definition = function(x) {
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature=c("theoretical_thalf_metric"), definition = function(x) {
   name <- x %>% getName()
   subtype <- x@subtype
   if (subtype == "1cpt") {

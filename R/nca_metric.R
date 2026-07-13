@@ -82,7 +82,7 @@ setMethod("calculate", signature=c("nca_metric", "campsis_output", "nca_options"
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          get_latex_name                               ----
 #_______________________________________________________________________________
 
 #' @importFrom stringr str_replace_all
@@ -95,8 +95,8 @@ subscriptOccurrence <- function(x, occurrence, replacement=NULL) {
   return(stringr::str_replace_all(string=x, pattern=occurrence, replacement=replacement))
 }
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature=c("nca_metric"), definition = function(x) {
   return(x %>% getName())
 })
 

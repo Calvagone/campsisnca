@@ -319,7 +319,7 @@ getLabelsCode <- function(table, subscripts) {
   retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     unit <- x@unit
     if (subscripts) {
-      resultingName <-  x %>% getLaTeXName()
+      resultingName <-  x %>% get_latex_name()
     } else {
       resultingName <-  x %>% getName()
     }

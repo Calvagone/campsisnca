@@ -105,11 +105,11 @@ setMethod("i_value", signature=c("abstract_value_at_metric", "numeric", "numeric
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          get_latex_name                               ----
 #_______________________________________________________________________________
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("abstract_value_at_metric"), definition = function(x) {
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature=c("abstract_value_at_metric"), definition = function(x) {
   retValue <- x %>% getName()
   return(retValue)
 })

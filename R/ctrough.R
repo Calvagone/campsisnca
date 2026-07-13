@@ -83,17 +83,17 @@ setMethod("i_value", signature=c("abstract_last_metric", "numeric", "numeric"), 
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          get_latex_name                               ----
 #_______________________________________________________________________________
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("last_metric"), definition = function(x) {
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature=c("last_metric"), definition = function(x) {
     retValue <- x %>% getName()
     return(retValue)
 })
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("ctrough_metric"), definition = function(x) {
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature=c("ctrough_metric"), definition = function(x) {
   retValue <- x %>% getName()
   return(subscriptOccurrence(retValue, "trough"))
 })
