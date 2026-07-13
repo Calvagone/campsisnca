@@ -125,7 +125,7 @@ setGeneric("i_values", function(object, x, options, strat_vars, ...) {
 })
 
 #_______________________________________________________________________________
-#----                       generateTableCode                               ----
+#----                      generate_table_code                              ----
 #_______________________________________________________________________________
 
 #' Generate table code.
@@ -134,16 +134,16 @@ setGeneric("i_values", function(object, x, options, strat_vars, ...) {
 #' @param init generate initialization code to generate the individuals, default is TRUE
 #' @param ... extra arguments
 #' @export
-#' @rdname generateTableCode
-generateTableCode <- function(object, init, ...) {
+#' @rdname generate_table_code
+generate_table_code <- function(object, init, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generateTableCode", function(object, init=NULL, ...) {
+setGeneric("generate_table_code", function(object, init=NULL, ...) {
   if (is.null(init)) {
     init <- TRUE
   }
-  standardGeneric("generateTableCode")
+  standardGeneric("generate_table_code")
 })
 
 #_______________________________________________________________________________

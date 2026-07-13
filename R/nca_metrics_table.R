@@ -194,10 +194,10 @@ setMethod("export", signature=c("nca_table", "dataframe_type"), definition=funct
   return(retValue)
 })
 
-#' @inheritParams generateTableCode
+#' @inheritParams generate_table_code
 setMethod("export", signature=c("nca_table", "gtsummary_type"),
           definition=function(object, dest, init=NULL, ...) {
-  code <- object %>% generateTableCode(init=init, ...)
+  code <- object %>% generate_table_code(init=init, ...)
   table <- object # Table variable needs to be there!
   #cat(code)
   # browser()
@@ -210,7 +210,7 @@ setMethod("export", signature=c("nca_table", "gtsummary_type"),
   return(retValue)
 })
 
-#' @inheritParams generateTableCode
+#' @inheritParams generate_table_code
 setMethod("export", signature=c("nca_table", "gt_type"),
           definition=function(object, dest, init=NULL, ...) {
   gtsummaryTable <- object %>%
@@ -281,11 +281,11 @@ toGt <- function(x, title=NULL, subtitle=NULL, opts=list(), subscripts=FALSE, fm
 }
 
 #_______________________________________________________________________________
-#----                       generateTableCode                               ----
+#----                      generate_table_code                              ----
 #_______________________________________________________________________________
 
-#' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_table", "logical"),
+#' @rdname generate_table_code
+setMethod("generate_table_code", signature=c("nca_table", "logical"),
           definition=function(object, init, ...) {
   
   if (init) {
