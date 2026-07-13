@@ -257,7 +257,7 @@ loadMetricFromJSON <- function(object, json) {
 
 
 #_______________________________________________________________________________
-#----                         statDisplayString                             ----
+#----                        stat_display_string                            ----
 #_______________________________________________________________________________
 
 getDiscreteCategories <- function(object) {
@@ -266,8 +266,8 @@ getDiscreteCategories <- function(object) {
   return(base::sort(unique(object@individual$value)))
 }
 
-#' @rdname statDisplayString
-setMethod("statDisplayString", signature=c("nca_metric"), definition=function(object, ...) {
+#' @rdname stat_display_string
+setMethod("stat_display_string", signature=c("nca_metric"), definition=function(object, ...) {
   if (nrow(object@summary_pretty) > 0) {
     if ("category" %in% colnames(object@summary_pretty)) {
       temp <- object@summary_pretty %>% dplyr::mutate(summary_stats_final=paste0(category, ": ", summary_stats))

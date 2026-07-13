@@ -225,7 +225,7 @@ setGeneric("getDefaultName", function(object, ...) {
 })
 
 #_______________________________________________________________________________
-#----                         statDisplayString                             ----
+#----                        stat_display_string                            ----
 #_______________________________________________________________________________
 
 #' Return the evaluated statistics display string. This method was kept for
@@ -236,13 +236,13 @@ setGeneric("getDefaultName", function(object, ...) {
 #' @param ... extra arguments
 #' @return a string, e.g. 100 [45-143]
 #' @export
-#' @rdname statDisplayString
-statDisplayString <- function(object, ...) {
+#' @rdname stat_display_string
+stat_display_string <- function(object, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("statDisplayString", function(object, ...) {
-  standardGeneric("statDisplayString")
+setGeneric("stat_display_string", function(object, ...) {
+  standardGeneric("stat_display_string")
 })
 
 #_______________________________________________________________________________
