@@ -15,7 +15,7 @@ no_default_function_provided_debug <- function(args_list, fun_name) {
 }
 
 #_______________________________________________________________________________
-#----                           applyTimeWindow                             ----
+#----                          apply_time_window                            ----
 #_______________________________________________________________________________
 
 #' Apply time window.
@@ -26,13 +26,13 @@ no_default_function_provided_debug <- function(args_list, fun_name) {
 #' @param ... extra arguments
 #' @return updated object
 #' @export
-#' @rdname applyTimeWindow
-applyTimeWindow <- function(x, window, data_time_unit, ...) {
+#' @rdname apply_time_window
+apply_time_window <- function(x, window, data_time_unit, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("applyTimeWindow", function(x, window, data_time_unit, ...) {
-  standardGeneric("applyTimeWindow")
+setGeneric("apply_time_window", function(x, window, data_time_unit, ...) {
+  standardGeneric("apply_time_window")
 })
 
 #_______________________________________________________________________________

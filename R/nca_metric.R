@@ -195,7 +195,7 @@ setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, 
   
   # Apply time window
   x <- x %>%
-    applyTimeWindow(window=object@window, data_time_unit=options@data_time_unit)
+    apply_time_window(window=object@window, data_time_unit=options@data_time_unit)
   
   # Convert to requested time unit
   data_time_unit <- options@data_time_unit

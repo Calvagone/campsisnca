@@ -18,3 +18,24 @@ setGeneric("iValue", function(object, time, value = NULL) {
   lifecycle::deprecate_warn("1.7.0", "iValue()", "i_value()")
   i_value(object = object, time = time, value = value)
 })
+
+#' Apply time window.
+#' 
+#' `applyTimeWindow()` is deprecated in favor of `apply_time_window()`.
+#' 
+#' @description
+#' `r lifecycle::badge("deprecated")`
+#' 
+#' @inheritParams apply_time_window
+#' @return updated object
+#' @export
+#' @rdname applyTimeWindow
+applyTimeWindow <- function(x, window, data_time_unit, ...) {
+  lifecycle::deprecate_warn("1.7.0", "applyTimeWindow()", "apply_time_window()")
+  apply_time_window(x = x, window = window, data_time_unit = data_time_unit, ...)
+}
+
+setGeneric("applyTimeWindow", function(x, window, data_time_unit, ...) {
+  lifecycle::deprecate_warn("1.7.0", "applyTimeWindow()", "apply_time_window()")
+  apply_time_window(x = x, window = window, data_time_unit = data_time_unit, ...)
+})
