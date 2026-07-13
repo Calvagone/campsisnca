@@ -32,11 +32,11 @@ Thalf <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("thalf_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("thalf_metric"), definition=function(object, ...) {
   return("thalf") 
 })
 

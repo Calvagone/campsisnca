@@ -60,16 +60,16 @@ Ctrough <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_displ
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("last_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("last_metric"), definition=function(object, ...) {
   return("Last value")
 })
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("ctrough_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("ctrough_metric"), definition=function(object, ...) {
   return("Ctrough")
 })
 

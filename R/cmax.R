@@ -65,16 +65,16 @@ Cmax <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("max_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("max_metric"), definition=function(object, ...) {
   return("Max")
 })
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("cmax_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("cmax_metric"), definition=function(object, ...) {
   return("Cmax")
 })
 

@@ -149,11 +149,11 @@ Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, di
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("theoretical_thalf_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("theoretical_thalf_metric"), definition=function(object, ...) {
   return(getDefaultTHalfName(object@subtype)) 
 })
 

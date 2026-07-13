@@ -74,16 +74,16 @@ TimeBelowLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALS
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("time_above_limit_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("time_above_limit_metric"), definition=function(object, ...) {
   return(sprintf("Time above %s", as.character(object@limit))) 
 })
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("time_below_limit_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("time_below_limit_metric"), definition=function(object, ...) {
   return(sprintf("Time below %s", as.character(object@limit))) 
 })
 

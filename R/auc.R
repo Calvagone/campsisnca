@@ -39,11 +39,11 @@ AUC <- function(variable=NULL, window=NULL, method=1, name=NULL, unit=NULL, stat
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("auc_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("auc_metric"), definition=function(object, ...) {
   return("AUC") 
 })
 

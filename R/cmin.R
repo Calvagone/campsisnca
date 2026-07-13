@@ -65,16 +65,16 @@ Cmin <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("min_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("min_metric"), definition=function(object, ...) {
   return("Min")
 })
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("cmin_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("cmin_metric"), definition=function(object, ...) {
   return("Cmin")
 })
 

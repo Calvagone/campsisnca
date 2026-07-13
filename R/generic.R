@@ -207,7 +207,7 @@ setGeneric("getUnit", function(object, metric, ...) {
 })
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
 #' Get default name.
@@ -215,13 +215,13 @@ setGeneric("getUnit", function(object, metric, ...) {
 #' @param object get default name of this object
 #' @param ... optional extra arguments
 #' @export
-#' @rdname getDefaultName
-getDefaultName <- function(object, ...) {
+#' @rdname get_default_name
+get_default_name <- function(object, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("getDefaultName", function(object, ...) {
-  standardGeneric("getDefaultName")
+setGeneric("get_default_name", function(object, ...) {
+  standardGeneric("get_default_name")
 })
 
 #_______________________________________________________________________________

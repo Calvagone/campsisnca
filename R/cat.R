@@ -72,16 +72,16 @@ CAt <- function(variable=NULL, window=NULL, time=NULL, name=NULL, unit=NULL, sta
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("value_at_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("value_at_metric"), definition=function(object, ...) {
   return("Value")
 })
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("conc_at_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("conc_at_metric"), definition=function(object, ...) {
   return("Conc")
 })
 

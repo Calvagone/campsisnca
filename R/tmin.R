@@ -35,11 +35,11 @@ Tmin <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, 
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("tmin_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("tmin_metric"), definition=function(object, ...) {
   return("tmin") 
 })
 

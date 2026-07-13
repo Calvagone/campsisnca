@@ -61,7 +61,7 @@ ncaConstructor <- function(variable, window, name, unit, stat_display, digits, m
 
 setDefaultNameIfNA <- function(object) {
   if (is.na(object@name)) {
-    object@name <- object %>% getDefaultName()
+    object@name <- object %>% get_default_name()
   }
   return(object)
 } 
@@ -101,11 +101,11 @@ setMethod("getLaTeXName", signature=c("nca_metric"), definition = function(x) {
 })
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("nca_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature=c("nca_metric"), definition=function(object, ...) {
   return("Unknown metric name") 
 })
 
