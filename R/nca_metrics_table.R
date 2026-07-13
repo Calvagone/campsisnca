@@ -336,15 +336,15 @@ setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=f
 })
 
 #_______________________________________________________________________________
-#----                              getUnit                                  ----
+#----                              get_unit                                 ----
 #_______________________________________________________________________________
 
-#' @rdname getUnit
-setMethod("getUnit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
+#' @rdname get_unit
+setMethod("get_unit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
   if (object@nca_analyses %>% length()==0) {
     stop("No metrics in table at this stage")
   }
-  return(object@nca_analyses@list[[1]] %>% getUnit(metric=metric, ...))
+  return(object@nca_analyses@list[[1]] %>% get_unit(metric=metric, ...))
 })
 
 #_______________________________________________________________________________

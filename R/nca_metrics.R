@@ -31,11 +31,11 @@ setMethod("getName", signature=c("nca_metrics"), definition=function(x) {
 })
 
 #_______________________________________________________________________________
-#----                              getUnit                                  ----
+#----                              get_unit                                 ----
 #_______________________________________________________________________________
 
-#' @rdname getUnit
-setMethod("getUnit", signature=c("nca_metrics", "character"), definition=function(object, metric, ...) {
+#' @rdname get_unit
+setMethod("get_unit", signature=c("nca_metrics", "character"), definition=function(object, metric, ...) {
   metrics <- object@list %>% purrr::keep(.p=~.x@name==metric)
   if (metrics %>% length() == 0) {
     stop(paste0("Metric ", metric, " not found"))

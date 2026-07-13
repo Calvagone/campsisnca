@@ -188,7 +188,7 @@ setGeneric("getStrata", function(object, keep_single=NULL, ...) {
 })
 
 #_______________________________________________________________________________
-#----                              getUnit                                  ----
+#----                              get_unit                                 ----
 #_______________________________________________________________________________
 
 #' Get the unit corresponding to the given metric.
@@ -197,13 +197,13 @@ setGeneric("getStrata", function(object, keep_single=NULL, ...) {
 #' @param metric given metric name
 #' @param ... extra arguments, not used
 #' @export
-#' @rdname getUnit
-getUnit <- function(object, metric, ...) {
+#' @rdname get_unit
+get_unit <- function(object, metric, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("getUnit", function(object, metric, ...) {
-  standardGeneric("getUnit")
+setGeneric("get_unit", function(object, metric, ...) {
+  standardGeneric("get_unit")
 })
 
 #_______________________________________________________________________________

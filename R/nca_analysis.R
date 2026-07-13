@@ -93,12 +93,12 @@ setMethod("getName", signature=c("nca_analysis"), definition = function(x) {
 })
 
 #_______________________________________________________________________________
-#----                              getUnit                                  ----
+#----                              get_unit                                 ----
 #_______________________________________________________________________________
 
-#' @rdname getUnit
-setMethod("getUnit", signature=c("nca_analysis", "character"), definition=function(object, metric, ...) {
-  return(object@metrics %>% getUnit(metric=metric, ...))
+#' @rdname get_unit
+setMethod("get_unit", signature=c("nca_analysis", "character"), definition=function(object, metric, ...) {
+  return(object@metrics %>% get_unit(metric=metric, ...))
 })
 
 #_______________________________________________________________________________
