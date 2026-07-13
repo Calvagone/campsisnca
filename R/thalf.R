@@ -2,7 +2,7 @@
 #----                          thalf_metric class                             ----
 #_______________________________________________________________________________
 
-validateThalfMetric <- function(object) {
+validate_thalf_metric <- function(object) {
   return(TRUE)
 }
 
@@ -15,14 +15,14 @@ setClass(
   representation(
   ),
   contains="nca_metric",
-  validity=validateThalfMetric
+  validity=validate_thalf_metric
 )
 
 #' 
 #' Terminal half life computed by making a linear regression in the log domain 
 #' on the given data x.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Thalf <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,

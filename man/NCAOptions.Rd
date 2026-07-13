@@ -8,7 +8,7 @@ NCAOptions(
   quantile_type = 2L,
   data_time_unit = "hour",
   table_time_unit = "hour",
-  rep_stat_display = getStatDisplayDefault(),
+  rep_stat_display = get_stat_display_default(),
   rep_stat_digits = 3L
 )
 }

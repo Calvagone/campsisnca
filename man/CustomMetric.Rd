@@ -11,7 +11,7 @@ CustomMetric(
   name = NULL,
   unit = NULL,
   categorical = FALSE,
-  stat_display = getStatDisplayDefault(categorical),
+  stat_display = get_stat_display_default(categorical),
   digits = NULL
 )
 }

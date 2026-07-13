@@ -10,7 +10,7 @@
 #' @importFrom jsonvalidate json_schema
 #' @keywords internal
 #' 
-openJSON <- function(json, schema=NULL) {
+open_json <- function(json, schema=NULL) {
   if (is.list(json)) {
     return(JSONElement(json)) # Don't go further if data is already parsed
   }

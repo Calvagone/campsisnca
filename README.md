@@ -34,7 +34,7 @@ Assume some results were simulated with Campsis (see `campsis`
 dataframe) :
 
 ``` r
-campsis <- generateTestData()
+campsis <- generate_test_data()
 campsis
 ```
 

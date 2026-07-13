@@ -2,7 +2,7 @@
 #----                          tmax_metric class                            ----
 #_______________________________________________________________________________
 
-validateTmaxMetric <- function(object) {
+validate_tmax_metric <- function(object) {
   return(expectOne(object, "rebase"))
 }
 
@@ -17,13 +17,13 @@ setClass(
   ),
   contains="nca_metric",
   prototype=prototype(rebase=TRUE),
-  validity=validateTmaxMetric
+  validity=validate_tmax_metric
 )
 
 #' 
 #' Tmax.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param rebase rebase time according to start time of window
 #' @export
 Tmax <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {

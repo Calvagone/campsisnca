@@ -12,7 +12,7 @@ setClass(
     rep_stat_digits = "integer"
   ),
   prototype=prototype(quantile_type=2L, data_time_unit="hour", table_time_unit="hour",
-   rep_stat_display=getStatDisplayDefault(), rep_stat_digits=3L),
+   rep_stat_display=get_stat_display_default(), rep_stat_digits=3L),
 )
 
 #' 
@@ -36,7 +36,7 @@ setClass(
 #' @param rep_stat_digits number of significant digits to display for replicate statistics, default is 3.
 #' @export
 NCAOptions <- function(quantile_type=2L, data_time_unit="hour", table_time_unit="hour",
- rep_stat_display=getStatDisplayDefault(), rep_stat_digits=3L) {
+ rep_stat_display=get_stat_display_default(), rep_stat_digits=3L) {
   return(new("nca_options", quantile_type=as.integer(quantile_type),
              data_time_unit=data_time_unit, table_time_unit=table_time_unit, rep_stat_display=rep_stat_display,
               rep_stat_digits=rep_stat_digits))

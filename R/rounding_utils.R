@@ -5,7 +5,7 @@
 #' @param x expression to deparse
 #' @return a single string
 #' 
-deparse1Line <- function(x) {
+deparse_one_line <- function(x) {
   # return(paste0(trimws(deparse(x)), collapse = ""))
   return(deparse1(x, collapse="\n"))
 }
@@ -18,25 +18,25 @@ deparse1Line <- function(x) {
 #' @return a character vector, which will be pasted and given to gtsummary
 #' @importFrom purrr map_chr
 #' 
-deparseDigits <- function(digits) {
+deparse_digits <- function(digits) {
   if (is.null(digits)) {
     return(character(0))
   }
   if (is.numeric(digits) || is.list(digits)) {
-    retValue <- digits %>% purrr::map_chr(~deparseDigit(.x))
+    retValue <- digits %>% purrr::map_chr(~deparse_digit(.x))
   } else {
-    retValue <- deparseDigit(digits)
+    retValue <- deparse_digit(digits)
   }
   return(retValue)
 }
 
 #' @importFrom rlang is_function is_lambda
-deparseDigit <- function(digit) {
+deparse_digit <- function(digit) {
   if (rlang::is_function(digit)) {
-    retValue <- deparse1Line(digit)
+    retValue <- deparse_one_line(digit)
     
   } else if (rlang::is_formula(digit)) {
-    retValue <- paste0("rlang::as_function(", deparse1Line(digit), ")")
+    retValue <- paste0("rlang::as_function(", deparse_one_line(digit), ")")
     
   } else if (is.numeric(digit)) {
     retValue <- as.character(digit)

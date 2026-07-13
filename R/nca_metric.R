@@ -2,12 +2,12 @@
 #----                          nca_metric class                             ----
 #_______________________________________________________________________________
 
-validateMetric <- function(object) {
+validate_metric <- function(object) {
   return(expectOneForAll(object, c("variable", "window", "name", "unit", "i_value_tibble",
                                    "stat_display", "categorical", "concentration")))
 }
 
-getStatDisplayDefault <- function(categorical=FALSE) {
+get_stat_display_default <- function(categorical=FALSE) {
   if (categorical) {
     return("{n} / {N} ({p}%)")
   } else {
@@ -37,9 +37,9 @@ setClass(
   ),
   contains="pmx_element",
   prototype=prototype(variable=as.character(NA), window=UndefinedTimeWindow(), name=as.character(NA), unit=as.character(NA),
-                      i_value_tibble=FALSE, categorical=FALSE, stat_display=getStatDisplayDefault(categorical=FALSE),
+                      i_value_tibble=FALSE, categorical=FALSE, stat_display=get_stat_display_default(categorical=FALSE),
                       digits=character(0), concentration=as.logical(NA)),
-  validity=validateMetric
+  validity=validate_metric
 )
 
 ncaConstructor <- function(variable, window, name, unit, stat_display, digits, metric_name) {
@@ -49,11 +49,11 @@ ncaConstructor <- function(variable, window, name, unit, stat_display, digits, m
   if (is.null(window)) {
     window <- UndefinedTimeWindow()
   }
-  variable <- processVariable(variable)
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
+  variable <- process_variable(variable)
+  unit <- process_unit(unit)
+  digits <- deparse_digits(digits)
   if (is.null(stat_display)) {
-    stat_display <- getStatDisplayDefault(categorical=FALSE) # Continuous by default
+    stat_display <- get_stat_display_default(categorical=FALSE) # Continuous by default
   }
   metric <- new(metric_name, variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits)
   return(metric)
@@ -75,7 +75,7 @@ setMethod("calculate", signature=c("nca_metric", "campsis_output", "nca_options"
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- i_values(object=object, x=x, options=options, strat_vars=strat_vars)
-  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
+  structuredObj <- compute_nca_metric_summary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
   object@summary_pretty <- structuredObj$summary_pretty
   return(object)    

@@ -165,7 +165,7 @@ setGeneric("get_latex_name", function(x, ...) {
 })
 
 #_______________________________________________________________________________
-#----                           getScenarios                                ----
+#----                            get_strata                                 ----
 #_______________________________________________________________________________
 
 #' Get all stratas.
@@ -175,16 +175,16 @@ setGeneric("get_latex_name", function(x, ...) {
 #' @param ... extra arguments
 #' @return list of stratification variable names
 #' @export
-#' @rdname getStrata
-getStrata <- function(object, keep_single, ...) {
+#' @rdname get_strata
+get_strata <- function(object, keep_single, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("getStrata", function(object, keep_single=NULL, ...) {
+setGeneric("get_strata", function(object, keep_single=NULL, ...) {
   if (is.null(keep_single)) {
     keep_single <- TRUE
   }
-  standardGeneric("getStrata")
+  standardGeneric("get_strata")
 })
 
 #_______________________________________________________________________________

@@ -31,7 +31,7 @@ se <- function(x) {
   return(sd(x)/sqrt(length(x)))
 }
 
-adaptFootnote <- function(x) {
+adapt_footnote <- function(x) {
   x <- x %>% replaceAll(pattern=VariablePattern("geomean"), replacement="Geometric Mean")
   x <- x %>% replaceAll(pattern=VariablePattern("geocv"), replacement="Geometric CV")
   x <- x %>% replaceAll(pattern=VariablePattern("cv"), replacement="Coefficient of Variation")

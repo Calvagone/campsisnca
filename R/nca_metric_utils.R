@@ -1,5 +1,5 @@
 
-processDataframe <- function(x) {
+process_dataframe <- function(x) {
   if (is.null(x)) {
     return(data.frame())
   } else {
@@ -8,7 +8,7 @@ processDataframe <- function(x) {
   }
 }
 
-processVariable <- function(variable) {
+process_variable <- function(variable) {
   if (is.null(variable)) {
     return(as.character(NA))
   } else {
@@ -18,7 +18,7 @@ processVariable <- function(variable) {
   }
 }
 
-processUnit <- function(unit) {
+process_unit <- function(unit) {
   return(if(is.null(unit)) as.character(NA) else unit)
 }
 
@@ -31,7 +31,7 @@ processUnit <- function(unit) {
 #' @param categorical categorical endpoint, logical
 #' @param stat_display statistics display, default is '\{median\} [\{p5\}-\{p95\}]' for continuous data or '\{n\} / \{N\} (\{p\}\%)' for categorical data
 #' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README
-metricsParams <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, categorical=NULL, stat_display=NULL, digits=NULL) {
+metrics_params <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, categorical=NULL, stat_display=NULL, digits=NULL) {
   # Do nothing
 }
 
@@ -60,13 +60,13 @@ standardise <- function(x, variable, strat_vars) {
   x <- x %>% campsis::obsOnly()
   
   # Check no time is NA
-  checkNATimes(x, time_var="TIME") 
+  check_na_times(x, time_var="TIME") 
   
   # Check no observation is NA
-  checkNAObservations(x, variable=variable)
+  check_na_observations(x, variable=variable)
   
   # Check time is monotonically increasing
-  checkTimesAreIncreasing(x, strat_vars)
+  check_times_are_increasing(x, strat_vars)
   
   # Factor all columns in 'strat_vars' by natural order
   x <- x %>%

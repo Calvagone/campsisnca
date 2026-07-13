@@ -2,7 +2,7 @@
 #----                       (c)avg_metric class                             ----
 #_______________________________________________________________________________
 
-validateAvgMetric <- function(object) {
+validate_avg_metric <- function(object) {
   return(TRUE)
 }
 
@@ -15,7 +15,7 @@ setClass(
   representation(
   ),
   contains="nca_metric",
-  validity=validateAvgMetric
+  validity=validate_avg_metric
 )
 
 #' 
@@ -43,7 +43,7 @@ setClass(
 #' 
 #' Avg.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Avg <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
@@ -55,7 +55,7 @@ Avg <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=N
 #' 
 #' Cavg.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Cavg <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,

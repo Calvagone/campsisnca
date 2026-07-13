@@ -2,7 +2,7 @@
 #----                      theoretical_thalf_metric classes                 ----
 #_______________________________________________________________________________
 
-validateTheoreticalThalfMetric <- function(object) {
+validate_theoretical_thalf_metric <- function(object) {
   return(c(
     expectZeroOrMore(object, "map"),
     expectOne(object, "subtype")
@@ -13,7 +13,7 @@ validateTheoreticalThalfMetric <- function(object) {
 #' Get default name based on thalf subtype.
 #'
 #' @param subtype thalf subtype (2cpt.dist, 2cpt.z or 2cpt.eff)
-getDefaultTHalfName <- function(subtype) {
+get_default_thalf_name <- function(subtype) {
   if (subtype == "1cpt") {
     return("thalf.z")
   } else if (subtype == "2cpt.dist") {
@@ -39,7 +39,7 @@ setClass(
   ),
   contains="nca_metric",
   prototype=prototype(subtype=as.character(NA)),
-  validity=validateTheoreticalThalfMetric
+  validity=validate_theoretical_thalf_metric
 )
 
 #' 
@@ -60,7 +60,7 @@ thalf.2cpt.required <- function() {
   return(c("DOSE", "TAU", "CL", "V2", "Q", "V3", "KA"))
 }
 
-checkMap <- function(map, thalf.1cpt=TRUE) {
+check_map <- function(map, thalf.1cpt=TRUE) {
   if (is.null(map)) {
     return(character(0))
   }
@@ -83,7 +83,7 @@ checkMap <- function(map, thalf.1cpt=TRUE) {
 #' 
 #' Theoretical half life for a 1-compartment model.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param map character vector used for column mapping, only one key is possible: K
 #' @export
 Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
@@ -91,7 +91,7 @@ Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits
   metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
-  map <- checkMap(map, thalf.1cpt=TRUE)
+  map <- check_map(map, thalf.1cpt=TRUE)
   metric@map <- map
   metric@subtype <- subtype
   return(setDefaultNameIfNA(metric))
@@ -100,7 +100,7 @@ Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits
 #' 
 #' Theoretical distribution half life for a 2-compartment model.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
 Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
@@ -108,7 +108,7 @@ Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, d
   metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
-  map <- checkMap(map, thalf.1cpt=FALSE)
+  map <- check_map(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
   return(setDefaultNameIfNA(metric))
@@ -117,7 +117,7 @@ Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, d
 #' 
 #' Theoretical elimination half life for a 2-compartment model.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
 Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
@@ -125,7 +125,7 @@ Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digi
   metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
-  map <- checkMap(map, thalf.1cpt=FALSE)
+  map <- check_map(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
   return(setDefaultNameIfNA(metric))
@@ -134,7 +134,7 @@ Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digi
 #' 
 #' Theoretical effective half life for a 2-compartment model.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
 #' @export
 Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
@@ -142,7 +142,7 @@ Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, di
   metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
-  map <- checkMap(map, thalf.1cpt=FALSE)
+  map <- check_map(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
   return(setDefaultNameIfNA(metric))
@@ -154,7 +154,7 @@ Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, di
 
 #' @rdname get_default_name
 setMethod("get_default_name", signature=c("theoretical_thalf_metric"), definition=function(object, ...) {
-  return(getDefaultTHalfName(object@subtype)) 
+  return(get_default_thalf_name(object@subtype)) 
 })
 
 #_______________________________________________________________________________
@@ -186,7 +186,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "campsis_output",
   args <- list(...)
   strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- ind
-  structuredObj <- computeNCAMetricSummary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
+  structuredObj <- compute_nca_metric_summary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
   object@summary_pretty <- structuredObj$summary_pretty
   return(object)

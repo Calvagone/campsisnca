@@ -2,7 +2,7 @@
 #----                       (c)max_metric classes                           ----
 #_______________________________________________________________________________
 
-validateMaxMetric <- function(object) {
+validate_max_metric <- function(object) {
   return(TRUE)
 }
 
@@ -15,7 +15,7 @@ setClass(
   representation(
   ),
   contains="nca_metric",
-  validity=validateMaxMetric
+  validity=validate_max_metric
 )
 
 #' 
@@ -43,7 +43,7 @@ setClass(
 #' 
 #' Max.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Max <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
@@ -55,7 +55,7 @@ Max <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=N
 #' 
 #' Cmax.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Cmax <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,

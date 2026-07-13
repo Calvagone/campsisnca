@@ -1,5 +1,5 @@
 
-renameOriginalColumn <- function(x, from, to) {
+rename_original_column <- function(x, from, to) {
   assertthat::assert_that(is.character(from) && length(from)==1, msg=paste0("argument ", to, " must be a single character value"))
   if (from %in% colnames(x)) {
     x <- x %>% dplyr::rename_at(.vars=from, .funs=~to)
@@ -22,11 +22,11 @@ renameOriginalColumn <- function(x, from, to) {
 #' @export
 metrics.common <- function(x, map, thalf.1cpt) {
   x <- x %>% campsis::obsOnly()
-  map <- checkMap(map, thalf.1cpt=thalf.1cpt)
+  map <- check_map(map, thalf.1cpt=thalf.1cpt)
   
   # Remap columns
   purrr::map2(.x=names(map), .y=as.character(map), .f=function(key, value) {
-    x <<- x %>% renameOriginalColumn(from=value, to=key)
+    x <<- x %>% rename_original_column(from=value, to=key)
   })
   
   # Check all columns are there

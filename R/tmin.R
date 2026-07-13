@@ -2,7 +2,7 @@
 #----                          tmin_metric class                            ----
 #_______________________________________________________________________________
 
-validateTminMetric <- function(object) {
+validate_tmin_metric <- function(object) {
   return(expectOne(object, "rebase"))
 }
 
@@ -17,13 +17,13 @@ setClass(
   ),
   contains="nca_metric",
   prototype=prototype(rebase=TRUE),
-  validity=validateTminMetric
+  validity=validate_tmin_metric
 )
 
 #' 
 #' Tmin.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param rebase rebase time according to start time of window
 #' @export
 Tmin <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {

@@ -38,7 +38,7 @@ setClass(
 #' 
 #' Last value.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Last <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
@@ -50,7 +50,7 @@ Last <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=
 #' 
 #' Ctrough. Last time in x shall be considered as the trough time. Similar to Last, but for concentrations.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Ctrough <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,

@@ -2,7 +2,7 @@
 #----                          auc_metric class                             ----
 #_______________________________________________________________________________
 
-validateAUCMetric <- function(object) {
+validate_auc_metric <- function(object) {
   return(expectOne(object, "method"))
 }
 
@@ -17,13 +17,13 @@ setClass(
   ),
   contains="nca_metric",
   prototype=prototype(method=1L),
-  validity=validateAUCMetric
+  validity=validate_auc_metric
 )
 
 #' 
 #' AUC.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param method method:
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down

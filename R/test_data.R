@@ -5,7 +5,7 @@
 #' @importFrom campsis Dataset Bolus Observations Covariate simulate
 #' @importFrom campsismod find replace 
 #' @export
-generateTestData <- function() {
+generate_test_data <- function() {
   rich_sampling <- c(0,1,2,4,6,8,12,16,24)
   day1 <- rich_sampling
   day2day6 <- c(2,3,4,5,6)*24

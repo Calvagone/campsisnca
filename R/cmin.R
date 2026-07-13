@@ -2,7 +2,7 @@
 #----                         (c)min_metric classes                         ----
 #_______________________________________________________________________________
 
-validateMinMetric <- function(object) {
+validate_min_metric <- function(object) {
   return(TRUE)
 }
 
@@ -15,7 +15,7 @@ setClass(
   representation(
   ),
   contains="nca_metric",
-  validity=validateMinMetric
+  validity=validate_min_metric
 )
 
 #' 
@@ -43,7 +43,7 @@ setClass(
 #' 
 #' Min.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Min <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
@@ -55,7 +55,7 @@ Min <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=N
 #' 
 #' Cmin
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @export
 Cmin <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,

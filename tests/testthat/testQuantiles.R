@@ -10,7 +10,7 @@ context("Test extra features")
 testFolder <-  file.path(getwd(), test_path())
 source(file.path(testFolder, "testUtils.R"))
 
-campsis <- generateTestData()
+campsis <- generate_test_data()
 
 test_that("Dynamic computation of quantiles works as expected (type=2)", {
   

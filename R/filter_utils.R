@@ -19,7 +19,7 @@ timerange <- function(x, min=0, max=Inf, exclmin=FALSE, exclmax=FALSE, rebase=FA
   
   time_var <- "TIME"
   id_var <- "ID"
-  checkNATimes(x, time_var=time_var) 
+  check_na_times(x, time_var=time_var) 
   
   if (exclmin) {
     x <- x %>% dplyr::filter_at(.vars=time_var, .vars_predicate=~.x > min)

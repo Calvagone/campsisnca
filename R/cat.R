@@ -2,7 +2,7 @@
 #----                   conc at/value at metric classes                     ----
 #_______________________________________________________________________________
 
-validateValueAtMetric <- function(object) {
+validate_value_at_metric <- function(object) {
   return(expectOne(object, "observed_time"))
 }
 
@@ -17,7 +17,7 @@ setClass(
   ),
   contains="nca_metric",
   prototype=prototype(observed_time=as.numeric(NA)),
-  validity=validateValueAtMetric
+  validity=validate_value_at_metric
 )
 
 #' 
@@ -45,7 +45,7 @@ setClass(
 #' 
 #' Value at (value at specific time).
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param time what time to read the values. If not provided, last values from x will be returned.
 #' @export
 ValueAt <- function(variable=NULL, window=NULL, time=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
@@ -60,7 +60,7 @@ ValueAt <- function(variable=NULL, window=NULL, time=NULL, name=NULL, unit=NULL,
 #' 
 #' CAt (concentration at specific time).
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param time what time to read the concentrations. If not provided, last concentrations from x will be returned.
 #' @export
 CAt <- function(variable=NULL, window=NULL, time=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {

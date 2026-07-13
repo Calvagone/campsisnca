@@ -6,11 +6,11 @@
 #' @return a character vector
 #' @importFrom stringr str_extract_all
 #' @export
-extractBraceValues <- function(x) {
+extract_brace_values <- function(x) {
   return(stringr::str_extract_all(x, '(?<=\\{)[^\\}]+')[[1]])
 }
 
-identifyGroupLevels <- function(x, strat_vars) {
+identify_group_levels <- function(x, strat_vars) {
   if (length(strat_vars) > 0) {
     renameVec <- paste0("group", seq_along(strat_vars), "_level")
     names(renameVec) <- strat_vars
@@ -33,11 +33,11 @@ identifyGroupLevels <- function(x, strat_vars) {
 #' @importFrom purrr map_chr
 #' @importFrom stringr str_detect
 #' @export
-computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
+compute_nca_metric_summary <- function(object, strat_vars, quantile_type) {
   data <- object@individual
   stat_display <- object@stat_display
   digits <- object@digits
-  stats <- extractBraceValues(stat_display) %>%
+  stats <- extract_brace_values(stat_display) %>%
     trimws()
   categorical <- object@categorical
   
@@ -56,7 +56,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
     summary <- tibble::as_tibble(summary)
     
     # Identify the group_level columns
-    summary <- identifyGroupLevels(summary, strat_vars)
+    summary <- identify_group_levels(summary, strat_vars)
     
     # Process cards data frame
     summary <- summary %>%
@@ -70,7 +70,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
       dplyr::group_split(dplyr::across(dplyr::all_of(c(strat_vars, "category")))) %>%
       purrr::map_df(~.x %>% dplyr::select(-stat, -value) %>%
                       dplyr::distinct() %>%
-                      mutate("summary_stats"=glueStatDisplay(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
+                      mutate("summary_stats"=glue_stat_display(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
     
   } else {
     availableContinuousStats <- list(
@@ -91,7 +91,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
     
     # Add requested percentile functions
     for (percentileStat in percentileStats) {
-      availableContinuousStats[[percentileStat]] <- quantileFun(str=percentileStat, type=quantile_type)
+      availableContinuousStats[[percentileStat]] <- quantile_fun(str=percentileStat, type=quantile_type)
     }
     
     # Check stats content, only N, mean, sd, median, min, max, geomean, geocv, cv, se and percentiles are allowed
@@ -111,7 +111,7 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
     summary <- tibble::as_tibble(summary)
     
     # Identify the group_level columns
-    summary <- identifyGroupLevels(summary, strat_vars)
+    summary <- identify_group_levels(summary, strat_vars)
     
     # Process cards data frame
     summary <- summary %>%
@@ -125,13 +125,13 @@ computeNCAMetricSummary <- function(object, strat_vars, quantile_type) {
       dplyr::group_split(dplyr::across(dplyr::all_of(strat_vars))) %>%
       purrr::map_df(~.x %>% dplyr::select(-stat, -value) %>%
                       dplyr::distinct() %>%
-                      mutate("summary_stats"=glueStatDisplay(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
+                      mutate("summary_stats"=glue_stat_display(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
   }
 
   return(list(summary=summary, summary_pretty=summary_pretty))
 }
 
-quantileFun <- function(str, type) {
+quantile_fun <- function(str, type) {
   myFun <- sprintf("function(x) {stats::quantile(x, probs=as.numeric(substr('%s', 2, nchar('%s')))/100, type=%i) %%>%% unname()}", str, str, type)
   return(eval(parse(text=myFun)))
 }
@@ -146,7 +146,7 @@ quantileFun <- function(str, type) {
 #' @return glued string
 #' @importFrom glue glue
 #' @export
-glueStatDisplay <- function(stat_display, stats, summary, digits) {
+glue_stat_display <- function(stat_display, stats, summary, digits) {
   env <- new.env()
   values <- summary$value
   names(values) <- summary$stat
@@ -205,7 +205,7 @@ glueStatDisplay <- function(stat_display, stats, summary, digits) {
 #' @param header_label header label name
 #' @importFrom gtsummary tbl_summary modify_header
 #' @return data frame
-getTableSummaryCode <- function(variable, data, by, stats, type, labels, digits, combine_with, header_label) {
+get_table_summary_code <- function(variable, data, by, stats, type, labels, digits, combine_with, header_label) {
   
   assertthat::assert_that(combine_with %in% c("tbl_stack", "tbl_merge"),
                           msg="combine_with must be 'tbl_stack' or 'tbl_merge'")
@@ -234,7 +234,7 @@ tbl_summary(
   )
 ) %%>%%
 modify_header(label=\"**%s**\")
-", variable, data, factorUsingNaturalOrder(by), by, stats, type, labels, digits, header_label)
+", variable, data, factor_using_natural_order(by), by, stats, type, labels, digits, header_label)
   
   } else if (length(by)==2) {
     retValue <- sprintf(
@@ -257,7 +257,7 @@ strata=%s,
 ),
 .combine_with=\"%s\") %%>%%
 modify_header(label=\"**%s**\")
-", variable, data, factorUsingNaturalOrder(by), by[1], by[2], stats, type, labels, digits, combine_with, header_label)    
+", variable, data, factor_using_natural_order(by), by[1], by[2], stats, type, labels, digits, combine_with, header_label)    
 
 }
   return(retValue)
@@ -268,11 +268,11 @@ modify_header(label=\"**%s**\")
 #' 
 #' @param table NCA table
 #' @return code
-getStatisticsCode <- function(table) {
+get_statistics_code <- function(table) {
   # Always look at first NCA metric only
   analyses <- table@nca_analyses@list[[1]]
   
-  retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", addBackticks(.x %>% getName()), .x@stat_display))
+  retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", add_backticks(.x %>% getName()), .x@stat_display))
   
   return(paste0(retValue, collapse=",\n    "))
 }
@@ -284,7 +284,7 @@ getStatisticsCode <- function(table) {
 #' @param all_dichotomous_levels show all dichotomous levels (0 and 1) when data is dichotomous
 #' @importFrom gtsummary all_dichotomous
 #' @return code
-getVariableTypeCode <- function(table, all_dichotomous_levels) {
+get_variable_type_code <- function(table, all_dichotomous_levels) {
   # Always look at first NCA metric only
   analyses <- table@nca_analyses@list[[1]]
   
@@ -295,7 +295,7 @@ getVariableTypeCode <- function(table, all_dichotomous_levels) {
     } else {
       typeStr <-  "continuous"
     }
-    type <- sprintf("%s ~ \"%s\"", addBackticks(x %>% getName()), typeStr)
+    type <- sprintf("%s ~ \"%s\"", add_backticks(x %>% getName()), typeStr)
     return(type)
   })
   
@@ -312,7 +312,7 @@ getVariableTypeCode <- function(table, all_dichotomous_levels) {
 #' @param table NCA table
 #' @param subscripts use subscripts, logical value
 #' @return code
-getLabelsCode <- function(table, subscripts) {
+get_labels_code <- function(table, subscripts) {
   # Always look at first NCA metric only
   analyses <- table@nca_analyses@list[[1]]
   
@@ -324,9 +324,9 @@ getLabelsCode <- function(table, subscripts) {
       resultingName <-  x %>% getName()
     }
     if (is.na(unit)) {
-      label <- sprintf("%s ~ \"%s\"", addBackticks(x %>% getName()), resultingName)
+      label <- sprintf("%s ~ \"%s\"", add_backticks(x %>% getName()), resultingName)
     } else {
-      label <- sprintf("%s ~ \"%s (%s)\"", addBackticks(x %>% getName()), resultingName, unit)
+      label <- sprintf("%s ~ \"%s (%s)\"", add_backticks(x %>% getName()), resultingName, unit)
     }
     return(label)
   })
@@ -339,14 +339,14 @@ getLabelsCode <- function(table, subscripts) {
 #' 
 #' @param table NCA table
 #' @return code
-getDigitsCode <- function(table) {
+get_digits_code <- function(table) {
   # Always look at first NCA metric only
   analyses <- table@nca_analyses@list[[1]]
   
   retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     digits <- x@digits
     if (length(digits) > 0) {
-      digit <- sprintf("%s ~ list(%s)", addBackticks(x %>% getName()), paste0(digits, collapse=","))
+      digit <- sprintf("%s ~ list(%s)", add_backticks(x %>% getName()), paste0(digits, collapse=","))
     } else {
       digit <- ""
     }
@@ -358,11 +358,11 @@ getDigitsCode <- function(table) {
   return(paste0(retValue, collapse=",\n    "))
 }
 
-addBackticks <- function(x) {
+add_backticks <- function(x) {
   return(paste0("`", x, "`")) 
 }
 
-factorUsingNaturalOrder <- function(by) {
+factor_using_natural_order <- function(by) {
   if (length(by)==1 && by != "NULL") {
     return(sprintf(" %%>%% mutate(%s=factor(%s, levels=unique(%s)))", by, by, by))
   } else if (length(by)==2) {
@@ -371,13 +371,13 @@ factorUsingNaturalOrder <- function(by) {
   return("")
 }
 
-addPipeLayer <- function(x, layer) {
+add_pipe_layer <- function(x, layer) {
   assertthat::assert_that(x %>% length() != 0, msg="x cannot be length 0")
   x[x %>% length()] <- paste0(x[x %>% length()], " %>%")
-  return(x %>% append(paste0(getDefaultIndent(), layer)))
+  return(x %>% append(paste0(get_default_indent(), layer)))
 }
 
-getDefaultIndent <- function() {
+get_default_indent <- function() {
   return("\t")
 }
 

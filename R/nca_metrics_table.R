@@ -179,7 +179,7 @@ setMethod("export", signature=c("nca_table", "dataframe_type"), definition=funct
         dplyr::mutate(dplyr::across(dplyr::all_of(categoricalVars), autoCastLogical))
     }
 
-    by <- c("id", object %>% getStrata(keep_single=FALSE))
+    by <- c("id", object %>% get_strata(keep_single=FALSE))
     retValue <- continuousData %>%
       dplyr::full_join(categoricalData, by=by) %>%
       dplyr::relocate(dplyr::any_of(c(by, allMetrics)))
@@ -243,7 +243,7 @@ toGt <- function(x, title=NULL, subtitle=NULL, opts=list(), subscripts=FALSE, fm
   # Adapt footnote (conversion of custom statistics)
   footnote <- x$table_styling$footnote
   if (is(footnote, "tbl_df")) {
-    x$table_styling$footnote$footnote <- adaptFootnote(footnote$footnote)
+    x$table_styling$footnote$footnote <- adapt_footnote(footnote$footnote)
   }
   
   # Convert to GT table
@@ -290,23 +290,23 @@ setMethod("generate_table_code", signature=c("nca_table", "logical"),
   
   if (init) {
     initCode <- "individual <- table" %>%
-      addPipeLayer("export(dest=\"dataframe\", type=\"individual_wide\")") %>%
-      addPipeLayer("dplyr::select(-id)")
+      add_pipe_layer("export(dest=\"dataframe\", type=\"individual_wide\")") %>%
+      add_pipe_layer("dplyr::select(-id)")
   } else {
     initCode <- NULL
   }
  
-  stratVariables <- object %>% getStrata(keep_single=FALSE)
+  stratVariables <- object %>% get_strata(keep_single=FALSE)
   if (object@swap_strat) {
     stratVariables <- rev(stratVariables)
   }
-  stats <- getStatisticsCode(object)
-  type <- getVariableTypeCode(object, all_dichotomous_levels=object@show_all_levels)
-  labels <- getLabelsCode(object, subscripts=object@subscripts)
-  digits <- getDigitsCode(object)
+  stats <- get_statistics_code(object)
+  type <- get_variable_type_code(object, all_dichotomous_levels=object@show_all_levels)
+  labels <- get_labels_code(object, subscripts=object@subscripts)
+  digits <- get_digits_code(object)
   
   if (length(stratVariables) <= 2) {
-    body <- getTableSummaryCode(var="gttable", data="individual", by=stratVariables,
+    body <- get_table_summary_code(var="gttable", data="individual", by=stratVariables,
                                 stats=stats, type=type, labels=labels, digits=digits,
                                 combine_with=object@combine_with, header_label=object@header_label)
   } else {
@@ -317,11 +317,11 @@ setMethod("generate_table_code", signature=c("nca_table", "logical"),
 })
 
 #_______________________________________________________________________________
-#----                             getStrata                                 ----
+#----                             get_strata                                ----
 #_______________________________________________________________________________
 
-#' @rdname getStrata
-setMethod("getStrata", signature=c("nca_table", "logical"), definition=function(object, keep_single, ...) {
+#' @rdname get_strata
+setMethod("get_strata", signature=c("nca_table", "logical"), definition=function(object, keep_single, ...) {
   retValue <- NULL
   
   if (length(object@nca_analyses) > 1) {
@@ -396,12 +396,12 @@ setMethod("loadFromJSON", signature=c("nca_table", "json_element"), definition=f
 
 setMethod("loadFromJSON", signature=c("nca_table", "character"), definition=function(object, json) {
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
-  return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
+  return(loadFromJSON(object=object, json=open_json(json=json, schema=schema)))
 })
 
 setMethod("loadFromJSON", signature=c("nca_table", "list"), definition=function(object, json) {
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
-  return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
+  return(loadFromJSON(object=object, json=open_json(json=json, schema=schema)))
 })
 
 #_______________________________________________________________________________

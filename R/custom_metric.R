@@ -2,7 +2,7 @@
 #----                          custom_metric class                          ----
 #_______________________________________________________________________________
 
-validateCustomMetric <- function(object) {
+validate_custom_metric <- function(object) {
   return(TRUE)
 }
 
@@ -17,20 +17,20 @@ setClass(
   ),
   contains="nca_metric",
   prototype=prototype(i_value_tibble=TRUE),
-  validity=validateCustomMetric
+  validity=validate_custom_metric
 )
 
 #' 
 #' Custom metric (input data as time and value vectors).
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param fun any custom function with exactly 2 arguments: time and value
 #' @export
 CustomMetric <- function(variable=NULL, window=NULL, fun, name=NULL, unit=NULL,
-                         categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
+                         categorical=FALSE, stat_display=get_stat_display_default(categorical), digits=NULL) {
   metric <- CustomMetricTbl(window=window, fun=fun, name=name, unit=unit,
                             categorical=categorical, stat_display=stat_display, digits=digits)
-  metric@variable <- processVariable(variable)
+  metric@variable <- process_variable(variable)
   metric@i_value_tibble <- FALSE
   
   # Auto-replace known NCA metrics
@@ -43,14 +43,14 @@ CustomMetric <- function(variable=NULL, window=NULL, fun, name=NULL, unit=NULL,
 #' 
 #' Custom metric (input data as tibble).
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param fun any custom function with exactly 1 argument: data
 #' @export
 CustomMetricTbl <- function(window=NULL, fun, name=NULL, unit=NULL,
-                         categorical=FALSE, stat_display=getStatDisplayDefault(categorical), digits=NULL) {
+                         categorical=FALSE, stat_display=get_stat_display_default(categorical), digits=NULL) {
   name <- if (is.null(name)) "Custom" else name
-  unit <- processUnit(unit)
-  digits <- deparseDigits(digits)
+  unit <- process_unit(unit)
+  digits <- deparse_digits(digits)
   fun <- deparseCustomFun(fun)
   if (is.null(window)) {
     window <- UndefinedTimeWindow()
@@ -83,10 +83,10 @@ setMethod("i_value", signature=c("custom_metric", "numeric", "numeric"), definit
 #' @importFrom rlang is_function is_formula
 deparseCustomFun <- function(fun) {
   if (rlang::is_function(fun)) {
-    retValue <- deparse1Line(fun)
+    retValue <- deparse_one_line(fun)
     
   } else if (rlang::is_formula(fun)) {
-    retValue <- paste0("rlang::as_function(", deparse1Line(fun), ")")
+    retValue <- paste0("rlang::as_function(", deparse_one_line(fun), ")")
     
   } else {
     stop("Custom function must be a function or a purrr-style lambda function")

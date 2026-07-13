@@ -2,7 +2,7 @@
 #----                    time_above_below_limit class                       ----
 #_______________________________________________________________________________
 
-validateTimeAboveBelowLimitMetric <- function(object) {
+validate_time_above_below_limit_metric <- function(object) {
   return(TRUE)
 }
 
@@ -18,7 +18,7 @@ setClass(
   ),
   prototype=prototype(strictly=FALSE),
   contains="nca_metric",
-  validity=validateTimeAboveBelowLimitMetric
+  validity=validate_time_above_below_limit_metric
 )
 
 #' 
@@ -46,7 +46,7 @@ setClass(
 #' 
 #' Time above a certain limit.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly above the limit
 #' @export
@@ -61,7 +61,7 @@ TimeAboveLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALS
 #' 
 #' Time below a certain limit.
 #' 
-#' @inheritParams metricsParams
+#' @inheritParams metrics_params
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly below the limit
 #' @export
