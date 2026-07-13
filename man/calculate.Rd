@@ -8,7 +8,7 @@
 \alias{calculate,theoretical_thalf_metric,campsis_output,nca_options-method}
 \alias{calculate,nca_analysis,campsis_output,nca_options-method}
 \alias{calculate,nca_analyses,campsis_output,nca_options-method}
-\alias{calculate,nca_metrics_table,campsis_output,nca_options-method}
+\alias{calculate,nca_table,campsis_output,nca_options-method}
 \title{Calculate.}
 \usage{
 calculate(object, x, options = NULL, ...)
@@ -21,7 +21,7 @@ calculate(object, x, options = NULL, ...)
 
 \S4method{calculate}{nca_analyses,campsis_output,nca_options}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_metrics_table,campsis_output,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_table,campsis_output,nca_options}(object, x, options = NULL, ...)
 }
 \arguments{
 \item{object}{object (NCA table, NCA analyses, NCA analysis, PK metric) where calculation is applied}

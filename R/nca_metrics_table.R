@@ -1,13 +1,13 @@
 #_______________________________________________________________________________
-#----                       nca_metrics_table class                         ----
+#----                       nca_table class                         ----
 #_______________________________________________________________________________
 
 #' 
-#' NCA metrics table class.
+#' NCA table class.
 #' 
 #' @export
 setClass(
-  "nca_metrics_table",
+  "nca_table",
   representation(
     nca_analyses = "nca_analyses",  # NCA analyses
     title = "character",
@@ -33,7 +33,7 @@ setClass(
 )
 
 #' 
-#' NCA metrics table (deprecated).
+#' NCA table (deprecated).
 #' 
 #' @param title table title, optional character value
 #' @param subtitle table subtitle, optional character value
@@ -80,12 +80,12 @@ NCATable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="
     if (is.null(subtitle)) {
       subtitle = NA_character_
     }
-    table <- new("nca_metrics_table", title=title, subtitle=subtitle,
+    table <- new("nca_table", title=title, subtitle=subtitle,
                  swap_strat=swap_strat, combine_with=combine_with, show_all_levels=show_all_levels,
                  header_label=header_label, subscripts=subscripts,
                  nca_options=nca_options, tab_options=tab_options)
   } else {
-    table <- loadFromJSON(object=new("nca_metrics_table"), json=json)
+    table <- loadFromJSON(object=new("nca_table"), json=json)
   }
   return(table)
 }
@@ -94,12 +94,12 @@ NCATable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="
 #----                           add                                   ----
 #_______________________________________________________________________________
 
-setMethod("add", signature = c("nca_metrics_table", "nca_analysis"), definition = function(object, x) {
+setMethod("add", signature = c("nca_table", "nca_analysis"), definition = function(object, x) {
   object@nca_analyses <- object@nca_analyses %>% add(x)
   return(object)
 })
 
-setMethod("add", signature = c("nca_metrics_table", "list"), definition = function(object, x) {
+setMethod("add", signature = c("nca_table", "list"), definition = function(object, x) {
   object@nca_analyses <- object@nca_analyses %>% add(x)
   return(object)
 })
@@ -109,7 +109,7 @@ setMethod("add", signature = c("nca_metrics_table", "list"), definition = functi
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("nca_metrics_table", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
+setMethod("calculate", signature=c("nca_table", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
   if (is(options, "undefined_nca_options")) {
     options_ <- object@nca_options # Use embedded NCA options
   } else {
@@ -125,7 +125,7 @@ setMethod("calculate", signature=c("nca_metrics_table", "campsis_output", "nca_o
 #----                                export                                 ----
 #_______________________________________________________________________________
 
-setMethod("export", signature=c("nca_metrics_table", "character"), definition=function(object, dest, ...) {
+setMethod("export", signature=c("nca_table", "character"), definition=function(object, dest, ...) {
   if (object@nca_analyses %>% length() == 0) {
     stop("No metrics to export")
   }
@@ -143,7 +143,7 @@ setMethod("export", signature=c("nca_metrics_table", "character"), definition=fu
 #' @importFrom purrr map_df
 #' @importFrom dplyr all_of any_of filter full_join mutate select pull
 #' @importFrom tidyr pivot_wider
-setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
+setMethod("export", signature=c("nca_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
   analysis_strat <- length(object@nca_analyses) > 1
   retValue <- object@nca_analyses@list %>% purrr::map_df(.f=~.x %>% export(dest=dest, type=type, analysis_strat=analysis_strat, ...))
@@ -195,7 +195,7 @@ setMethod("export", signature=c("nca_metrics_table", "dataframe_type"), definiti
 })
 
 #' @inheritParams generateTableCode
-setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
+setMethod("export", signature=c("nca_table", "gtsummary_type"),
           definition=function(object, dest, init=NULL, ...) {
   code <- object %>% generateTableCode(init=init, ...)
   table <- object # Table variable needs to be there!
@@ -211,7 +211,7 @@ setMethod("export", signature=c("nca_metrics_table", "gtsummary_type"),
 })
 
 #' @inheritParams generateTableCode
-setMethod("export", signature=c("nca_metrics_table", "gt_type"),
+setMethod("export", signature=c("nca_table", "gt_type"),
           definition=function(object, dest, init=NULL, ...) {
   gtsummaryTable <- object %>%
     export(dest=new("gtsummary_type"), init=init, ...)
@@ -285,7 +285,7 @@ toGt <- function(x, title=NULL, subtitle=NULL, opts=list(), subscripts=FALSE, fm
 #_______________________________________________________________________________
 
 #' @rdname generateTableCode
-setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"),
+setMethod("generateTableCode", signature=c("nca_table", "logical"),
           definition=function(object, init, ...) {
   
   if (init) {
@@ -321,7 +321,7 @@ setMethod("generateTableCode", signature=c("nca_metrics_table", "logical"),
 #_______________________________________________________________________________
 
 #' @rdname getStrata
-setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=function(object, keep_single, ...) {
+setMethod("getStrata", signature=c("nca_table", "logical"), definition=function(object, keep_single, ...) {
   retValue <- NULL
   
   if (length(object@nca_analyses) > 1) {
@@ -340,7 +340,7 @@ setMethod("getStrata", signature=c("nca_metrics_table", "logical"), definition=f
 #_______________________________________________________________________________
 
 #' @rdname get_unit
-setMethod("get_unit", signature=c("nca_metrics_table", "character"), definition=function(object, metric, ...) {
+setMethod("get_unit", signature=c("nca_table", "character"), definition=function(object, metric, ...) {
   if (object@nca_analyses %>% length()==0) {
     stop("No metrics in table at this stage")
   }
@@ -351,7 +351,7 @@ setMethod("get_unit", signature=c("nca_metrics_table", "character"), definition=
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("nca_table", "json_element"), definition=function(object, json) {
   json <- json@data
   object@nca_analyses@list <- json$nca_analyses %>%
     purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
@@ -394,12 +394,12 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "json_element"), defi
   return(object)
 })
 
-setMethod("loadFromJSON", signature=c("nca_metrics_table", "character"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("nca_table", "character"), definition=function(object, json) {
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
   return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
 })
 
-setMethod("loadFromJSON", signature=c("nca_metrics_table", "list"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("nca_table", "list"), definition=function(object, json) {
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
   return(loadFromJSON(object=object, json=openJSON(json=json, schema=schema)))
 })
@@ -427,7 +427,7 @@ setMethod("loadFromJSON", signature=c("nca_metrics_table", "list"), definition=f
 #' @rdname summarise_replicates
 setMethod(
   "summarise_replicates",
-  signature = c("nca_metrics_table", "campsisnca_output", "nca_options"),
+  signature = c("nca_table", "campsisnca_output", "nca_options"),
   definition = function(object, x, options, dest = "dataframe", ...) {
     if (is(options, "undefined_nca_options")) {
       options_ <- object@nca_options # Use embedded NCA options
@@ -583,7 +583,7 @@ translate_stat_string <- function(stat_string) {
   }
   
   # Clean up duplicate trailing " percentile" strings if they appear in ranges
-  stat_string <- gsub(" percentile([–-])([0-9]+[a-z]{2} percentile)", "\\1\\2", stat_string)
+  stat_string <- gsub(" percentile([\U2013-])([0-9]+[a-z]{2} percentile)", "\\1\\2", stat_string)
   
   return(stat_string)
 }

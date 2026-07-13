@@ -2,12 +2,12 @@
 % Please edit documentation in R/generic.R, R/nca_metrics_table.R
 \name{generateTableCode}
 \alias{generateTableCode}
-\alias{generateTableCode,nca_metrics_table,logical-method}
+\alias{generateTableCode,nca_table,logical-method}
 \title{Generate table code.}
 \usage{
 generateTableCode(object, init = NULL, ...)
 
-\S4method{generateTableCode}{nca_metrics_table,logical}(object, init = NULL, ...)
+\S4method{generateTableCode}{nca_table,logical}(object, init = NULL, ...)
 }
 \arguments{
 \item{object}{table object}

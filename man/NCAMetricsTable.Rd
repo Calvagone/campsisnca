@@ -2,7 +2,7 @@
 % Please edit documentation in R/nca_metrics_table.R
 \name{NCAMetricsTable}
 \alias{NCAMetricsTable}
-\title{NCA metrics table (deprecated).}
+\title{NCA table (deprecated).}
 \usage{
 NCAMetricsTable(
   title = NULL,
@@ -39,5 +39,5 @@ NCAMetricsTable(
 \item{json}{path to JSON table file or JSON content in string form}
 }
 \description{
-NCA metrics table (deprecated).
+NCA table (deprecated).
 }

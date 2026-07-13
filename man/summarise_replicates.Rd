@@ -2,12 +2,12 @@
 % Please edit documentation in R/generic.R, R/nca_metrics_table.R
 \name{summarise_replicates}
 \alias{summarise_replicates}
-\alias{summarise_replicates,nca_metrics_table,campsisnca_output,nca_options-method}
+\alias{summarise_replicates,nca_table,campsisnca_output,nca_options-method}
 \title{Summarise NCA results obtained across simulation replicates.}
 \usage{
 summarise_replicates(object, x, options = NULL, ...)
 
-\S4method{summarise_replicates}{nca_metrics_table,campsisnca_output,nca_options}(object, x, options, dest = "dataframe", ...)
+\S4method{summarise_replicates}{nca_table,campsisnca_output,nca_options}(object, x, options, dest = "dataframe", ...)
 }
 \arguments{
 \item{object}{object (NCA table) which contains the table structure}

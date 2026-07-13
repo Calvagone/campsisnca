@@ -2,12 +2,12 @@
 % Please edit documentation in R/generic.R, R/nca_metrics_table.R
 \name{getStrata}
 \alias{getStrata}
-\alias{getStrata,nca_metrics_table,logical-method}
+\alias{getStrata,nca_table,logical-method}
 \title{Get all stratas.}
 \usage{
 getStrata(object, keep_single = NULL, ...)
 
-\S4method{getStrata}{nca_metrics_table,logical}(object, keep_single = NULL, ...)
+\S4method{getStrata}{nca_table,logical}(object, keep_single = NULL, ...)
 }
 \arguments{
 \item{object}{table object}

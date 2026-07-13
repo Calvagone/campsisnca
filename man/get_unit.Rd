@@ -5,7 +5,7 @@
 \alias{get_unit}
 \alias{get_unit,nca_metrics,character-method}
 \alias{get_unit,nca_analysis,character-method}
-\alias{get_unit,nca_metrics_table,character-method}
+\alias{get_unit,nca_table,character-method}
 \title{Get the unit corresponding to the given metric.}
 \usage{
 get_unit(object, metric, ...)
@@ -14,7 +14,7 @@ get_unit(object, metric, ...)
 
 \S4method{get_unit}{nca_analysis,character}(object, metric, ...)
 
-\S4method{get_unit}{nca_metrics_table,character}(object, metric, ...)
+\S4method{get_unit}{nca_table,character}(object, metric, ...)
 }
 \arguments{
 \item{object}{any object that contains units}
