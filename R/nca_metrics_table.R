@@ -442,7 +442,9 @@ setMethod(
 
     # Check if the data contains replicates
     if (!.is_replicated(x)) {
-      stop("x must contain a 'replicate' column with more than one distinct value")
+      stop(
+        "x must contain a 'replicate' column with more than one distinct value"
+      )
     }
 
     # Add category if not existing
@@ -452,7 +454,9 @@ setMethod(
 
     # Detect stratification variables
     all_cols <- colnames(x)
-    strata_vars <- all_cols[!all_cols %in% c("replicate", "metric", "stat", "value", "category")]
+    strata_vars <- all_cols[
+      !all_cols %in% c("replicate", "metric", "stat", "value", "category")
+    ]
 
     categories <- x %>%
       tibble::add_column(!!!c(category = NA)[!"category" %in% names(.)]) %>%
@@ -461,7 +465,10 @@ setMethod(
       dplyr::distinct()
 
     x_wider <- x %>%
-      dplyr::filter(dplyr::if_any(dplyr::matches("category"), ~ is.na(.x) | .x != "FALSE")) %>%
+      dplyr::filter(dplyr::if_any(
+        dplyr::matches("category"),
+        ~ is.na(.x) | .x != "FALSE"
+      )) %>%
       discardCategoryColumn() %>%
       tidyr::pivot_wider(
         names_from = c("metric", "stat"),
@@ -483,6 +490,12 @@ setMethod(
       return(x_wider)
     }
 
+    stat_type <- if (length(options_@rep_stat_display) > 1) {
+      "continuous2"
+    } else {
+      "continuous"
+    }
+
     if (dest %in% c("gt", "gtsummary")) {
       gtsummary_table <- gtsummary::tbl_summary(
         data = x_wider,
@@ -492,8 +505,8 @@ setMethod(
           gtsummary::all_categorical() ~ options_@rep_stat_display
         ),
         type = list(
-          gtsummary::all_continuous() ~ "continuous2",
-          gtsummary::all_categorical() ~ "continuous2"
+          gtsummary::all_continuous() ~ stat_type,
+          gtsummary::all_categorical() ~ stat_type
         ),
         label = list(),
         digits = list(
@@ -505,13 +518,22 @@ setMethod(
           ))
         )
       ) %>%
-        gtsummary::modify_header(
-          gtsummary::all_stat_cols() ~ "**{level}**",
-          label = "**Metric**"
-        ) %>%
-        gtsummary::modify_footnote(
-          gtsummary::all_stat_cols() ~ "N<sub>rep</sub> = {n}"
-        )
+      gtsummary::modify_header(
+        gtsummary::all_stat_cols() ~ "**{level}**",
+        label = "**Metric**"
+      )
+
+      if (length(options_@rep_stat_display) == 1) {
+        gtsummary_table <- gtsummary_table %>%
+          gtsummary::modify_footnote(
+            gtsummary::all_stat_cols() ~ sprintf("%s, N<sub>rep</sub> = {n}", translate_stat_string(options_@rep_stat_display))
+          )
+      } else {
+        gtsummary_table <- gtsummary_table %>%
+          gtsummary::modify_footnote(
+            gtsummary::all_stat_cols() ~ "N<sub>rep</sub> = {n}"
+          )
+      }
 
       if (dest == "gtsummary") {
         return(gtsummary_table)
@@ -525,3 +547,43 @@ setMethod(
     }
   }
 )
+
+translate_stat_string <- function(stat_string) {
+  # Standard map for common base statistics
+  stat_map <- c(
+    "median" = "Median",
+    "mean"   = "Mean",
+    "sd"     = "SD",
+    "var"    = "Variance",
+    "min"    = "Minimum",
+    "max"    = "Maximum",
+    "sum"    = "Sum",
+    "n"      = "n",
+    "N"      = "N"
+  )
+  
+  # Replace base statistics (e.g., {median} -> Median)
+  for (stat in names(stat_map)) {
+    stat_string <- gsub(paste0("{", stat, "}"), stat_map[stat], stat_string, fixed = TRUE)
+  }
+  
+  # Dynamic map for percentiles (e.g., {p5} -> 5th percentile)
+  while(grepl("\\{p[0-9]+\\}", stat_string)) {
+    p_match <- regmatches(stat_string, regexpr("\\{p([0-9]+)\\}", stat_string))
+    p_num <- gsub("[^0-9]", "", p_match)
+    
+    # Determine ordinal suffix (st, nd, rd, th)
+    suffix <- switch(
+      ifelse(p_num %in% c("11", "12", "13"), "th", substr(p_num, nchar(p_num), nchar(p_num))),
+      "1" = "st", "2" = "nd", "3" = "rd", "th"
+    )
+    
+    # CRITICAL FIX: Add fixed = TRUE here so R treats "{p5}" as a literal string
+    stat_string <- sub(p_match, paste0(p_num, suffix, " percentile"), stat_string, fixed = TRUE)
+  }
+  
+  # Clean up duplicate trailing " percentile" strings if they appear in ranges
+  stat_string <- gsub(" percentile([–-])([0-9]+[a-z]{2} percentile)", "\\1\\2", stat_string)
+  
+  return(stat_string)
+}

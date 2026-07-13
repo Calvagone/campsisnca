@@ -306,8 +306,19 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
     )
   )
 
+  # Stat type is 'continuous2' because several statistical strings
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
 
-  gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10.html"))
+  gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10a.html"))
+
+  # Changing to 1 string stat display
+  # Stat type should now be 'continuous'
+  table@nca_options@rep_stat_display <- c("{median} ({p5}–{p95})")
+  gttable <- table %>%
+    summarise_replicates(x = x, dest = "gt")
+
+  gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10b.html"))
+
 })
+
