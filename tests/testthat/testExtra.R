@@ -320,5 +320,10 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
 
   gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10b.html"))
 
+
+  # Testing method 'translate_stat_string'
+  expect_equal(translate_stat_string("{median} ({p5}–{p95})"), "Median (5th–95th percentile)")
+  expect_equal(translate_stat_string("{mean} ± {sd}"), "Mean ± SD") 
+  expect_equal(translate_stat_string("{mean} ({min}–{max})"), "Mean (Minimum–Maximum)") 
 })
 

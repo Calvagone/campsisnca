@@ -19,7 +19,7 @@ NCAOptions(
 
 \item{table_time_unit}{time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)}
 
-\item{rep_stat_display}{display format for replicate statistics, character vector. Default is '{median} ({p5}–{p95})'.}
+\item{rep_stat_display}{display format for replicate statistics, character vector. Default is \verb{'{median} ({p5}–{p95})'}.}
 
 \item{rep_stat_digits}{number of significant digits to display for replicate statistics, default is 3.}
 }
