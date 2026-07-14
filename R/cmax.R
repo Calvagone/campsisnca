@@ -93,7 +93,7 @@ setMethod("i_value", signature=c("abstract_max_metric", "numeric", "numeric"), d
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("abstract_max_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "max"))
+  return(subscript_occurrence(x %>% getName(), "max"))
 })
 
 #_______________________________________________________________________________

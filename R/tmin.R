@@ -62,7 +62,7 @@ setMethod("i_value", signature=c("tmin_metric", "numeric", "numeric"), definitio
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("tmin_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "min"))
+  return(subscript_occurrence(x %>% getName(), "min"))
 })
 
 #_______________________________________________________________________________

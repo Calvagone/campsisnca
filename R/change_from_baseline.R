@@ -3,172 +3,109 @@
 #_______________________________________________________________________________
 
 validate_baseline_metric <- function(object) {
+  valid_methods <- c("absolute", "percent", "ratio", "log")
+  if (!object@method %in% valid_methods) {
+    return(paste0("Method must be one of: ", paste(valid_methods, collapse = ", ")))
+  }
   return(TRUE)
 }
 
 #' 
-#' Abstract baseline metric class.
+#' Change from Baseline metric class.
 #' 
+#' @slot method Character string specifying the CFB method ("absolute", "percent", "ratio", "log").
 #' @export
 setClass(
-  "abstract_baseline_metric",
-  representation(),
+  "baseline_metric",
+  representation(
+    method="character"
+  ),
   contains="nca_metric",
   validity=validate_baseline_metric
 )
 
-#' 
-#' Absolute Change from Baseline metric class.
-#' 
-#' @export
-setClass(
-  "cfb_metric",
-  representation(),
-  contains="abstract_baseline_metric"
-)
-
-#' 
-#' Percent Change from Baseline metric class.
-#' 
-#' @export
-setClass(
-  "pcfb_metric",
-  representation(),
-  contains="abstract_baseline_metric"
-)
-
-#' 
-#' Ratio to Baseline metric class.
-#' 
-#' @export
-setClass(
-  "ratio_baseline_metric",
-  representation(),
-  contains="abstract_baseline_metric"
-)
-
-#' 
-#' Log-transformed Change from Baseline metric class.
-#' 
-#' @export
-setClass(
-  "log_cfb_metric",
-  representation(),
-  contains="abstract_baseline_metric"
-)
-
 #_______________________________________________________________________________
-#----                            Constructors                               ----
+#----                         ChangeFromBaseline                            ----
 #_______________________________________________________________________________
 
 #' 
-#' Absolute Change from Baseline (CFB).
+#' Change from Baseline (CFB).
 #' 
+#' @param method Character string specifying the calculation method. Must be one of 
+#'   "absolute" (default), "percent", "ratio", or "log".
 #' @inheritParams metrics_params
 #' @export
-CFB <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
+ChangeFromBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, 
+                               stat_display=NULL, digits=NULL, method="absolute") {
+  
+  # Map or validate the incoming method argument (forces lowercase for robustness)
+  method <- match.arg(tolower(method), c("absolute", "percent", "ratio", "log"))
+  
+  # Construct base metric using your package's S4 constructor
   metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
-                           metric_name="cfb_metric")
+                           metric_name="baseline_metric")
+  
+  # Populate the custom slot
+  metric@method <- method
+  
   return(setDefaultNameIfNA(metric))
 }
 
-#' 
-#' Percent Change from Baseline (PCFB).
-#' 
-#' @inheritParams metrics_params
+# Alias for developers/users who prefer the quick acronym
 #' @export
-PCFB <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="pcfb_metric")
-  return(setDefaultNameIfNA(metric))
-}
-
-#' 
-#' Ratio to Baseline.
-#' 
-#' @inheritParams metrics_params
-#' @export
-RatioBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="ratio_baseline_metric")
-  return(setDefaultNameIfNA(metric))
-}
-
-#' 
-#' Log-transformed Change from Baseline.
-#' 
-#' @inheritParams metrics_params
-#' @export
-LogCFB <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="log_cfb_metric")
-  return(setDefaultNameIfNA(metric))
-}
+CFB <- ChangeFromBaseline
 
 #_______________________________________________________________________________
 #----                          get_default_name                             ----
 #_______________________________________________________________________________
 
 #' @rdname get_default_name
-setMethod("get_default_name", signature=c("cfb_metric"), definition=function(object, ...) {
-  return("CFB")
-})
-
-#' @rdname get_default_name
-setMethod("get_default_name", signature=c("pcfb_metric"), definition=function(object, ...) {
-  return("PCFB")
-})
-
-#' @rdname get_default_name
-setMethod("get_default_name", signature=c("ratio_baseline_metric"), definition=function(object, ...) {
-  return("Ratio_Base")
-})
-
-#' @rdname get_default_name
-setMethod("get_default_name", signature=c("log_cfb_metric"), definition=function(object, ...) {
-  return("Log_CFB")
+setMethod("get_default_name", signature=c("baseline_metric"), definition=function(object, ...) {
+  # Translate the internal method slot into the standard pharmacometric acronym
+  switch(object@method,
+         "absolute" = "CFB",
+         "percent"  = "PCFB",
+         "ratio"    = "Ratio",
+         "log"      = "CFBlog",
+         "CFB") # Fallback
 })
 
 #_______________________________________________________________________________
-#----                               i_value                                 ----
+#----                                i_value                                ----
 #_______________________________________________________________________________
 
-# Helper function to extract the first value chronologically (assuming time is sorted)
-# If time is not guaranteed to be sorted in your data passing mechanism, use value[which.min(time)]
 get_baseline_value <- function(time, value) {
   if (length(value) == 0) return(NA_real_)
-  return(value[1]) 
+  return(value[1]) # Or value[which.min(time)] if time is not pre-sorted
 }
 
 #' @rdname i_value
-setMethod("i_value", signature=c("cfb_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("i_value", signature=c("baseline_metric", "numeric", "numeric"), definition=function(object, time, value) {
   y0 <- get_baseline_value(time, value)
-  return(value - y0)
-})
-
-#' @rdname i_value
-setMethod("i_value", signature=c("pcfb_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  y0 <- get_baseline_value(time, value)
-  if (is.na(y0) || y0 == 0) return(rep(NA_real_, length(value)))
-  return(((value - y0) / y0) * 100)
-})
-
-#' @rdname i_value
-setMethod("i_value", signature=c("ratio_baseline_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  y0 <- get_baseline_value(time, value)
-  if (is.na(y0) || y0 == 0) return(rep(NA_real_, length(value)))
-  return(value / y0)
-})
-
-#' @rdname i_value
-setMethod("i_value", signature=c("log_cfb_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  y0 <- get_baseline_value(time, value)
-  if (is.na(y0) || y0 <= 0 || any(value <= 0, na.rm = TRUE)) return(rep(NA_real_, length(value)))
-  return(log(value) - log(y0))
+  
+  # If baseline is missing, the output vectors should gracefully propagate NA
+  if (is.na(y0)) return(rep(NA_real_, length(value)))
+  
+  # Execute calculation based on the selected method
+  switch(object@method,
+         "absolute" = {
+           return(value - y0)
+         },
+         "percent" = {
+           if (y0 == 0) return(rep(NA_real_, length(value)))
+           return(((value - y0) / y0) * 100)
+         },
+         "ratio" = {
+           if (y0 == 0) return(rep(NA_real_, length(value)))
+           return(value / y0)
+         },
+         "log" = {
+           if (y0 <= 0 || any(value <= 0, na.rm = TRUE)) return(rep(NA_real_, length(value)))
+           return(log(value) - log(y0))
+         },
+         stop("Unknown calculation method")
+  )
 })
 
 #_______________________________________________________________________________
@@ -176,14 +113,28 @@ setMethod("i_value", signature=c("log_cfb_metric", "numeric", "numeric"), defini
 #_______________________________________________________________________________
 
 #' @rdname get_latex_name
-setMethod("get_latex_name", signature=c("abstract_baseline_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "base"))
+setMethod("get_latex_name", signature=c("baseline_metric"), definition = function(x) {
+  if (x@method=="log") {
+    return(subscript_occurrence(x %>% getName(), "log"))
+  } else {
+    return(x %>% getName())
+  }
 })
 
 #_______________________________________________________________________________
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("abstract_baseline_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("loadFromJSON", signature=c("baseline_metric", "json_element"), definition=function(object, json) {
+  # Load the standard metric components first
+  object <- loadMetricFromJSON(object=object, json=json)
+  
+  # Retrieve the custom method parameter from the parsed JSON list
+  if ("method" %in% names(json)) {
+    object@method <- json[["method"]]
+  } else {
+    object@method <- "absolute" # Fallback/Default
+  }
+  
+  return(object)
 })

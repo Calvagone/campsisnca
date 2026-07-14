@@ -95,7 +95,7 @@ setMethod("get_latex_name", signature=c("last_metric"), definition = function(x)
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("ctrough_metric"), definition = function(x) {
   retValue <- x %>% getName()
-  return(subscriptOccurrence(retValue, "trough"))
+  return(subscript_occurrence(retValue, "trough"))
 })
 
 #_______________________________________________________________________________

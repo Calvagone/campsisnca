@@ -14,10 +14,7 @@
 \alias{i_value,abstract_avg_metric,numeric,numeric-method}
 \alias{i_value,thalf_metric,numeric,numeric-method}
 \alias{i_value,abstract_time_above_or_below_limit_metric,numeric,numeric-method}
-\alias{i_value,cfb_metric,numeric,numeric-method}
-\alias{i_value,pcfb_metric,numeric,numeric-method}
-\alias{i_value,ratio_baseline_metric,numeric,numeric-method}
-\alias{i_value,log_cfb_metric,numeric,numeric-method}
+\alias{i_value,baseline_metric,numeric,numeric-method}
 \alias{i_value,custom_metric,numeric,numeric-method}
 \title{Compute the individual value of an individual.}
 \usage{
@@ -43,13 +40,7 @@ i_value(object, time, value = NULL)
 
 \S4method{i_value}{abstract_time_above_or_below_limit_metric,numeric,numeric}(object, time, value = NULL)
 
-\S4method{i_value}{cfb_metric,numeric,numeric}(object, time, value = NULL)
-
-\S4method{i_value}{pcfb_metric,numeric,numeric}(object, time, value = NULL)
-
-\S4method{i_value}{ratio_baseline_metric,numeric,numeric}(object, time, value = NULL)
-
-\S4method{i_value}{log_cfb_metric,numeric,numeric}(object, time, value = NULL)
+\S4method{i_value}{baseline_metric,numeric,numeric}(object, time, value = NULL)
 
 \S4method{i_value}{custom_metric,numeric,numeric}(object, time, value = NULL)
 }

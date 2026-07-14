@@ -86,7 +86,7 @@ setMethod("calculate", signature=c("nca_metric", "campsis_output", "nca_options"
 #_______________________________________________________________________________
 
 #' @importFrom stringr str_replace_all
-subscriptOccurrence <- function(x, occurrence, replacement=NULL) {
+subscript_occurrence <- function(x, occurrence, replacement=NULL) {
   if (is.null(replacement)) {
      replacement <- sprintf("_{%s}", occurrence)
   } else {
@@ -234,6 +234,7 @@ setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, 
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
+#' @importFrom campsismod mapJSONPropertiesToS4Slots
 loadMetricFromJSON <- function(object, json) {
   if (!is.null(json@data$window)) {
     # Assign type to window element
@@ -260,7 +261,7 @@ loadMetricFromJSON <- function(object, json) {
 #----                        stat_display_string                            ----
 #_______________________________________________________________________________
 
-getDiscreteCategories <- function(object) {
+get_discrete_categories <- function(object) {
   # Unfortunately, this is no other way to retrieve the categories corresponding to the categorical stat values in gtsummary
   # gtsummary categorical stat values are given in the same order as the alphabetically-sorted categories present in the data
   return(base::sort(unique(object@individual$value)))

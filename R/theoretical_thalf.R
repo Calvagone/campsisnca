@@ -201,13 +201,13 @@ setMethod("get_latex_name", signature=c("theoretical_thalf_metric"), definition 
   name <- x %>% getName()
   subtype <- x@subtype
   if (subtype == "1cpt") {
-    retValue <- subscriptOccurrence(name, "half\\.z", "\U00BD,z")
+    retValue <- subscript_occurrence(name, "half\\.z", "\U00BD,z")
   } else if (subtype == "2cpt.dist") {
-    retValue <- subscriptOccurrence(name, "half\\.dist", "\U00BD,dist")
+    retValue <- subscript_occurrence(name, "half\\.dist", "\U00BD,dist")
   } else if (subtype == "2cpt.z") {
-    retValue <- subscriptOccurrence(name, "half\\.z", "\U00BD,z")
+    retValue <- subscript_occurrence(name, "half\\.z", "\U00BD,z")
   } else if (subtype == "2cpt.eff") {
-    retValue <- subscriptOccurrence(name, "half\\.eff", "\U00BD,eff")
+    retValue <- subscript_occurrence(name, "half\\.eff", "\U00BD,eff")
   } else {
     retValue <- name
   }

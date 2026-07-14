@@ -22,10 +22,7 @@
 \alias{get_default_name,theoretical_thalf_metric-method}
 \alias{get_default_name,time_above_limit_metric-method}
 \alias{get_default_name,time_below_limit_metric-method}
-\alias{get_default_name,cfb_metric-method}
-\alias{get_default_name,pcfb_metric-method}
-\alias{get_default_name,ratio_baseline_metric-method}
-\alias{get_default_name,log_cfb_metric-method}
+\alias{get_default_name,baseline_metric-method}
 \title{Get default name.}
 \usage{
 get_default_name(object, ...)
@@ -66,13 +63,7 @@ get_default_name(object, ...)
 
 \S4method{get_default_name}{time_below_limit_metric}(object, ...)
 
-\S4method{get_default_name}{cfb_metric}(object, ...)
-
-\S4method{get_default_name}{pcfb_metric}(object, ...)
-
-\S4method{get_default_name}{ratio_baseline_metric}(object, ...)
-
-\S4method{get_default_name}{log_cfb_metric}(object, ...)
+\S4method{get_default_name}{baseline_metric}(object, ...)
 }
 \arguments{
 \item{object}{get default name of this object}

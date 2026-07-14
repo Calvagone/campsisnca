@@ -58,7 +58,7 @@ setMethod("i_value", signature=c("thalf_metric", "numeric", "numeric"), definiti
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("thalf_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "half", "\U00BD"))
+  return(subscript_occurrence(x %>% getName(), "half", "\U00BD"))
 })
 
 #_______________________________________________________________________________
