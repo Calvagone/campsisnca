@@ -10,7 +10,8 @@ source(file.path(testFolder, "testUtils.R"))
 test_that("Dataset 1 - cmin at steady state", {
   ds <- dataset1()
   cmin1 <- Cmin("Y", TimeWindow(144, 168)) %>% campsisnca::calculate(ds$campsis)
-  cmin2 <- ncappc_output(ds$nonmem, metric="Cmin", doseType="ss", doseTime=144, Tau=24) # SS info needed to have Cmin
+  cmin2 <- ncappc_output(ds$nonmem, metric="Cmin", doseType="ss", doseTime=144, Tau=24,
+    reg_file=ncappc_reg_file("dataset1_cmin_ss.csv")) # SS info needed to have Cmin
   expect_equal(cmin1@individual, cmin2, tolerance=1e-3)
 })
 

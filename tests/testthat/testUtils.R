@@ -26,9 +26,13 @@ standardise_output <- function(ncaOutput, metric) {
   return(ncaOutput %>% tibble::as_tibble())
 }
 
-ncappc_output <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
+ncappc_reg_file <- function(filename) {
+  return(file.path(getwd(), test_path(), "non_regression", "ncappc", filename))
+}
+
+ncappc_output <- function(x, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE, reg_file=NULL) {
   envir <- list()
-  envir$obsFile=nmDataset
+  envir$obsFile=x
   envir$method=convert_method(method)
   envir$doseType=doseType
   envir$doseTime=doseTime
@@ -56,7 +60,15 @@ ncappc_output <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseT
         noPlot=T)"
     ), envir=envir, enclos=NULL)
   
-  return(standardise_output(out$ncaOutput, metric))
+  std_output <- standardise_output(out$ncaOutput, metric)
+
+  if (!is.null(reg_file)) {
+    write.table(std_output, file=reg_file, sep=",", row.names=FALSE)
+  } else {
+    print("reg_file is null")
+  }
+  
+  return(std_output)
 }
 
 to_nm_dataset <- function(results, dataset, model, seed=1) {
