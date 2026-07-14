@@ -554,6 +554,7 @@ translate_stat_string <- function(stat_string) {
     "median" = "Median",
     "mean"   = "Mean",
     "sd"     = "SD",
+    "se"     = "SE",
     "var"    = "Variance",
     "min"    = "Minimum",
     "max"    = "Maximum",
