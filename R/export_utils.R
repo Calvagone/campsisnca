@@ -4,9 +4,10 @@
 #' 
 #' @param x summary export
 #' @param split string use to concatenate the 'stat' and 'category' column
+#' @return updated data frame
 #' @importFrom dplyr all_of mutate select
 #' @export
-discardCategoryColumn <- function(x, split="_") {
+discard_category_column <- function(x, split="_") {
   if (!"category" %in% colnames(x)) {
     return(x)
   }

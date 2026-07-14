@@ -469,7 +469,7 @@ setMethod(
         dplyr::matches("category"),
         ~ is.na(.x) | .x != "FALSE"
       )) %>%
-      discardCategoryColumn() %>%
+      discard_category_column() %>%
       tidyr::pivot_wider(
         names_from = c("metric", "stat"),
         values_from = c("value"),
