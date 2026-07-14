@@ -30,12 +30,12 @@ setClass(
 #' * 3: linear before Tmax, logarithmic after Tmax
 #' @export
 AUC <- function(variable=NULL, window=NULL, method=1, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="auc_metric")
   assertthat::assert_that(method %in% c(1,2,3), msg="method must be 1, 2 or 3")
   metric@method <- as.integer(method)
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________
@@ -60,7 +60,7 @@ setMethod("i_value", signature=c("auc_metric", "numeric", "numeric"), definition
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-aucMethodToInteger <- function(method) {
+auc_method_to_integer <- function(method) {
   if (length(method)==0) {
     return(1L) # Default
   } else {
@@ -76,7 +76,7 @@ aucMethodToInteger <- function(method) {
 }
 
 setMethod("loadFromJSON", signature=c("auc_metric", "json_element"), definition=function(object, json) {
-  json@data$method <- aucMethodToInteger(json@data$method)
+  json@data$method <- auc_method_to_integer(json@data$method)
   return(loadMetricFromJSON(object=object, json=json))
 })
 

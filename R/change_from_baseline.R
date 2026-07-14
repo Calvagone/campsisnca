@@ -42,14 +42,14 @@ ChangeFromBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL,
   method <- match.arg(tolower(method), c("absolute", "percent", "ratio", "log"))
   
   # Construct base metric using your package's S4 constructor
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="baseline_metric")
   
   # Populate the custom slot
   metric@method <- method
   
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 # Alias for developers/users who prefer the quick acronym

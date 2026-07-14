@@ -46,10 +46,10 @@ setClass(
 #' @inheritParams metrics_params
 #' @export
 Min <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="min_metric")
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #' 
@@ -58,10 +58,10 @@ Min <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=N
 #' @inheritParams metrics_params
 #' @export
 Cmin <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="cmin_metric")
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________

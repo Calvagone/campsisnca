@@ -27,11 +27,11 @@ setClass(
 #' @param rebase rebase time according to start time of window
 #' @export
 Tmax <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="tmax_metric")
   metric@rebase <- rebase
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________

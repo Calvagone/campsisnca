@@ -51,11 +51,11 @@ setClass(
 #' @param strictly whether the variable must be strictly above the limit
 #' @export
 TimeAboveLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="time_above_limit_metric")
   metric@limit <- limit
   metric@strictly <- strictly
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #' 
@@ -66,11 +66,11 @@ TimeAboveLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALS
 #' @param strictly whether the variable must be strictly below the limit
 #' @export
 TimeBelowLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
+  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
                            metric_name="time_below_limit_metric")
   metric@limit <- limit
   metric@strictly <- strictly
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________

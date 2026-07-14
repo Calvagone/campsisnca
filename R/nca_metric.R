@@ -42,7 +42,7 @@ setClass(
   validity=validate_metric
 )
 
-ncaConstructor <- function(variable, window, name, unit, stat_display, digits, metric_name) {
+nca_constructor <- function(variable, window, name, unit, stat_display, digits, metric_name) {
   if (is.null(name)) {
     name <- as.character(NA)
   }
@@ -59,7 +59,7 @@ ncaConstructor <- function(variable, window, name, unit, stat_display, digits, m
   return(metric)
 }
 
-setDefaultNameIfNA <- function(object) {
+set_default_name_if_na <- function(object) {
   if (is.na(object@name)) {
     object@name <- object %>% get_default_name()
   }
@@ -253,7 +253,7 @@ loadMetricFromJSON <- function(object, json) {
     json@data$rounding <- NULL
   }
   object <- mapJSONPropertiesToS4Slots(object=object, json=json)
-  return(setDefaultNameIfNA(object))
+  return(set_default_name_if_na(object))
 }
 
 

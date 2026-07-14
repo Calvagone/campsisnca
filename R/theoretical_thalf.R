@@ -88,13 +88,13 @@ check_map <- function(map, thalf.1cpt=TRUE) {
 #' @export
 Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "1cpt"
-  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+  metric <- nca_constructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- check_map(map, thalf.1cpt=TRUE)
   metric@map <- map
   metric@subtype <- subtype
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #' 
@@ -105,13 +105,13 @@ Thalf.1cpt <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits
 #' @export
 Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.dist"
-  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+  metric <- nca_constructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- check_map(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #' 
@@ -122,13 +122,13 @@ Thalf.2cpt.dist <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, d
 #' @export
 Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.z"
-  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+  metric <- nca_constructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- check_map(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #' 
@@ -139,13 +139,13 @@ Thalf.2cpt.z <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digi
 #' @export
 Thalf.2cpt.eff <- function(map=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
   subtype <- "2cpt.eff"
-  metric <- ncaConstructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
+  metric <- nca_constructor(variable=as.character(NA), window=UndefinedTimeWindow(), name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
                            metric_name="theoretical_thalf_metric")
   map <- check_map(map, thalf.1cpt=FALSE)
   metric@map <- map
   metric@subtype <- subtype
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________
