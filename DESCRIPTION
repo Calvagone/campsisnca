@@ -51,7 +51,6 @@ Suggests:
     devtools,
     ggplot2,
     mrgsolve,
-    ncappc,
     pkgdown,
     rmarkdown,
     roxygen2,

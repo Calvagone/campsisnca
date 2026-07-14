@@ -31,42 +31,40 @@ ncappc_reg_file <- function(filename) {
 }
 
 ncappc_output <- function(x, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE, reg_file=NULL) {
-  envir <- list()
-  envir$obsFile=x
-  envir$method=convert_method(method)
-  envir$doseType=doseType
-  envir$doseTime=doseTime
-  envir$Tau=Tau
-  envir$extrapolate=extrapolate
-
-  out <- eval(
-    expr=parse(
-      text="
-      Cmax <<- NA # See global variable in ncappc::est.nca
-      Cmin <<- NA # See global variable in ncappc::est.nca
-      Clast <<- NA # See global variable in ncappc::est.nca
-      Tmin <<- NA # See global variable in ncappc::est.nca
-      Tmax <<- NA # See global variable in ncappc::est.nca
-      Cavg <<- NA # See global variable in ncappc::est.nca
-      ncappc::ncappc(
-        obsFile=obsFile,
-        method=method,
-        doseType=doseType,
-        doseTime=doseTime,
-        Tau=Tau,
-        onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
-        extrapolate=extrapolate,
-        printOut=F,
-        noPlot=T)"
-    ), envir=envir, enclos=NULL)
   
-  std_output <- standardise_output(out$ncaOutput, metric)
+  # envir <- list()
+  # envir$obsFile=x
+  # envir$method=convert_method(method)
+  # envir$doseType=doseType
+  # envir$doseTime=doseTime
+  # envir$Tau=Tau
+  # envir$extrapolate=extrapolate
+  # 
+  # out <- eval(
+  #   expr=parse(
+  #     text="
+  #     Cmax <<- NA # See global variable in ncappc::est.nca
+  #     Cmin <<- NA # See global variable in ncappc::est.nca
+  #     Clast <<- NA # See global variable in ncappc::est.nca
+  #     Tmin <<- NA # See global variable in ncappc::est.nca
+  #     Tmax <<- NA # See global variable in ncappc::est.nca
+  #     Cavg <<- NA # See global variable in ncappc::est.nca
+  #     ncappc::ncappc(
+  #       obsFile=obsFile,
+  #       method=method,
+  #       doseType=doseType,
+  #       doseTime=doseTime,
+  #       Tau=Tau,
+  #       onlyNCA=T, # To avoid note: Simulated data file, nca_simulation.1.npctab.dta.zip, is not found in the working directory.
+  #       extrapolate=extrapolate,
+  #       printOut=F,
+  #       noPlot=T)"
+  #   ), envir=envir, enclos=NULL)
+  # std_output <- standardise_output(out$ncaOutput, metric)
+  # write.table(std_output, file=reg_file, sep=",", row.names=FALSE)
 
-  if (!is.null(reg_file)) {
-    write.table(std_output, file=reg_file, sep=",", row.names=FALSE)
-  } else {
-    print("reg_file is null")
-  }
+  std_output <- read.table(reg_file, sep = ",", header = TRUE) %>%
+    tibble::as_tibble()
   
   return(std_output)
 }
