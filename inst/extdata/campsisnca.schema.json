@@ -118,6 +118,9 @@
                 "$ref": "#/$defs/thalf_metric"
               },
               {
+                "$ref": "#/$defs/cfb_metric"
+              },
+              {
                 "$ref": "#/$defs/custom_metric"
               }
             ]
@@ -187,6 +190,28 @@
             }
           },
           "required": []
+        }
+      ]
+    },
+    "cfb_metric": {
+      "title": "Change from baseline (CFB) Metric",
+      "allOf": [
+        {
+          "$ref": "#/$defs/nca_metric"
+        },
+        {
+          "properties": {
+            "type": {
+              "const": "cfb_metric"
+            },
+            "method": {
+              "$ref": "#/$defs/cfb_method",
+              "description": "Method used to compute the change from baseline (CFB)."
+            }
+          },
+          "required": [
+            "method"
+          ]
         }
       ]
     },
@@ -509,6 +534,16 @@
         "tmax_linlog"
       ],
       "description": "Method used to compute AUC"
+    },
+    "cfb_method": {
+      "type": "string",
+      "enum": [
+        "absolute",
+        "percent",
+        "ratio",
+        "log"
+      ],
+      "description": "Change from baseline (CFG) method"
     },
     "nca_time_window": {
       "title": "NCA Time Window",

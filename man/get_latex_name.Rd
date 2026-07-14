@@ -15,7 +15,7 @@
 \alias{get_latex_name,abstract_avg_metric-method}
 \alias{get_latex_name,thalf_metric-method}
 \alias{get_latex_name,theoretical_thalf_metric-method}
-\alias{get_latex_name,baseline_metric-method}
+\alias{get_latex_name,cfb_metric-method}
 \title{Get the name of the metric in LaTeX notation (with subscript coded with an underscore and brackets).}
 \usage{
 get_latex_name(x, ...)
@@ -42,7 +42,7 @@ get_latex_name(x, ...)
 
 \S4method{get_latex_name}{theoretical_thalf_metric}(x)
 
-\S4method{get_latex_name}{baseline_metric}(x)
+\S4method{get_latex_name}{cfb_metric}(x)
 }
 \arguments{
 \item{x}{metric}

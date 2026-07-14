@@ -2,7 +2,7 @@
 #----                      baseline_metric classes                          ----
 #_______________________________________________________________________________
 
-validate_baseline_metric <- function(object) {
+validate_cfb_metric <- function(object) {
   valid_methods <- c("absolute", "percent", "ratio", "log")
   if (!object@method %in% valid_methods) {
     return(paste0("Method must be one of: ", paste(valid_methods, collapse = ", ")))
@@ -16,13 +16,13 @@ validate_baseline_metric <- function(object) {
 #' @slot method Character string specifying the CFB method ("absolute", "percent", "ratio", "log").
 #' @export
 setClass(
-  "baseline_metric",
+  "cfb_metric",
   representation(
     method="character"
   ),
   contains="nca_metric",
   prototype=prototype(method="absolute"),
-  validity=validate_baseline_metric
+  validity=validate_cfb_metric
 )
 
 #_______________________________________________________________________________
@@ -45,7 +45,7 @@ ChangeFromBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL,
   # Construct base metric using your package's S4 constructor
   metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
                            stat_display=stat_display, digits=digits,
-                           metric_name="baseline_metric")
+                           metric_name="cfb_metric")
   
   # Populate the custom slot
   metric@method <- method
@@ -62,7 +62,7 @@ CFB <- ChangeFromBaseline
 #_______________________________________________________________________________
 
 #' @rdname get_default_name
-setMethod("get_default_name", signature=c("baseline_metric"), definition=function(object, ...) {
+setMethod("get_default_name", signature=c("cfb_metric"), definition=function(object, ...) {
   # Translate the internal method slot into the standard pharmacometric acronym
   switch(object@method,
          "absolute" = "CFB",
@@ -83,7 +83,7 @@ get_baseline_value <- function(time, value) {
 }
 
 #' @rdname i_value
-setMethod("i_value", signature=c("baseline_metric", "numeric", "numeric"), definition=function(object, time, value) {
+setMethod("i_value", signature=c("cfb_metric", "numeric", "numeric"), definition=function(object, time, value) {
   # Guard: return NA if we have no observations
   if (length(value) == 0) return(NA_real_)
   
@@ -122,7 +122,7 @@ setMethod("i_value", signature=c("baseline_metric", "numeric", "numeric"), defin
 #_______________________________________________________________________________
 
 #' @rdname get_latex_name
-setMethod("get_latex_name", signature=c("baseline_metric"), definition = function(x) {
+setMethod("get_latex_name", signature=c("cfb_metric"), definition = function(x) {
   if (x@method=="log") {
     return(subscript_occurrence(x %>% getName(), "log"))
   } else {
@@ -134,16 +134,9 @@ setMethod("get_latex_name", signature=c("baseline_metric"), definition = functio
 #----                           loadFromJSON                                ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("baseline_metric", "json_element"), definition=function(object, json) {
+setMethod("loadFromJSON", signature=c("cfb_metric", "json_element"), definition=function(object, json) {
   # Load the standard metric components first
   object <- loadMetricFromJSON(object=object, json=json)
-  
-  # Retrieve the custom method parameter from the parsed JSON list
-  if ("method" %in% names(json)) {
-    object@method <- json[["method"]]
-  } else {
-    object@method <- "absolute" # Fallback/Default
-  }
-  
+    
   return(object)
 })

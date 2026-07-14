@@ -8,9 +8,6 @@ context("Test the 'Change From Baseline' metric")
 testFolder <-  file.path(getwd(), test_path())
 source(file.path(testFolder, "testUtils.R"))
 
-#_______________________________________________________________________________
-#----                              helpers                                  ----
-#_______________________________________________________________________________
 
 # A small fictitious dataset with 3 subjects and 4 time points each.
 # Subject 3 has a baseline of 0 (edge case for percent/ratio/log).

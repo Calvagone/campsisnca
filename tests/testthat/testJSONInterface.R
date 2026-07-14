@@ -34,7 +34,8 @@ test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
     add(Tmax()) %>%
     add(TimeAboveLimit(limit=10)) %>%
     add(TimeBelowLimit(limit=10)) %>%
-    add(Thalf())
+    add(Thalf()) %>%
+    add(ChangeFromBaseline(method="percent"))
   
   analysis2 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y", strata=c(ARM="Specific arm")) %>%
     add(AUC()) %>%
@@ -50,7 +51,8 @@ test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
     add(Tmax()) %>%
     add(TimeAboveLimit(limit=20)) %>%
     add(TimeBelowLimit(limit=20)) %>%
-    add(Thalf())
+    add(Thalf()) %>%
+    add(ChangeFromBaseline(method="percent"))
   
   expected_table <- NCATable() %>%
     add(analysis1) %>%
