@@ -105,7 +105,7 @@ test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
   metrics <- metrics.2cpt(results %>% mutate(DOSE=1000, TAU=24))
   metrics$THALF_EFF
   expect_equal(metrics$THALF_EFF, 23.97703, tolerance=1e-5)
-  nca <- ncappcOutput(exportToNMDataset(results, dataset, model), metric=NULL, doseType="ss", doseTime=24*14, Tau=24, extrapolate=TRUE)
+  nca <- ncappc_output(to_nm_dataset(results, dataset, model), metric=NULL, doseType="ss", doseTime=24*14, Tau=24, extrapolate=TRUE)
 })
 
 test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
@@ -130,11 +130,11 @@ test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
   expect_equal(-linearMod$coefficients[["TIME"]], firstRow$K, tolerance=1e-3)
   
   # Validation 2: NOK
-  nca <- ncappcOutput(exportToNMDataset(results, dataset, model), metric=NULL, doseType="ss", doseTime=24*14, Tau=24, extrapolate=TRUE)
+  nca <- ncappc_output(to_nm_dataset(results, dataset, model), metric=NULL, doseType="ss", doseTime=24*14, Tau=24, extrapolate=TRUE)
   nca$Lambda_z
   
   # Validation 3: OK
-  # calva_nca <- (CalvaNCA::CalvaNCA_plasma(obsFile=exportToNMDataset(results, dataset, model)))$ncaOutput
+  # calva_nca <- (CalvaNCA::CalvaNCA_plasma(obsFile=to_nm_dataset(results, dataset, model)))$ncaOutput
   # expect_equal(calva_nca$Lambda_z, firstRow$K, tolerance=1e-3)
 
   # Validation 4: OK

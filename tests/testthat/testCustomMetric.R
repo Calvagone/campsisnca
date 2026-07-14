@@ -45,7 +45,7 @@ test_that("Dataset 1 - Cmax at day 1 via custom metric", {
   cmax1c <- CustomMetric("Y", TimeWindow(0, 24), fun=customFun) %>% campsisnca::calculate(campsis) # Normal function
   cmax1d <- CustomMetricTbl(TimeWindow(0, 24), fun=~max(.x$Y)) %>% campsisnca::calculate(campsis) # Lambda using tibble
   
-  cmax2 <- ncappcOutput(nonmem %>% timerange(0, 24), metric="Cmax")
+  cmax2 <- ncappc_output(nonmem %>% timerange(0, 24), metric="Cmax")
   
   expect_equal(cmax1a@individual, cmax2, tolerance=1e-3)
   expect_equal(cmax1b@individual, cmax2, tolerance=1e-3)

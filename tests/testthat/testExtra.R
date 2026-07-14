@@ -34,7 +34,7 @@ test_that("Column names can be non-standard", {
   expect_true(all(c("Area Under Curve", "Cavg") %in% summary$metric))
   
   gttable <- table %>% export(dest="gt")
-  gtTableRegressionTest(gttable, getRefFile("non_standard_column_name.html"))
+  gt_table_regression_test(gttable, getRefFile("non_standard_column_name.html"))
   
 })
 
@@ -55,7 +55,7 @@ test_that("Statistics can contain line breaks", {
   expect_equal(summary$summary_stats, c("909<BR>(35.2%)", "3.79<BR>(35.2%)")) # No conversion yet at this stage
   
   gttable <- table %>% export(dest="gt", fmt_markdown=TRUE)
-  gtTableRegressionTest(gttable, getRefFile("linebreaks_in_stats.html"))
+  gt_table_regression_test(gttable, getRefFile("linebreaks_in_stats.html"))
   
 })
 
@@ -116,19 +116,19 @@ test_that("Summary stats on categorical data only should work as expected", {
     export(dest="dataframe")
   
   expect_equal(nrow(summary), 2*3*3) # 2 days * 3 categories * 3 stat
-  outputRegressionTest(data=summary, file=getRefFile("categorical_data_summary.csv"))
+  output_regression_test(data=summary, file=getRefFile("categorical_data_summary.csv"))
   
   summary_wide <- table %>%
     export(dest="dataframe", type="summary_wide")
-  outputRegressionTest(data=summary_wide, file=getRefFile("categorical_data_summary_wide.csv"))
+  output_regression_test(data=summary_wide, file=getRefFile("categorical_data_summary_wide.csv"))
   
   summary_pretty <- table %>%
     export(dest="dataframe", type="summary_pretty")
-  outputRegressionTest(data=summary_pretty, file=getRefFile("categorical_data_summary_pretty.csv"))
+  output_regression_test(data=summary_pretty, file=getRefFile("categorical_data_summary_pretty.csv"))
   
   individual <- table %>%
     export(dest="dataframe", type="individual_wide")
-  outputRegressionTest(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), file=getRefFile("categorical_data_individual.csv"))
+  output_regression_test(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), file=getRefFile("categorical_data_individual.csv"))
 
   subjects <- length(unique(campsis$ID))
   expect_equal(nrow(individual), subjects*2) # subjects * 2 categories
@@ -310,7 +310,7 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
 
-  gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10a.html"))
+  gt_table_regression_test(gttable, getRefFile("summarised_replicated_table10a.html"))
 
   # Changing to 1 string stat display
   # Stat type should now be 'continuous'
@@ -318,7 +318,7 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
 
-  gtTableRegressionTest(gttable, getRefFile("summarised_replicated_table10b.html"))
+  gt_table_regression_test(gttable, getRefFile("summarised_replicated_table10b.html"))
 
 
   # Testing method 'translate_stat_string'

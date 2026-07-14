@@ -15,7 +15,7 @@ test_that("Dataset 1 - Ctrough at steady state", {
   expect_error(CAt("Y", time=169) %>% campsisnca::calculate(ds$campsis),
                msg="Could not find any sample at t=169")
   
-  expected <- ncappcOutput(ds$nonmem, metric="Clast", doseType="ss", doseTime=144, Tau=24)
+  expected <- ncappc_output(ds$nonmem, metric="Clast", doseType="ss", doseTime=144, Tau=24)
   expect_equal(ctrough@individual, expected, tolerance=1e-3)
   expect_equal(last@individual, expected, tolerance=1e-3)
   expect_equal(concAt@individual, expected, tolerance=1e-3)

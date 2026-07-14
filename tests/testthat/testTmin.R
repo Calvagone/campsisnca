@@ -10,7 +10,7 @@ source(file.path(testFolder, "testUtils.R"))
 test_that("Dataset 1 - cmin at steady state", {
   ds <- dataset1()
   tmin1 <- Tmin("Y", TimeWindow(144, 168), rebase=FALSE) %>% campsisnca::calculate(ds$campsis)
-  tmin2 <- ncappcOutput(ds$nonmem, metric="Tmin", doseType="ss", doseTime=144, Tau=24) # SS info needed to have Tmin
+  tmin2 <- ncappc_output(ds$nonmem, metric="Tmin", doseType="ss", doseTime=144, Tau=24) # SS info needed to have Tmin
   expect_equal(tmin1@individual, tmin2, tolerance=1e-3)
 })
 

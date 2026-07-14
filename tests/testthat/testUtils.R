@@ -3,9 +3,9 @@
 # roxygen2::roxygenise()
 # setwd("C:/prj/campsisnca/tests/")
 
-overwriteNonRegressionFiles <- FALSE
+OVERWRITE_NON_REG_FILES <- FALSE
 
-convertMethod <- function(method) {
+convert_method <- function(method) {
   if (method==1) {
     method_ <- "linear"
   } else if(method==2) {
@@ -16,7 +16,7 @@ convertMethod <- function(method) {
   return(method_)
 }
 
-standardiseOutput <- function(ncaOutput, metric) {
+standardise_output <- function(ncaOutput, metric) {
   ncaOutput <- ncaOutput %>% dplyr::mutate(ID=as.numeric(ID)) %>% dplyr::arrange(ID)
   if (!is.null(metric)) {
     ncaOutput <- ncaOutput %>% dplyr::select(ID, dplyr::all_of(metric))
@@ -26,10 +26,10 @@ standardiseOutput <- function(ncaOutput, metric) {
   return(ncaOutput %>% tibble::as_tibble())
 }
 
-ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
+ncappc_output <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, extrapolate=FALSE) {
   envir <- list()
   envir$obsFile=nmDataset
-  envir$method=convertMethod(method)
+  envir$method=convert_method(method)
   envir$doseType=doseType
   envir$doseTime=doseTime
   envir$Tau=Tau
@@ -56,22 +56,10 @@ ncappcOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTi
         noPlot=T)"
     ), envir=envir, enclos=NULL)
   
-  return(standardiseOutput(out$ncaOutput, metric))
+  return(standardise_output(out$ncaOutput, metric))
 }
 
-# calvaNCAOutput <- function(nmDataset, metric=NULL, method=1, doseType="ns", doseTime=NULL, Tau=NULL, AUCTimeRange=NULL) {
-#   detachCampsisNCA()
-#   out <- CalvaNCA::CalvaNCA_plasma(
-#     obsFile=nmDataset, 
-#     method=convertMethod(method),
-#     doseType=doseType,
-#     doseTime=doseTime,
-#     Tau=Tau,
-#     AUCTimeRange=AUCTimeRange)
-#   return(standardiseOutput(out$ncaOutput, metric))
-# }
-
-exportToNMDataset <- function(results, dataset, model, seed=1) {
+to_nm_dataset <- function(results, dataset, model, seed=1) {
   # Retrieve ETA names from model
   etas <- (model@parameters %>% campsismod::select("omega"))@list %>% purrr::map_chr(~paste0("ETA_", .x@name))
   
@@ -92,7 +80,7 @@ exportToNMDataset <- function(results, dataset, model, seed=1) {
 #' @param output variables to compare, if NULL, all column names are compared
 #' @param file reference file
 #' @importFrom tibble as_tibble
-outputRegressionTest <- function(data, output=NULL, file) {
+output_regression_test <- function(data, output=NULL, file) {
   if (is.null(output)) {
     output <- colnames(data)
   }
@@ -101,7 +89,7 @@ outputRegressionTest <- function(data, output=NULL, file) {
     dplyr::select(dplyr::all_of(output)) %>%
     dplyr::mutate_if(is.numeric, round, digits=2)
   
-  if (overwriteNonRegressionFiles) {
+  if (OVERWRITE_NON_REG_FILES) {
     write.table(results1, file=file, sep=",", row.names=FALSE)
   }
   
@@ -119,7 +107,7 @@ outputRegressionTest <- function(data, output=NULL, file) {
   expect_equal(results1, results2)
 }
 
-gtTableRegressionTest <- function(gttable, file) {
+gt_table_regression_test <- function(gttable, file) {
 
   gttable %>%
     gt::gtsave(filename=file)
@@ -148,5 +136,5 @@ dataset1 <- function(seed=1, reload=TRUE) {
   #spaghettiPlot(results, "CP")
   
   # Return both the CAMPSIS output and the NONMEM dataset
-  return(list(campsis=results, nonmem=results %>% exportToNMDataset(dataset=dataset, model=model, seed=seed)))
+  return(list(campsis=results, nonmem=results %>% to_nm_dataset(dataset=dataset, model=model, seed=seed)))
 }
