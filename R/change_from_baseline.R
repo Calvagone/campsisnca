@@ -21,6 +21,7 @@ setClass(
     method="character"
   ),
   contains="nca_metric",
+  prototype=prototype(method="absolute"),
   validity=validate_baseline_metric
 )
 
@@ -72,37 +73,45 @@ setMethod("get_default_name", signature=c("baseline_metric"), definition=functio
 })
 
 #_______________________________________________________________________________
-#----                                i_value                                ----
+#----                               i_value                                 ----
 #_______________________________________________________________________________
 
 get_baseline_value <- function(time, value) {
   if (length(value) == 0) return(NA_real_)
-  return(value[1]) # Or value[which.min(time)] if time is not pre-sorted
+  # Safely gets the baseline corresponding to the earliest time
+  return(value[which.min(time)]) 
 }
 
 #' @rdname i_value
 setMethod("i_value", signature=c("baseline_metric", "numeric", "numeric"), definition=function(object, time, value) {
+  # Guard: return NA if we have no observations
+  if (length(value) == 0) return(NA_real_)
+  
+  # 1. Identify baseline (earliest time) and final (latest time) values
   y0 <- get_baseline_value(time, value)
   
-  # If baseline is missing, the output vectors should gracefully propagate NA
-  if (is.na(y0)) return(rep(NA_real_, length(value)))
+  latest_idx <- which.max(time)
+  y_last <- value[latest_idx]
   
-  # Execute calculation based on the selected method
+  # If either the baseline or the latest value is missing, return NA
+  if (is.na(y0) || is.na(y_last)) return(NA_real_)
+  
+  # 2. Execute calculation based on the selected method
   switch(object@method,
          "absolute" = {
-           return(value - y0)
+           return(y_last - y0)
          },
          "percent" = {
-           if (y0 == 0) return(rep(NA_real_, length(value)))
-           return(((value - y0) / y0) * 100)
+           if (y0 == 0) return(NA_real_)
+           return(((y_last - y0) / y0) * 100)
          },
          "ratio" = {
-           if (y0 == 0) return(rep(NA_real_, length(value)))
-           return(value / y0)
+           if (y0 == 0) return(NA_real_)
+           return(y_last / y0)
          },
          "log" = {
-           if (y0 <= 0 || any(value <= 0, na.rm = TRUE)) return(rep(NA_real_, length(value)))
-           return(log(value) - log(y0))
+           if (y0 <= 0 || y_last <= 0) return(NA_real_)
+           return(log(y_last) - log(y0))
          },
          stop("Unknown calculation method")
   )
