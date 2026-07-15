@@ -53,7 +53,12 @@ ChangeFromBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL,
   return(set_default_name_if_na(metric))
 }
 
-# Alias for developers/users who prefer the quick acronym
+#' 
+#' Alias for Change from Baseline (CFB).
+#' 
+#' @param method Character string specifying the calculation method. Must be one of 
+#'   "absolute" (default), "percent", "ratio", or "log".
+#' @inheritParams metrics_params
 #' @export
 CFB <- ChangeFromBaseline
 
