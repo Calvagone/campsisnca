@@ -18,10 +18,10 @@ rename_original_column <- function(x, from, to) {
 #' @return theoretical metrics
 #' @importFrom dplyr all_of group_by select slice ungroup
 #' @importFrom purrr map2
-#' @importFrom campsis obsOnly
+#' @importFrom campsis obs_only
 #' @export
 metrics.common <- function(x, map, thalf.1cpt) {
-  x <- x %>% campsis::obsOnly()
+  x <- x %>% campsis::obs_only()
   map <- check_map(map, thalf.1cpt=thalf.1cpt)
   
   # Remap columns

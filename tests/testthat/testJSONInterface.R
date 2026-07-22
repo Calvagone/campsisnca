@@ -8,10 +8,10 @@ test_that("Import time range from JSON", {
   
   json <- jsonlite::read_json(file.path(testFolder, "json_examples", "nca_table_1.json"))
   
-  time_range <- loadFromJSON(TimeWindow(), JSONElement(json$nca_analyses[[1]]$window))
+  time_range <- load_from_json(TimeWindow(), JSONElement(json$nca_analyses[[1]]$window))
   expect_equal(time_range, TimeWindow(0, 24))
   
-  time_range <- loadFromJSON(TimeWindow(), JSONElement(json$nca_analyses[[2]]$window))
+  time_range <- load_from_json(TimeWindow(), JSONElement(json$nca_analyses[[2]]$window))
   expect_equal(time_range, TimeWindow(144, 168))
 })
 

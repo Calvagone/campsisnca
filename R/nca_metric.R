@@ -97,7 +97,7 @@ subscript_occurrence <- function(x, occurrence, replacement=NULL) {
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("nca_metric"), definition = function(x) {
-  return(x %>% getName())
+  return(x %>% get_name())
 })
 
 #_______________________________________________________________________________
@@ -110,10 +110,10 @@ setMethod("get_default_name", signature=c("nca_metric"), definition=function(obj
 })
 
 #_______________________________________________________________________________
-#----                             getName                                   ----
+#----                             get_name                                   ----
 #_______________________________________________________________________________
 
-setMethod("getName", signature=c("nca_metric"), definition = function(x) {
+setMethod("get_name", signature=c("nca_metric"), definition = function(x) {
   return(x@name)
 })
 
@@ -135,9 +135,9 @@ setMethod("export", signature=c("nca_metric", "character"), definition=function(
 setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   if (type == "summary" || type == "summary_wide" || type == "summary_pretty") {
     if (nrow(object@summary) == 0) {
-      stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
+      stop(paste0("Metric ", object %>% get_name(), " is empty (please call calculate())"))
     }
-    retValue <- tibble::tibble(metric=object %>% getName(), object@summary) %>%
+    retValue <- tibble::tibble(metric=object %>% get_name(), object@summary) %>%
       dplyr::mutate(value=as.numeric(value)) # Remove names on values (e.g. if quantile was used)
     
     if (type == "summary_wide") {
@@ -145,12 +145,12 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
         tidyr::pivot_wider(names_from=stat, values_from=value)
 
     } else if (type == "summary_pretty") {
-      retValue <- tibble::tibble(metric=object %>% getName(), object@summary_pretty)
+      retValue <- tibble::tibble(metric=object %>% get_name(), object@summary_pretty)
     }
   
   } else if (type == "individual" || type == "individual_wide") {
     if (nrow(object@individual) == 0) {
-      stop(paste0("Metric ", object %>% getName(), " is empty (please call calculate())"))
+      stop(paste0("Metric ", object %>% get_name(), " is empty (please call calculate())"))
     }
     # Always 2 columns 'value' or 'discrete_value' based on field categorical
     individual <- object@individual
@@ -168,7 +168,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     individual <- individual %>%
       dplyr::mutate(categorical=object@categorical)
     
-    retValue <- tibble::tibble(metric=object %>% getName(), individual)
+    retValue <- tibble::tibble(metric=object %>% get_name(), individual)
     
   } else {
     stop("Argument type can be 'summary', 'summary_wide', 'summary_pretty', 'individual' or 'individual_wide'.")
@@ -187,7 +187,7 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
 setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, options, strat_vars, ...) {
   variable <- object@variable
   if (length(variable)==0) {
-    stop(sprintf("No variable provided for metric '%s'", x %>% getName()))
+    stop(sprintf("No variable provided for metric '%s'", x %>% get_name()))
   }
   # Standardise data frame
   x <- x %>% 
@@ -231,11 +231,11 @@ setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, 
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-#' @importFrom campsismod mapJSONPropertiesToS4Slots
-loadMetricFromJSON <- function(object, json) {
+#' @importFrom campsismod map_json_properties_to_s4_slots
+load_metric_from_json <- function(object, json) {
   if (!is.null(json@data$window)) {
     # Assign type to window element
     json@data$window$type <- "nca_time_window"
@@ -252,7 +252,7 @@ loadMetricFromJSON <- function(object, json) {
     }
     json@data$rounding <- NULL
   }
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  object <- map_json_properties_to_s4_slots(object=object, json=json)
   return(set_default_name_if_na(object))
 }
 

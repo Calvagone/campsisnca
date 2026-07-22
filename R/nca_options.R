@@ -51,9 +51,9 @@ UndefinedNCAOptions <- function() {
 }
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("nca_options", "json_element"), definition=function(object, json) {
-  return(mapJSONPropertiesToS4Slots(object=object, json=json))
+setMethod("load_from_json", signature=c("nca_options", "json_element"), definition=function(object, json) {
+  return(map_json_properties_to_s4_slots(object=object, json=json))
 })

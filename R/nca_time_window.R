@@ -89,10 +89,10 @@ setMethod(
 )
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("nca_time_window", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("nca_time_window", "json_element"), definition=function(object, json) {
   json@data$end <- processEndArgument(json@data$end)
-  return(mapJSONPropertiesToS4Slots(object=object, json=json))
+  return(map_json_properties_to_s4_slots(object=object, json=json))
 })

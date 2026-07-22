@@ -129,19 +129,19 @@ setMethod("i_value", signature=c("cfb_metric", "numeric", "numeric"), definition
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("cfb_metric"), definition = function(x) {
   if (x@method=="log") {
-    return(subscript_occurrence(x %>% getName(), "log"))
+    return(subscript_occurrence(x %>% get_name(), "log"))
   } else {
-    return(x %>% getName())
+    return(x %>% get_name())
   }
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("cfb_metric", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("cfb_metric", "json_element"), definition=function(object, json) {
   # Load the standard metric components first
-  object <- loadMetricFromJSON(object=object, json=json)
+  object <- load_metric_from_json(object=object, json=json)
     
   return(object)
 })

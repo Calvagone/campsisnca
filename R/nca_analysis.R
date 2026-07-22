@@ -85,10 +85,10 @@ setMethod("add", signature = c("nca_analysis", "list"), definition = function(ob
 })
 
 #_______________________________________________________________________________
-#----                             getName                                   ----
+#----                             get_name                                   ----
 #_______________________________________________________________________________
 
-setMethod("getName", signature=c("nca_analysis"), definition = function(x) {
+setMethod("get_name", signature=c("nca_analysis"), definition = function(x) {
   return(x@name)
 })
 
@@ -164,10 +164,10 @@ setMethod("export", signature=c("nca_analysis", "dataframe_type"), definition=fu
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("nca_analysis", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("nca_analysis", "json_element"), definition=function(object, json) {
   # Assign type to type range
   json@data$window$type <- "nca_time_window"
   
@@ -175,9 +175,9 @@ setMethod("loadFromJSON", signature=c("nca_analysis", "json_element"), definitio
   jsonMetrics <- json@data$metrics
   json@data$metrics <- NULL
   object@metrics@list <- jsonMetrics %>%
-    purrr::map(~loadFromJSON(new(.x$type), JSONElement(.x)))
+    purrr::map(~load_from_json(new(.x$type), JSONElement(.x)))
   
   # Auto mapping
-  object <- mapJSONPropertiesToS4Slots(object=object, json=json)
+  object <- map_json_properties_to_s4_slots(object=object, json=json)
   return(object)
 })

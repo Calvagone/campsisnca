@@ -93,14 +93,14 @@ setMethod("i_value", signature=c("abstract_max_metric", "numeric", "numeric"), d
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("abstract_max_metric"), definition = function(x) {
-  return(subscript_occurrence(x %>% getName(), "max"))
+  return(subscript_occurrence(x %>% get_name(), "max"))
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("abstract_max_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("load_from_json", signature=c("abstract_max_metric", "json_element"), definition=function(object, json) {
+  return(load_metric_from_json(object=object, json=json))
 })
 

@@ -95,10 +95,10 @@ deparseCustomFun <- function(fun) {
 }
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("custom_metric", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("custom_metric", "json_element"), definition=function(object, json) {
   type <- json@data$input_type
   if (type == "vector") {
     object@i_value_tibble <- FALSE
@@ -109,7 +109,7 @@ setMethod("loadFromJSON", signature=c("custom_metric", "json_element"), definiti
   }
   json@data$input_type <- NULL
   
-  metric <- loadMetricFromJSON(object=object, json=json)
+  metric <- load_metric_from_json(object=object, json=json)
   
   # Process fun
   metric@custom_function <- sprintf("rlang::as_function(%s)", metric@custom_function)
@@ -157,7 +157,7 @@ setMethod("replaceAll", signature=c("custom_metric", "nca_metric", "character"),
     return(object)
   }
   if (is.null(fun_name)) {
-    name <- pattern %>% getName()
+    name <- pattern %>% get_name()
   } else {
     name <- fun_name
   }

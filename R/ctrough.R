@@ -88,22 +88,22 @@ setMethod("i_value", signature=c("abstract_last_metric", "numeric", "numeric"), 
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("last_metric"), definition = function(x) {
-    retValue <- x %>% getName()
+    retValue <- x %>% get_name()
     return(retValue)
 })
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("ctrough_metric"), definition = function(x) {
-  retValue <- x %>% getName()
+  retValue <- x %>% get_name()
   return(subscript_occurrence(retValue, "trough"))
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("abstract_last_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("load_from_json", signature=c("abstract_last_metric", "json_element"), definition=function(object, json) {
+  return(load_metric_from_json(object=object, json=json))
 })
 
 

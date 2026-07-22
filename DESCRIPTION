@@ -59,7 +59,6 @@ Suggests:
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 7.3.3
 Collate:
     'all_classes.R'
     'test_data.R'
@@ -102,3 +101,4 @@ Collate:
     'deprecated_methods.R'
 Remotes:
     Calvagone/campsis@develop
+Config/roxygen2/version: 8.0.0

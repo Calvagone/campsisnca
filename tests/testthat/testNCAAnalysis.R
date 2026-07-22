@@ -17,13 +17,13 @@ test_that("Dataset 1 - day 1 & day 7", {
     add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
     campsisnca::calculate(ds$campsis)
   
-  expect_equal(nca_d1@metrics %>% getNames(), c("AUC", "Cmax", "tmax", "Ctrough"))
+  expect_equal(nca_d1@metrics %>% get_names(), c("AUC", "Cmax", "tmax", "Ctrough"))
   
   nca_d7 <- NCAAnalysis(name="Day 7", window=TimeWindow(144, 168), variable="Y") %>%
     add(c(AUC(), Cmax(), Tmax(), Ctrough())) %>%
     campsisnca::calculate(ds$campsis)
   
-  expect_equal(nca_d7@metrics %>% getNames(), c("AUC", "Cmax", "tmax", "Ctrough"))
+  expect_equal(nca_d7@metrics %>% get_names(), c("AUC", "Cmax", "tmax", "Ctrough"))
   
   table <- NCATable(subscripts=TRUE)  
   table <- table %>% add(c(nca_d1, nca_d7))

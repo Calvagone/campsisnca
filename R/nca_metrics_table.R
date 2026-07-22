@@ -85,7 +85,7 @@ NCATable <- function(title=NULL, subtitle=NULL, swap_strat=FALSE, combine_with="
                  header_label=header_label, subscripts=subscripts,
                  nca_options=nca_options, tab_options=tab_options)
   } else {
-    table <- loadFromJSON(object=new("nca_table"), json=json)
+    table <- load_from_json(object=new("nca_table"), json=json)
   }
   return(table)
 }
@@ -348,13 +348,13 @@ setMethod("get_unit", signature=c("nca_table", "character"), definition=function
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("nca_table", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("nca_table", "json_element"), definition=function(object, json) {
   json <- json@data
   object@nca_analyses@list <- json$nca_analyses %>%
-    purrr::map(~loadFromJSON(NCAAnalysis(), JSONElement(.x)))
+    purrr::map(~load_from_json(NCAAnalysis(), JSONElement(.x)))
   
   # Extract possible tab options
   if (!is.null(json$tab_options)) {
@@ -363,7 +363,7 @@ setMethod("loadFromJSON", signature=c("nca_table", "json_element"), definition=f
   
   # Extract possible NCA options
   if (!is.null(json$nca_options)) {
-    object@nca_options <- loadFromJSON(NCAOptions(), JSONElement(json$nca_options))
+    object@nca_options <- load_from_json(NCAOptions(), JSONElement(json$nca_options))
   }
   
   # Extract title and subtitle
@@ -394,14 +394,14 @@ setMethod("loadFromJSON", signature=c("nca_table", "json_element"), definition=f
   return(object)
 })
 
-setMethod("loadFromJSON", signature=c("nca_table", "character"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("nca_table", "character"), definition=function(object, json) {
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
-  return(loadFromJSON(object=object, json=open_json(json=json, schema=schema)))
+  return(load_from_json(object=object, json=open_json(json=json, schema=schema)))
 })
 
-setMethod("loadFromJSON", signature=c("nca_table", "list"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("nca_table", "list"), definition=function(object, json) {
   schema <- system.file("extdata", "campsisnca.schema.json", package="campsisnca")
-  return(loadFromJSON(object=object, json=open_json(json=json, schema=schema)))
+  return(load_from_json(object=object, json=open_json(json=json, schema=schema)))
 })
 
 #_______________________________________________________________________________

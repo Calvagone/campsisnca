@@ -21,8 +21,8 @@ test_that("Dataset 1 - Ctrough at steady state", {
   expect_equal(last@individual, expected, tolerance=1e-3)
   expect_equal(concAt@individual, expected, tolerance=1e-3)
   
-  expect_equal(ctrough %>% getName(), "Ctrough")
-  expect_equal(last %>% getName(), "Last value")
-  expect_equal(concAt %>% getName(), "Conc")
+  expect_equal(ctrough %>% get_name(), "Ctrough")
+  expect_equal(last %>% get_name(), "Last value")
+  expect_equal(concAt %>% get_name(), "Conc")
 })
 

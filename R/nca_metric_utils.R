@@ -44,7 +44,7 @@ metrics_params <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, cat
 #' @param strat_vars stratification variables in x (e.g. 'SCENARIO')
 #' @importFrom assertthat assert_that
 #' @importFrom dplyr rename_at
-#' @importFrom campsis obsOnly
+#' @importFrom campsis obs_only
 #' 
 standardise <- function(x, variable, strat_vars) {
   assertthat::assert_that(is.character(variable) && length(variable)==1, msg="variable must be a single character value")
@@ -57,7 +57,7 @@ standardise <- function(x, variable, strat_vars) {
                                                              paste0(strat_vars[!strat_vars_check], collapse=", ")))
 
   # Use only observations
-  x <- x %>% campsis::obsOnly()
+  x <- x %>% campsis::obs_only()
   
   # Check no time is NA
   check_na_times(x, time_var="TIME") 

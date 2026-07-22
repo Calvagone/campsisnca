@@ -57,7 +57,7 @@ setMethod("i_value", signature=c("auc_metric", "numeric", "numeric"), definition
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
 auc_method_to_integer <- function(method) {
@@ -75,8 +75,8 @@ auc_method_to_integer <- function(method) {
   stop(sprintf("Unknown AUC method '%s'", method))
 }
 
-setMethod("loadFromJSON", signature=c("auc_metric", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature=c("auc_metric", "json_element"), definition=function(object, json) {
   json@data$method <- auc_method_to_integer(json@data$method)
-  return(loadMetricFromJSON(object=object, json=json))
+  return(load_metric_from_json(object=object, json=json))
 })
 

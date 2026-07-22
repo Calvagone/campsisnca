@@ -58,14 +58,14 @@ setMethod("i_value", signature=c("thalf_metric", "numeric", "numeric"), definiti
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("thalf_metric"), definition = function(x) {
-  return(subscript_occurrence(x %>% getName(), "half", "\U00BD"))
+  return(subscript_occurrence(x %>% get_name(), "half", "\U00BD"))
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("thalf_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("load_from_json", signature=c("thalf_metric", "json_element"), definition=function(object, json) {
+  return(load_metric_from_json(object=object, json=json))
 })
 

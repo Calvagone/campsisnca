@@ -198,7 +198,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "campsis_output",
 
 #' @rdname get_latex_name
 setMethod("get_latex_name", signature=c("theoretical_thalf_metric"), definition = function(x) {
-  name <- x %>% getName()
+  name <- x %>% get_name()
   subtype <- x@subtype
   if (subtype == "1cpt") {
     retValue <- subscript_occurrence(name, "half\\.z", "\U00BD,z")

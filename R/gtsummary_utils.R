@@ -272,7 +272,7 @@ get_statistics_code <- function(table) {
   # Always look at first NCA metric only
   analyses <- table@nca_analyses@list[[1]]
   
-  retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", add_backticks(.x %>% getName()), .x@stat_display))
+  retValue <- analyses@metrics@list %>% purrr::map_chr(~sprintf("%s ~ \"%s\"", add_backticks(.x %>% get_name()), .x@stat_display))
   
   return(paste0(retValue, collapse=",\n    "))
 }
@@ -295,7 +295,7 @@ get_variable_type_code <- function(table, all_dichotomous_levels) {
     } else {
       typeStr <-  "continuous"
     }
-    type <- sprintf("%s ~ \"%s\"", add_backticks(x %>% getName()), typeStr)
+    type <- sprintf("%s ~ \"%s\"", add_backticks(x %>% get_name()), typeStr)
     return(type)
   })
   
@@ -321,12 +321,12 @@ get_labels_code <- function(table, subscripts) {
     if (subscripts) {
       resultingName <-  x %>% get_latex_name()
     } else {
-      resultingName <-  x %>% getName()
+      resultingName <-  x %>% get_name()
     }
     if (is.na(unit)) {
-      label <- sprintf("%s ~ \"%s\"", add_backticks(x %>% getName()), resultingName)
+      label <- sprintf("%s ~ \"%s\"", add_backticks(x %>% get_name()), resultingName)
     } else {
-      label <- sprintf("%s ~ \"%s (%s)\"", add_backticks(x %>% getName()), resultingName, unit)
+      label <- sprintf("%s ~ \"%s (%s)\"", add_backticks(x %>% get_name()), resultingName, unit)
     }
     return(label)
   })
@@ -346,7 +346,7 @@ get_digits_code <- function(table) {
   retValue <- analyses@metrics@list %>% purrr::map_chr(.f=function(x) {
     digits <- x@digits
     if (length(digits) > 0) {
-      digit <- sprintf("%s ~ list(%s)", add_backticks(x %>% getName()), paste0(digits, collapse=","))
+      digit <- sprintf("%s ~ list(%s)", add_backticks(x %>% get_name()), paste0(digits, collapse=","))
     } else {
       digit <- ""
     }

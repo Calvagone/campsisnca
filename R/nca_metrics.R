@@ -23,11 +23,11 @@ NCAMetrics <- function() {
 }
 
 #_______________________________________________________________________________
-#----                             getName                                   ----
+#----                             get_name                                   ----
 #_______________________________________________________________________________
 
-setMethod("getName", signature=c("nca_metrics"), definition=function(x) {
-  return(paste0("NCA metrics: ", paste0(x@list %>% purrr::map(~getName(.x)), collapse=" / ")))
+setMethod("get_name", signature=c("nca_metrics"), definition=function(x) {
+  return(paste0("NCA metrics: ", paste0(x@list %>% purrr::map(~get_name(.x)), collapse=" / ")))
 })
 
 #_______________________________________________________________________________

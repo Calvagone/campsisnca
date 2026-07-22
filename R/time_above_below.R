@@ -175,10 +175,10 @@ computeTimeAboveBelow <- function(x1, y1, x2, y2, above, strictly) {
 }
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("abstract_time_above_or_below_limit_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("load_from_json", signature=c("abstract_time_above_or_below_limit_metric", "json_element"), definition=function(object, json) {
+  return(load_metric_from_json(object=object, json=json))
 })
 
