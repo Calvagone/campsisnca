@@ -100,5 +100,6 @@ Collate:
     'json_interface.R'
     'deprecated_methods.R'
 Remotes:
-    Calvagone/campsis@develop
+    Calvagone/campsismod@snake_case,
+    Calvagone/campsis@snake_case
 Config/roxygen2/version: 8.0.0
