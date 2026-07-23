@@ -189,7 +189,9 @@
               "description": "Method used to compute AUC. If undefined, 'linlin' will be used as the default method."
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -210,6 +212,7 @@
             }
           },
           "required": [
+            "type",
             "method"
           ]
         }
@@ -239,7 +242,9 @@
               "const": "max_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -255,7 +260,9 @@
               "const": "cmax_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -283,7 +290,9 @@
               "const": "min_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -299,7 +308,9 @@
               "const": "cmin_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -327,7 +338,9 @@
               "const": "avg_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -343,7 +356,9 @@
               "const": "cavg_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -371,7 +386,9 @@
               "const": "ctrough_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -387,7 +404,9 @@
               "const": "last_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -403,7 +422,9 @@
               "const": "tmin_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -419,7 +440,9 @@
               "const": "tmax_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -458,7 +481,9 @@
               "const": "time_above_limit_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -474,7 +499,9 @@
               "const": "time_below_limit_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -490,7 +517,9 @@
               "const": "thalf_metric"
             }
           },
-          "required": []
+          "required": [
+            "type"
+          ]
         }
       ]
     },
@@ -519,6 +548,7 @@
             }
           },
           "required": [
+            "type",
             "categorical",
             "custom_function",
             "input_type"
