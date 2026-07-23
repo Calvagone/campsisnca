@@ -2,22 +2,14 @@
 #----                           nca_analysis class                          ----
 #_______________________________________________________________________________
 
-allStrataLevels <- function() {
-  return("all")
-}
-
-getDefaultStrata <- function() {
-  return(c(SCENARIO=allStrataLevels(), ARM=allStrataLevels()))
-}
-
-getEffectiveStratVars <- function(strata, x) {
+get_effective_strat_vars <- function(strata, x) {
   retValue <- NULL
   colnames_ <- colnames(x)
   for (index in seq_along(strata)) {
     strat_var <- names(strata)[index]
     strat_vars_level <- as.character(strata)[index]
     if (strat_var %in% colnames_) {
-      if (strat_vars_level == allStrataLevels() && length(unique(x %>% dplyr::pull(strat_var))) > 1) {
+      if (strat_vars_level == all_strata_levels() && length(unique(x %>% dplyr::pull(strat_var))) > 1) {
         retValue <- c(retValue, strat_var)
       }
     } else {
@@ -30,23 +22,29 @@ getEffectiveStratVars <- function(strata, x) {
   return(retValue)
 }
 
-#' 
+#'
 #' NCA analysis class.
-#' 
+#'
 #' @export
 setClass(
   "nca_analysis",
   representation(
-    name = "character",                # analysis name
-    window = "nca_time_window",        # default time range
-    variable = "character",            # default variable name
-    metrics = "nca_metrics",           # metrics contained in this analysis
-    strata = "character",              # named vector
+    name = "character", # analysis name
+    window = "nca_time_window", # default time range
+    variable = "character", # default variable name
+    metrics = "nca_metrics", # metrics contained in this analysis
+    strata = "character", # named vector
     effective_strat_vars = "character" # effective stratification variables in data, transient field: updated when calculate is called
   ),
-  contains="pmx_element",
-  prototype=prototype(name="Default", window=TimeWindow(), variable=as.character(NA),
-                      metrics=NCAMetrics(), strata=getDefaultStrata(), strat_vars=character(0))
+  contains = "pmx_element",
+  prototype = prototype(
+    name = "Default",
+    window = TimeWindow(),
+    variable = as.character(NA),
+    metrics = NCAMetrics(),
+    strata = get_default_strata(),
+    strat_vars = character(0)
+  )
 )
 
 #' 
@@ -60,12 +58,12 @@ setClass(
 #'  Use 'all' if this analysis refers to all levels for the specified stratification variable.
 #'  By default, a stratification variable that has only 1 level is ignored.
 #' @export
-NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, strata=getDefaultStrata()) {
+NCAAnalysis <- function(name="Default", window=TimeWindow(), variable=NULL, strata=get_default_strata()) {
   if (is.null(variable)) {
     variable = as.character(NA)
   }
   if (is.null(strata)) {
-    strata = getDefaultStrata()
+    strata = get_default_strata()
   }
   return(new("nca_analysis", name=name, window=window, variable=variable, strata=strata))
 }
@@ -108,10 +106,10 @@ setMethod("get_unit", signature=c("nca_analysis", "character"), definition=funct
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_analysis", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
   # Effective stratification variables based on strata and x
-  object@effective_strat_vars <- getEffectiveStratVars(strata=object@strata, x=x)
+  object@effective_strat_vars <- get_effective_strat_vars(strata=object@strata, x=x)
   
   # Detect the specific strata
-  specific_strata <- object@strata[object@strata != allStrataLevels()]
+  specific_strata <- object@strata[object@strata != all_strata_levels()]
   
   # Filter input data frame to specific strata
   x_reduced <- purrr::reduce(

@@ -688,6 +688,10 @@
         "summary_stat_signif_digits": {
           "type": "integer",
           "description": "Number of significant digits to display for replicate statistics."
+        },
+        "strata": {
+          "$ref": "#/$defs/nca_strata",
+          "description": "Named strata filters used to subset the dataset. See nca_strata definition."
         }
       },
       "required": []

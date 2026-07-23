@@ -7,7 +7,8 @@
 ReplicatedNCAOptions(
   selected_statistics = character(),
   summary_stat_display = get_stat_display_default(),
-  summary_stat_signif_digits = 3L
+  summary_stat_signif_digits = 3L,
+  strata = get_default_strata()
 )
 }
 \arguments{
@@ -17,6 +18,11 @@ Default is the empty character vector (all statistics are computed).}
 \item{summary_stat_display}{display format for replicate statistics, character vector. Default is \verb{'{median} ({p5}–{p95})'}.}
 
 \item{summary_stat_signif_digits}{number of significant digits to display for replicate statistics, default is 3.}
+
+\item{strata}{strata levels this analysis refers to, named vector, e.g. c(ARM='1g QD').
+Note, the default strata are c(SCENARIO='all', ARM='all').
+Use 'all' if this analysis refers to all levels for the specified stratification variable.
+By default, a stratification variable that has only 1 level is ignored.}
 }
 \description{
 Replicated NCA options.
