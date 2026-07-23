@@ -11,7 +11,7 @@ source(file.path(testFolder, "testUtils.R"))
 
 campsis <- campsisnca::generate_test_data()
 
-getRefFile <- function(filename) {
+get_ref_file <- function(filename) {
   return(file.path(testFolder, "non_regression", filename))
 }
 
@@ -34,7 +34,7 @@ test_that("Column names can be non-standard", {
   expect_true(all(c("Area Under Curve", "Cavg") %in% summary$metric))
   
   gttable <- table %>% export(dest="gt")
-  gt_table_regression_test(gttable, getRefFile("non_standard_column_name.html"))
+  gt_table_regression_test(gttable, get_ref_file("non_standard_column_name.html"))
   
 })
 
@@ -55,7 +55,7 @@ test_that("Statistics can contain line breaks", {
   expect_equal(summary$summary_stats, c("909<BR>(35.2%)", "3.79<BR>(35.2%)")) # No conversion yet at this stage
   
   gttable <- table %>% export(dest="gt", fmt_markdown=TRUE)
-  gt_table_regression_test(gttable, getRefFile("linebreaks_in_stats.html"))
+  gt_table_regression_test(gttable, get_ref_file("linebreaks_in_stats.html"))
   
 })
 
@@ -116,19 +116,19 @@ test_that("Summary stats on categorical data only should work as expected", {
     export(dest="dataframe")
   
   expect_equal(nrow(summary), 2*3*3) # 2 days * 3 categories * 3 stat
-  output_regression_test(data=summary, file=getRefFile("categorical_data_summary.csv"))
+  output_regression_test(data=summary, file=get_ref_file("categorical_data_summary.csv"))
   
   summary_wide <- table %>%
     export(dest="dataframe", type="summary_wide")
-  output_regression_test(data=summary_wide, file=getRefFile("categorical_data_summary_wide.csv"))
+  output_regression_test(data=summary_wide, file=get_ref_file("categorical_data_summary_wide.csv"))
   
   summary_pretty <- table %>%
     export(dest="dataframe", type="summary_pretty")
-  output_regression_test(data=summary_pretty, file=getRefFile("categorical_data_summary_pretty.csv"))
+  output_regression_test(data=summary_pretty, file=get_ref_file("categorical_data_summary_pretty.csv"))
   
   individual <- table %>%
     export(dest="dataframe", type="individual_wide")
-  output_regression_test(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), file=getRefFile("categorical_data_individual.csv"))
+  output_regression_test(data=individual[1:20,] %>% dplyr::rename(Categories=`Cmax categories`), file=get_ref_file("categorical_data_individual.csv"))
 
   subjects <- length(unique(campsis$ID))
   expect_equal(nrow(individual), subjects*2) # subjects * 2 categories
@@ -311,7 +311,7 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
 
-  gt_table_regression_test(gttable, getRefFile("summarised_replicated_table10a.html"))
+  gt_table_regression_test(gttable, get_ref_file("summarised_replicated_table10a.html"))
 
   # Changing to 1 string stat display
   # Stat type should now be 'continuous'
@@ -319,7 +319,17 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
 
-  gt_table_regression_test(gttable, getRefFile("summarised_replicated_table10b.html"))
+  gt_table_regression_test(gttable, get_ref_file("summarised_replicated_table10b.html"))
+
+  # Select base scenario only and geoman
+  table@nca_options@replicated_nca_options@strata <- c(SCENARIO="Base scenario")
+  table@nca_options@replicated_nca_options@summary_stat_display <- c("{median} ({p5}–{p95})")
+  table@nca_options@replicated_nca_options@selected_statistics <- "geomean"
+
+  gttable <- table %>%
+    summarise_replicates(x = x, dest = "gt")
+
+  gt_table_regression_test(gttable, get_ref_file("summarised_replicated_table10c.html"))
 
 
   # Testing method 'translate_stat_string'

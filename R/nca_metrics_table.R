@@ -472,7 +472,17 @@ setMethod(
       x_filtered <- x
     }
 
-    x_wider <- x_filtered %>%
+    # Detect specific strata
+    specific_strata <- options_@strata[options_@strata != all_strata_levels()]
+
+    # Filter input data frame to specific strata
+    x_reduced <- purrr::reduce(
+      names(specific_strata),
+      ~ dplyr::filter(.x, .data[[.y]] == specific_strata[[.y]]),
+      .init = x_filtered
+    )
+
+    x_wider <- x_reduced %>%
       dplyr::filter(dplyr::if_any(
         dplyr::matches("category"),
         ~ is.na(.x) | .x != "FALSE"

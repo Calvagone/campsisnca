@@ -108,7 +108,7 @@ setMethod("calculate", signature=c("nca_analysis", "campsis_output", "nca_option
   # Effective stratification variables based on strata and x
   object@effective_strat_vars <- get_effective_strat_vars(strata=object@strata, x=x)
   
-  # Detect the specific strata
+  # Detect specific strata
   specific_strata <- object@strata[object@strata != all_strata_levels()]
   
   # Filter input data frame to specific strata
