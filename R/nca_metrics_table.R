@@ -430,9 +430,9 @@ setMethod(
   signature = c("nca_table", "campsisnca_output", "nca_options"),
   definition = function(object, x, options, dest = "dataframe", ...) {
     if (is(options, "undefined_nca_options")) {
-      options_ <- object@nca_options # Use embedded NCA options
+      options_ <- object@nca_options@replicated_nca_options # Use embedded NCA options
     } else {
-      options_ <- options # Use external NCA options
+      options_ <- options@replicated_nca_options # Use external NCA options
     }
 
     # Check data frame class
@@ -465,9 +465,9 @@ setMethod(
       dplyr::distinct()
 
     # Filter NCA metric statistics
-    if (length(options_@rep_nca_stat_filter) > 0) {
+    if (length(options_@selected_stastistics) > 0) {
       x_filtered <- x %>%
-        dplyr::filter(stat %in% options_@rep_nca_stat_filter)
+        dplyr::filter(stat %in% options_@selected_stastistics)
     } else {
       x_filtered <- x
     }
@@ -498,7 +498,7 @@ setMethod(
       return(x_wider)
     }
 
-    stat_type <- if (length(options_@rep_summary_stat_display) > 1) {
+    stat_type <- if (length(options_@summary_stat_display) > 1) {
       "continuous2"
     } else {
       "continuous"
@@ -509,8 +509,8 @@ setMethod(
         data = x_wider,
         by = strata_vars,
         statistic = list(
-          gtsummary::all_continuous() ~ options_@rep_summary_stat_display,
-          gtsummary::all_categorical() ~ options_@rep_summary_stat_display
+          gtsummary::all_continuous() ~ options_@summary_stat_display,
+          gtsummary::all_categorical() ~ options_@summary_stat_display
         ),
         type = list(
           gtsummary::all_continuous() ~ stat_type,
@@ -519,10 +519,10 @@ setMethod(
         label = list(),
         digits = list(
           gtsummary::all_continuous() ~ list(rlang::as_function(
-            ~ gtsummary::style_sigfig(.x, options_@rep_summary_stat_signif_digits)
+            ~ gtsummary::style_sigfig(.x, options_@summary_stat_signif_digits)
           )),
           gtsummary::all_categorical() ~ list(rlang::as_function(
-            ~ gtsummary::style_sigfig(.x, options_@rep_summary_stat_signif_digits)
+            ~ gtsummary::style_sigfig(.x, options_@summary_stat_signif_digits)
           ))
         )
       ) %>%
@@ -531,10 +531,10 @@ setMethod(
         label = "**Metric**"
       )
 
-      if (length(options_@rep_summary_stat_display) == 1) {
+      if (length(options_@summary_stat_display) == 1) {
         gtsummary_table <- gtsummary_table %>%
           gtsummary::modify_footnote(
-            gtsummary::all_stat_cols() ~ sprintf("%s, N<sub>rep</sub> = {n}", translate_stat_string(options_@rep_summary_stat_display))
+            gtsummary::all_stat_cols() ~ sprintf("%s, N<sub>rep</sub> = {n}", translate_stat_string(options_@summary_stat_display))
           )
       } else {
         gtsummary_table <- gtsummary_table %>%

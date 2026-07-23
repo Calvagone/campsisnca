@@ -8,18 +8,14 @@ setClass(
     quantile_type = "integer",
     data_time_unit = "character",
     table_time_unit = "character",
-    rep_nca_stat_filter = "character", # vector
-    rep_summary_stat_display = "character", # vector
-    rep_summary_stat_signif_digits = "integer"
+    replicated_nca_options = "replicated_nca_options"
   ),
   prototype = prototype(
     quantile_type = 2L,
     data_time_unit = "hour",
     table_time_unit = "hour",
-    rep_nca_stat_filter = character(), # empty means no filter (all stats used)
-    rep_summary_stat_display = get_stat_display_default(),
-    rep_summary_stat_signif_digits = 3L
-  ),
+    replicated_nca_options = ReplicatedNCAOptions()
+  )
 )
 
 #' 
@@ -39,27 +35,17 @@ setClass(
 #' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
 #' @param data_time_unit time unit of the data given to 'calculate'
 #' @param table_time_unit time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)
-#' @param rep_nca_stat_filter NCA metrics statistics to keep (e.g. mean, etc) when summary statistics are computed on replicated output.
-#'  Default is the empty character vector (all statistics are computed).
-#' @param rep_summary_stat_display display format for replicate statistics, character vector. Default is \verb{'{median} ({p5}–{p95})'}.
-#' @param rep_summary_stat_signif_digits number of significant digits to display for replicate statistics, default is 3.
 #' @export
 NCAOptions <- function(
   quantile_type = 2L,
   data_time_unit = "hour",
-  table_time_unit = "hour",
-  rep_nca_stat_filter = character(),
-  rep_summary_stat_display = get_stat_display_default(),
-  rep_summary_stat_signif_digits = 3L
+  table_time_unit = "hour"
 ) {
   return(new(
     "nca_options",
     quantile_type = as.integer(quantile_type),
     data_time_unit = data_time_unit,
-    table_time_unit = table_time_unit,
-    rep_nca_stat_filter = rep_nca_stat_filter,
-    rep_summary_stat_display = rep_summary_stat_display,
-    rep_summary_stat_signif_digits = rep_summary_stat_signif_digits
+    table_time_unit = table_time_unit
   ))
 }
 
@@ -76,5 +62,14 @@ UndefinedNCAOptions <- function() {
 #_______________________________________________________________________________
 
 setMethod("load_from_json", signature=c("nca_options", "json_element"), definition=function(object, json) {
-  return(map_json_properties_to_s4_slots(object=object, json=json))
+  rep_options_json <- json@data$replicated_nca_options
+  rep_options <- ReplicatedNCAOptions()
+  if (!is.null(rep_options_json)) {
+    rep_options <- load_from_json(rep_options, JSONElement(rep_options_json))
+    json@data$replicated_nca_options <- NULL
+  }
+  print(json)
+  nca_options <- map_json_properties_to_s4_slots(object=object, json=json)
+  nca_options@replicated_nca_options <- rep_options
+  return(nca_options)
 })

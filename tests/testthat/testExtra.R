@@ -315,7 +315,7 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
 
   # Changing to 1 string stat display
   # Stat type should now be 'continuous'
-  table@nca_options@rep_summary_stat_display <- c("{median} ({p5}–{p95})")
+  table@nca_options@replicated_nca_options@summary_stat_display <- c("{median} ({p5}–{p95})")
   gttable <- table %>%
     summarise_replicates(x = x, dest = "gt")
 

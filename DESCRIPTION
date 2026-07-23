@@ -71,6 +71,7 @@ Collate:
     'generic.R'
     'stat_utils.R'
     'export_utils.R'
+    'replicated_nca_options.R'
     'nca_options.R'
     'nca_time_window.R'
     'nca_metric_utils.R'
