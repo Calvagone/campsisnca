@@ -21,20 +21,11 @@ cfb_dataset <- function() {
   )
 }
 
-#_______________________________________________________________________________
-#----                       i_value: absolute method                        ----
-#_______________________________________________________________________________
-
-test_that("i_value (absolute) returns value - baseline", {
-  metric <- ChangeFromBaseline(method="absolute")
+test_that("i_value (difference) returns value - baseline", {
+  metric <- ChangeFromBaseline(method="difference")
   expect_equal(metric %>% i_value(time=c(0, 24), value=c(100, 80)), -20)
   expect_equal(metric %>% i_value(time=c(0, 24), value=c(110, 80)), -30)
 })
-
-#_______________________________________________________________________________
-#----                       i_value: percent method                         ----
-#_______________________________________________________________________________
-
 test_that("i_value (percent) returns 100 * (value - baseline) / baseline", {
   metric <- ChangeFromBaseline(method="percent")
   expect_equal(metric %>% i_value(time=c(0, 24), value=c(100, 80)), -20)
@@ -46,10 +37,6 @@ test_that("i_value (percent) returns NA when baseline is 0", {
   expect_true(is.na(metric %>% i_value(time=c(0, 24), value=c(0, -10))))
 })
 
-#_______________________________________________________________________________
-#----                        i_value: ratio method                          ----
-#_______________________________________________________________________________
-
 test_that("i_value (ratio) returns value / baseline", {
   metric <- ChangeFromBaseline(method="ratio")
   expect_equal(metric %>% i_value(time=c(0, 24), value=c(100, 80)), 80/100)
@@ -60,10 +47,6 @@ test_that("i_value (ratio) returns NA when baseline is 0", {
   metric <- ChangeFromBaseline(method="ratio")
   expect_true(is.na(metric %>% i_value(time=c(0, 24), value=c(0, -10))))
 })
-
-#_______________________________________________________________________________
-#----                         i_value: log method                           ----
-#_______________________________________________________________________________
 
 test_that("i_value (log) returns log(value) - log(baseline)", {
   metric <- ChangeFromBaseline(method="log")
@@ -81,25 +64,17 @@ test_that("i_value (log) returns NA when any value is <= 0", {
   expect_true(is.na(metric %>% i_value(time=c(0, 24), value=c(50, -10))))
 })
 
-#_______________________________________________________________________________
-#----                       i_value: missing baseline                       ----
-#_______________________________________________________________________________
-
 test_that("i_value errors for all 4 methods when there is no observation", {
   # The generic i_value() dispatcher enforces length(value) > 0 up front,
   # so baseline_metric's own NA-handling for an empty vector is unreachable.
-  for (method in c("absolute", "percent", "ratio", "log")) {
+  for (method in c("difference", "percent", "ratio", "log")) {
     metric <- ChangeFromBaseline(method=method)
     expect_error(i_value(metric, numeric(0), numeric(0)), "value should contain at least 1 value")
   }
 })
 
-#_______________________________________________________________________________
-#----                    get_default_name / get_latex_name                  ----
-#_______________________________________________________________________________
-
 test_that("get_default_name returns the expected acronym for each method", {
-  expect_equal(ChangeFromBaseline(method="absolute") %>% get_default_name(), "CFB")
+  expect_equal(ChangeFromBaseline(method="difference") %>% get_default_name(), "CFB")
   expect_equal(ChangeFromBaseline(method="percent") %>% get_default_name(), "PCFB")
   expect_equal(ChangeFromBaseline(method="ratio") %>% get_default_name(), "Ratio")
   expect_equal(ChangeFromBaseline(method="log") %>% get_default_name(), "CFBlog")
@@ -109,35 +84,27 @@ test_that("get_latex_name only adds a subscript for the log method", {
   metric_log <- ChangeFromBaseline(method="log")
   expect_equal(metric_log %>% get_latex_name(), "CFB_{log}")
 
-  metric_abs <- ChangeFromBaseline(method="absolute")
+  metric_abs <- ChangeFromBaseline(method="difference")
   expect_equal(metric_abs %>% get_latex_name(), "CFB")
 })
 
-#_______________________________________________________________________________
-#----                 ChangeFromBaseline() / CFB() constructor              ----
-#_______________________________________________________________________________
-
 test_that("ChangeFromBaseline()/CFB() build a valid metric with correct default name", {
-  expect_equal(ChangeFromBaseline(method="absolute")@name, "CFB")
+  expect_equal(ChangeFromBaseline(method="difference")@name, "CFB")
   expect_equal(ChangeFromBaseline(method="percent")@name, "PCFB")
   expect_equal(ChangeFromBaseline(method="ratio")@name, "Ratio")
   expect_equal(ChangeFromBaseline(method="log")@name, "CFBlog")
-  expect_equal(CFB(method="absolute")@method, "absolute")
+  expect_equal(CFB(method="difference")@method, "difference")
 })
 
 test_that("ChangeFromBaseline()/CFB() rejects an invalid method", {
   expect_error(ChangeFromBaseline(method="unknown"))
 })
 
-#_______________________________________________________________________________
-#----               calculate() end-to-end on a fictitious dataset          ----
-#_______________________________________________________________________________
-
 test_that("calculate() computes individual CFB values for all 4 methods", {
   df <- cfb_dataset()
 
   expected <- list(
-    absolute = c(-20, -10, 5),
+    difference = c(-20, -10, 5),
     percent = c(-20, -20, NA_real_),
     ratio = c(0.8, 0.8, NA_real_),
     log = c(log(0.8), log(0.8), NA_real_) # log(0.8) evaluates to ~ -0.2231436

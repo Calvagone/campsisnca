@@ -568,7 +568,7 @@
     "cfb_method": {
       "type": "string",
       "enum": [
-        "absolute",
+        "difference",
         "percent",
         "ratio",
         "log"

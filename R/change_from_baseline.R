@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validate_cfb_metric <- function(object) {
-  valid_methods <- c("absolute", "percent", "ratio", "log")
+  valid_methods <- c("difference", "percent", "ratio", "log")
   if (!object@method %in% valid_methods) {
     return(paste0("Method must be one of: ", paste(valid_methods, collapse = ", ")))
   }
@@ -13,7 +13,7 @@ validate_cfb_metric <- function(object) {
 #' 
 #' Change from Baseline metric class.
 #' 
-#' @slot method Character string specifying the CFB method ("absolute", "percent", "ratio", "log").
+#' @slot method Character string specifying the CFB method ("difference", "percent", "ratio", "log").
 #' @export
 setClass(
   "cfb_metric",
@@ -21,7 +21,7 @@ setClass(
     method="character"
   ),
   contains="nca_metric",
-  prototype=prototype(method="absolute"),
+  prototype=prototype(method="difference"),
   validity=validate_cfb_metric
 )
 
@@ -33,14 +33,14 @@ setClass(
 #' Change from Baseline (CFB).
 #' 
 #' @param method Character string specifying the calculation method. Must be one of 
-#'   "absolute" (default), "percent", "ratio", or "log".
+#'   "difference" (default), "percent", "ratio", or "log".
 #' @inheritParams metrics_params
 #' @export
 ChangeFromBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, 
-                               stat_display=NULL, digits=NULL, method="absolute") {
+                               stat_display=NULL, digits=NULL, method="difference") {
   
   # Map or validate the incoming method argument (forces lowercase for robustness)
-  method <- match.arg(tolower(method), c("absolute", "percent", "ratio", "log"))
+  method <- match.arg(tolower(method), c("difference", "percent", "ratio", "log"))
   
   # Construct base metric using your package's S4 constructor
   metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit,
@@ -57,7 +57,7 @@ ChangeFromBaseline <- function(variable=NULL, window=NULL, name=NULL, unit=NULL,
 #' Alias for Change from Baseline (CFB).
 #' 
 #' @param method Character string specifying the calculation method. Must be one of 
-#'   "absolute" (default), "percent", "ratio", or "log".
+#'   "difference" (default), "percent", "ratio", or "log".
 #' @inheritParams metrics_params
 #' @export
 CFB <- ChangeFromBaseline
@@ -70,7 +70,7 @@ CFB <- ChangeFromBaseline
 setMethod("get_default_name", signature=c("cfb_metric"), definition=function(object, ...) {
   # Translate the internal method slot into the standard pharmacometric acronym
   switch(object@method,
-         "absolute" = "CFB",
+         "difference" = "CFB",
          "percent"  = "PCFB",
          "ratio"    = "Ratio",
          "log"      = "CFBlog",
@@ -103,7 +103,7 @@ setMethod("i_value", signature=c("cfb_metric", "numeric", "numeric"), definition
   
   # 2. Execute calculation based on the selected method
   switch(object@method,
-         "absolute" = {
+         "difference" = {
            return(y_last - y0)
          },
          "percent" = {

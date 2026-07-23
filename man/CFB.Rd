@@ -11,7 +11,7 @@ CFB(
   unit = NULL,
   stat_display = NULL,
   digits = NULL,
-  method = "absolute"
+  method = "difference"
 )
 }
 \arguments{
@@ -28,7 +28,7 @@ CFB(
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 
 \item{method}{Character string specifying the calculation method. Must be one of 
-"absolute" (default), "percent", "ratio", or "log".}
+"difference" (default), "percent", "ratio", or "log".}
 }
 \description{
 Alias for Change from Baseline (CFB).

@@ -10,6 +10,6 @@ Change from Baseline metric class.
 \section{Slots}{
 
 \describe{
-\item{\code{method}}{Character string specifying the CFB method ("absolute", "percent", "ratio", "log").}
+\item{\code{method}}{Character string specifying the CFB method ("difference", "percent", "ratio", "log").}
 }}
 
