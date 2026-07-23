@@ -464,7 +464,15 @@ setMethod(
       dplyr::transmute(metric, stat, category) %>%
       dplyr::distinct()
 
-    x_wider <- x %>%
+    # Filter NCA metric statistics
+    if (length(options_@rep_nca_stat_filter) > 0) {
+      x_filtered <- x %>%
+        dplyr::filter(stat %in% options_@rep_nca_stat_filter)
+    } else {
+      x_filtered <- x
+    }
+
+    x_wider <- x_filtered %>%
       dplyr::filter(dplyr::if_any(
         dplyr::matches("category"),
         ~ is.na(.x) | .x != "FALSE"
@@ -490,7 +498,7 @@ setMethod(
       return(x_wider)
     }
 
-    stat_type <- if (length(options_@rep_stat_display) > 1) {
+    stat_type <- if (length(options_@rep_summary_stat_display) > 1) {
       "continuous2"
     } else {
       "continuous"
@@ -501,8 +509,8 @@ setMethod(
         data = x_wider,
         by = strata_vars,
         statistic = list(
-          gtsummary::all_continuous() ~ options_@rep_stat_display,
-          gtsummary::all_categorical() ~ options_@rep_stat_display
+          gtsummary::all_continuous() ~ options_@rep_summary_stat_display,
+          gtsummary::all_categorical() ~ options_@rep_summary_stat_display
         ),
         type = list(
           gtsummary::all_continuous() ~ stat_type,
@@ -511,10 +519,10 @@ setMethod(
         label = list(),
         digits = list(
           gtsummary::all_continuous() ~ list(rlang::as_function(
-            ~ gtsummary::style_sigfig(.x, options_@rep_stat_digits)
+            ~ gtsummary::style_sigfig(.x, options_@rep_summary_stat_signif_digits)
           )),
           gtsummary::all_categorical() ~ list(rlang::as_function(
-            ~ gtsummary::style_sigfig(.x, options_@rep_stat_digits)
+            ~ gtsummary::style_sigfig(.x, options_@rep_summary_stat_signif_digits)
           ))
         )
       ) %>%
@@ -523,10 +531,10 @@ setMethod(
         label = "**Metric**"
       )
 
-      if (length(options_@rep_stat_display) == 1) {
+      if (length(options_@rep_summary_stat_display) == 1) {
         gtsummary_table <- gtsummary_table %>%
           gtsummary::modify_footnote(
-            gtsummary::all_stat_cols() ~ sprintf("%s, N<sub>rep</sub> = {n}", translate_stat_string(options_@rep_stat_display))
+            gtsummary::all_stat_cols() ~ sprintf("%s, N<sub>rep</sub> = {n}", translate_stat_string(options_@rep_summary_stat_display))
           )
       } else {
         gtsummary_table <- gtsummary_table %>%

@@ -200,12 +200,12 @@ setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, 
   # Convert to requested time unit
   data_time_unit <- options@data_time_unit
   table_time_unit <- options@table_time_unit
-  x$TIME <- campsis::convertTime(x$TIME, from=data_time_unit, to=table_time_unit)
+  x$TIME <- campsis::convert_time(x$TIME, from=data_time_unit, to=table_time_unit)
   
   # Normalize time window (e.g. rebase field in tmin and tmax)
   window_time_unit <- object@window@time_unit
-  object@window@start <- campsis::convertTime(object@window@start, from=window_time_unit, to=table_time_unit)
-  object@window@end <- campsis::convertTime(object@window@end, from=window_time_unit, to=table_time_unit)
+  object@window@start <- campsis::convert_time(object@window@start, from=window_time_unit, to=table_time_unit)
+  object@window@end <- campsis::convert_time(object@window@end, from=window_time_unit, to=table_time_unit)
   object@window@time_unit <- table_time_unit 
 
   if (object@i_value_tibble) {

@@ -630,14 +630,21 @@
           "$ref": "#/$defs/time_unit",
           "description": "Unit of time to use when representing the metrics in the table (AUC, Time above/below, etc)."
         },
-        "rep_stat_display": {
+        "rep_nca_stat_filter": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "NCA metrics statistics to keep (e.g. mean, etc) when summary statistics are computed on replicated output."
+        },
+        "rep_summary_stat_display": {
           "type": "array",
           "items": {
             "type": "string"
           },
           "description": "Display format for replicate statistics. E.g. '{median} ({p5}–{p95})' or ['{median}', '{p5}', '{p95}']. See documentation on campsisnca repository."
         },
-        "rep_stat_digits": {
+        "rep_summary_stat_signif_digits": {
           "type": "integer",
           "description": "Number of significant digits to display for replicate statistics."
         }

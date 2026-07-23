@@ -8,8 +8,9 @@ NCAOptions(
   quantile_type = 2L,
   data_time_unit = "hour",
   table_time_unit = "hour",
-  rep_stat_display = get_stat_display_default(),
-  rep_stat_digits = 3L
+  rep_nca_stat_filter = character(),
+  rep_summary_stat_display = get_stat_display_default(),
+  rep_summary_stat_signif_digits = 3L
 )
 }
 \arguments{
@@ -19,9 +20,12 @@ NCAOptions(
 
 \item{table_time_unit}{time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)}
 
-\item{rep_stat_display}{display format for replicate statistics, character vector. Default is \verb{'{median} ({p5}–{p95})'}.}
+\item{rep_nca_stat_filter}{NCA metrics statistics to keep (e.g. mean, etc) when summary statistics are computed on replicated output.
+Default is the empty character vector (all statistics are computed).}
 
-\item{rep_stat_digits}{number of significant digits to display for replicate statistics, default is 3.}
+\item{rep_summary_stat_display}{display format for replicate statistics, character vector. Default is \verb{'{median} ({p5}–{p95})'}.}
+
+\item{rep_summary_stat_signif_digits}{number of significant digits to display for replicate statistics, default is 3.}
 }
 \description{
 NCA options used for calculation of metrics.

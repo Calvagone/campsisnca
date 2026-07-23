@@ -79,8 +79,8 @@ setMethod(
     return(
       timerange(
         x=x,
-        min=campsis::convertTime(window@start, from=window@time_unit, to=data_time_unit),
-        max=campsis::convertTime(window@end, from=window@time_unit, to=data_time_unit),
+        min=campsis::convert_time(window@start, from=window@time_unit, to=data_time_unit),
+        max=campsis::convert_time(window@end, from=window@time_unit, to=data_time_unit),
         exclmin=window@exclude_start,
         exclmax=window@exclude_end
       )
