@@ -5,13 +5,13 @@
 \title{Replicated NCA options.}
 \usage{
 ReplicatedNCAOptions(
-  selected_stastistics = character(),
+  selected_statistics = character(),
   summary_stat_display = get_stat_display_default(),
   summary_stat_signif_digits = 3L
 )
 }
 \arguments{
-\item{selected_stastistics}{NCA metrics statistics to keep (e.g. mean, etc) when summary statistics are computed on replicated output.
+\item{selected_statistics}{NCA metrics statistics to keep (e.g. mean, etc) when summary statistics are computed on replicated output.
 Default is the empty character vector (all statistics are computed).}
 
 \item{summary_stat_display}{display format for replicate statistics, character vector. Default is \verb{'{median} ({p5}–{p95})'}.}

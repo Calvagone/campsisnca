@@ -671,7 +671,7 @@
       "type": "object",
       "description": "Options controlling replicated NCA calculations.",
       "properties": {
-        "selected_stastistics": {
+        "selected_statistics": {
           "type": "array",
           "items": {
             "type": "string"

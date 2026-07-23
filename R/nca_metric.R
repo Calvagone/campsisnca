@@ -73,7 +73,7 @@ set_default_name_if_na <- function(object) {
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_metric", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
   args <- list(...)
-  strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
+  strat_vars <- process_extra_arg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- i_values(object=object, x=x, options=options, strat_vars=strat_vars)
   structuredObj <- compute_nca_metric_summary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary

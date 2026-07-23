@@ -465,9 +465,9 @@ setMethod(
       dplyr::distinct()
 
     # Filter NCA metric statistics
-    if (length(options_@selected_stastistics) > 0) {
+    if (length(options_@selected_statistics) > 0) {
       x_filtered <- x %>%
-        dplyr::filter(stat %in% options_@selected_stastistics)
+        dplyr::filter(stat %in% options_@selected_statistics)
     } else {
       x_filtered <- x
     }

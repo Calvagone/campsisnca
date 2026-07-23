@@ -184,7 +184,7 @@ setMethod("calculate", signature=c("theoretical_thalf_metric", "campsis_output",
     stop(paste0("Unknown subtype ", subtype))
   }
   args <- list(...)
-  strat_vars <- processExtraArg(args, name="strat_vars", mandatory=FALSE, default=character(0))
+  strat_vars <- process_extra_arg(args, name="strat_vars", mandatory=FALSE, default=character(0))
   object@individual <- ind
   structuredObj <- compute_nca_metric_summary(object=object, strat_vars=strat_vars, quantile_type=options@quantile_type)
   object@summary <- structuredObj$summary
