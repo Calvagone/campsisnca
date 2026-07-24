@@ -474,13 +474,19 @@ setMethod(
 
     # Detect specific strata
     specific_strata <- options_@strata[options_@strata != all_strata_levels()]
+    specific_strata_names <- names(specific_strata)
 
     # Filter input data frame to specific strata
     x_reduced <- purrr::reduce(
-      names(specific_strata),
+      specific_strata_names,
       ~ dplyr::filter(.x, .data[[.y]] == specific_strata[[.y]]),
       .init = x_filtered
     )
+
+    # Update 'strata_vars' and remove specific stratification variables
+    strata_vars <- strata_vars[!strata_vars %in% specific_strata_names]
+    x_reduced <- x_reduced %>%
+      dplyr::select(-dplyr::all_of(specific_strata_names))
 
     x_wider <- x_reduced %>%
       dplyr::filter(dplyr::if_any(
@@ -536,10 +542,16 @@ setMethod(
           ))
         )
       ) %>%
-      gtsummary::modify_header(
-        gtsummary::all_stat_cols() ~ "**{level}**",
-        label = "**Metric**"
-      )
+        gtsummary::modify_header(
+          gtsummary::all_stat_cols() ~ "**{level}**",
+          label = "**Metric**"
+        )
+
+      # Instead of 'Overall', we clearly show the specific strata
+      if (length(specific_strata) > 0) {
+        gtsummary_table <- gtsummary_table %>%
+         gtsummary::modify_header(stat_0 = paste0("**", paste0(specific_strata, collapse = " / "), "**"))
+      }
 
       if (length(options_@summary_stat_display) == 1) {
         gtsummary_table <- gtsummary_table %>%
