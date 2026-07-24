@@ -71,7 +71,6 @@ Collate:
     'generic.R'
     'stat_utils.R'
     'export_utils.R'
-    'replicated_nca_options.R'
     'nca_options.R'
     'nca_time_window.R'
     'nca_metric_utils.R'
@@ -98,6 +97,7 @@ Collate:
     'nca_analysis.R'
     'nca_analyses.R'
     'nca_table.R'
+    'replicated_nca_table.R'
     'json_interface.R'
     'deprecated_methods.R'
 Remotes:

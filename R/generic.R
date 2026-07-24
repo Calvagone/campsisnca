@@ -244,32 +244,3 @@ stat_display_string <- function(object, ...) {
 setGeneric("stat_display_string", function(object, ...) {
   standardGeneric("stat_display_string")
 })
-
-#_______________________________________________________________________________
-#----                        summarise_replicates                           ----
-#_______________________________________________________________________________
-
-#' Summarise NCA results obtained across simulation replicates.
-#' 
-#' @details Summarises a table of NCA metrics computed on several simulation
-#' replicates (e.g. as produced by \code{\link{calculate}} on a
-#' \code{summary_campsisnca_tbl}) into a single summary table. Stratification
-#' variables are automatically detected as the columns of \code{x} other than
-#' \code{replicate}, \code{metric}, \code{stat}, \code{value} and \code{category}.
-#' @param object object (NCA table) which contains the table structure
-#' @param x input data for the calculation, data frame of class 'summary_campsisnca_tbl' containing a 'replicate' column with more than one distinct value
-#' @param options NCA options
-#' @param ... extra arguments like 'dest' which can take the following values: "dataframe", "gtsummary" or "gt"
-#' @return a summarised table, whose class depends on the 'dest' argument: a data frame ('dataframe'), a gtsummary table ('gtsummary') or a gt table ('gt')
-#' @export
-#' @rdname summarise_replicates
-summarise_replicates <- function(object, x, options, ...) {
-  no_default_function_provided_debug(mget(names(formals()), envir = environment()), "summarise_replicates")
-}
-
-setGeneric("summarise_replicates", function(object, x, options=NULL, ...) {
-  if (is.null(options)) {
-    options <- UndefinedNCAOptions()
-  }
-  standardGeneric("summarise_replicates")
-})

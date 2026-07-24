@@ -7,14 +7,12 @@ setClass(
   representation(
     quantile_type = "integer",
     data_time_unit = "character",
-    table_time_unit = "character",
-    replicated_nca_options = "replicated_nca_options"
+    table_time_unit = "character"
   ),
   prototype = prototype(
     quantile_type = 2L,
     data_time_unit = "hour",
-    table_time_unit = "hour",
-    replicated_nca_options = ReplicatedNCAOptions()
+    table_time_unit = "hour"
   )
 )
 
@@ -62,14 +60,6 @@ UndefinedNCAOptions <- function() {
 #_______________________________________________________________________________
 
 setMethod("load_from_json", signature=c("nca_options", "json_element"), definition=function(object, json) {
-  rep_options_json <- json@data$replicated_nca_options
-  rep_options <- ReplicatedNCAOptions()
-  if (!is.null(rep_options_json)) {
-    rep_options <- load_from_json(rep_options, JSONElement(rep_options_json))
-    json@data$replicated_nca_options <- NULL
-  }
-  print(json)
   nca_options <- map_json_properties_to_s4_slots(object=object, json=json)
-  nca_options@replicated_nca_options <- rep_options
   return(nca_options)
 })

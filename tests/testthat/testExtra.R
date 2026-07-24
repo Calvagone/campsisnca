@@ -270,7 +270,7 @@ test_that("Method NCATableOutfun can be used in campsisnca", {
 })
 
 test_that("Method summarise_replicates can be used to summarise Campsisnca output across replicates", {
-  # Same as NCA table 9 but with a categorical metric added + specific options
+  # Same as NCA table 9 but with a categorical metric added
   table <- NCATable(
     json = file.path(testFolder, "json_examples", "nca_table_10.json")
   )
@@ -290,8 +290,13 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
 
   x <- simulate(model=model, dataset=dataset, dest="mrgsolve", seed=1, outfun=outfun, scenarios=scenarios, replicates=5)
 
-  summary <- table %>%
-    summarise_replicates(x = x)
+  rep_nca_table <- ReplicatedNCATable(
+    json = file.path(testFolder, "json_examples", "replicated_nca_table_10.json")
+  )
+
+  summary <- rep_nca_table %>%
+    calculate(x=x) %>%
+    export(dest="dataframe")
 
   expect_equal(
     colnames(summary),
@@ -308,29 +313,30 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
   )
 
   # Stat type is 'continuous2' because several statistical strings
-  gttable <- table %>%
-    summarise_replicates(x = x, dest = "gt")
-
+  gttable <- rep_nca_table %>%
+    calculate(x=x) %>%
+    export(dest="gt")
   gt_table_regression_test(gttable, get_ref_file("summarised_replicated_table10a.html"))
 
   # Changing to 1 string stat display
   # Stat type should now be 'continuous'
-  table@nca_options@replicated_nca_options@summary_stat_display <- c("{median} ({p5}–{p95})")
-  gttable <- table %>%
-    summarise_replicates(x = x, dest = "gt")
+  rep_nca_table@summary_stat_display <- c("{median} ({p5}–{p95})")
+  gttable <- rep_nca_table %>%
+    calculate(x=x) %>%
+    export(dest="gt")
 
   gt_table_regression_test(gttable, get_ref_file("summarised_replicated_table10b.html"))
 
   # Select base scenario only and geoman
-  table@nca_options@replicated_nca_options@strata <- c(SCENARIO="Base scenario")
-  table@nca_options@replicated_nca_options@summary_stat_display <- c("{median} ({p5}–{p95})")
-  table@nca_options@replicated_nca_options@selected_statistics <- "geomean"
+  rep_nca_table@strata <- c(SCENARIO="Base scenario")
+  rep_nca_table@summary_stat_display <- c("{median} ({p5}–{p95})")
+  rep_nca_table@selected_statistics <- "geomean"
 
-  gttable <- table %>%
-    summarise_replicates(x = x, dest = "gt")
+  gttable <- rep_nca_table %>%
+    calculate(x=x) %>%
+    export(dest="gt")
 
   gt_table_regression_test(gttable, get_ref_file("summarised_replicated_table10c.html"))
-
 
   # Testing method 'translate_stat_string'
   expect_equal(translate_stat_string("{median} ({p5}–{p95})"), "Median (5th–95th percentile)")

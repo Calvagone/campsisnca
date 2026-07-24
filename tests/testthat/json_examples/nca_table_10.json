@@ -32,15 +32,7 @@
   ],
   "nca_options": {
     "data_time_unit": "hour",
-    "table_time_unit": "hour",
-    "replicated_nca_options": {
-      "summary_stat_display": [
-        "{p5}",
-        "{median}",
-        "{p95}"
-      ],
-      "summary_stat_signif_digits": 4
-    }
+    "table_time_unit": "hour"
   },
   "tab_options": {
     "table.font.size": "18px"

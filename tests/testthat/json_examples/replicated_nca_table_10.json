@@ -1,0 +1,9 @@
+{
+  "title": "Table 10 (replicated)",
+  "summary_stat_display": [
+    "{p5}",
+    "{median}",
+    "{p95}"
+  ],
+  "summary_stat_signif_digits": 4
+}
