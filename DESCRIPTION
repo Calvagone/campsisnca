@@ -19,7 +19,7 @@ Description: A flexible and user-friendly non-compartmental analysis (NCA)
     integration. The package also includes utilities for generating
     formatted summary tables and exporting results in multiple formats
     suitable for reporting. The package itself is licensed under the GPL
-    (>= 3); the JSON schema file shipped in inst/extdata is licensed
+    (>= 3); the JSON schema files shipped in inst/extdata are licensed
     separately under the Creative Commons Attribution 4.0 International
     (CC BY 4.0).
 License: GPL (>= 3)
