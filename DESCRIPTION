@@ -56,6 +56,10 @@ Suggests:
     roxygen2,
     rxode2,
     testthat
+Remotes:
+    Calvagone/campsis@snake_case,
+    Calvagone/campsismod@snake_case
+Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Language: en-US
 LazyData: true
@@ -100,7 +104,3 @@ Collate:
     'replicated_nca_table.R'
     'json_interface.R'
     'deprecated_methods.R'
-Remotes:
-    Calvagone/campsismod@snake_case,
-    Calvagone/campsis@snake_case
-Config/roxygen2/version: 8.0.0
