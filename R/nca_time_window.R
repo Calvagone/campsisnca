@@ -75,7 +75,7 @@ UndefinedTimeWindow <- function() {
 
 #' @rdname apply_time_window
 setMethod(
-  "apply_time_window", signature=c("campsis_output", "nca_time_window", "character"), definition=function(x, window, data_time_unit) {
+  "apply_time_window", signature=c("ANY", "nca_time_window", "character"), definition=function(x, window, data_time_unit) {
     return(
       timerange(
         x=x,

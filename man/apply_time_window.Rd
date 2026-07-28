@@ -2,12 +2,12 @@
 % Please edit documentation in R/generic.R, R/nca_time_window.R
 \name{apply_time_window}
 \alias{apply_time_window}
-\alias{apply_time_window,campsis_output,nca_time_window,character-method}
+\alias{apply_time_window,ANY,nca_time_window,character-method}
 \title{Apply time window.}
 \usage{
 apply_time_window(x, window, data_time_unit, ...)
 
-\S4method{apply_time_window}{campsis_output,nca_time_window,character}(x, window, data_time_unit)
+\S4method{apply_time_window}{ANY,nca_time_window,character}(x, window, data_time_unit)
 }
 \arguments{
 \item{x}{input data for the calculation, data frame}

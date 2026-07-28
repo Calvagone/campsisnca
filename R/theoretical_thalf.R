@@ -162,7 +162,7 @@ setMethod("get_default_name", signature=c("theoretical_thalf_metric"), definitio
 #_______________________________________________________________________________
 
 #' @rdname calculate
-setMethod("calculate", signature=c("theoretical_thalf_metric", "campsis_output", "nca_options"), definition=function(object, x, options, ...) {
+setMethod("calculate", signature=c("theoretical_thalf_metric"), definition=function(object, x, options, ...) {
   subtype <- object@subtype
 
   if (subtype == "1cpt") {

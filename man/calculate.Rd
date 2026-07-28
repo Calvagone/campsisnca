@@ -4,27 +4,27 @@
 %   R/replicated_nca_table.R
 \name{calculate}
 \alias{calculate}
-\alias{calculate,nca_metric,campsis_output,nca_options-method}
-\alias{calculate,theoretical_thalf_metric,campsis_output,nca_options-method}
-\alias{calculate,nca_analysis,campsis_output,nca_options-method}
-\alias{calculate,nca_analyses,campsis_output,nca_options-method}
-\alias{calculate,nca_table,campsis_output,nca_options-method}
-\alias{calculate,replicated_nca_table,campsis_output,ANY-method}
+\alias{calculate,nca_metric,ANY-method}
+\alias{calculate,theoretical_thalf_metric,ANY-method}
+\alias{calculate,nca_analysis,ANY-method}
+\alias{calculate,nca_analyses,ANY-method}
+\alias{calculate,nca_table,ANY-method}
+\alias{calculate,replicated_nca_table,campsis_output-method}
 \title{Calculate.}
 \usage{
 calculate(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_metric,campsis_output,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_metric,ANY}(object, x, options = NULL, ...)
 
-\S4method{calculate}{theoretical_thalf_metric,campsis_output,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{theoretical_thalf_metric,ANY}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_analysis,campsis_output,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_analysis,ANY}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_analyses,campsis_output,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_analyses,ANY}(object, x, options = NULL, ...)
 
-\S4method{calculate}{nca_table,campsis_output,nca_options}(object, x, options = NULL, ...)
+\S4method{calculate}{nca_table,ANY}(object, x, options = NULL, ...)
 
-\S4method{calculate}{replicated_nca_table,campsis_output,ANY}(object, x, options = NULL, ...)
+\S4method{calculate}{replicated_nca_table,campsis_output}(object, x, options = NULL, ...)
 }
 \arguments{
 \item{object}{object (NCA table, NCA analyses, NCA analysis, PK metric) where calculation is applied}
