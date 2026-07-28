@@ -2,14 +2,18 @@
 #----                           nca_analysis class                          ----
 #_______________________________________________________________________________
 
-get_effective_strat_vars <- function(strata, x) {
+get_effective_strat_vars <- function(strata, x, force_strat_vars) {
   retValue <- NULL
   colnames_ <- colnames(x)
   for (index in seq_along(strata)) {
     strat_var <- names(strata)[index]
     strat_vars_level <- as.character(strata)[index]
     if (strat_var %in% colnames_) {
-      if (strat_vars_level == all_strata_levels() && length(unique(x %>% dplyr::pull(strat_var))) > 1) {
+      if (
+        (strat_vars_level == all_strata_levels() &&
+          length(unique(x %>% dplyr::pull(strat_var))) > 1) ||
+          strat_var %in% force_strat_vars
+      ) {
         retValue <- c(retValue, strat_var)
       }
     } else {
@@ -34,6 +38,7 @@ setClass(
     variable = "character", # default variable name
     metrics = "nca_metrics", # metrics contained in this analysis
     strata = "character", # named vector
+    force_strat_vars = "character", # By default, if 'all' and only 1 level, stratification variable is omitted, unless specified here
     effective_strat_vars = "character" # effective stratification variables in data, transient field: updated when calculate is called
   ),
   contains = "pmx_element",
@@ -43,7 +48,8 @@ setClass(
     variable = as.character(NA),
     metrics = NCAMetrics(),
     strata = get_default_strata(),
-    strat_vars = character(0)
+    strat_vars = character(0),
+    force_strat_vars = character(0)
   )
 )
 
@@ -106,7 +112,11 @@ setMethod("get_unit", signature=c("nca_analysis", "character"), definition=funct
 #' @rdname calculate
 setMethod("calculate", signature=c("nca_analysis"), definition=function(object, x, options, ...) {
   # Effective stratification variables based on strata and x
-  object@effective_strat_vars <- get_effective_strat_vars(strata=object@strata, x=x)
+  object@effective_strat_vars <- get_effective_strat_vars(
+    strata = object@strata,
+    x = x,
+    force_strat_vars = object@force_strat_vars
+  )
   
   # Detect specific strata
   specific_strata <- object@strata[object@strata != all_strata_levels()]
