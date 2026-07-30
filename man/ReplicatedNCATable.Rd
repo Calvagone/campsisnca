@@ -11,6 +11,7 @@ ReplicatedNCATable(
   summary_stat_display = get_stat_display_default(),
   summary_stat_signif_digits = 3L,
   strata = get_default_strata(),
+  tab_options = list(),
   json = NULL
 )
 }
@@ -30,6 +31,8 @@ Default is the empty character vector (all statistics are computed).}
 Note, the default strata are c(SCENARIO='all', ARM='all').
 Use 'all' if this analysis refers to all levels for the specified stratification variable.
 By default, a stratification variable that has only 1 level is ignored.}
+
+\item{tab_options}{list of options to pass to gt::tab_options}
 
 \item{json}{path to JSON table file or JSON content in string form}
 }

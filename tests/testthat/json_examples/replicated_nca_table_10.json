@@ -5,5 +5,8 @@
     "{median}",
     "{p95}"
   ],
-  "summary_stat_signif_digits": 4
+  "summary_stat_signif_digits": 4,
+  "tab_options": {
+    "table.font.size": "18px"
+  }
 }

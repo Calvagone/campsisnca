@@ -38,6 +38,10 @@
         "subtitle": {
           "type": "string",
           "description": "Subtitle to use for the replicated NCA table (optional)."
+        },
+        "tab_options": {
+          "$ref": "#/$defs/gt_tab_options",
+          "description": "(Gt)-table options that will be passed to gt when the table is rendered."
         }
       },
       "required": []
@@ -49,6 +53,18 @@
         "type": "string"
       },
       "minProperties": 1
+    },
+    "gt_tab_options": {
+      "type": "object",
+      "description": "Options passed to gt::tab_options()",
+      "additionalProperties": {
+        "type": [
+          "string",
+          "number",
+          "boolean",
+          "null"
+        ]
+      }
     }
   }
 }

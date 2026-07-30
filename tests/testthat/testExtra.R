@@ -294,6 +294,9 @@ test_that("Method summarise_replicates can be used to summarise Campsisnca outpu
     json = file.path(testFolder, "json_examples", "replicated_nca_table_10.json")
   )
 
+  # Check table font size is there
+  expect_equal(rep_nca_table@tab_options$table.font.size, "18px")
+
   summary <- rep_nca_table %>%
     calculate(x=x) %>%
     export(dest="dataframe")

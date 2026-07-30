@@ -12,7 +12,8 @@ setClass(
     summary_stat_signif_digits = "integer", # integer value
     strata = "character", # Named vector
     data = "data.frame", # Transient field
-    effective_strat_vars = "character" # effective stratification variables in data, transient field: updated when calculate is called
+    effective_strat_vars = "character", # effective stratification variables in data, transient field: updated when calculate is called
+    tab_options = "list"
   ),
   prototype = prototype(
     title=NA_character_,
@@ -20,7 +21,8 @@ setClass(
     selected_statistics = character(), # empty means no filter (all stats used)
     summary_stat_display = get_stat_display_default(),
     summary_stat_signif_digits = 3L,
-    strata = get_default_strata()
+    strata = get_default_strata(),
+    tab_options=list()
   )
 )
 
@@ -37,6 +39,7 @@ setClass(
 #'  Note, the default strata are c(SCENARIO='all', ARM='all').
 #'  Use 'all' if this analysis refers to all levels for the specified stratification variable.
 #'  By default, a stratification variable that has only 1 level is ignored.
+#' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
 #' @export
 ReplicatedNCATable <- function(
@@ -46,6 +49,7 @@ ReplicatedNCATable <- function(
   summary_stat_display = get_stat_display_default(),
   summary_stat_signif_digits = 3L,
   strata = get_default_strata(),
+  tab_options=list(),
   json = NULL
 ) {
   if (is.null(json)) {
@@ -65,7 +69,8 @@ ReplicatedNCATable <- function(
       selected_statistics = selected_statistics,
       summary_stat_display = summary_stat_display,
       summary_stat_signif_digits = summary_stat_signif_digits,
-      strata = strata
+      strata = strata,
+      tab_options = tab_options
     )
   } else {
     table <- load_from_json(object = new("replicated_nca_table"), json = json)
@@ -262,7 +267,8 @@ setMethod(
           toGt(
             subscripts = TRUE,
             title = object@title,
-            subtitle = object@subtitle
+            subtitle = object@subtitle,
+            opts = object@tab_options
           )
         return(gt_table)
       }
@@ -322,7 +328,15 @@ translate_stat_string <- function(stat_string) {
 #_______________________________________________________________________________
 
 setMethod("load_from_json", signature=c("replicated_nca_table", "json_element"), definition=function(object, json) {
-  object <- map_json_properties_to_s4_slots(object = object, json = json)
+  json <- json@data
+
+  # Extract possible tab options
+  if (!is.null(json$tab_options)) {
+    object@tab_options <- json$tab_options
+    json$tab_options <- NULL
+  }
+
+  object <- map_json_properties_to_s4_slots(object = object, json = JSONElement(json))
   return(object)
 })
 
