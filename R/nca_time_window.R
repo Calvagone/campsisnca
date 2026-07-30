@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validateTimeWindow <- function(object) {
-  return(expectOneForAll(object, c("start", "end", "time_unit", "exclude_start", "exclude_end")))
+  return(expect_one_for_all(object, c("start", "end", "time_unit", "exclude_start", "exclude_end")))
 }
 
 #' 

@@ -4,8 +4,8 @@
 
 validate_theoretical_thalf_metric <- function(object) {
   return(c(
-    expectZeroOrMore(object, "map"),
-    expectOne(object, "subtype")
+    expect_zero_or_more(object, "map"),
+    expect_one(object, "subtype")
   ))
 }
 

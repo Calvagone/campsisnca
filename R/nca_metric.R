@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validate_metric <- function(object) {
-  return(expectOneForAll(object, c("variable", "window", "name", "unit", "i_value_tibble",
+  return(expect_one_for_all(object, c("variable", "window", "name", "unit", "i_value_tibble",
                                    "stat_display", "categorical", "concentration")))
 }
 

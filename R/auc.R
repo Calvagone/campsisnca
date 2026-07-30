@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validate_auc_metric <- function(object) {
-  return(expectOne(object, "method"))
+  return(expect_one(object, "method"))
 }
 
 #' 

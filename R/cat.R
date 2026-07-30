@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validate_value_at_metric <- function(object) {
-  return(expectOne(object, "observed_time"))
+  return(expect_one(object, "observed_time"))
 }
 
 #' 

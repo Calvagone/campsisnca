@@ -3,7 +3,7 @@
 #_______________________________________________________________________________
 
 validate_tmax_metric <- function(object) {
-  return(expectOne(object, "rebase"))
+  return(expect_one(object, "rebase"))
 }
 
 #' 
