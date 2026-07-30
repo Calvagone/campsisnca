@@ -132,17 +132,18 @@ setMethod("export", signature=c("nca_metric", "character"), definition=function(
 #' @importFrom tibble tibble
 #' @importFrom tidyr pivot_wider
 #' @importFrom dplyr all_of distinct mutate select relocate
+#' @importFrom rlang .data
 setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   if (type == "summary" || type == "summary_wide" || type == "summary_pretty") {
     if (nrow(object@summary) == 0) {
       stop(paste0("Metric ", object %>% get_name(), " is empty (please call calculate())"))
     }
     retValue <- tibble::tibble(metric=object %>% get_name(), object@summary) %>%
-      dplyr::mutate(value=as.numeric(value)) # Remove names on values (e.g. if quantile was used)
+      dplyr::mutate(value=as.numeric(.data$value)) # Remove names on values (e.g. if quantile was used)
     
     if (type == "summary_wide") {
       retValue <- retValue %>%
-        tidyr::pivot_wider(names_from=stat, values_from=value)
+        tidyr::pivot_wider(names_from="stat", values_from="value")
 
     } else if (type == "summary_pretty") {
       retValue <- tibble::tibble(metric=object %>% get_name(), object@summary_pretty)
@@ -156,12 +157,12 @@ setMethod("export", signature=c("nca_metric", "dataframe_type"), definition=func
     individual <- object@individual
     if (object@categorical) {
       individual <- individual %>%
-        dplyr::mutate(discrete_value=as.character(value)) %>%
+        dplyr::mutate(discrete_value=as.character(.data$value)) %>%
         dplyr::mutate(value=as.numeric(NA)) %>%
         dplyr::relocate(dplyr::all_of(c("value", "discrete_value"))) # value first
     } else {
       individual <- individual %>%
-        dplyr::mutate(value=as.numeric(value)) %>%
+        dplyr::mutate(value=as.numeric(.data$value)) %>%
         dplyr::mutate(discrete_value=as.character(NA))
     }
     # Keep track of categorical in dataframe
@@ -268,10 +269,11 @@ get_discrete_categories <- function(object) {
 }
 
 #' @rdname stat_display_string
+#' @importFrom rlang .data
 setMethod("stat_display_string", signature=c("nca_metric"), definition=function(object, ...) {
   if (nrow(object@summary_pretty) > 0) {
     if ("category" %in% colnames(object@summary_pretty)) {
-      temp <- object@summary_pretty %>% dplyr::mutate(summary_stats_final=paste0(category, ": ", summary_stats))
+      temp <- object@summary_pretty %>% dplyr::mutate(summary_stats_final=paste0(.data$category, ": ", .data$summary_stats))
       return(as.character(temp$summary_stats_final))
     } else {
       return(as.character(object@summary_pretty$summary_stats))

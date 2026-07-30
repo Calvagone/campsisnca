@@ -143,6 +143,7 @@ setMethod("export", signature=c("nca_table", "character"), definition=function(o
 #' @importFrom purrr map_df
 #' @importFrom dplyr all_of any_of filter full_join mutate select pull
 #' @importFrom tidyr pivot_wider
+#' @importFrom rlang .data
 setMethod("export", signature=c("nca_table", "dataframe_type"), definition=function(object, dest, type="summary", ...) {
   
   analysis_strat <- length(object@nca_analyses) > 1
@@ -153,17 +154,17 @@ setMethod("export", signature=c("nca_table", "dataframe_type"), definition=funct
     allMetrics <- unique(retValue$metric)
     
     continuousData <- retValue %>%
-      dplyr::filter(!categorical) %>%
+      dplyr::filter(!.data$categorical) %>%
       dplyr::select(-dplyr::all_of(c("discrete_value", "categorical"))) %>%
-      tidyr::pivot_wider(names_from=metric, values_from=value)
+      tidyr::pivot_wider(names_from="metric", values_from="value")
     categoricalData <- retValue %>%
-      dplyr::filter(categorical) %>%
+      dplyr::filter(.data$categorical) %>%
       dplyr::select(-dplyr::all_of(c("value", "categorical"))) %>%
-      tidyr::pivot_wider(names_from=metric, values_from=discrete_value)
+      tidyr::pivot_wider(names_from="metric", values_from="discrete_value")
     
     categoricalVars <- retValue %>%
-      dplyr::filter(categorical) %>%
-      dplyr::pull(metric)
+      dplyr::filter(.data$categorical) %>%
+      dplyr::pull("metric")
     
     # Force "TRUE" or "FALSE" to be recognised as logical
     # Otherwise, auto-detection of dichotomous data will not work with gtsummary

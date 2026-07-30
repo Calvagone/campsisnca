@@ -95,6 +95,7 @@ ReplicatedNCATable <- function(
 #' @importFrom dplyr across filter if_any if_else matches mutate select transmute
 #' @importFrom tibble add_column
 #' @importFrom tidyr pivot_wider
+#' @importFrom rlang .data
 #' @rdname calculate
 setMethod(
   "calculate",
@@ -121,15 +122,15 @@ setMethod(
     
 
     categories <- x %>%
-      tibble::add_column(!!!c(category = NA)[!"category" %in% names(.)]) %>%
-      dplyr::filter(!is.na(category)) %>%
-      dplyr::transmute(metric, stat, category) %>%
+      tibble::add_column(!!!c(category = NA)[!"category" %in% names(x)]) %>%
+      dplyr::filter(!is.na(.data$category)) %>%
+      dplyr::transmute(.data$metric, .data$stat, .data$category) %>%
       dplyr::distinct()
 
     # Filter NCA metric statistics
     if (length(object@selected_statistics) > 0) {
       x_filtered <- x %>%
-        dplyr::filter(stat %in% object@selected_statistics)
+        dplyr::filter(.data$stat %in% object@selected_statistics)
     } else {
       x_filtered <- x
     }

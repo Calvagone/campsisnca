@@ -32,6 +32,7 @@ identify_group_levels <- function(x, strat_vars) {
 #' @importFrom tibble as_tibble
 #' @importFrom purrr map_chr
 #' @importFrom stringr str_detect
+#' @importFrom rlang .data
 #' @export
 compute_nca_metric_summary <- function(object, strat_vars, quantile_type) {
   data <- object@individual
@@ -61,14 +62,14 @@ compute_nca_metric_summary <- function(object, strat_vars, quantile_type) {
     # Process cards data frame
     summary <- summary %>%
       dplyr::select(dplyr::all_of(c(strat_vars, "stat_name", "stat", "variable_level"))) %>%
-      dplyr::rename(stat=stat_name, value=stat, category=variable_level) %>%
-      dplyr::mutate(value=as.numeric(value), category=as.character(category)) %>%
+      dplyr::rename(stat="stat_name", value="stat", category="variable_level") %>%
+      dplyr::mutate(value=as.numeric(.data$value), category=as.character(.data$category)) %>%
       dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), unlist))
 
     # Make summary pretty
     summary_pretty <- summary %>%
       dplyr::group_split(dplyr::across(dplyr::all_of(c(strat_vars, "category")))) %>%
-      purrr::map_df(~.x %>% dplyr::select(-stat, -value) %>%
+      purrr::map_df(~.x %>% dplyr::select(-dplyr::any_of(c("stat", "value"))) %>%
                       dplyr::distinct() %>%
                       mutate("summary_stats"=glue_stat_display(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
     
@@ -116,14 +117,14 @@ compute_nca_metric_summary <- function(object, strat_vars, quantile_type) {
     # Process cards data frame
     summary <- summary %>%
       dplyr::select(dplyr::all_of(c(strat_vars, "stat_name", "stat"))) %>%
-      dplyr::rename(stat=stat_name, value=stat) %>%
-      dplyr::mutate(value=as.numeric(value)) %>%
+      dplyr::rename(stat="stat_name", value="stat") %>%
+      dplyr::mutate(value=as.numeric(.data$value)) %>%
       dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), unlist))
 
     # Make summary pretty
     summary_pretty <- summary %>%
       dplyr::group_split(dplyr::across(dplyr::all_of(strat_vars))) %>%
-      purrr::map_df(~.x %>% dplyr::select(-stat, -value) %>%
+      purrr::map_df(~.x %>% dplyr::select(-dplyr::any_of(c("stat", "value"))) %>%
                       dplyr::distinct() %>%
                       mutate("summary_stats"=glue_stat_display(stat_display=stat_display, stats=stats_, summary=.x, digits=digits)))
   }

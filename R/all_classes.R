@@ -121,18 +121,3 @@ setClassUnion(
 #' @importFrom stats lm median rnorm sd
 #' @importFrom campsismod find replace add export get_name load_from_json replaceAll Equation VariablePattern JSONElement process_extra_arg
 NULL
-
-# Prevent R CMD check notes on global variables
-utils::globalVariables(c(
-  ".",
-  ".data",
-  "categorical",
-  "category",
-  "discrete_value",
-  "metric",
-  "stat",
-  "stat_name",
-  "summary_stats",
-  "value",
-  "variable_level"
-))
