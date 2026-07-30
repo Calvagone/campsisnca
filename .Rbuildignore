@@ -8,3 +8,5 @@
 ^README\.Rmd$
 ^README_files$
 ^codecov\.yml$
+^air\.toml$
+^cran-comments\.md$

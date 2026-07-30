@@ -6,68 +6,98 @@ validate_time_above_below_limit_metric <- function(object) {
   return(TRUE)
 }
 
-#' 
+#'
 #' Abstract time above/below limit class.
-#' 
+#'
 #' @export
 setClass(
   "abstract_time_above_or_below_limit_metric",
   representation(
-    limit="numeric",
-    strictly="logical"
+    limit = "numeric",
+    strictly = "logical"
   ),
-  prototype=prototype(strictly=FALSE),
-  contains="nca_metric",
-  validity=validate_time_above_below_limit_metric
+  prototype = prototype(strictly = FALSE),
+  contains = "nca_metric",
+  validity = validate_time_above_below_limit_metric
 )
 
-#' 
+#'
 #' Time above limit metric class.
-#' 
+#'
 #' @export
 setClass(
   "time_above_limit_metric",
-  representation(
-  ),
-  contains="abstract_time_above_or_below_limit_metric"
+  representation(),
+  contains = "abstract_time_above_or_below_limit_metric"
 )
 
-#' 
+#'
 #' Time below limit metric class.
-#' 
+#'
 #' @export
 setClass(
   "time_below_limit_metric",
-  representation(
-  ),
-  contains="abstract_time_above_or_below_limit_metric"
+  representation(),
+  contains = "abstract_time_above_or_below_limit_metric"
 )
 
-#' 
+#'
 #' Time above a certain limit.
-#' 
+#'
 #' @inheritParams metrics_params
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly above the limit
 #' @export
-TimeAboveLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="time_above_limit_metric")
+TimeAboveLimit <- function(
+  variable = NULL,
+  window = NULL,
+  limit = NULL,
+  strictly = FALSE,
+  name = NULL,
+  unit = NULL,
+  stat_display = NULL,
+  digits = NULL
+) {
+  metric <- nca_constructor(
+    variable = variable,
+    window = window,
+    name = name,
+    unit = unit,
+    stat_display = stat_display,
+    digits = digits,
+    metric_name = "time_above_limit_metric"
+  )
   metric@limit <- limit
   metric@strictly <- strictly
   return(set_default_name_if_na(metric))
 }
 
-#' 
+#'
 #' Time below a certain limit.
-#' 
+#'
 #' @inheritParams metrics_params
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly below the limit
 #' @export
-TimeBelowLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALSE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- nca_constructor(variable=variable, window=window, name=name, unit=unit, stat_display=stat_display, digits=digits,
-                           metric_name="time_below_limit_metric")
+TimeBelowLimit <- function(
+  variable = NULL,
+  window = NULL,
+  limit = NULL,
+  strictly = FALSE,
+  name = NULL,
+  unit = NULL,
+  stat_display = NULL,
+  digits = NULL
+) {
+  metric <- nca_constructor(
+    variable = variable,
+    window = window,
+    name = name,
+    unit = unit,
+    stat_display = stat_display,
+    digits = digits,
+    metric_name = "time_below_limit_metric"
+  )
   metric@limit <- limit
   metric@strictly <- strictly
   return(set_default_name_if_na(metric))
@@ -78,13 +108,13 @@ TimeBelowLimit <- function(variable=NULL, window=NULL, limit=NULL, strictly=FALS
 #_______________________________________________________________________________
 
 #' @rdname get_default_name
-setMethod("get_default_name", signature=c("time_above_limit_metric"), definition=function(object, ...) {
-  return(sprintf("Time above %s", as.character(object@limit))) 
+setMethod("get_default_name", signature = c("time_above_limit_metric"), definition = function(object, ...) {
+  return(sprintf("Time above %s", as.character(object@limit)))
 })
 
 #' @rdname get_default_name
-setMethod("get_default_name", signature=c("time_below_limit_metric"), definition=function(object, ...) {
-  return(sprintf("Time below %s", as.character(object@limit))) 
+setMethod("get_default_name", signature = c("time_below_limit_metric"), definition = function(object, ...) {
+  return(sprintf("Time below %s", as.character(object@limit)))
 })
 
 #_______________________________________________________________________________
@@ -92,37 +122,41 @@ setMethod("get_default_name", signature=c("time_below_limit_metric"), definition
 #_______________________________________________________________________________
 
 #' @rdname i_value
-setMethod("i_value", signature=c("abstract_time_above_or_below_limit_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  if (is(object, "time_above_limit_metric")) {
-    above <- TRUE
-  } else if (is(object, "time_below_limit_metric")) {
-    above <- FALSE
-  } else{
-    stop("Wrong object")
-  }
-  value <- value - object@limit
-  strictly <- object@strictly
+setMethod(
+  "i_value",
+  signature = c("abstract_time_above_or_below_limit_metric", "numeric", "numeric"),
+  definition = function(object, time, value) {
+    if (is(object, "time_above_limit_metric")) {
+      above <- TRUE
+    } else if (is(object, "time_below_limit_metric")) {
+      above <- FALSE
+    } else {
+      stop("Wrong object")
+    }
+    value <- value - object@limit
+    strictly <- object@strictly
 
-  size <- length(time)
+    size <- length(time)
 
-  lines <- tibble::tibble(
-    x1=time[1:(size - 1)],
-    y1=value[1:(size - 1)],
-    x2=time[2:size],
-    y2=value[2:size],
-    above=rep(above, size - 1),
-    strictly=rep(strictly, size - 1)
+    lines <- tibble::tibble(
+      x1 = time[1:(size - 1)],
+      y1 = value[1:(size - 1)],
+      x2 = time[2:size],
+      y2 = value[2:size],
+      above = rep(above, size - 1),
+      strictly = rep(strictly, size - 1)
     )
-  
-  durations <- lines %>%
-    purrr::pmap_dbl(computeTimeAboveBelow)
 
-  return(sum(durations))    
-})
+    durations <- lines %>%
+      purrr::pmap_dbl(computeTimeAboveBelow)
 
-#' 
+    return(sum(durations))
+  }
+)
+
+#'
 #' Compute the duration of a line segment above or below a certain limit.
-#' 
+#'
 #' @param x1 x-coordinate of the first point
 #' @param y1 y-coordinate of the first point
 #' @param x2 x-coordinate of the second point
@@ -133,37 +167,37 @@ setMethod("i_value", signature=c("abstract_time_above_or_below_limit_metric", "n
 #' @export
 computeTimeAboveBelow <- function(x1, y1, x2, y2, above, strictly) {
   duration <- x2 - x1
-  if (duration==0) {
+  if (duration == 0) {
     stop("Sample times must be unique")
   }
-  
+
   # Both values are 0
   if (y1 == 0 && y2 == 0) {
     return(ifelse(strictly, 0, duration))
   }
-  
+
   # Both values above 0
   if (y1 > 0 && y2 > 0) {
     return(ifelse(above, duration, 0))
   }
-  
+
   # Both values below 0
   if (y1 < 0 && y2 < 0) {
     return(ifelse(!above, duration, 0))
   }
-  
+
   # Only 1 value is 0
   if ((y1 == 0 && y2 > 0) || (y1 > 0 && y2 == 0)) {
     return(ifelse(above, duration, 0))
   } else if ((y1 == 0 && y2 < 0) || (y1 < 0 && y2 == 0)) {
     return(ifelse(!above, duration, 0))
   }
-  
+
   # Otherwise, find intersection
   a <- (y2 - y1) / (x2 - x1)
-  b <- y1 - a*x1
-  intersection <- -b/a
-  
+  b <- y1 - a * x1
+  intersection <- -b / a
+
   if (intersection > x1 && intersection < x2) {
     if (y1 > 0) {
       return(ifelse(above, intersection - x1, x2 - intersection))
@@ -178,7 +212,10 @@ computeTimeAboveBelow <- function(x1, y1, x2, y2, above, strictly) {
 #----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("load_from_json", signature=c("abstract_time_above_or_below_limit_metric", "json_element"), definition=function(object, json) {
-  return(load_metric_from_json(object=object, json=json))
-})
-
+setMethod(
+  "load_from_json",
+  signature = c("abstract_time_above_or_below_limit_metric", "json_element"),
+  definition = function(object, json) {
+    return(load_metric_from_json(object = object, json = json))
+  }
+)

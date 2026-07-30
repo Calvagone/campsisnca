@@ -2,9 +2,7 @@
 % Please edit documentation in R/auc_trap_rule.R
 \name{trap}
 \alias{trap}
-\title{NOTE: This method has been copied from the qpNCA package (qPharmetra).
- 
-Calculate Area Under the Curve Using Trapezoids.}
+\title{NOTE: This method has been copied from the qpNCA package (qPharmetra).}
 \usage{
 trap(x, y, method = 1)
 }
@@ -22,6 +20,9 @@ trap(x, y, method = 1)
 area (length-one numeric)
 }
 \description{
+Calculate Area Under the Curve Using Trapezoids.
+}
+\details{
 Calculates AUC using the trapezoidal method. Assumes data represent a single profile.
 Despite choice of method, only linear interpolation is used
 for areas of intervals beginning or ending with y: 0.

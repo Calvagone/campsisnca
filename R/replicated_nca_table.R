@@ -16,13 +16,13 @@ setClass(
     tab_options = "list"
   ),
   prototype = prototype(
-    title=NA_character_,
-    subtitle=NA_character_,
+    title = NA_character_,
+    subtitle = NA_character_,
     selected_statistics = character(), # empty means no filter (all stats used)
     summary_stat_display = get_stat_display_default(),
     summary_stat_signif_digits = 3L,
     strata = get_default_strata(),
-    tab_options=list()
+    tab_options = list()
   )
 )
 
@@ -49,7 +49,7 @@ ReplicatedNCATable <- function(
   summary_stat_display = get_stat_display_default(),
   summary_stat_signif_digits = 3L,
   strata = get_default_strata(),
-  tab_options=list(),
+  tab_options = list(),
   json = NULL
 ) {
   if (is.null(json)) {
@@ -83,7 +83,7 @@ ReplicatedNCATable <- function(
 #_______________________________________________________________________________
 
 #' Does the data contain more than one replicate?
-#' 
+#'
 #' @return \code{TRUE} if the data contains a \code{replicate} column with more than one distinct value, \code{FALSE} otherwise
 #' @param x a data frame (typically \code{std_campsis_tbl})
 #' @importFrom dplyr n_distinct
@@ -101,7 +101,6 @@ setMethod(
   "calculate",
   signature = c("replicated_nca_table", "campsis_output", "ANY"),
   definition = function(object, x, options, ...) {
-
     # Check data frame class
     if (!is(x, "summary_campsisnca_tbl")) {
       stop("x must be of class 'summary_campsisnca_tbl' for now")
@@ -118,8 +117,6 @@ setMethod(
     if (!"category" %in% colnames(x)) {
       x$category <- NA_character_
     }
-
-    
 
     categories <- x %>%
       tibble::add_column(!!!c(category = NA)[!"category" %in% names(x)]) %>%
@@ -287,40 +284,43 @@ translate_stat_string <- function(stat_string) {
   # Standard map for common base statistics
   stat_map <- c(
     "median" = "Median",
-    "mean"   = "Mean",
-    "sd"     = "SD",
-    "se"     = "SE",
-    "var"    = "Variance",
-    "min"    = "Minimum",
-    "max"    = "Maximum",
-    "sum"    = "Sum",
-    "n"      = "n",
-    "N"      = "N"
+    "mean" = "Mean",
+    "sd" = "SD",
+    "se" = "SE",
+    "var" = "Variance",
+    "min" = "Minimum",
+    "max" = "Maximum",
+    "sum" = "Sum",
+    "n" = "n",
+    "N" = "N"
   )
-  
+
   # Replace base statistics (e.g., {median} -> Median)
   for (stat in names(stat_map)) {
     stat_string <- gsub(paste0("{", stat, "}"), stat_map[stat], stat_string, fixed = TRUE)
   }
-  
+
   # Dynamic map for percentiles (e.g., {p5} -> 5th percentile)
-  while(grepl("\\{p[0-9]+\\}", stat_string)) {
+  while (grepl("\\{p[0-9]+\\}", stat_string)) {
     p_match <- regmatches(stat_string, regexpr("\\{p([0-9]+)\\}", stat_string))
     p_num <- gsub("[^0-9]", "", p_match)
-    
+
     # Determine ordinal suffix (st, nd, rd, th)
     suffix <- switch(
       ifelse(p_num %in% c("11", "12", "13"), "th", substr(p_num, nchar(p_num), nchar(p_num))),
-      "1" = "st", "2" = "nd", "3" = "rd", "th"
+      "1" = "st",
+      "2" = "nd",
+      "3" = "rd",
+      "th"
     )
-    
+
     # CRITICAL FIX: Add fixed = TRUE here so R treats "{p5}" as a literal string
     stat_string <- sub(p_match, paste0(p_num, suffix, " percentile"), stat_string, fixed = TRUE)
   }
-  
+
   # Clean up duplicate trailing " percentile" strings if they appear in ranges
   stat_string <- gsub(" percentile([\U2013-])([0-9]+[a-z]{2} percentile)", "\\1\\2", stat_string)
-  
+
   return(stat_string)
 }
 
@@ -328,7 +328,7 @@ translate_stat_string <- function(stat_string) {
 #----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("load_from_json", signature=c("replicated_nca_table", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature = c("replicated_nca_table", "json_element"), definition = function(object, json) {
   json <- json@data
 
   # Extract possible tab options
@@ -341,12 +341,12 @@ setMethod("load_from_json", signature=c("replicated_nca_table", "json_element"),
   return(object)
 })
 
-setMethod("load_from_json", signature=c("replicated_nca_table", "character"), definition=function(object, json) {
-  schema <- system.file("extdata", "campsisnca_replicated_table.schema.json", package="campsisnca")
-  return(load_from_json(object=object, json=open_json(json=json, schema=schema)))
+setMethod("load_from_json", signature = c("replicated_nca_table", "character"), definition = function(object, json) {
+  schema <- system.file("extdata", "campsisnca_replicated_table.schema.json", package = "campsisnca")
+  return(load_from_json(object = object, json = open_json(json = json, schema = schema)))
 })
 
-setMethod("load_from_json", signature=c("replicated_nca_table", "list"), definition=function(object, json) {
-  schema <- system.file("extdata", "campsisnca_replicated_table.schema.json", package="campsisnca")
-  return(load_from_json(object=object, json=open_json(json=json, schema=schema)))
+setMethod("load_from_json", signature = c("replicated_nca_table", "list"), definition = function(object, json) {
+  schema <- system.file("extdata", "campsisnca_replicated_table.schema.json", package = "campsisnca")
+  return(load_from_json(object = object, json = open_json(json = json, schema = schema)))
 })

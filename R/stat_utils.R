@@ -1,5 +1,4 @@
-
-get_stat_display_default <- function(categorical=FALSE) {
+get_stat_display_default <- function(categorical = FALSE) {
   if (categorical) {
     return("{n} / {N} ({p}%)")
   } else {

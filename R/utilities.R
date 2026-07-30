@@ -34,5 +34,5 @@ all_strata_levels <- function() {
 }
 
 get_default_strata <- function() {
-  return(c(SCENARIO=all_strata_levels(), ARM=all_strata_levels()))
+  return(c(SCENARIO = all_strata_levels(), ARM = all_strata_levels()))
 }

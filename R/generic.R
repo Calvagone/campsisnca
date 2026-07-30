@@ -1,17 +1,27 @@
 no_default_function_provided_debug <- function(args_list, fun_name) {
   # Get the class of each argument as a string (fixed CHARACTER to character)
-  arg_classes <- vapply(args_list, function(x) {
-    if (is.null(x)) "NULL" else paste(class(x), collapse = "/")
-  }, character(1))
-  
+  arg_classes <- vapply(
+    args_list,
+    function(x) {
+      if (is.null(x)) "NULL" else paste(class(x), collapse = "/")
+    },
+    character(1)
+  )
+
   # Format into a readable string: "arg1 (class), arg2 (class), ..."
   formatted_args <- sprintf("%s (%s)", names(arg_classes), arg_classes)
   error_details <- paste(formatted_args, collapse = "\n  ")
-  
-  stop(paste0(
-    "Generic '", fun_name, "' function cannot be called directly.\n",
-    "Received arguments:\n  ", error_details
-  ), call. = FALSE)
+
+  stop(
+    paste0(
+      "Generic '",
+      fun_name,
+      "' function cannot be called directly.\n",
+      "Received arguments:\n  ",
+      error_details
+    ),
+    call. = FALSE
+  )
 }
 
 #_______________________________________________________________________________
@@ -19,7 +29,7 @@ no_default_function_provided_debug <- function(args_list, fun_name) {
 #_______________________________________________________________________________
 
 #' Apply time window.
-#' 
+#'
 #' @param x input data for the calculation, data frame
 #' @param window time window
 #' @param data_time_unit time unit of TIME column in data (x argument)
@@ -40,7 +50,7 @@ setGeneric("apply_time_window", function(x, window, data_time_unit, ...) {
 #_______________________________________________________________________________
 
 #' Calculate.
-#' 
+#'
 #' @param object object (NCA table, NCA analyses, NCA analysis, PK metric) where calculation is applied
 #' @param x input data for the calculation, data frame
 #' @param options NCA options
@@ -52,7 +62,7 @@ calculate <- function(object, x, options, ...) {
   no_default_function_provided_debug(mget(names(formals()), envir = environment()), "calculate")
 }
 
-setGeneric("calculate", function(object, x, options=NULL, ...) {
+setGeneric("calculate", function(object, x, options = NULL, ...) {
   if (is.null(options)) {
     options <- UndefinedNCAOptions()
   }
@@ -65,7 +75,7 @@ setGeneric("calculate", function(object, x, options=NULL, ...) {
 #_______________________________________________________________________________
 
 #' Compute the individual value of an individual.
-#' 
+#'
 #' @param object PK metric
 #' @param time time vector, numeric
 #' @param value value vector, numeric
@@ -76,9 +86,9 @@ i_value <- function(object, time, value) {
   stop("No default function is provided")
 }
 
-setGeneric("i_value", function(object, time, value=NULL) {
-  assertthat::assert_that(length(time)==length(value), msg="time and value must be the same length")
-  assertthat::assert_that(length(value) > 0, msg="value should contain at least 1 value")
+setGeneric("i_value", function(object, time, value = NULL) {
+  assertthat::assert_that(length(time) == length(value), msg = "time and value must be the same length")
+  assertthat::assert_that(length(value) > 0, msg = "value should contain at least 1 value")
   standardGeneric("i_value")
 })
 
@@ -87,7 +97,7 @@ setGeneric("i_value", function(object, time, value=NULL) {
 #_______________________________________________________________________________
 
 #' Compute the individual value of an individual.
-#' 
+#'
 #' @param object PK metric
 #' @param data individual data, tibble
 #' @param ... extra arguments
@@ -107,7 +117,7 @@ setGeneric("i_value_tbl", function(object, data, ...) {
 #_______________________________________________________________________________
 
 #' Compute the individual values on a simulation output.
-#' 
+#'
 #' @param object PK metric
 #' @param x input data for the calculation, data frame
 #' @param options NCA options
@@ -129,7 +139,7 @@ setGeneric("i_values", function(object, x, options, strat_vars, ...) {
 #_______________________________________________________________________________
 
 #' Generate table code.
-#' 
+#'
 #' @param object table object
 #' @param init generate initialization code to generate the individuals, default is TRUE
 #' @param ... extra arguments
@@ -139,7 +149,7 @@ generate_table_code <- function(object, init, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("generate_table_code", function(object, init=NULL, ...) {
+setGeneric("generate_table_code", function(object, init = NULL, ...) {
   if (is.null(init)) {
     init <- TRUE
   }
@@ -151,7 +161,7 @@ setGeneric("generate_table_code", function(object, init=NULL, ...) {
 #_______________________________________________________________________________
 
 #' Get the name of the metric in LaTeX notation (with subscript coded with an underscore and brackets).
-#' 
+#'
 #' @param x metric
 #' @param ... extra arguments, not used
 #' @export
@@ -169,7 +179,7 @@ setGeneric("get_latex_name", function(x, ...) {
 #_______________________________________________________________________________
 
 #' Get all stratas.
-#' 
+#'
 #' @param object table object
 #' @param keep_single keep single stratification values, logical (default TRUE)
 #' @param ... extra arguments
@@ -180,7 +190,7 @@ get_strata <- function(object, keep_single, ...) {
   stop("No default function is provided")
 }
 
-setGeneric("get_strata", function(object, keep_single=NULL, ...) {
+setGeneric("get_strata", function(object, keep_single = NULL, ...) {
   if (is.null(keep_single)) {
     keep_single <- TRUE
   }
@@ -192,7 +202,7 @@ setGeneric("get_strata", function(object, keep_single=NULL, ...) {
 #_______________________________________________________________________________
 
 #' Get the unit corresponding to the given metric.
-#' 
+#'
 #' @param object any object that contains units
 #' @param metric given metric name
 #' @param ... extra arguments, not used
@@ -211,7 +221,7 @@ setGeneric("get_unit", function(object, metric, ...) {
 #_______________________________________________________________________________
 
 #' Get default name.
-#' 
+#'
 #' @param object get default name of this object
 #' @param ... optional extra arguments
 #' @export

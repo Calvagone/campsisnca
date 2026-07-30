@@ -3,31 +3,28 @@
 #_______________________________________________________________________________
 
 #' Dataframe export type class.
-#' 
+#'
 #' @export
 setClass(
   "dataframe_type",
-  representation(
-  ),
-  contains="export_type" 
+  representation(),
+  contains = "export_type"
 )
 
 #' Gt summary export type class.
-#' 
+#'
 #' @export
 setClass(
   "gtsummary_type",
-  representation(
-  ),
-  contains="export_type" 
+  representation(),
+  contains = "export_type"
 )
 
 #' Gt export type class.
-#' 
+#'
 #' @export
 setClass(
   "gt_type",
-  representation(
-  ),
-  contains="export_type" 
+  representation(),
+  contains = "export_type"
 )

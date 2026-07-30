@@ -16,15 +16,14 @@ setClass(
   )
 )
 
-#' 
+#'
 #' Undefined NCA options class.
-#' 
+#'
 #' @export
 setClass(
   "undefined_nca_options",
-  representation(
-  ),
-  contains="nca_options"
+  representation(),
+  contains = "nca_options"
 )
 
 #'
@@ -47,9 +46,9 @@ NCAOptions <- function(
   ))
 }
 
-#' 
+#'
 #' Undefined NCA options.
-#' 
+#'
 #' @export
 UndefinedNCAOptions <- function() {
   return(new("undefined_nca_options"))
@@ -59,7 +58,7 @@ UndefinedNCAOptions <- function() {
 #----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("load_from_json", signature=c("nca_options", "json_element"), definition=function(object, json) {
-  nca_options <- map_json_properties_to_s4_slots(object=object, json=json)
+setMethod("load_from_json", signature = c("nca_options", "json_element"), definition = function(object, json) {
+  nca_options <- map_json_properties_to_s4_slots(object = object, json = json)
   return(nca_options)
 })

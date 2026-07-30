@@ -1,4 +1,3 @@
-
 library(testthat)
 
 context("Test method get_latex_name")

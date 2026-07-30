@@ -6,44 +6,43 @@ validateTimeWindow <- function(object) {
   return(expect_one_for_all(object, c("start", "end", "time_unit", "exclude_start", "exclude_end")))
 }
 
-#' 
+#'
 #' NCA time window class.
-#' 
+#'
 #' @export
 setClass(
   "nca_time_window",
   representation(
-    start = "numeric",            # Any starting time
-    end = "numeric",              # End time. Note: use Inf for 'last'
-    time_unit = "character",      # Default is 'hour'
-    exclude_start = "logical",    # Exclude first time point
-    exclude_end = "logical"  
+    start = "numeric", # Any starting time
+    end = "numeric", # End time. Note: use Inf for 'last'
+    time_unit = "character", # Default is 'hour'
+    exclude_start = "logical", # Exclude first time point
+    exclude_end = "logical"
   ),
-  prototype=prototype(start=0, end=Inf, time_unit="hour", exclude_start=FALSE, exclude_end=FALSE),
-  validity=validateTimeWindow
+  prototype = prototype(start = 0, end = Inf, time_unit = "hour", exclude_start = FALSE, exclude_end = FALSE),
+  validity = validateTimeWindow
 )
 
-#' 
+#'
 #' Undefined NCA time window class.
-#' 
+#'
 #' @export
 setClass(
   "undefined_nca_time_window",
-  representation(
-  ),
-  contains="nca_time_window"
+  representation(),
+  contains = "nca_time_window"
 )
 
 processEndArgument <- function(x) {
-  if (x=="last") {
+  if (x == "last") {
     return(Inf)
   }
   return(x)
 }
 
-#' 
+#'
 #' Create a time window object.
-#' 
+#'
 #' @param start start time of window
 #' @param end end time of window, use 'last' to specify the end of the simulation output
 #' @param time_unit time unit of 'start' and 'end'
@@ -51,18 +50,20 @@ processEndArgument <- function(x) {
 #' @param exclude_end exclude end time when filtering
 #' @return a time range object
 #' @export
-TimeWindow <- function(start=0, end="last", time_unit="hour", exclude_start=FALSE, exclude_end=FALSE) {
-  return(new("nca_time_window",
-             start=start,
-             end=processEndArgument(end),
-             time_unit=time_unit,
-             exclude_start=exclude_start,
-             exclude_end=exclude_end))
+TimeWindow <- function(start = 0, end = "last", time_unit = "hour", exclude_start = FALSE, exclude_end = FALSE) {
+  return(new(
+    "nca_time_window",
+    start = start,
+    end = processEndArgument(end),
+    time_unit = time_unit,
+    exclude_start = exclude_start,
+    exclude_end = exclude_end
+  ))
 }
 
-#' 
+#'
 #' Create an undefined time window.
-#' 
+#'
 #' @return undefined time window
 #' @export
 UndefinedTimeWindow <- function() {
@@ -75,14 +76,16 @@ UndefinedTimeWindow <- function() {
 
 #' @rdname apply_time_window
 setMethod(
-  "apply_time_window", signature=c("ANY", "nca_time_window", "character"), definition=function(x, window, data_time_unit) {
+  "apply_time_window",
+  signature = c("ANY", "nca_time_window", "character"),
+  definition = function(x, window, data_time_unit) {
     return(
       timerange(
-        x=x,
-        min=campsis::convert_time(window@start, from=window@time_unit, to=data_time_unit),
-        max=campsis::convert_time(window@end, from=window@time_unit, to=data_time_unit),
-        exclmin=window@exclude_start,
-        exclmax=window@exclude_end
+        x = x,
+        min = campsis::convert_time(window@start, from = window@time_unit, to = data_time_unit),
+        max = campsis::convert_time(window@end, from = window@time_unit, to = data_time_unit),
+        exclmin = window@exclude_start,
+        exclmax = window@exclude_end
       )
     )
   }
@@ -92,7 +95,7 @@ setMethod(
 #----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("load_from_json", signature=c("nca_time_window", "json_element"), definition=function(object, json) {
+setMethod("load_from_json", signature = c("nca_time_window", "json_element"), definition = function(object, json) {
   json@data$end <- processEndArgument(json@data$end)
-  return(map_json_properties_to_s4_slots(object=object, json=json))
+  return(map_json_properties_to_s4_slots(object = object, json = json))
 })
