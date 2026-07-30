@@ -4,11 +4,11 @@ library(dplyr)
 library(campsis)
 context("Test the 'TimeAboveLimit' and 'TimeBelowLimit' methods")
 
-testFolder <-  file.path(getwd(), test_path())
-source(file.path(testFolder, "testUtils.R"))
+TEST_FOLDER <-  file.path(getwd(), test_path())
+source(file.path(TEST_FOLDER, "test-utils.R"))
 
 get_ref_file <- function(filename) {
-  return(file.path(testFolder, "non_regression", filename))
+  return(file.path(TEST_FOLDER, "non_regression", filename))
 }
 
 test_that("Dataset 1 - time above 0.75 at day 1", {

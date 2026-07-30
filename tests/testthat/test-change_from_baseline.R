@@ -5,8 +5,8 @@ library(campsis)
 
 context("Test the 'Change From Baseline' metric")
 
-testFolder <-  file.path(getwd(), test_path())
-source(file.path(testFolder, "testUtils.R"))
+TEST_FOLDER <-  file.path(getwd(), test_path())
+source(file.path(TEST_FOLDER, "test-utils.R"))
 
 
 # A small fictitious dataset with 3 subjects and 4 time points each.

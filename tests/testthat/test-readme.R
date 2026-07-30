@@ -8,13 +8,13 @@ library(gt)
 
 context("Test all functionalities presented in the README")
 
-testFolder <-  file.path(getwd(), test_path())
-source(file.path(testFolder, "testUtils.R"))
+TEST_FOLDER <-  file.path(getwd(), test_path())
+source(file.path(TEST_FOLDER, "test-utils.R"))
 
 campsis <- generate_test_data()
 
 get_ref_file <- function(filename) {
-  return(file.path(testFolder, "non_regression", filename))
+  return(file.path(TEST_FOLDER, "non_regression", filename))
 }
 
 test_that("PK metrics at Day 1 and Day 7 (example 1) can be reproduced", {

@@ -2,11 +2,11 @@ library(testthat)
 
 context("Test the JSON interface")
 
-testFolder <-  file.path(getwd(), test_path())
+TEST_FOLDER <-  file.path(getwd(), test_path())
 
 test_that("Import time range from JSON", {
   
-  json <- jsonlite::read_json(file.path(testFolder, "json_examples", "nca_table_1.json"))
+  json <- jsonlite::read_json(file.path(TEST_FOLDER, "json_examples", "nca_table_1.json"))
   
   time_range <- load_from_json(TimeWindow(), JSONElement(json$nca_analyses[[1]]$window))
   expect_equal(time_range, TimeWindow(0, 24))
@@ -18,7 +18,7 @@ test_that("Import time range from JSON", {
 test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_1.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_1.json"))
 
   analysis1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y", strata=c(ARM="Specific arm")) %>%
     add(AUC()) %>%
@@ -64,7 +64,7 @@ test_that("Import NCA table 1 (2 analyses, all metrics covered)", {
 test_that("Import NCA table 2 (default analysis, AUC only)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_2.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_2.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(AUC(stat_display="{median} ({p5}–{p95})"))
@@ -78,7 +78,7 @@ test_that("Import NCA table 2 (default analysis, AUC only)", {
 test_that("Import NCA table 3 (default analysis, AUC and AUC custom)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_3.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_3.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(AUC(stat_display="{median} ({p5}–{p95})")) %>%
@@ -93,7 +93,7 @@ test_that("Import NCA table 3 (default analysis, AUC and AUC custom)", {
 test_that("Import NCA table 4 (default analysis, custom metric)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_4.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_4.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(CustomMetric(fun=~AUC > 100, stat_display="{p}%", categorical=TRUE))
@@ -108,7 +108,7 @@ test_that("Import NCA table 4 (default analysis, custom metric)", {
 test_that("Import NCA table 5 (default analysis, Cmax with rounding options)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_5.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_5.json"))
   
   analysis <- NCAAnalysis(name="Default", variable="CONC") %>%
     add(Cmax(name="Cmax 1", stat_display="{median} ({p5}–{p95})", digits=~style_sigfig(.x, 3))) %>%
@@ -124,7 +124,7 @@ test_that("Import NCA table 5 (default analysis, Cmax with rounding options)", {
 test_that("Import NCA table with proper time units", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_6.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_6.json"))
   
   analysis <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
     add(AUC())
@@ -138,7 +138,7 @@ test_that("Import NCA table with proper time units", {
 test_that("Import NCA table with 'combine_with' and 'show_all_levels' fields set", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_7.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_7.json"))
   
   analysis <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 24), variable="Y") %>%
     add(AUC())
@@ -152,7 +152,7 @@ test_that("Import NCA table with 'combine_with' and 'show_all_levels' fields set
 test_that("Import NCA table with proper time units (test issue #80)", {
   
   # Import NCA configuration from JSON
-  imported_table <- NCATable(json=file.path(testFolder, "json_examples", "nca_table_8.json"))
+  imported_table <- NCATable(json=file.path(TEST_FOLDER, "json_examples", "nca_table_8.json"))
   
   day1 <- NCAAnalysis(name="Day 1", window=TimeWindow(0, 1, "day"), variable="CONC") %>%
     add(c(Cmax(unit="ng/mL"), Tmax(unit="min")))

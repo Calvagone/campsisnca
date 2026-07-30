@@ -7,8 +7,8 @@ library(gtsummary)
 
 context("Test NCA metrics and NCA metrics table object")
 
-testFolder <-  file.path(getwd(), test_path())
-source(file.path(testFolder, "testUtils.R"))
+TEST_FOLDER <-  file.path(getwd(), test_path())
+source(file.path(TEST_FOLDER, "test-utils.R"))
 
 test_that("Dataset 1 - day 1 & day 7", {
   ds <- dataset1()

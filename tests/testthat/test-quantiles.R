@@ -7,8 +7,8 @@ library(gt)
 
 context("Test extra features")
 
-testFolder <-  file.path(getwd(), test_path())
-source(file.path(testFolder, "testUtils.R"))
+TEST_FOLDER <-  file.path(getwd(), test_path())
+source(file.path(TEST_FOLDER, "test-utils.R"))
 
 campsis <- generate_test_data()
 

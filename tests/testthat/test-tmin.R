@@ -4,8 +4,8 @@ library(dplyr)
 library(campsis)
 context("Test tmin method")
 
-testFolder <-  file.path(getwd(), test_path())
-source(file.path(testFolder, "testUtils.R"))
+TEST_FOLDER <-  file.path(getwd(), test_path())
+source(file.path(TEST_FOLDER, "test-utils.R"))
 
 test_that("Dataset 1 - cmin at steady state", {
   ds <- dataset1()

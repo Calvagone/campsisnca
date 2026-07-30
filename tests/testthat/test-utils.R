@@ -1,8 +1,3 @@
-
-# setwd("C:/prj/campsisnca/")
-# roxygen2::roxygenise()
-# setwd("C:/prj/campsisnca/tests/")
-
 OVERWRITE_NON_REG_FILES <- FALSE
 
 convert_method <- function(method) {
