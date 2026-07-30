@@ -5,3 +5,6 @@
 ^\.claude$
 ^\.github$
 ^\.vscode$
+^README\.Rmd$
+^README_files$
+^codecov\.yml$

@@ -6,6 +6,6 @@
 \alias{campsisnca_output}
 \title{The Campsisnca Output Class Union}
 \description{
-A class union containing standard data frames, tibbles, 
+A class union containing standard data frames, tibbles,
 and Campsisnca-specific table objects.
 }

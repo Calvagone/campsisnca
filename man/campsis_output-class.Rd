@@ -6,6 +6,6 @@
 \alias{campsis_output}
 \title{The Campsis Output Class Union}
 \description{
-A class union containing standard data frames, tibbles, 
+A class union containing standard data frames, tibbles,
 and Campsis-specific table objects.
 }

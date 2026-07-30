@@ -306,7 +306,7 @@ setMethod("generate_table_code", signature=c("nca_table", "logical"),
   digits <- get_digits_code(object)
   
   if (length(stratVariables) <= 2) {
-    body <- get_table_summary_code(var="gttable", data="individual", by=stratVariables,
+    body <- get_table_summary_code(variable="gttable", data="individual", by=stratVariables,
                                 stats=stats, type=type, labels=labels, digits=digits,
                                 combine_with=object@combine_with, header_label=object@header_label)
   } else {
