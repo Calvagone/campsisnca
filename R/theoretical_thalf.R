@@ -167,17 +167,17 @@ setMethod("calculate", signature=c("theoretical_thalf_metric"), definition=funct
 
   if (subtype == "1cpt") {
     ind <- metrics.1cpt(x, map=object@map)
-    ind <- ind %>% dplyr::transmute(id=ID, value=THALF)
+    ind <- ind %>% dplyr::transmute(id=.data$ID, value=.data$THALF)
 
   } else if (subtype %>% startsWith("2cpt")) {
     ind <- metrics.2cpt(x, map=object@map)
 
     if (subtype == "2cpt.dist") {
-      ind <- ind %>% dplyr::transmute(id=ID, value=THALF_D)
+      ind <- ind %>% dplyr::transmute(id=.data$ID, value=.data$THALF_D)
     } else if (subtype == "2cpt.z") {
-      ind <- ind %>% dplyr::transmute(id=ID, value=THALF_Z)
+      ind <- ind %>% dplyr::transmute(id=.data$ID, value=.data$THALF_Z)
     } else if (subtype == "2cpt.eff") {
-      ind <- ind %>% dplyr::transmute(id=ID, value=THALF_EFF)
+      ind <- ind %>% dplyr::transmute(id=.data$ID, value=.data$THALF_EFF)
     }
 
   } else {

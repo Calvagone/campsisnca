@@ -15,6 +15,6 @@ check_na_observations <- function(x, variable) {
 check_times_are_increasing <- function(x, strat_vars) {
   tmp <- x %>%
     dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
-    dplyr::summarise(INC=all(TIME==cummax(TIME)))
+    dplyr::summarise(INC=all(.data$TIME==cummax(.data$TIME)))
   assertthat::assert_that(all(tmp$INC), msg="Times must be monotonically increasing")
 }

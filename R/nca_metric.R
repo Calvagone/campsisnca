@@ -228,7 +228,7 @@ setMethod("i_values", signature=c("nca_metric"), definition=function(object, x, 
   retValue <- retValue %>%
     dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), as.character))
 
-  return(retValue %>% dplyr::rename(id=ID))  
+  return(retValue %>% dplyr::rename(id="ID"))  
 })
 
 #_______________________________________________________________________________
