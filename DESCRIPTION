@@ -56,8 +56,7 @@ Suggests:
     rxode2,
     testthat
 Remotes:
-    Calvagone/campsis@snake_case,
-    Calvagone/campsismod@snake_case
+    Calvagone/campsis
 Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Language: en-US

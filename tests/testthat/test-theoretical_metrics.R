@@ -85,19 +85,22 @@ test_that("Run 017F Pop2", {
 })
 
 test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
-  model <- model_suite$testing$nonmem$advan4_trans4
-  model <- model %>% campsismod::replace(Theta(name = "Q", value = 5))
-  model <- model %>% campsismod::replace(Theta(name = "V3", value = 100))
-  halfLifeRequiredVars <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
+  model <- model_suite$testing$nonmem$advan4_trans4 %>%
+    replace(Theta(name = "Q", value = 5)) %>%
+    replace(Theta(name = "V3", value = 100))
+  half_life_required_vars <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
 
-  dataset <- Dataset(1)
-  dataset <- dataset %>% add(Bolus(time = (0:13) * 24, amount = 1000, compartment = 1))
-  dataset <- dataset %>% add(Observations(times = seq(0, 21 * 24)))
+  dataset <- Dataset(1) %>%
+    add(Bolus(time = (0:13) * 24, amount = 1000, compartment = 1)) %>%
+    add(Observations(times = seq(0, 21 * 24)))
 
-  # Simulate with CAMPSIS
-  results <- model %>%
-    disable("IIV") %>%
-    simulate(dataset, dest = "rxode2", seed = 1, outvars = c("CP", halfLifeRequiredVars))
+  # Simulate with Campsis
+  results <- simulate(
+    model = model %>% disable("IIV"),
+    dataset = dataset,
+    seed = 1,
+    outvars = c("CP", half_life_required_vars)
+  )
 
   shadedPlot(results, "CP") + ggplot2::scale_y_log10()
 
@@ -106,15 +109,15 @@ test_that("Get half-life parameters from CAMPSIS 2-cpt model", {
   expect_equal(metrics$THALF_EFF, 23.97703, tolerance = 1e-5)
 })
 
-test_that("Get half-life parameters from CAMPSIS 1-cpt model", {
+test_that("Get half-life parameters from Campsis 1-cpt model", {
   model <- model_suite$testing$nonmem$advan2_trans1
 
-  dataset <- Dataset(1)
-  dataset <- dataset %>% add(Bolus(time = (0:13) * 24, amount = 1000, compartment = 1))
-  dataset <- dataset %>% add(Observations(times = seq(0, 21 * 24)))
+  dataset <- Dataset(1) %>%
+    add(Bolus(time = (0:13) * 24, amount = 1000, compartment = 1)) %>%
+    add(Observations(times = seq(0, 21 * 24)))
 
-  # Simulate with CAMPSIS
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest = "rxode2", seed = 1, outvars = c("CP", "K"))
+  # Simulate with Campsis
+  results <- simulate(model = model, dataset = dataset, seed = 1, outvars = c("CP", "K"))
 
   shadedPlot(results, "CP") + ggplot2::scale_y_log10()
 

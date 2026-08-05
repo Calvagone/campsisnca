@@ -13,7 +13,12 @@ test_that("Test half life parameters on 1-compartment model ", {
     add(Bolus(time = 0, amount = amount)) %>%
     add(Observations(times = times))
 
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest = "rxode2", seed = 1, outvars = c("CP", required))
+  results <- simulate(
+    model = model %>% disable("IIV"),
+    dataset = dataset,
+    seed = 1,
+    outvars = c("CP", required)
+  )
 
   nca <- NCAAnalysis(variable = "CP") %>%
     add(Thalf.1cpt()) %>%
@@ -38,8 +43,8 @@ test_that("Test half life parameters on 1-compartment model ", {
 test_that("Test half life parameters on 2-compartment model ", {
   amount <- 1000
   model <- model_suite$testing$nonmem$advan4_trans4 %>%
-    campsismod::replace(Theta(name = "Q", value = 5)) %>%
-    campsismod::replace(Theta(name = "V3", value = 100))
+    replace(Theta(name = "Q", value = 5)) %>%
+    replace(Theta(name = "V3", value = 100))
   required <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
 
   times <- seq(0, 144, by = 0.1)
@@ -47,7 +52,12 @@ test_that("Test half life parameters on 2-compartment model ", {
     add(Bolus(time = 0, amount = amount)) %>%
     add(Observations(times = times))
 
-  results <- model %>% disable("IIV") %>% simulate(dataset, dest = "rxode2", seed = 1, outvars = c("CP", required))
+  results <- simulate(
+    model = model %>% disable("IIV"),
+    dataset = dataset,
+    seed = 1,
+    outvars = c("CP", required)
+  )
 
   nca <- NCAAnalysis(variable = "CP") %>%
     add(Thalf.2cpt.dist()) %>%

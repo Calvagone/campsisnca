@@ -7,15 +7,20 @@ context("Test AUC metric (extra tests)")
 test_that("AUC infinite (single dose)", {
   amount <- 1000
   wait_period <- 24 * 7 * 5 # 5 weeks
-  model <- model_suite$testing$nonmem$advan4_trans4 %>% disable("IIV")
-  model <- model %>% campsismod::replace(Theta(name = "Q", value = 5))
-  model <- model %>% campsismod::replace(Theta(name = "V3", value = 100))
+
+  model <- model_suite$testing$nonmem$advan4_trans4 %>% disable("IIV") %>%
+    replace(Theta(name = "Q", value = 5)) %>%
+    replace(Theta(name = "V3", value = 100))
+
   required <- thalf.2cpt.required()[!(thalf.2cpt.required() %in% c("DOSE", "TAU"))]
-  dataset <- Dataset(1)
-  dataset <- dataset %>% add(Bolus(time = 0, amount = amount))
-  dataset <- dataset %>% add(Observations(times = seq(0, wait_period, by = 0.1)))
-  results <- model %>% simulate(dataset = dataset, dest = "rxode2", seed = 1, outvars = c("CP", required))
-  spaghettiPlot(results, "CP")
+
+  dataset <- Dataset(1) %>%
+    add(Bolus(time = 0, amount = amount)) %>%
+    add(Observations(times = seq(0, wait_period, by = 0.1)))
+
+  results <-  simulate(model = model, dataset = dataset, seed = 1, outvars = c("CP", required))
+
+  spaghetti_plot(results, "CP")
 
   auc <- AUC("CP", method = 1) %>% campsisnca::calculate(results)
   auc@individual$value

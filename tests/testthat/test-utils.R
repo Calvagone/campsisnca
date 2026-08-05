@@ -144,11 +144,11 @@ dataset1 <- function(seed = 1, reload = TRUE) {
   sampling <- c(0, 1, 2, 3, 4, 8, 10, 12, 16, 20, 24)
   dataset <- dataset %>% add(Observations(times = c(sampling, sampling + ((7 - 1) * 24))))
 
-  # Simulate with CAMPSIS
-  results <- model %>% simulate(dataset, dest = "mrgsolve", seed = seed)
+  # Simulate with Campsis
+  results <- simulate(model = model, dataset, seed = seed)
 
   #spaghettiPlot(results, "CP")
 
-  # Return both the CAMPSIS output and the NONMEM dataset
+  # Return both the Campsis output and the NONMEM dataset
   return(list(campsis = results, nonmem = results %>% to_nm_dataset(dataset = dataset, model = model, seed = seed)))
 }
