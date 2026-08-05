@@ -2,53 +2,67 @@
 #----                          tmax_metric class                            ----
 #_______________________________________________________________________________
 
-validateTmaxMetric <- function(object) {
-  return(expectOne(object, "rebase"))
+validate_tmax_metric <- function(object) {
+  return(expect_one(object, "rebase"))
 }
 
-#' 
+#'
 #' Tmax metric class.
-#' 
+#'
 #' @export
 setClass(
   "tmax_metric",
   representation(
-    rebase="logical"
+    rebase = "logical"
   ),
-  contains="nca_metric",
-  prototype=prototype(rebase=TRUE),
-  validity=validateTmaxMetric
+  contains = "nca_metric",
+  prototype = prototype(rebase = TRUE),
+  validity = validate_tmax_metric
 )
 
-#' 
+#'
 #' Tmax.
-#' 
-#' @inheritParams metricsParams
+#'
+#' @inheritParams metrics_params
 #' @param rebase rebase time according to start time of window
 #' @export
-Tmax <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="tmax_metric")
+Tmax <- function(
+  variable = NULL,
+  window = NULL,
+  rebase = TRUE,
+  name = NULL,
+  unit = NULL,
+  stat_display = NULL,
+  digits = NULL
+) {
+  metric <- nca_constructor(
+    variable = variable,
+    window = window,
+    name = name,
+    unit = unit,
+    stat_display = stat_display,
+    digits = digits,
+    metric_name = "tmax_metric"
+  )
   metric@rebase <- rebase
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("tmax_metric"), definition=function(object, ...) {
-  return("tmax") 
+#' @rdname get_default_name
+setMethod("get_default_name", signature = c("tmax_metric"), definition = function(object, ...) {
+  return("tmax")
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname i_value
+setMethod("i_value", signature = c("tmax_metric", "numeric", "numeric"), definition = function(object, time, value) {
   retValue <- time[which.max(value)]
   if (object@rebase) {
     retValue <- retValue - object@window@start
@@ -57,19 +71,18 @@ setMethod("iValue", signature=c("tmax_metric", "numeric", "numeric"), definition
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          get_latex_name                               ----
 #_______________________________________________________________________________
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("tmax_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "max"))
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature = c("tmax_metric"), definition = function(x) {
+  return(subscript_occurrence(x %>% get_name(), "max"))
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("tmax_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("load_from_json", signature = c("tmax_metric", "json_element"), definition = function(object, json) {
+  return(load_metric_from_json(object = object, json = json))
 })
-

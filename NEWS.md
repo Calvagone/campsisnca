@@ -1,3 +1,18 @@
+# campsisnca 1.7.0
+
+* Align package with Campsis v1.9.0 #83
+* openJSON method should support JSON as list #84
+* New table to summarise replicated data #85
+* Change from baseline metric #86
+* Migrate campsisnca to snake_case #87
+* Prepare package for CRAN submission #88
+* Get rid of ncappc package #89
+* Force stratification variables to appear when they have only a single level #90
+* Add gt tab options to the replicated NCA table #91
+* Review test script filenames #92
+* Format code with Air #93
+* Remove argument 'dest' from call to 'simulate' in tests #94
+
 # campsisnca 1.6.1
 
 * Tmax and Tmin: rebase not supporting time unit #80

@@ -8,7 +8,7 @@ NCAAnalysis(
   name = "Default",
   window = TimeWindow(),
   variable = NULL,
-  strata = getDefaultStrata()
+  strata = get_default_strata()
 )
 }
 \arguments{

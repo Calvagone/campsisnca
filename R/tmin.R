@@ -2,74 +2,87 @@
 #----                          tmin_metric class                            ----
 #_______________________________________________________________________________
 
-validateTminMetric <- function(object) {
-  return(expectOne(object, "rebase"))
+validate_tmin_metric <- function(object) {
+  return(expect_one(object, "rebase"))
 }
 
-#' 
+#'
 #' Tmin metric class.
-#' 
+#'
 #' @export
 setClass(
   "tmin_metric",
   representation(
-    rebase="logical"
+    rebase = "logical"
   ),
-  contains="nca_metric",
-  prototype=prototype(rebase=TRUE),
-  validity=validateTminMetric
+  contains = "nca_metric",
+  prototype = prototype(rebase = TRUE),
+  validity = validate_tmin_metric
 )
 
-#' 
+#'
 #' Tmin.
-#' 
-#' @inheritParams metricsParams
+#'
+#' @inheritParams metrics_params
 #' @param rebase rebase time according to start time of window
 #' @export
-Tmin <- function(variable=NULL, window=NULL, rebase=TRUE, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="tmin_metric")
+Tmin <- function(
+  variable = NULL,
+  window = NULL,
+  rebase = TRUE,
+  name = NULL,
+  unit = NULL,
+  stat_display = NULL,
+  digits = NULL
+) {
+  metric <- nca_constructor(
+    variable = variable,
+    window = window,
+    name = name,
+    unit = unit,
+    stat_display = stat_display,
+    digits = digits,
+    metric_name = "tmin_metric"
+  )
   metric@rebase <- rebase
-  return(setDefaultNameIfNA(metric))
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("tmin_metric"), definition=function(object, ...) {
-  return("tmin") 
+#' @rdname get_default_name
+setMethod("get_default_name", signature = c("tmin_metric"), definition = function(object, ...) {
+  return("tmin")
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("tmin_metric", "numeric", "numeric"), definition=function(object, time, value) {
+#' @rdname i_value
+setMethod("i_value", signature = c("tmin_metric", "numeric", "numeric"), definition = function(object, time, value) {
   retValue <- time[which.min(value)]
   if (object@rebase) {
     retValue <- retValue - object@window@start
   }
-  return(retValue)    
+  return(retValue)
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          get_latex_name                               ----
 #_______________________________________________________________________________
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("tmin_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "min"))
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature = c("tmin_metric"), definition = function(x) {
+  return(subscript_occurrence(x %>% get_name(), "min"))
 })
 
 #_______________________________________________________________________________
-#----                           loadFromJSON                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-setMethod("loadFromJSON", signature=c("tmin_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
+setMethod("load_from_json", signature = c("tmin_metric", "json_element"), definition = function(object, json) {
+  return(load_metric_from_json(object = object, json = json))
 })
-

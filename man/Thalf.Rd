@@ -2,7 +2,7 @@
 % Please edit documentation in R/thalf.R
 \name{Thalf}
 \alias{Thalf}
-\title{Terminal half life computed by making a linear regression in the log domain 
+\title{Terminal half life computed by making a linear regression in the log domain
 on the given data x.}
 \usage{
 Thalf(
@@ -28,6 +28,6 @@ Thalf(
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
 \description{
-Terminal half life computed by making a linear regression in the log domain 
+Terminal half life computed by making a linear regression in the log domain
 on the given data x.
 }

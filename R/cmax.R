@@ -2,105 +2,117 @@
 #----                       (c)max_metric classes                           ----
 #_______________________________________________________________________________
 
-validateMaxMetric <- function(object) {
+validate_max_metric <- function(object) {
   return(TRUE)
 }
 
-#' 
+#'
 #' Abstract max metric class.
-#' 
+#'
 #' @export
 setClass(
   "abstract_max_metric",
-  representation(
-  ),
-  contains="nca_metric",
-  validity=validateMaxMetric
+  representation(),
+  contains = "nca_metric",
+  validity = validate_max_metric
 )
 
-#' 
+#'
 #' Max metric class.
-#' 
+#'
 #' @export
 setClass(
   "max_metric",
-  representation(
-  ),
-  contains="abstract_max_metric"
+  representation(),
+  contains = "abstract_max_metric"
 )
 
-#' 
+#'
 #' Cmax metric class.
-#' 
+#'
 #' @export
 setClass(
   "cmax_metric",
-  representation(
-  ),
-  contains="abstract_max_metric"
+  representation(),
+  contains = "abstract_max_metric"
 )
 
-#' 
+#'
 #' Max.
-#' 
-#' @inheritParams metricsParams
+#'
+#' @inheritParams metrics_params
 #' @export
-Max <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="max_metric")
-  return(setDefaultNameIfNA(metric))
+Max <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
+  metric <- nca_constructor(
+    variable = variable,
+    window = window,
+    name = name,
+    unit = unit,
+    stat_display = stat_display,
+    digits = digits,
+    metric_name = "max_metric"
+  )
+  return(set_default_name_if_na(metric))
 }
 
-#' 
+#'
 #' Cmax.
-#' 
-#' @inheritParams metricsParams
+#'
+#' @inheritParams metrics_params
 #' @export
-Cmax <- function(variable=NULL, window=NULL, name=NULL, unit=NULL, stat_display=NULL, digits=NULL) {
-  metric <- ncaConstructor(variable=variable, window=window, name=name, unit=unit,
-                           stat_display=stat_display, digits=digits,
-                           metric_name="cmax_metric")
-  return(setDefaultNameIfNA(metric))
+Cmax <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
+  metric <- nca_constructor(
+    variable = variable,
+    window = window,
+    name = name,
+    unit = unit,
+    stat_display = stat_display,
+    digits = digits,
+    metric_name = "cmax_metric"
+  )
+  return(set_default_name_if_na(metric))
 }
 
 #_______________________________________________________________________________
-#----                           getDefaultName                              ----
+#----                          get_default_name                             ----
 #_______________________________________________________________________________
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("max_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature = c("max_metric"), definition = function(object, ...) {
   return("Max")
 })
 
-#' @rdname getDefaultName
-setMethod("getDefaultName", signature=c("cmax_metric"), definition=function(object, ...) {
+#' @rdname get_default_name
+setMethod("get_default_name", signature = c("cmax_metric"), definition = function(object, ...) {
   return("Cmax")
 })
 
 #_______________________________________________________________________________
-#----                            iValue                                     ----
+#----                            i_value                                    ----
 #_______________________________________________________________________________
 
-#' @rdname iValue
-setMethod("iValue", signature=c("abstract_max_metric", "numeric", "numeric"), definition=function(object, time, value) {
-  return(max(value))    
+#' @rdname i_value
+setMethod(
+  "i_value",
+  signature = c("abstract_max_metric", "numeric", "numeric"),
+  definition = function(object, time, value) {
+    return(max(value))
+  }
+)
+
+#_______________________________________________________________________________
+#----                          get_latex_name                               ----
+#_______________________________________________________________________________
+
+#' @rdname get_latex_name
+setMethod("get_latex_name", signature = c("abstract_max_metric"), definition = function(x) {
+  return(subscript_occurrence(x %>% get_name(), "max"))
 })
 
 #_______________________________________________________________________________
-#----                           getLaTeXName                                ----
+#----                          load_from_json                               ----
 #_______________________________________________________________________________
 
-#' @rdname getLaTeXName
-setMethod("getLaTeXName", signature=c("abstract_max_metric"), definition = function(x) {
-  return(subscriptOccurrence(x %>% getName(), "max"))
+setMethod("load_from_json", signature = c("abstract_max_metric", "json_element"), definition = function(object, json) {
+  return(load_metric_from_json(object = object, json = json))
 })
-
-#_______________________________________________________________________________
-#----                           loadFromJSON                                ----
-#_______________________________________________________________________________
-
-setMethod("loadFromJSON", signature=c("abstract_max_metric", "json_element"), definition=function(object, json) {
-  return(loadMetricFromJSON(object=object, json=json))
-})
-

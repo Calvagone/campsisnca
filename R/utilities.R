@@ -28,3 +28,11 @@ getCampsisncaOption <- function(name, default) {
     }
   }
 }
+
+all_strata_levels <- function() {
+  return("all")
+}
+
+get_default_strata <- function() {
+  return(c(SCENARIO = all_strata_levels(), ARM = all_strata_levels()))
+}

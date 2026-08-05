@@ -3,3 +3,10 @@
 ^LICENSE\.md$
 ^\.positai$
 ^\.claude$
+^\.github$
+^\.vscode$
+^README\.Rmd$
+^README_files$
+^codecov\.yml$
+^air\.toml$
+^cran-comments\.md$
