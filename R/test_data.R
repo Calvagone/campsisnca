@@ -17,13 +17,15 @@ generate_test_data <- function() {
     add(campsis::Covariate("BW", campsis::UniformDistribution(50, 100)))
 
   model <- campsismod::model_suite$testing$nonmem$advan4_trans4
-  cl <- model %>% campsismod::find(Equation("CL"))
-  model <- model %>% campsismod::replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
+
+  cl <- model %>%
+    campsismod::find(Equation("CL"))
+  model <- model %>%
+    campsismod::replace(Equation("CL", paste0(cl@rhs, "*pow(BW/70, 0.75)")))
 
   # It should not matter if mrgsolve is used instead of rxode2
   # Residual variability is now generated with base R on line 32
-  campsis <- model %>%
-    campsis::simulate(dataset = ds, dest = "mrgsolve", seed = 1, outvars = c("BW", "CL", "V2", "Q", "V3", "KA"))
+  campsis <- campsis::simulate(model = model, dataset = ds, seed = 1, outvars = c("BW", "CL", "V2", "Q", "V3", "KA"))
 
   # Generate residual variability with base R (see issue #52)
   set.seed(1)
