@@ -316,7 +316,6 @@ toGt <- function(x, title = NULL, subtitle = NULL, opts = list(), subscripts = F
   }
 
   if (length(opts) > 0) {
-    print(opts)
     gtTable <- do.call(
       gt::tab_options,
       c(list(data = gtTable), opts)
