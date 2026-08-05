@@ -184,7 +184,11 @@ setMethod(
 #----                                export                                 ----
 #_______________________________________________________________________________
 
+#' Export replicated NCA table.
+#'
+#' @param object replicated_nca_table object
 #' @param dest destination for the summarised table, either "dataframe", "gtsummary" or "gt"
+#' @param ... extra arguments
 #' @importFrom gtsummary all_categorical all_continuous all_stat_cols modify_footnote modify_header tbl_summary
 #' @importFrom rlang as_function
 setMethod(
