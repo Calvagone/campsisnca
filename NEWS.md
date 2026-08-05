@@ -11,6 +11,7 @@
 * Add gt tab options to the replicated NCA table #91
 * Review test script filenames #92
 * Format code with Air #93
+* Remove argument 'dest' from call to 'simulate' in tests #94
 
 # campsisnca 1.6.1
 
