@@ -55,8 +55,6 @@ Suggests:
     roxygen2,
     rxode2,
     testthat
-Remotes:
-    Calvagone/campsis
 Config/roxygen2/version: 8.0.0
 Encoding: UTF-8
 Language: en-US
