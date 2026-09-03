@@ -143,7 +143,7 @@ setMethod(
       .init = x_filtered
     )
 
-    # remove specific stratification variables
+    # Remove specific stratification variables
     x_reduced <- x_reduced %>%
       dplyr::select(-dplyr::all_of(specific_strata_names))
 
@@ -205,6 +205,9 @@ setMethod(
     } else {
       "continuous"
     }
+
+   # Preserve original order in stratification variables
+    x_wider <- preserve_column_levels(x = x_wider, cols = names(object@strata))
 
     if (dest %in% c("gt", "gtsummary")) {
       gtsummary_table <- gtsummary::tbl_summary(
