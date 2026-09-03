@@ -61,6 +61,10 @@ export(i_values)
 export(metrics.1cpt)
 export(metrics.2cpt)
 export(metrics.common)
+export(preserve_column_levels)
+export(remove_column_levels)
+export(restore_column_levels)
+export(save_column_levels)
 export(se)
 export(stat_display_string)
 export(thalf.1cpt.required)
@@ -117,85 +121,112 @@ import(tibble)
 importClassesFrom(campsis,campsis_tbl)
 importClassesFrom(campsis,std_campsis_tbl)
 importFrom(assertthat,assert_that)
-importFrom(campsis,Bolus)
-importFrom(campsis,Covariate)
-importFrom(campsis,Dataset)
-importFrom(campsis,Observations)
-importFrom(campsis,obs_only)
-importFrom(campsis,simulate)
-importFrom(campsismod,Equation)
-importFrom(campsismod,JSONElement)
-importFrom(campsismod,VariablePattern)
-importFrom(campsismod,add)
-importFrom(campsismod,export)
-importFrom(campsismod,find)
-importFrom(campsismod,get_name)
-importFrom(campsismod,load_from_json)
-importFrom(campsismod,map_json_properties_to_s4_slots)
-importFrom(campsismod,process_extra_arg)
-importFrom(campsismod,replace)
-importFrom(campsismod,replaceAll)
-importFrom(cards,ard_categorical)
-importFrom(cards,ard_continuous)
-importFrom(dplyr,across)
-importFrom(dplyr,all_of)
-importFrom(dplyr,any_of)
-importFrom(dplyr,arrange)
-importFrom(dplyr,desc)
-importFrom(dplyr,distinct)
-importFrom(dplyr,everything)
-importFrom(dplyr,filter)
-importFrom(dplyr,first)
-importFrom(dplyr,full_join)
-importFrom(dplyr,group_by)
-importFrom(dplyr,if_any)
-importFrom(dplyr,if_else)
-importFrom(dplyr,lag)
-importFrom(dplyr,matches)
-importFrom(dplyr,mutate)
-importFrom(dplyr,n_distinct)
-importFrom(dplyr,pull)
-importFrom(dplyr,relocate)
-importFrom(dplyr,rename_at)
-importFrom(dplyr,select)
-importFrom(dplyr,slice)
-importFrom(dplyr,summarise)
-importFrom(dplyr,transmute)
-importFrom(dplyr,ungroup)
+importFrom(campsis,
+  Bolus,
+  Covariate,
+  Dataset,
+  Observations,
+  obs_only,
+  simulate
+)
+importFrom(campsismod,
+  Equation,
+  JSONElement,
+  VariablePattern,
+  add,
+  export,
+  find,
+  get_name,
+  load_from_json,
+  map_json_properties_to_s4_slots,
+  process_extra_arg,
+  replace,
+  replaceAll
+)
+importFrom(cards,
+  ard_categorical,
+  ard_continuous
+)
+importFrom(dplyr,
+  across,
+  all_of,
+  any_of,
+  arrange,
+  cur_column,
+  desc,
+  distinct,
+  everything,
+  filter,
+  first,
+  full_join,
+  group_by,
+  if_any,
+  if_else,
+  lag,
+  matches,
+  mutate,
+  n_distinct,
+  pull,
+  relocate,
+  rename_at,
+  select,
+  slice,
+  summarise,
+  transmute,
+  ungroup
+)
 importFrom(glue,glue)
-importFrom(gt,cells_body)
-importFrom(gt,fmt_markdown)
-importFrom(gt,tab_options)
-importFrom(gt,text_transform)
-importFrom(gtsummary,all_categorical)
-importFrom(gtsummary,all_continuous)
-importFrom(gtsummary,all_dichotomous)
-importFrom(gtsummary,all_stat_cols)
-importFrom(gtsummary,as_gt)
-importFrom(gtsummary,modify_footnote)
-importFrom(gtsummary,modify_header)
-importFrom(gtsummary,tbl_summary)
+importFrom(gt,
+  cells_body,
+  fmt_markdown,
+  tab_options,
+  text_transform
+)
+importFrom(gtsummary,
+  all_categorical,
+  all_continuous,
+  all_dichotomous,
+  all_stat_cols,
+  as_gt,
+  modify_footnote,
+  modify_header,
+  tbl_summary
+)
 importFrom(jsonlite,parse_json)
 importFrom(jsonvalidate,json_schema)
 importFrom(magrittr,`%>%`)
-importFrom(methods,is)
-importFrom(methods,new)
-importFrom(purrr,map2)
-importFrom(purrr,map_chr)
-importFrom(purrr,map_df)
-importFrom(rlang,.data)
-importFrom(rlang,as_function)
-importFrom(rlang,is_formula)
-importFrom(rlang,is_function)
-importFrom(rlang,is_lambda)
-importFrom(stats,lm)
-importFrom(stats,median)
-importFrom(stats,rnorm)
-importFrom(stats,sd)
-importFrom(stringr,str_detect)
-importFrom(stringr,str_extract_all)
-importFrom(stringr,str_replace_all)
-importFrom(tibble,add_column)
-importFrom(tibble,as_tibble)
-importFrom(tibble,tibble)
+importFrom(methods,
+  is,
+  new
+)
+importFrom(purrr,
+  map,
+  map2,
+  map_chr,
+  map_df
+)
+importFrom(rlang,
+  .data,
+  as_function,
+  is_formula,
+  is_function,
+  is_lambda
+)
+importFrom(stats,
+  lm,
+  median,
+  rnorm,
+  sd,
+  setNames
+)
+importFrom(stringr,
+  str_detect,
+  str_extract_all,
+  str_replace_all
+)
+importFrom(tibble,
+  add_column,
+  as_tibble,
+  tibble
+)
 importFrom(tidyr,pivot_wider)

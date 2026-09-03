@@ -40,6 +40,7 @@ compute_nca_metric_summary <- function(object, strat_vars, quantile_type) {
   stats <- extract_brace_values(stat_display) %>%
     trimws()
   categorical <- object@categorical
+  saved_levels <- save_column_levels(x = data, cols = strat_vars)
 
   if (categorical) {
     # Check stats content, only n, p and N are allowed
@@ -147,7 +148,20 @@ compute_nca_metric_summary <- function(object, strat_vars, quantile_type) {
       )
   }
 
-  return(list(summary = summary, summary_pretty = summary_pretty))
+  return(list(
+    summary = restore_column_levels(
+      x = summary,
+      saved_levels = saved_levels,
+      arrange = TRUE,
+      to_character = TRUE
+    ),
+    summary_pretty = restore_column_levels(
+      x = summary_pretty,
+      saved_levels = saved_levels,
+      arrange = TRUE,
+      to_character = TRUE
+    )
+  ))
 }
 
 quantile_fun <- function(str, type) {

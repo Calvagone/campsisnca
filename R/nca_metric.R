@@ -213,6 +213,9 @@ setMethod("i_values", signature = c("nca_metric"), definition = function(object,
   if (length(variable) == 0) {
     stop(sprintf("No variable provided for metric '%s'", x %>% get_name()))
   }
+  # Preserve levels in stratification variables
+  x <- preserve_column_levels(x = x, cols = strat_vars)
+
   # Standardise data frame
   x <- x %>%
     standardise(variable = variable, strat_vars = strat_vars)
@@ -233,7 +236,7 @@ setMethod("i_values", signature = c("nca_metric"), definition = function(object,
   object@window@time_unit <- table_time_unit
 
   if (object@i_value_tibble) {
-    retValue <- x %>%
+    x <- x %>%
       dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
       dplyr::group_modify(
         ~ {
@@ -243,17 +246,16 @@ setMethod("i_values", signature = c("nca_metric"), definition = function(object,
       ) %>%
       dplyr::ungroup()
   } else {
-    retValue <- x %>%
+    x <- x %>%
       dplyr::group_by(dplyr::across(dplyr::all_of(c(strat_vars, "ID")))) %>%
       dplyr::summarise(value = object %>% i_value(time = .data$TIME, value = .data[[variable]])) %>%
       dplyr::ungroup()
   }
 
   # Stratification variables back to character vectors
-  retValue <- retValue %>%
-    dplyr::mutate(dplyr::across(dplyr::all_of(strat_vars), as.character))
+  x <- remove_column_levels(x = x, cols = strat_vars)
 
-  return(retValue %>% dplyr::rename(id = "ID"))
+  return(x %>% dplyr::rename(id = "ID"))
 })
 
 #_______________________________________________________________________________

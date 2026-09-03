@@ -1,7 +1,7 @@
 Type: Package
 Package: campsisnca
 Title: Non-Compartmental Analysis for Campsis Simulation Platform
-Version: 1.7.0
+Version: 1.7.1
 Authors@R: 
     person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
 Description: A flexible and user-friendly non-compartmental analysis (NCA)
@@ -55,7 +55,7 @@ Suggests:
     roxygen2,
     rxode2,
     testthat
-Config/roxygen2/version: 8.0.0
+Config/roxygen2/version: 8.1.0
 Encoding: UTF-8
 Language: en-US
 LazyData: true

@@ -36,3 +36,137 @@ all_strata_levels <- function() {
 get_default_strata <- function() {
   return(c(SCENARIO = all_strata_levels(), ARM = all_strata_levels()))
 }
+
+#' Preserve Existing Column Value Order as Factor Levels
+#'
+#' Converts target columns into factors using their current unique row appearance
+#' order as the factor levels.
+#'
+#' @param x A data frame or tibble.
+#' @param cols A character vector of column names to convert.
+#'
+#' @return A data frame with updated factor columns.
+#' @export
+#' @importFrom dplyr mutate across all_of
+preserve_column_levels <- function(x, cols) {
+  target_cols <- intersect(cols, colnames(x))
+  if (length(target_cols) > 0) {
+    x <- x %>%
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::all_of(target_cols),
+          ~ factor(.x, levels = unique(.x))
+        )
+      )
+  }
+  return(x)
+}
+
+#' Strip Factor Class from Columns
+#'
+#' Converts target columns from factors into standard character vectors.
+#'
+#' @param x A data frame or tibble.
+#' @param cols A character vector of column names to convert.
+#'
+#' @return A data frame with character columns.
+#' @export
+#' @importFrom dplyr mutate across all_of
+remove_column_levels <- function(x, cols) {
+  target_cols <- intersect(cols, colnames(x))
+  if (length(target_cols) > 0) {
+    x <- x %>%
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::all_of(target_cols),
+          as.character
+        )
+      )
+  }
+  return(x)
+}
+
+#' Extract and Save Column Factor Levels
+#'
+#' Extracts factor levels (or unique value order for non-factors) for target columns
+#' and stores them in a named list for later restoration.
+#'
+#' @param x A data frame or tibble.
+#' @param cols A character vector of column names whose levels should be saved.
+#'
+#' @return A named list where names correspond to column names and values
+#'   contain character vectors of factor levels.
+#' @export
+#' @importFrom purrr map
+#' @importFrom stats setNames
+save_column_levels <- function(x, cols) {
+  target_cols <- intersect(cols, colnames(x))
+
+  if (length(target_cols) == 0) {
+    return(list())
+  }
+
+  saved_levels <- purrr::map(
+    target_cols,
+    ~ {
+      if (is.factor(x[[.x]])) {
+        levels(x[[.x]])
+      } else {
+        unique(x[[.x]])
+      }
+    }
+  )
+
+  return(stats::setNames(saved_levels, target_cols))
+}
+
+#' Restore Factor Levels and Optionally Reorder Rows
+#'
+#' Re-applies saved factor levels back onto target columns, optionally
+#' physically sorts the rows by the restored factor order, and optionally
+#' converts the columns back to character vectors.
+#'
+#' @param x A data frame or tibble.
+#' @param saved_levels A named list of character vectors representing factor levels
+#'   (typically created by \code{\link{save_column_levels}}).
+#' @param arrange Logical. If \code{TRUE} (default), physically reorders rows in
+#'   \code{x} to match the restored factor level sequence.
+#' @param to_character Logical. If \code{TRUE}, converts the target columns back to
+#'   character vectors after restoring levels and sorting. Defaults to \code{FALSE}.
+#'
+#' @return A data frame with restored factor (or character) columns and
+#'   optionally reordered rows.
+#' @export
+#' @importFrom dplyr mutate across all_of arrange cur_column
+restore_column_levels <- function(x, saved_levels, arrange = TRUE, to_character = FALSE) {
+  target_cols <- intersect(names(saved_levels), colnames(x))
+
+  if (length(target_cols) > 0) {
+    # 1. Restore factor metadata
+    x <- x %>%
+      dplyr::mutate(
+        dplyr::across(
+          dplyr::all_of(target_cols),
+          ~ factor(.x, levels = saved_levels[[dplyr::cur_column()]])
+        )
+      )
+
+    # 2. Optionally reorder physical rows to match the restored levels
+    if (arrange) {
+      x <- x %>%
+        dplyr::arrange(dplyr::across(dplyr::all_of(target_cols)))
+    }
+
+    # 3. Optionally convert columns back to character vector class
+    if (to_character) {
+      x <- x %>%
+        dplyr::mutate(
+          dplyr::across(
+            dplyr::all_of(target_cols),
+            as.character
+          )
+        )
+    }
+  }
+  return(x)
+}
