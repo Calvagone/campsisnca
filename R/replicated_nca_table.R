@@ -207,7 +207,8 @@ setMethod(
     }
 
    # Preserve original order in stratification variables
-    x_wider <- preserve_column_levels(x = x_wider, cols = names(object@strata))
+    character_strat_vars = get_character_cols_only(x = x_wider, cols = names(object@strata))
+    x_wider <- preserve_column_levels(x = x_wider, cols = character_strat_vars)
 
     if (dest %in% c("gt", "gtsummary")) {
       gtsummary_table <- gtsummary::tbl_summary(

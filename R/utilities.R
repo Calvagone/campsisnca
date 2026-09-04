@@ -37,24 +37,50 @@ get_default_strata <- function() {
   return(c(SCENARIO = all_strata_levels(), ARM = all_strata_levels()))
 }
 
+#' Filter Column Names to Character (and Optionally Factor) Columns
+#'
+#' Filters a vector of column names to include only those present in a data frame 
+#' that are of class character (and optionally factor).
+#'
+#' @param x A data frame or tibble.
+#' @param cols A character vector of candidate column names.
+#' @param include_factor Logical. If \code{TRUE}, factor columns are also included 
+#'   along with character columns. Defaults to \code{FALSE}.
+#'
+#' @return A character vector of column names matching the specified class criteria.
+#' @export
+#' @importFrom purrr map_lgl
+get_character_cols_only <- function(x, cols, include_factor = FALSE) {
+  matched <- intersect(cols, colnames(x))
+  
+  if (length(matched) == 0) {
+    return(character(0))
+  }
+
+  is_valid_col <- purrr::map_lgl(matched, ~ {
+    is.character(x[[.x]]) || (include_factor && is.factor(x[[.x]]))
+  })
+
+  return(matched[is_valid_col])
+}
+
 #' Preserve Existing Column Value Order as Factor Levels
 #'
 #' Converts target columns into factors using their current unique row appearance
 #' order as the factor levels.
 #'
-#' @param x A data frame or tibble.
-#' @param cols A character vector of column names to convert.
+#' @param x a data frame or tibble.
+#' @param cols a character vector of column names to convert.
 #'
-#' @return A data frame with updated factor columns.
+#' @return a data frame with updated factor columns.
 #' @export
 #' @importFrom dplyr mutate across all_of
 preserve_column_levels <- function(x, cols) {
-  target_cols <- intersect(cols, colnames(x))
-  if (length(target_cols) > 0) {
+  if (length(cols) > 0) {
     x <- x %>%
       dplyr::mutate(
         dplyr::across(
-          dplyr::all_of(target_cols),
+          dplyr::all_of(cols),
           ~ factor(.x, levels = unique(.x))
         )
       )
@@ -66,19 +92,18 @@ preserve_column_levels <- function(x, cols) {
 #'
 #' Converts target columns from factors into standard character vectors.
 #'
-#' @param x A data frame or tibble.
-#' @param cols A character vector of column names to convert.
+#' @param x a data frame or tibble.
+#' @param cols a character vector of column names to convert.
 #'
-#' @return A data frame with character columns.
+#' @return a data frame with character columns.
 #' @export
 #' @importFrom dplyr mutate across all_of
 remove_column_levels <- function(x, cols) {
-  target_cols <- intersect(cols, colnames(x))
-  if (length(target_cols) > 0) {
+  if (length(cols) > 0) {
     x <- x %>%
       dplyr::mutate(
         dplyr::across(
-          dplyr::all_of(target_cols),
+          dplyr::all_of(cols),
           as.character
         )
       )
@@ -91,16 +116,16 @@ remove_column_levels <- function(x, cols) {
 #' Extracts factor levels (or unique value order for non-factors) for target columns
 #' and stores them in a named list for later restoration.
 #'
-#' @param x A data frame or tibble.
-#' @param cols A character vector of column names whose levels should be saved.
+#' @param x a data frame or tibble.
+#' @param cols a character vector of column names whose levels should be saved.
 #'
-#' @return A named list where names correspond to column names and values
+#' @return a named list where names correspond to column names and values
 #'   contain character vectors of factor levels.
 #' @export
 #' @importFrom purrr map
 #' @importFrom stats setNames
 save_column_levels <- function(x, cols) {
-  target_cols <- intersect(cols, colnames(x))
+  target_cols <- get_character_cols_only(x = x, cols = cols, include_factor = TRUE)
 
   if (length(target_cols) == 0) {
     return(list())
@@ -126,15 +151,15 @@ save_column_levels <- function(x, cols) {
 #' physically sorts the rows by the restored factor order, and optionally
 #' converts the columns back to character vectors.
 #'
-#' @param x A data frame or tibble.
-#' @param saved_levels A named list of character vectors representing factor levels
+#' @param x a data frame or tibble.
+#' @param saved_levels a named list of character vectors representing factor levels
 #'   (typically created by \code{\link{save_column_levels}}).
-#' @param arrange Logical. If \code{TRUE} (default), physically reorders rows in
+#' @param arrange logical. If \code{TRUE} (default), physically reorders rows in
 #'   \code{x} to match the restored factor level sequence.
-#' @param to_character Logical. If \code{TRUE}, converts the target columns back to
+#' @param to_character logical. If \code{TRUE}, converts the target columns back to
 #'   character vectors after restoring levels and sorting. Defaults to \code{FALSE}.
 #'
-#' @return A data frame with restored factor (or character) columns and
+#' @return a data frame with restored factor (or character) columns and
 #'   optionally reordered rows.
 #' @export
 #' @importFrom dplyr mutate across all_of arrange cur_column

@@ -7,12 +7,12 @@
 save_column_levels(x, cols)
 }
 \arguments{
-\item{x}{A data frame or tibble.}
+\item{x}{a data frame or tibble.}
 
-\item{cols}{A character vector of column names whose levels should be saved.}
+\item{cols}{a character vector of column names whose levels should be saved.}
 }
 \value{
-A named list where names correspond to column names and values
+a named list where names correspond to column names and values
   contain character vectors of factor levels.
 }
 \description{

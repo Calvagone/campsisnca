@@ -7,19 +7,19 @@
 restore_column_levels(x, saved_levels, arrange = TRUE, to_character = FALSE)
 }
 \arguments{
-\item{x}{A data frame or tibble.}
+\item{x}{a data frame or tibble.}
 
-\item{saved_levels}{A named list of character vectors representing factor levels
+\item{saved_levels}{a named list of character vectors representing factor levels
 (typically created by \code{\link{save_column_levels}}).}
 
-\item{arrange}{Logical. If \code{TRUE} (default), physically reorders rows in
+\item{arrange}{logical. If \code{TRUE} (default), physically reorders rows in
 \code{x} to match the restored factor level sequence.}
 
-\item{to_character}{Logical. If \code{TRUE}, converts the target columns back to
+\item{to_character}{logical. If \code{TRUE}, converts the target columns back to
 character vectors after restoring levels and sorting. Defaults to \code{FALSE}.}
 }
 \value{
-A data frame with restored factor (or character) columns and
+a data frame with restored factor (or character) columns and
   optionally reordered rows.
 }
 \description{

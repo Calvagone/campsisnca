@@ -49,6 +49,7 @@ export(geocv)
 export(geomean)
 export(getCampsisncaOption)
 export(getCampsisncaOptions)
+export(get_character_cols_only)
 export(get_default_name)
 export(get_latex_name)
 export(get_strata)
@@ -203,7 +204,8 @@ importFrom(purrr,
   map,
   map2,
   map_chr,
-  map_df
+  map_df,
+  map_lgl
 )
 importFrom(rlang,
   .data,

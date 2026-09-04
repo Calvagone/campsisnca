@@ -214,7 +214,8 @@ setMethod("i_values", signature = c("nca_metric"), definition = function(object,
     stop(sprintf("No variable provided for metric '%s'", x %>% get_name()))
   }
   # Preserve levels in stratification variables
-  x <- preserve_column_levels(x = x, cols = strat_vars)
+  character_strat_vars = get_character_cols_only(x = x, cols = strat_vars)
+  x <- preserve_column_levels(x = x, cols = character_strat_vars)
 
   # Standardise data frame
   x <- x %>%
@@ -253,7 +254,7 @@ setMethod("i_values", signature = c("nca_metric"), definition = function(object,
   }
 
   # Stratification variables back to character vectors
-  x <- remove_column_levels(x = x, cols = strat_vars)
+  x <- remove_column_levels(x = x, cols = character_strat_vars)
 
   return(x %>% dplyr::rename(id = "ID"))
 })
