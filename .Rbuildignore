@@ -4,6 +4,7 @@
 ^\.positai$
 ^\.claude$
 ^\.github$
+^data-raw$
 ^\.vscode$
 ^README\.Rmd$
 ^README_files$

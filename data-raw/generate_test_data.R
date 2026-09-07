@@ -27,4 +27,10 @@ set.seed(1)
 pk_bolus_md$OBS_CP <- pk_bolus_md$CP * (rnorm(n = nrow(pk_bolus_md), mean = 0, sd = sqrt(0.025)) + 1)
 pk_bolus_md$Y <- pk_bolus_md$OBS_CP
 
+# Revert class back to standard tibble components
+class(pk_bolus_md) <- c("tbl_df", "tbl", "data.frame")
+
+# Delete Campsis metadata attribute
+attr(pk_bolus_md, "metadata") <- NULL
+
 usethis::use_data(pk_bolus_md, overwrite = TRUE)
