@@ -10,7 +10,7 @@ context("Test extra features")
 TEST_FOLDER <- file.path(getwd(), test_path())
 source(file.path(TEST_FOLDER, "test-utils.R"))
 
-campsis <- generate_test_data()
+campsis <- campsisnca::pk_bolus_md
 
 test_that("Dynamic computation of quantiles works as expected (type=2)", {
   nca <- NCAAnalysis(variable = "Y") %>%

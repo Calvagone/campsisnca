@@ -65,7 +65,6 @@ Language: en-US
 LazyData: true
 Collate:
     'all_classes.R'
-    'test_data.R'
     'check.R'
     'utilities.R'
     'special_operators.R'
@@ -73,6 +72,7 @@ Collate:
     'stat_formula.R'
     'export_type.R'
     'generic.R'
+    'data.R'
     'stat_utils.R'
     'export_utils.R'
     'nca_options.R'

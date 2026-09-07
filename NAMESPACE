@@ -44,7 +44,6 @@ export(discardCategoryColumn)
 export(discard_category_column)
 export(extract_brace_values)
 export(generate_table_code)
-export(generate_test_data)
 export(geocv)
 export(geomean)
 export(getCampsisncaOption)
@@ -122,14 +121,7 @@ import(tibble)
 importClassesFrom(campsis,campsis_tbl)
 importClassesFrom(campsis,std_campsis_tbl)
 importFrom(assertthat,assert_that)
-importFrom(campsis,
-  Bolus,
-  Covariate,
-  Dataset,
-  Observations,
-  obs_only,
-  simulate
-)
+importFrom(campsis,obs_only)
 importFrom(campsismod,
   Equation,
   JSONElement,
