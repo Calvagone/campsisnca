@@ -244,12 +244,9 @@ setMethod(
   definition = function(object, dest, init = NULL, ...) {
     code <- object %>% generate_table_code(init = init, ...)
     table <- object # Table variable needs to be there!
-    #cat(code)
-    # browser()
     retValue <- tryCatch(
       expr = eval(expr = parse(text = code)),
       error = function(cond) {
-        print(cond)
         return(sprintf("Failed to create gtsummary table: %s", cond$message))
       }
     )
