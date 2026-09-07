@@ -16,6 +16,7 @@ setClass(
 #'
 #' NCA metrics
 #'
+#' @return an object of class nca_metrics
 #' @export
 NCAMetrics <- function() {
   return(new("nca_metrics"))

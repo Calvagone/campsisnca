@@ -41,6 +41,7 @@ setClass(
 #' Min.
 #'
 #' @inheritParams metrics_params
+#' @return an object of class min_metric
 #' @export
 Min <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(
@@ -59,6 +60,7 @@ Min <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_d
 #' Cmin
 #'
 #' @inheritParams metrics_params
+#' @return an object of class cmin_metric
 #' @export
 Cmin <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(

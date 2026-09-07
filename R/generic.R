@@ -143,6 +143,7 @@ setGeneric("i_values", function(object, x, options, strat_vars, ...) {
 #' @param object table object
 #' @param init generate initialization code to generate the individuals, default is TRUE
 #' @param ... extra arguments
+#' @return a character vector containing the code
 #' @export
 #' @rdname generate_table_code
 generate_table_code <- function(object, init, ...) {
@@ -164,6 +165,7 @@ setGeneric("generate_table_code", function(object, init = NULL, ...) {
 #'
 #' @param x metric
 #' @param ... extra arguments, not used
+#' @return a character string
 #' @export
 #' @rdname get_latex_name
 get_latex_name <- function(x, ...) {
@@ -206,6 +208,7 @@ setGeneric("get_strata", function(object, keep_single = NULL, ...) {
 #' @param object any object that contains units
 #' @param metric given metric name
 #' @param ... extra arguments, not used
+#' @return a character string (the unit)
 #' @export
 #' @rdname get_unit
 get_unit <- function(object, metric, ...) {
@@ -224,6 +227,7 @@ setGeneric("get_unit", function(object, metric, ...) {
 #'
 #' @param object get default name of this object
 #' @param ... optional extra arguments
+#' @return a character string (the default name)
 #' @export
 #' @rdname get_default_name
 get_default_name <- function(object, ...) {

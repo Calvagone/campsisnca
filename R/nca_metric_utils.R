@@ -29,6 +29,8 @@ process_unit <- function(unit) {
 #' @param categorical categorical endpoint, logical
 #' @param stat_display statistics display, default is '\{median\} [\{p5\}-\{p95\}]' for continuous data or '\{n\} / \{N\} (\{p\}\%)' for categorical data
 #' @param digits rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README
+#' @return nothing, called for its parameters
+#' @keywords internal
 metrics_params <- function(
   variable = NULL,
   window = NULL,
@@ -52,6 +54,8 @@ metrics_params <- function(
 #' @importFrom dplyr rename_at
 #' @importFrom campsis obs_only
 #'
+#' @return standardised data frame
+#' @keywords internal
 standardise <- function(x, variable, strat_vars) {
   assertthat::assert_that(
     is.character(variable) && length(variable) == 1,

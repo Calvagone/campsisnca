@@ -45,6 +45,7 @@ setClass(
 #'
 #' @inheritParams metrics_params
 #' @param time what time to read the values. If not provided, last values from x will be returned.
+#' @return an object of class value_at_metric
 #' @export
 ValueAt <- function(
   variable = NULL,
@@ -74,6 +75,7 @@ ValueAt <- function(
 #'
 #' @inheritParams metrics_params
 #' @param time what time to read the concentrations. If not provided, last concentrations from x will be returned.
+#' @return an object of class conc_at_metric
 #' @export
 CAt <- function(
   variable = NULL,

@@ -23,6 +23,9 @@ get_unit(object, metric, ...)
 
 \item{...}{extra arguments, not used}
 }
+\value{
+a character string (the unit)
+}
 \description{
 Get the unit corresponding to the given metric.
 }

@@ -9,6 +9,9 @@ geocv(x)
 \arguments{
 \item{x}{numeric vector}
 }
+\value{
+numeric value
+}
 \description{
 Compute the geometric CV.
 }

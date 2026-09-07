@@ -47,6 +47,7 @@ setClass(
 #' @param nca_options NCA options, see ?NCAOptions
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
+#' @return an object of class nca_table
 #' @export
 NCAMetricsTable <- function(
   title = NULL,
@@ -88,6 +89,7 @@ NCAMetricsTable <- function(
 #' @param nca_options NCA options, see ?NCAOptions
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
+#' @return an object of class nca_table
 #' @export
 NCATable <- function(
   title = NULL,
@@ -284,6 +286,7 @@ setMethod("export", signature = c("nca_table", "gt_type"), definition = function
 #' @importFrom gtsummary as_gt
 #' @importFrom gt cells_body fmt_markdown tab_options text_transform
 #' @importFrom stringr str_replace_all
+#' @return a gt table object
 #' @export
 toGt <- function(x, title = NULL, subtitle = NULL, opts = list(), subscripts = FALSE, fmt_markdown = FALSE) {
   if (is.null(subscripts)) {

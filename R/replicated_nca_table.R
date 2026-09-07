@@ -41,6 +41,7 @@ setClass(
 #'  By default, a stratification variable that has only 1 level is ignored.
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
+#' @return an object of class replicated_nca_table
 #' @export
 ReplicatedNCATable <- function(
   title = NULL,
@@ -189,6 +190,7 @@ setMethod(
 #' @param object replicated_nca_table object
 #' @param dest destination for the summarised table, either "dataframe", "gtsummary" or "gt"
 #' @param ... extra arguments
+#' @return a data frame, a gtsummary object or a gt object, depending on the destination
 #' @importFrom gtsummary all_categorical all_continuous all_stat_cols modify_footnote modify_header tbl_summary
 #' @importFrom rlang as_function
 setMethod(

@@ -32,6 +32,9 @@ TimeBelowLimit(
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
+\value{
+an object of class time_below_limit_metric
+}
 \description{
 Time below a certain limit.
 }

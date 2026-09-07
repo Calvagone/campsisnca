@@ -30,6 +30,9 @@ CFB(
 \item{method}{Character string specifying the calculation method. Must be one of
 "difference" (default), "percent", "ratio", or "log".}
 }
+\value{
+an object of class cfb_metric
+}
 \description{
 Alias for Change from Baseline (CFB).
 }

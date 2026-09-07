@@ -26,6 +26,9 @@ Cavg(
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
+\value{
+an object of class cavg_metric
+}
 \description{
 Cavg.
 }

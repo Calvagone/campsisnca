@@ -26,6 +26,9 @@ toGt(
 
 \item{fmt_markdown}{transform any markdown-formatted text, logical value. Default is FALSE.}
 }
+\value{
+a gt table object
+}
 \description{
 Gtsummary to Gt.
 }

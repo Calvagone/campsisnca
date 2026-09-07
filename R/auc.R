@@ -34,6 +34,7 @@ setClass(
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
+#' @return an object of class auc_metric
 #' @export
 AUC <- function(
   variable = NULL,

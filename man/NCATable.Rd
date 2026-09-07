@@ -38,6 +38,9 @@ NCATable(
 
 \item{json}{path to JSON table file or JSON content in string form}
 }
+\value{
+an object of class nca_table
+}
 \description{
 NCA table.
 }

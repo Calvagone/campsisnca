@@ -23,6 +23,9 @@ Thalf.2cpt.eff(
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
+\value{
+an object of class theoretical_thalf_metric
+}
 \description{
 Theoretical effective half life for a 2-compartment model.
 }

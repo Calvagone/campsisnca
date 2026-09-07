@@ -32,6 +32,7 @@ setClass(
 #' @param quantile_type type of quantile to use (see ?quantile), default value in campsisnca is 2 (aligned with gtsummary)
 #' @param data_time_unit time unit of the data given to 'calculate'
 #' @param table_time_unit time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)
+#' @return an object of class nca_options
 #' @export
 NCAOptions <- function(
   quantile_type = 2L,
@@ -49,6 +50,7 @@ NCAOptions <- function(
 #'
 #' Undefined NCA options.
 #'
+#' @return an object of class undefined_nca_options
 #' @export
 UndefinedNCAOptions <- function() {
   return(new("undefined_nca_options"))

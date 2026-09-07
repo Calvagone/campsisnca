@@ -22,6 +22,7 @@ setClass(
 #' on the given data x.
 #'
 #' @inheritParams metrics_params
+#' @return an object of class thalf_metric
 #' @export
 Thalf <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(

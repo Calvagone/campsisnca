@@ -6,6 +6,9 @@
 \usage{
 UndefinedNCAOptions()
 }
+\value{
+an object of class undefined_nca_options
+}
 \description{
 Undefined NCA options.
 }

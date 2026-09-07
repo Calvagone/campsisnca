@@ -29,6 +29,10 @@ metrics_params(
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
+\value{
+nothing, called for its parameters
+}
 \description{
 Main metrics parameters.
 }
+\keyword{internal}

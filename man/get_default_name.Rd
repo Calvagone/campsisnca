@@ -70,6 +70,9 @@ get_default_name(object, ...)
 
 \item{...}{optional extra arguments}
 }
+\value{
+a character string (the default name)
+}
 \description{
 Get default name.
 }

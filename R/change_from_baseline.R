@@ -35,6 +35,7 @@ setClass(
 #' @param method Character string specifying the calculation method. Must be one of
 #'   "difference" (default), "percent", "ratio", or "log".
 #' @inheritParams metrics_params
+#' @return an object of class cfb_metric
 #' @export
 ChangeFromBaseline <- function(
   variable = NULL,
@@ -71,6 +72,7 @@ ChangeFromBaseline <- function(
 #' @param method Character string specifying the calculation method. Must be one of
 #'   "difference" (default), "percent", "ratio", or "log".
 #' @inheritParams metrics_params
+#' @return an object of class cfb_metric
 #' @export
 CFB <- ChangeFromBaseline
 

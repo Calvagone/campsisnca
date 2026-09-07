@@ -13,6 +13,9 @@
 
 \item{...}{extra arguments}
 }
+\value{
+a data frame, a gtsummary object or a gt object, depending on the destination
+}
 \description{
 Export replicated NCA table.
 }

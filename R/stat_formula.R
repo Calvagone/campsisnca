@@ -1,6 +1,7 @@
 #' Compute the geometric mean.
 #'
 #' @param x numeric vector
+#' @return numeric value
 #' @export
 geomean <- function(x) {
   return(exp(mean(log(x))))
@@ -9,6 +10,7 @@ geomean <- function(x) {
 #' Compute the geometric CV.
 #'
 #' @param x numeric vector
+#' @return numeric value
 #' @export
 geocv <- function(x) {
   return(100 * sqrt(exp(sd(log(x))^2) - 1))
@@ -17,6 +19,7 @@ geocv <- function(x) {
 #' Compute the coefficient of variation.
 #'
 #' @param x numeric vector
+#' @return numeric value
 #' @export
 cv <- function(x) {
   return(100 * sd(x) / mean(x))
@@ -25,6 +28,7 @@ cv <- function(x) {
 #' Compute the standard error.
 #'
 #' @param x numeric vector
+#' @return numeric value
 #' @export
 se <- function(x) {
   return(sd(x) / sqrt(length(x)))

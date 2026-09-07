@@ -41,6 +41,7 @@ setClass(
 #' Avg.
 #'
 #' @inheritParams metrics_params
+#' @return an object of class avg_metric
 #' @export
 Avg <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(
@@ -59,6 +60,7 @@ Avg <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_d
 #' Cavg.
 #'
 #' @inheritParams metrics_params
+#' @return an object of class cavg_metric
 #' @export
 Cavg <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(

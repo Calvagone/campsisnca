@@ -14,7 +14,11 @@ standardise(x, variable, strat_vars)
 
 \item{strat_vars}{stratification variables in x (e.g. 'SCENARIO')}
 }
+\value{
+standardised data frame
+}
 \description{
 Standardise Campsis/NONMEM dataframe for NCA analysis.
 Additional checks will also be performed.
 }
+\keyword{internal}
