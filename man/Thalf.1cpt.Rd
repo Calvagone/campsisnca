@@ -23,6 +23,9 @@ Thalf.1cpt(
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
+\value{
+an object of class theoretical_thalf_metric
+}
 \description{
 Theoretical half life for a 1-compartment model.
 }

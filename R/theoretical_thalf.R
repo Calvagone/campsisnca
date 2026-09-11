@@ -13,6 +13,8 @@ validate_theoretical_thalf_metric <- function(object) {
 #' Get default name based on thalf subtype.
 #'
 #' @param subtype thalf subtype (2cpt.dist, 2cpt.z or 2cpt.eff)
+#' @return a character string
+#' @keywords internal
 get_default_thalf_name <- function(subtype) {
   if (subtype == "1cpt") {
     return("thalf.z")
@@ -90,6 +92,7 @@ check_map <- function(map, thalf.1cpt = TRUE) {
 #'
 #' @inheritParams metrics_params
 #' @param map character vector used for column mapping, only one key is possible: K
+#' @return an object of class theoretical_thalf_metric
 #' @export
 Thalf.1cpt <- function(map = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   subtype <- "1cpt"
@@ -113,6 +116,7 @@ Thalf.1cpt <- function(map = NULL, name = NULL, unit = NULL, stat_display = NULL
 #'
 #' @inheritParams metrics_params
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
+#' @return an object of class theoretical_thalf_metric
 #' @export
 Thalf.2cpt.dist <- function(map = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   subtype <- "2cpt.dist"
@@ -136,6 +140,7 @@ Thalf.2cpt.dist <- function(map = NULL, name = NULL, unit = NULL, stat_display =
 #'
 #' @inheritParams metrics_params
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
+#' @return an object of class theoretical_thalf_metric
 #' @export
 Thalf.2cpt.z <- function(map = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   subtype <- "2cpt.z"
@@ -159,6 +164,7 @@ Thalf.2cpt.z <- function(map = NULL, name = NULL, unit = NULL, stat_display = NU
 #'
 #' @inheritParams metrics_params
 #' @param map character vector used for column mapping, keys to be chosen among: DOSE, TAU, CL, V2, Q, V3, KA
+#' @return an object of class theoretical_thalf_metric
 #' @export
 Thalf.2cpt.eff <- function(map = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   subtype <- "2cpt.eff"

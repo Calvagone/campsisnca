@@ -41,6 +41,7 @@ setClass(
 #' Max.
 #'
 #' @inheritParams metrics_params
+#' @return an object of class max_metric
 #' @export
 Max <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(
@@ -59,6 +60,7 @@ Max <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_d
 #' Cmax.
 #'
 #' @inheritParams metrics_params
+#' @return an object of class cmax_metric
 #' @export
 Cmax <- function(variable = NULL, window = NULL, name = NULL, unit = NULL, stat_display = NULL, digits = NULL) {
   metric <- nca_constructor(

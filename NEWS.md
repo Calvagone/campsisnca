@@ -1,3 +1,8 @@
+# campsisnca 1.7.1
+
+* Prepare package for CRAN submission (part 2) #97
+* Remove method 'generate_test_data' from package #98
+
 # campsisnca 1.7.0
 
 * Align package with Campsis v1.9.0 #83

@@ -41,6 +41,7 @@ setClass(
 #'  By default, a stratification variable that has only 1 level is ignored.
 #' @param tab_options list of options to pass to gt::tab_options
 #' @param json path to JSON table file or JSON content in string form
+#' @return an object of class replicated_nca_table
 #' @export
 ReplicatedNCATable <- function(
   title = NULL,
@@ -143,7 +144,7 @@ setMethod(
       .init = x_filtered
     )
 
-    # remove specific stratification variables
+    # Remove specific stratification variables
     x_reduced <- x_reduced %>%
       dplyr::select(-dplyr::all_of(specific_strata_names))
 
@@ -189,6 +190,7 @@ setMethod(
 #' @param object replicated_nca_table object
 #' @param dest destination for the summarised table, either "dataframe", "gtsummary" or "gt"
 #' @param ... extra arguments
+#' @return a data frame, a gtsummary object or a gt object, depending on the destination
 #' @importFrom gtsummary all_categorical all_continuous all_stat_cols modify_footnote modify_header tbl_summary
 #' @importFrom rlang as_function
 setMethod(
@@ -205,6 +207,10 @@ setMethod(
     } else {
       "continuous"
     }
+
+   # Preserve original order in stratification variables
+    character_strat_vars = get_character_cols_only(x = x_wider, cols = names(object@strata))
+    x_wider <- preserve_column_levels(x = x_wider, cols = character_strat_vars)
 
     if (dest %in% c("gt", "gtsummary")) {
       gtsummary_table <- gtsummary::tbl_summary(

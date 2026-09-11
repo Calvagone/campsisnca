@@ -49,6 +49,9 @@ get_latex_name(x, ...)
 
 \item{...}{extra arguments, not used}
 }
+\value{
+a character string
+}
 \description{
 Get the name of the metric in LaTeX notation (with subscript coded with an underscore and brackets).
 }

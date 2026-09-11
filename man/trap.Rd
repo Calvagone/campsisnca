@@ -2,7 +2,10 @@
 % Please edit documentation in R/auc_trap_rule.R
 \name{trap}
 \alias{trap}
-\title{NOTE: This method has been copied from the qpNCA package (qPharmetra).}
+\title{NOTE: This method has been adapted from the 'qpNCA' package by Huisman,
+Jolling, Mehta and Bergsma (2021) <doi:10.32614/CRAN.package.qpNCA>,
+following methodology from Rowland and Tozer (2011,
+ISBN:978-0-683-07404-8).}
 \usage{
 trap(x, y, method = 1)
 }

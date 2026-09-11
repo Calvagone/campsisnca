@@ -6,6 +6,9 @@
 \usage{
 lhs \%>\% rhs
 }
+\value{
+the result of the piping operation
+}
 \description{
 Magritt operator for piping.
 }

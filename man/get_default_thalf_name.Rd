@@ -9,6 +9,10 @@ get_default_thalf_name(subtype)
 \arguments{
 \item{subtype}{thalf subtype (2cpt.dist, 2cpt.z or 2cpt.eff)}
 }
+\value{
+a character string
+}
 \description{
 Get default name based on thalf subtype.
 }
+\keyword{internal}

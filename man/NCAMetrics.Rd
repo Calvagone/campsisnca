@@ -6,6 +6,9 @@
 \usage{
 NCAMetrics()
 }
+\value{
+an object of class nca_metrics
+}
 \description{
 NCA metrics
 }

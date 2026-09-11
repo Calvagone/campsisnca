@@ -47,6 +47,7 @@ setClass(
 #' @inheritParams metrics_params
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly above the limit
+#' @return an object of class time_above_limit_metric
 #' @export
 TimeAboveLimit <- function(
   variable = NULL,
@@ -78,6 +79,7 @@ TimeAboveLimit <- function(
 #' @inheritParams metrics_params
 #' @param limit the limit to compare the variable against
 #' @param strictly whether the variable must be strictly below the limit
+#' @return an object of class time_below_limit_metric
 #' @export
 TimeBelowLimit <- function(
   variable = NULL,

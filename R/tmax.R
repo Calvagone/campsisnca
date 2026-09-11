@@ -25,6 +25,7 @@ setClass(
 #'
 #' @inheritParams metrics_params
 #' @param rebase rebase time according to start time of window
+#' @return an object of class tmax_metric
 #' @export
 Tmax <- function(
   variable = NULL,

@@ -25,6 +25,7 @@ setClass(
 #'
 #' @inheritParams metrics_params
 #' @param fun any custom function with exactly 2 arguments: time and value
+#' @return an object of class custom_metric
 #' @export
 CustomMetric <- function(
   variable = NULL,
@@ -60,6 +61,7 @@ CustomMetric <- function(
 #'
 #' @inheritParams metrics_params
 #' @param fun any custom function with exactly 1 argument: data
+#' @return an object of class custom_metric
 #' @export
 CustomMetricTbl <- function(
   window = NULL,

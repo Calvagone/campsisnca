@@ -10,7 +10,7 @@ context("Test all functionalities presented in the README")
 TEST_FOLDER <- file.path(getwd(), test_path())
 source(file.path(TEST_FOLDER, "test-utils.R"))
 
-campsis <- generate_test_data()
+campsis <- campsisnca::pk_bolus_md
 
 get_ref_file <- function(filename) {
   return(file.path(TEST_FOLDER, "non_regression", filename))

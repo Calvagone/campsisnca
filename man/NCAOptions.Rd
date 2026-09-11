@@ -17,6 +17,9 @@ NCAOptions(
 
 \item{table_time_unit}{time unit in table (for time-dependent metrics like AUC, Time above and below, etc.)}
 }
+\value{
+an object of class nca_options
+}
 \description{
 NCA options used for calculation of metrics.
 }

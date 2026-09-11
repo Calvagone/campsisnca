@@ -36,6 +36,9 @@ By default, a stratification variable that has only 1 level is ignored.}
 
 \item{json}{path to JSON table file or JSON content in string form}
 }
+\value{
+an object of class replicated_nca_table
+}
 \description{
 Replicated NCA table.
 }

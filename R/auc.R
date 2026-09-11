@@ -23,11 +23,18 @@ setClass(
 #'
 #' AUC.
 #'
+#' @details
+#' Trapezoidal rule implementation for AUC calculation is based on the 'qpNCA'
+#' package by Huisman, Jolling, Mehta and Bergsma (2021)
+#' <doi:10.32614/CRAN.package.qpNCA>, following methodology from Rowland and
+#' Tozer (2011, ISBN:978-0-683-07404-8).
+#'
 #' @inheritParams metrics_params
 #' @param method method:
 #' * 1: linear up - linear down
 #' * 2: linear up - logarithmic down
 #' * 3: linear before Tmax, logarithmic after Tmax
+#' @return an object of class auc_metric
 #' @export
 AUC <- function(
   variable = NULL,

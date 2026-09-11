@@ -16,6 +16,9 @@ generate_table_code(object, init = NULL, ...)
 
 \item{...}{extra arguments}
 }
+\value{
+a character vector containing the code
+}
 \description{
 Generate table code.
 }

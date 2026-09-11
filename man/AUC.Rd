@@ -32,6 +32,15 @@ AUC(
 
 \item{digits}{rounding digits definitions (integer, function, purrr-style lambda function or list of these, 1 item per statistic), see README}
 }
+\value{
+an object of class auc_metric
+}
 \description{
 AUC.
+}
+\details{
+Trapezoidal rule implementation for AUC calculation is based on the 'qpNCA'
+package by Huisman, Jolling, Mehta and Bergsma (2021)
+<doi:10.32614/CRAN.package.qpNCA>, following methodology from Rowland and
+Tozer (2011, ISBN:978-0-683-07404-8).
 }

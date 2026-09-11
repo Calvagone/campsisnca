@@ -1,5 +1,8 @@
 #'
-#' NOTE: This method has been copied from the qpNCA package (qPharmetra).
+#' NOTE: This method has been adapted from the 'qpNCA' package by Huisman,
+#' Jolling, Mehta and Bergsma (2021) <doi:10.32614/CRAN.package.qpNCA>,
+#' following methodology from Rowland and Tozer (2011,
+#' ISBN:978-0-683-07404-8).
 #'
 #' Calculate Area Under the Curve Using Trapezoids.
 #'

@@ -23,6 +23,9 @@ Note, the default strata are c(SCENARIO='all', ARM='all').
 Use 'all' if this analysis refers to all levels for the specified stratification variable.
 By default, a stratification variable that has only 1 level is ignored.}
 }
+\value{
+an object of class nca_analysis
+}
 \description{
 Create an NCA analysis.
 }
