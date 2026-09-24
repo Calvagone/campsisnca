@@ -1,3 +1,6 @@
+# campsisnca 1.7.2
+* Update maintainer's email address
+
 # campsisnca 1.7.1
 
 * Prepare package for CRAN submission (part 2) #97

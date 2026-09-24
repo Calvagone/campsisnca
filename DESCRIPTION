@@ -1,9 +1,12 @@
 Type: Package
 Package: campsisnca
 Title: Non-Compartmental Analysis for Campsis Simulation Platform
-Version: 1.7.1
-Authors@R: 
-    person("Nicolas", "Luyckx", , "nicolas.luyckx@calvagone.com", role = c("aut", "cre"))
+Version: 1.7.2
+Authors@R: c(
+    person("Nicolas", "Luyckx", email = "nicolas.luyckx@lynxsoft.be", role = c("aut", "cre")),
+    person("Calvagone", role = "cph")
+  )
+Maintainer: Nicolas Luyckx <nicolas.luyckx@lynxsoft.be>
 Description: A flexible and user-friendly non-compartmental analysis (NCA)
     toolkit designed to work seamlessly with simulated pharmacokinetic
     data generated using the 'campsis' ecosystem. The package provides a
